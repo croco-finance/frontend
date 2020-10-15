@@ -48,7 +48,6 @@ const MultipleTokenSelect = ({ options, selected, onChange, isSearchable = false
     return (
         <Wrapper>
             <Select
-                noTopLabel
                 withDropdownIndicator
                 options={options}
                 onChange={onChange}

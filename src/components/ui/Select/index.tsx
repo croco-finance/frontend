@@ -120,7 +120,6 @@ interface Props extends Omit<SelectProps, 'components'> {
     label?: React.ReactNode;
     wrapperProps?: Record<string, any>;
     variant?: 'small' | 'large';
-    noTopLabel?: boolean;
     usePointerCursor?: boolean;
     fontFamily?: string;
     noBorder?: boolean;
@@ -134,14 +133,12 @@ const Select = ({
     label,
     width,
     variant = 'large',
-    noTopLabel = false,
     fontFamily = variables.FONT_FAMILY.OPEN_SANS,
     noBorder = false,
     ...props
 }: Props) => {
     return (
         <Wrapper width={width} {...wrapperProps}>
-            {!noTopLabel && <Label>{label}</Label>}
             <ReactSelect
                 styles={selectStyle(
                     isSearchable,

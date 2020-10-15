@@ -52,7 +52,6 @@ const TokenSelect = ({ tokens, selectedToken, onChange }: Props) => {
     return (
         <Wrapper>
             <Select
-                noTopLabel
                 withDropdownIndicator
                 options={tokens}
                 onChange={onChange}
