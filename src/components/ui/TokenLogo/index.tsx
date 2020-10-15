@@ -1,0 +1,36 @@
+import React from 'react';
+import { ReactSVG } from 'react-svg';
+import styled from 'styled-components';
+import { TOKENS } from './tokens';
+
+const SvgWrapper = styled.div<Omit<Props, 'symbol'>>`
+    display: inline-block;
+    height: ${props => props.size}px;
+
+    div {
+        height: ${props => props.size}px;
+        line-height: ${props => props.size}px;
+    }
+`;
+
+interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
+    symbol: string; // add TokenType later
+    size?: number;
+}
+
+const TokenLogo = ({ symbol, className, size = 32, ...rest }: Props) => {
+    return (
+        <SvgWrapper size={size} {...rest}>
+            <ReactSVG
+                src={TOKENS[symbol]}
+                beforeInjection={(svg: any) => {
+                    svg.setAttribute('width', `${size}px`);
+                    svg.setAttribute('height', `${size}px`);
+                }}
+                loading={() => <span className="loading" />}
+            />
+        </SvgWrapper>
+    );
+};
+
+export default TokenLogo;
