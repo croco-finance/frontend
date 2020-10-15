@@ -38,10 +38,6 @@ const TokenInfoWrapper = styled(GridWrapper)<{ rowsCount: number }>`
     padding-top: 10px;
 `;
 
-const LastRowWrapper = styled(GridWrapper)`
-    grid-template-rows: repeat(1, 50px);
-`;
-
 const TokenWrapper = styled.div`
     display: flex;
 `;
@@ -63,7 +59,7 @@ const Overview = ({ size = 20 }: Props) => {
         return null;
     }
 
-    const { tokens, tokenWeights, userTokenAmounts } = allPools[selectedPoolId];
+    const { tokens, tokenWeights, endTokenBalance } = allPools[selectedPoolId];
     const numberOfTokens = tokens.length;
 
     return (
@@ -89,7 +85,7 @@ const Overview = ({ size = 20 }: Props) => {
                                 </TokenWrapper>
                             }
                             secondColumn={getFormattedPercentageValue(tokenWeights[i], true)}
-                            thirdColumn={userTokenAmounts[i].toFixed(4)}
+                            thirdColumn={endTokenBalance[i].toFixed(4)}
                             fourthColumn={
                                 <FiatAmount value={currentPriceRatioExample['usd'][token.symbol]} />
                             }
@@ -98,9 +94,6 @@ const Overview = ({ size = 20 }: Props) => {
                     );
                 })}
             </TokenInfoWrapper>
-            {/* <LastRowWrapper>
-                <OverviewRow fourthColumn={<FiatAmount value={8908} />} color="light" />
-            </LastRowWrapper> */}
         </Wrapper>
     );
 };

@@ -71,7 +71,7 @@ const CardInfo = ({}: Props) => {
                 {/* <GrayBox> */}
                 <CardOverview></CardOverview>
                 <GraphWrapper>
-                    <ILGraph height={300}></ILGraph>
+                    <ILGraph height={250}></ILGraph>
                 </GraphWrapper>
                 {/* </GrayBox> */}
             </Wrapper>

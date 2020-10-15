@@ -1,4 +1,4 @@
-import { currentPriceRatioExample } from '../config/example-data';
+import { currentPriceRatioExample, PoolItemsDictExample } from '../config/example-data';
 import { PoolItemsInterface, PoolItemInterface } from '../config/types';
 
 const countDecimals = value => {
@@ -41,7 +41,7 @@ const getDailyAverageFeeGains = (timeStampStart, timeStampEnd, totalFeesUSD) => 
     return totalFeesUSD / differenceDays;
 };
 
-const getPoolsSummaryObject = (pools: any) => {
+const getPoolsSummaryObject = (pools = PoolItemsDictExample) => {
     // TODO compute separately for Balancer and for Uniswap
     let summaryObject = {};
     let endBalanceUSDSum = 0;
@@ -52,15 +52,17 @@ const getPoolsSummaryObject = (pools: any) => {
     let txCostEthSum = 0;
     let averageDailyFeesUSDSum = 0;
 
-    // for (const [id, pool] of Object.entries(pools)) {
-    //     endBalanceUSDSum += pool.endBalanceUSD;
-    //     netReturnUSDSum += pool.netReturnUSD;
-    //     feesUSDSum += pool.feesUSD;
-    //     impLossUSDSum += pool.impLossUSD;
-    //     dexReturnUSDSum += pool.dexReturnUSD;
-    //     txCostEthSum += pool.txCostEth;
-    //     averageDailyFeesUSDSum += getDailyAverageFeeGains(pool.start, pool.end, pool.feesUSD);
-    // }
+    for (const [id, pool] of Object.entries(pools)) {
+        endBalanceUSDSum += pool.endBalanceUSD;
+        netReturnUSDSum += pool.netReturnUSD;
+        feesUSDSum += pool.feesUSD;
+        impLossUSDSum += pool.impLossUSD;
+        dexReturnUSDSum += pool.dexReturnUSD;
+        if (pool.txCostEth) {
+            txCostEthSum += pool.txCostEth;
+        }
+        averageDailyFeesUSDSum += getDailyAverageFeeGains(pool.start, pool.end, pool.feesUSD);
+    }
 
     summaryObject['endBalanceUSD'] = endBalanceUSDSum;
     summaryObject['netReturnUSD'] = netReturnUSDSum;

@@ -134,8 +134,7 @@ const CardOverview = ({}: Props) => {
     }
 
     if (!pool) {
-        // pool = getPoolsSummaryObject();
-        pool = {};
+        pool = getPoolsSummaryObject();
     }
 
     const {
@@ -144,7 +143,7 @@ const CardOverview = ({}: Props) => {
         feesUSD,
         txCostEth,
         impLossUSD,
-        impLoss,
+        impLossRel,
         dexReturnUSD,
         start,
         end,
@@ -235,8 +234,11 @@ const CardOverview = ({}: Props) => {
                         firstColumn="Impermanent loss"
                         secondColumn={
                             <ImpLossValueWrapper>
-                                {/* <SubValue>{getFormattedPercentageValue(impLoss)}</SubValue> */}
-                                <FiatAmount value={-impLossUSD} usePlusSymbol />
+                                {impLossRel && (
+                                    <SubValue>{getFormattedPercentageValue(impLossRel)}</SubValue>
+                                )}
+
+                                <FiatAmount value={impLossUSD} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         color="dark"

@@ -166,9 +166,6 @@ const Simulator = (props: RouteComponentProps<any>) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
-    const [simulationValue, setSimulationValue] = useState({});
-    const [simulatedParams, setSimulatedParams] = useState({});
-
     const poolOptions = buildPoolOptions(allPools);
 
     useEffect(() => {
@@ -219,8 +216,6 @@ const Simulator = (props: RouteComponentProps<any>) => {
         const isValidEthAddress = true;
         if (isValidEthAddress) fetchData();
     }, [address, urlPoolId]);
-
-    const setNewSimulatedParams = (tokenSymbol: string, newValue: number) => {};
 
     return (
         <SimulatorContainer>

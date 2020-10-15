@@ -1,5 +1,4 @@
 import React from 'react';
-import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
 import Logo from '../../../data/images/logo.svg';
 

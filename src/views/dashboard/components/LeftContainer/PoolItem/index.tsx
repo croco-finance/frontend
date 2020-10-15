@@ -1,6 +1,6 @@
 import colors from '../../../../../config/colors';
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { TokenLogo, FiatAmount } from '../../../../../components/ui';
 import { variables } from '../../../../../config';
 import { currentPriceRatioExample } from '../../../../../config/example-data';
@@ -15,9 +15,6 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
     align-items: center;
     background-color: inherit;
     border-radius: 5px;
-    /* background-color: ${props =>
-        props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND}; */
-    /* background-color: ${props => (props.isSelected ? '#c5e3ff' : colors.BACKGROUND)}; */
     background-color: ${props => (props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND)};
 
     padding: 10px;
@@ -28,9 +25,6 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
     transition: 0s;
 
     &:hover {
-        /* background-color: ${props =>
-            props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND_DARK}; */
-
         /* background-color: ${props => (props.isSelected ? '#c5e3ff' : colors.BACKGROUND)}; */
         background-color: ${props =>
             props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND};

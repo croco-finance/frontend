@@ -21,17 +21,6 @@ const Wrapper = styled.div`
     align-items: center;
 `;
 
-const TitleWrapper = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const Title = styled.div`
-    font-weight: 800;
-    font-size: 20px;
-    color: ${colors.FONT_DARK};
-`;
-
 const NavItemsWrapper = styled.div`
     display: flex;
     flex-grow: 1;
@@ -50,7 +39,7 @@ const StyledLink = styled(NavLink)`
 
 const NavBar = () => (
     <Wrapper>
-        <PageLogo height={28}></PageLogo>
+        <PageLogo height={16}></PageLogo>
 
         <NavItemsWrapper>
             <StyledLink
