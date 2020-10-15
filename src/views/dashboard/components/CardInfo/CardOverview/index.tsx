@@ -159,14 +159,13 @@ const CardOverview = ({}: Props) => {
     let averageFeeGains;
     if (selectedPoolId === 'all') {
         averageFeeGains = pool.averageDailyFeesUSD;
-        console.log('averageFeeGains', averageFeeGains);
     } else {
         averageFeeGains = getDailyAverageFeeGains(start, end, feesUSD);
     }
 
     const daysLefStaking = Math.abs(Math.ceil(dexReturnUSD / averageFeeGains));
+    console.log('daysLefStaking', daysLefStaking);
 
-    // getPoolsSummaryObject();
     return (
         <Wrapper>
             <SwitchWrapper>

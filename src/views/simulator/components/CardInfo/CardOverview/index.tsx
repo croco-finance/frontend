@@ -217,7 +217,7 @@ const CardOverview = ({}: Props) => {
                         />
                     </DaysLeftGridWrapper>
                     <DaysLeftNote>
-                        <b>*</b> According to the current trading volume and your pool share
+                        <b>*</b> According to your average trading fee gains
                     </DaysLeftNote>
                 </DaysLeftWrapper>
             </GrayBox>

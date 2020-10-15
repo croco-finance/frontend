@@ -83,7 +83,7 @@ const CardInfo = ({ address }: Props) => {
                             pathname: `/simulator/${address}/${selectedPoolId}`,
                         }}
                     >
-                        Open Simulator
+                        Open in simulator
                     </StyledLink>
                 </SimulatorButtonWrapper>
             </Wrapper>

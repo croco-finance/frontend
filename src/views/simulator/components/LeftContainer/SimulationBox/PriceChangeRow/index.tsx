@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { colors, variables } from '../../../../../../config';
-import {
-    TokenLogo,
-    FiatAmount,
-    GrayBox,
-    Input,
-    MaterialSlider,
-} from '../../../../../../components/ui';
+import { Input, MaterialSlider } from '../../../../../../components/ui';
 
 const rightAlignedStyles = css`
     text-align: right;
@@ -70,12 +64,11 @@ interface Props {
 }
 
 const PriceChangeRow = ({
-    // set default values
     firstColumn,
     fourthColumn,
-    color = 'light',
     onSliderChange,
     defaultSliderValue = 1,
+    color = 'light',
 }: Props) => {
     const [sliderMidValue, setSliderMidValue] = useState(defaultSliderValue);
     const [sliderValue, setSliderValue] = useState(defaultSliderValue);
@@ -125,7 +118,7 @@ const PriceChangeRow = ({
                         value={sliderValue}
                         onChange={(event, newValue) => handleSliderChange(newValue)}
                     />
-                    <SliderRightLabel>2x</SliderRightLabel>
+                    <SliderRightLabel>{sliderMidValue * 2}x</SliderRightLabel>
                 </SliderWrapper>
             </Col>
             <Col textAlign="right" color={'light'}>

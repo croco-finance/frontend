@@ -46,7 +46,6 @@ const SummaryList = ({}: Props) => {
     const exchangeToPoolMapping = useSelector(state => state.exchangeToPoolMapping);
 
     const poolsSummaryInfo: any = getPoolsSummaryObject(allPools);
-    console.log('poolsSummaryInfo', poolsSummaryInfo);
 
     return (
         <Wrapper>
