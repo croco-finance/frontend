@@ -33,7 +33,7 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
 
 const Item = styled.div`
     display: flex;
-    flex: 0 0 25%;
+    flex: 0 0 33%;
     justify-content: center;
     align-items: center;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
@@ -113,7 +113,7 @@ const PoolItem = ({ poolId }: Props) => {
             <Gains>
                 <FiatAmount value={feesUSD} usePlusSymbol></FiatAmount>
             </Gains>
-            <Balance>5%</Balance>
+            {/* <Balance>5%</Balance> */}
         </Wrapper>
     );
 };

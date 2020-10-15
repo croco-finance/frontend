@@ -33,14 +33,14 @@ const Headline = styled.h2`
 `;
 
 const LeftWrapper = styled.div`
-    width: 52%;
+    width: 50%;
     padding: 0px 50px 20px 0;
     /* animation: ${animations.SHOW_UP} 1.5s; */
 `;
 
 const RightWrapper = styled.div`
     padding: 40px 0px 20px 50px;
-    width: 48%;
+    width: 50%;
     background-color: ${colors.BACKGROUND};
 `;
 

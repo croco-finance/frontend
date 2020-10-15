@@ -110,7 +110,7 @@ const CardOverview = ({}: Props) => {
     return (
         <Wrapper>
             <SwitchWrapper>
-                <ToggleLabel>Show Crypto</ToggleLabel>
+                <ToggleLabel>Show ETH</ToggleLabel>
                 <ToggleSwitch checked={false} onChange={() => {}} isSmall />
             </SwitchWrapper>
             <HeaderWrapper>

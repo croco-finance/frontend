@@ -6,12 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getPoolsSummaryObject } from '../../../../../utils/math';
 import * as actionTypes from '../../../../../store/actions/actionTypes';
 
-const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-});
-
 const Wrapper = styled.div<{ isSelected: boolean }>`
     display: flex;
     align-items: center;
@@ -39,7 +33,7 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
 
 const Item = styled.div`
     display: flex;
-    flex: 0 0 25%;
+    flex: 0 0 33%;
     justify-content: center;
     color: ${colors.FONT_DARK};
 `;
@@ -97,7 +91,7 @@ const SummaryItem = ({ exchange, value, gainsAbsolute, roi }: Props) => {
             <Gains>
                 <FiatAmount value={feesUSD} usePlusSymbol />
             </Gains>
-            <Roi>{roi}%</Roi>
+            {/* <Roi>{roi}%</Roi> */}
         </Wrapper>
     );
 };

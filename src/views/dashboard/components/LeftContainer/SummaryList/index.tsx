@@ -23,7 +23,7 @@ const Header = styled.div`
 
 const HeaderChild = styled.div`
     display: flex;
-    flex: 0 0 25%;
+    flex: 0 0 33%;
     justify-content: center;
 `;
 
