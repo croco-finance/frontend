@@ -45,7 +45,7 @@ const selectStyle = (
             '&:hover, &:focus': {
                 cursor: 'pointer',
                 borderRadius: '4px',
-                borderColor: colors.PASTEL_PURPLE_MEDIUM,
+                borderColor: colors.PASTEL_BLUE_MEDIUM,
             },
         };
     },

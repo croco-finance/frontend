@@ -1,9 +1,6 @@
 import axios from 'axios';
 
-export const fetchTokensCurrentFiatRates = async (
-    tokens: Array<any>,
-    currencies: Array<string>,
-) => {
+export const fetchCurrentTokenFiatRates = async (tokens: Array<any>, currencies: Array<string>) => {
     const baseUrl =
         'https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=';
     const separator = '%2C';

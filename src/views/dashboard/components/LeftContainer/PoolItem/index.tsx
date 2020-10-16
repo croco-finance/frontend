@@ -23,7 +23,7 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
     &:hover {
         /* background-color: ${props => (props.isSelected ? '#c5e3ff' : colors.BACKGROUND)}; */
         background-color: ${props =>
-            props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND};
+            props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND_DARK};
     }
 `;
 
@@ -55,6 +55,7 @@ const TokenWeight = styled.div``;
 const TokenSymbol = styled.div`
     margin-left: 10px;
     text-transform: uppercase;
+    min-width: 48px;
 `;
 
 const Circle = styled.div`

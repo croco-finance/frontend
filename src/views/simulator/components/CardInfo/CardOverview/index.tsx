@@ -8,6 +8,7 @@ import {
     getDailyAverageFeeGains,
     getFiatFromCrypto,
     getFormattedPercentageValue,
+    getBalancerImpLoss,
 } from '../../../../../utils/math';
 import CardRow from '../CardRow';
 
@@ -135,6 +136,41 @@ const CardOverview = ({}: Props) => {
 
     const averageFeeGains = getDailyAverageFeeGains(start, end, feesUSD);
     const daysLeftStaking = Math.abs(Math.ceil(dexReturnUSD / averageFeeGains));
+
+    const newRateCoefficients = {
+        usdt: 1.4,
+        dai: 2,
+        weth: 4.5,
+        comp: 1.0,
+        link: 0.5,
+        yfi: 0.2,
+        wbtc: 2.4,
+    };
+
+    const getNewSimulatedData = (tokens, currentBalances, newRateCoefficients) => {
+        // 1. compute new price
+        const newPrices = [];
+
+        // 2. initial token balances = current token balances
+        const initialBalances = currentBalances;
+
+        // 3. token weights ... vysaju z pool.tokens
+        const tokenWeights = [];
+
+        // 4. compute newTokenBalances a imp loss
+        const newTokenBalances = [];
+        const newImpLossRel = 0;
+        const newImpLossAbs = 0;
+
+        // 5. new pool value
+
+        // compute new
+        const newValue = 0;
+        const newDexReturn = 0;
+        const newFeesUsd = 0;
+        const newDepositCost = 0;
+        const newAverageDailyFees = 0;
+    };
 
     return (
         <Wrapper>

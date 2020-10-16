@@ -5,8 +5,20 @@ export const poolItemExample1: PoolItemInterface = {
     poolId: '0x59a19d8c652fa0284f44113d0ff9aba70bd46fb4',
     userAddr: '0xb652c617d18971A53f3727E01f6E86f975312c28',
     tokens: [
-        { symbol: 'usdt', address: '0x123', platform: 'ethereum' },
-        { symbol: 'wbtc', address: '0x456', platform: 'ethereum' },
+        {
+            symbol: 'usdt',
+            address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+            platform: 'ethereum',
+            price: {
+                usd: 14119.35,
+                eur: 12029.27,
+            },
+        },
+        {
+            symbol: 'wbtc',
+            address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+            platform: 'ethereum',
+        },
     ],
     tokenWeights: [0.8, 0.2],
     endTokenBalance: [234, 17.8],
@@ -27,9 +39,24 @@ export const poolItemExample2: PoolItemInterface = {
     poolId: '0xf54025af2dc86809be1153c1f20d77adb7e8ecf4',
     userAddr: '0xb652c617d18971A53f3727E01f6E86f975312c28',
     tokens: [
-        { symbol: 'eth', address: '0x123', platform: 'ethereum' },
-        { symbol: 'dai', address: '0x456', platform: 'ethereum' },
-        { symbol: 'yfi', address: '0x789', platform: 'ethereum' },
+        {
+            symbol: 'weth',
+            address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+            platform: 'ethereum',
+            // ...
+        },
+        {
+            symbol: 'dai',
+            address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+            platform: 'ethereum',
+            // ...
+        },
+        {
+            symbol: 'yfi',
+            address: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+            platform: 'ethereum',
+            // ...
+        },
     ],
     tokenWeights: [0.3, 0.2, 0.5],
     endTokenBalance: [12.32, 74.3, 2.64],
@@ -50,8 +77,16 @@ export const poolItemExample3: PoolItemInterface = {
     poolId: '0xbb2b8038a1640196fbe3e38816f3e67cba72d940',
     userAddr: '0xb652c617d18971A53f3727E01f6E86f975312c28',
     tokens: [
-        { symbol: 'comp', address: '0x123', platform: 'ethereum' },
-        { symbol: 'link', address: '0x456', platform: 'ethereum' },
+        {
+            symbol: 'comp',
+            address: '0xc00e94cb662c3520282e6f5717214004a7f26888',
+            platform: 'ethereum',
+        },
+        {
+            symbol: 'link',
+            address: '0x514910771af9ca656af840dff83e8264ecf986ca',
+            platform: 'ethereum',
+        },
     ],
     tokenWeights: [0.5, 0.5],
     endTokenBalance: [123, 34443.45],

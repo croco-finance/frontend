@@ -14,8 +14,8 @@ const Wrapper = styled.div`
 const Header = styled.div`
     display: flex;
     align-items: center;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_MEDIUM};
+    font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    color: ${colors.FONT_LIGHT};
     /* use the same sside padding as in <OverviewItem> so that the items are aligned */
     padding: 10px 10px 15px 10px;
 `;
@@ -34,6 +34,7 @@ const Exchange = styled(HeaderChild)`
 
 const ExchangeTitle = styled.div`
     margin-left: 5px;
+    text-transform: capitalize;
 `;
 
 const Value = styled(HeaderChild)``;
@@ -43,7 +44,7 @@ const Gains = styled(HeaderChild)``;
 const ItemsWrapper = styled.div``;
 
 const PoolGroup = styled.div`
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 `;
 interface Props {}
 
@@ -60,7 +61,7 @@ const PoolList = ({ ...rest }: Props) => {
                         <Header>
                             <Exchange>
                                 <TokenLogo symbol={exchange} size={26} />
-                                <ExchangeTitle>Balancer</ExchangeTitle>
+                                <ExchangeTitle>{exchange}</ExchangeTitle>
                             </Exchange>
                             <Value>Value</Value>
                             <Gains>Fee Gains</Gains>

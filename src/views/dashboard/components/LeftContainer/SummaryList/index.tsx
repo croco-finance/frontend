@@ -14,8 +14,8 @@ const Wrapper = styled.div`
 const Header = styled.div`
     display: flex;
     align-items: center;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_MEDIUM};
+    font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    color: ${colors.FONT_LIGHT};
     /* use the same side padding as in <OverviewItem> so that the items are aligned */
     padding: 10px 10px 15px 10px;
 `;
@@ -43,7 +43,7 @@ const SummaryList = () => {
     return (
         <Wrapper>
             <Header>
-                <Exchange>Exchange</Exchange>
+                <Exchange>&ensp;</Exchange>
                 <Value>Value</Value>
                 <Gains>Fee gains</Gains>
             </Header>

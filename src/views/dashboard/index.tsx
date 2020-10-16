@@ -43,6 +43,9 @@ const RightWrapper = styled.div`
     background-color: ${colors.BACKGROUND};
 `;
 
+const SummaryWrapper = styled.div`
+    margin-top: 40px;
+`;
 const CardInfoWrapper = styled.div`
     animation: ${animations.SHOW_UP} 1.5s;
 `;
@@ -130,10 +133,12 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                     <h1>Loading...</h1>
                 ) : (
                     <>
-                        <Headline>Pools Summary</Headline>
-                        <SummaryList />
+                        <SummaryWrapper>
+                            {/* <Headline>Pools Summary</Headline> */}
+                            <SummaryList />
+                        </SummaryWrapper>
 
-                        <Headline>Your Pools</Headline>
+                        {/* <Headline>Your Pools</Headline> */}
                         <PoolList />
                     </>
                 )}

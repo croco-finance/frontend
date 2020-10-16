@@ -9,7 +9,7 @@ import { PoolItemsExample, poolItemExample1 } from '../../config/example-data';
 import { PoolItemInterface } from '../../config/types';
 import * as actionTypes from '../../store/actions/actionTypes';
 import { getFormattedPercentageValue } from '../../utils';
-import { fetchCurrentFiatRates, fetchTokensCurrentFiatRates } from '../../utils/coingecko';
+import { fetchCurrentTokenFiatRates } from '../../utils/coingecko';
 import CardInfo from './components/CardInfo';
 import Overview from './components/LeftContainer/Overview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
@@ -154,7 +154,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
         const fetchTokenRates = async () => {
             // const coinlist = await fetchCurrentFiatRates();
             const currencies = ['usd'];
-            let fetchedRates = await fetchTokensCurrentFiatRates(
+            let fetchedRates = await fetchCurrentTokenFiatRates(
                 allPools[selectedPoolId].tokens,
                 currencies,
             );
