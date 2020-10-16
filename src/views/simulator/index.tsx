@@ -127,7 +127,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
         props.match.params.poolId ? props.match.params.poolId : '',
     );
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [isFetchingPrices, setIsFetchingPrices] = useState(false);
 
     const [currentTokenRates, setCurrentTokenRates] = useState({});
@@ -139,6 +139,8 @@ const Simulator = (props: RouteComponentProps<any>) => {
     const poolOptions = buildPoolOptions(allPools);
 
     useEffect(() => {
+        setIsLoading(true);
+
         const urlPoolId = props.match.params.poolId ? props.match.params.poolId : '';
 
         if (urlPoolId in Object.keys(allPools)) {
@@ -147,6 +149,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                 poolId: urlPoolId,
             });
         }
+        setIsLoading(false);
     }, []);
 
     useEffect(() => {

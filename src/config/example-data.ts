@@ -117,7 +117,7 @@ export const oldRatioExample: PriceRatesInterface = {
     usd: {
         usdt: 1.01,
         wbtc: 6343.78,
-        eth: 322.46,
+        weth: 322.46,
         dai: 1.03,
         yfi: 35.45,
         bal: 46.78,
@@ -135,7 +135,7 @@ export const currentPriceRatioExample: PriceRatesInterface = {
     usd: {
         usdt: 1.01,
         wbtc: 10343.78,
-        eth: 342.46,
+        weth: 342.46,
         dai: 1.0,
         yfi: 25.45,
         bal: 16.78,
