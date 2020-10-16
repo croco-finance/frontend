@@ -3,11 +3,7 @@ import styled from 'styled-components';
 import { animations, colors, variables } from '../../config';
 import { Input, GrayBox, MultipleTokenSelect } from '../../components/ui';
 import { NavBar, SimulatorContainer } from '../../components/layout';
-import {
-    poolItemExample1,
-    currentPriceRatioExample,
-    PoolItemsExample,
-} from '../../config/example-data';
+import { PoolItemsExample } from '../../config/example-data';
 import { PoolItemInterface } from '../../config/types';
 import { getFormattedPercentageValue } from '../../utils';
 import Overview from './components/LeftContainer/Overview';
@@ -66,8 +62,6 @@ const MultipleSelectWrapper = styled.div`
     flex-grow: 1;
 `;
 
-const TokenBalancesWrapper = styled(Section)``;
-
 const PoolSelectLabel = styled(SectionLabel)``;
 
 const OverviewWrapper = styled.div`
@@ -107,35 +101,7 @@ const buildPoolOptions = (pools: any) => {
     return poolOptions;
 };
 
-const getUserTokenBalances = (totalPoolValue: { [key: string]: number }, userPoolShare: number) => {
-    let balances = {};
-    for (const [key, value] of Object.entries(totalPoolValue)) {
-        balances[key] = userPoolShare * value;
-    }
-
-    return balances;
-};
-
-const getInitialSliderState = (tokens: Array<string>) => {
-    let attributes = {};
-    const initialSetup = {
-        min: 0,
-        max: 2,
-        step: 2 / 100,
-        value: 1.0,
-    };
-    tokens.forEach(token => {
-        attributes[token] = { ...initialSetup }; // it's crucial to use spread operator here
-    });
-
-    return attributes;
-};
-
 type PoolOption = ReturnType<typeof buildPoolOption>;
-
-interface ParamsInterface {
-    newPriceRatios: { [key: string]: number };
-}
 
 interface RouteComponentProps<P> {
     match: match<P>;

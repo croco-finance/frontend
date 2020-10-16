@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import styled from 'styled-components';
 import { animations, colors, variables } from '../../../../config';
 import { Card } from '../../../../components/ui';
@@ -32,10 +34,15 @@ const Wrapper = styled.div`
     }
 `;
 
-const SectionTitle = styled.div`
-    color: ${colors.FONT_MEDIUM};
-    font-size: ${variables.FONT_SIZE.SMALL};
+const SelectPoolWrapper = styled.div`
+    display: flex;
+    height: 88vh;
+    align-items: center;
+    justify-content: center;
+    color: ${colors.FONT_LIGHT};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    font-size: ${variables.FONT_SIZE.H2};
+    text-align: center;
 `;
 
 const GraphWrapper = styled.div`
@@ -64,6 +71,23 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const CardInfo = ({}: Props) => {
+    const allPools = useSelector(state => state.allPools);
+    const selectedPoolId = useSelector(state => state.selectedPoolId);
+
+    // TODO make the following checks and computations cleaner
+    if (!allPools || !allPools[selectedPoolId]) {
+        return (
+            <SelectPoolWrapper>
+                We didn't find any pools associated with this address :(
+            </SelectPoolWrapper>
+        );
+    }
+
+    // just in case the Pool summary is selected, return the following message
+    if (selectedPoolId === 'all' || !selectedPoolId) {
+        return <SelectPoolWrapper>Select your pool</SelectPoolWrapper>;
+    }
+
     return (
         <Card>
             <Wrapper>

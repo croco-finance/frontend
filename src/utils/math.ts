@@ -150,4 +150,5 @@ export {
     getPoolsSummaryObject,
     arrangeArray,
     getBalancerImpLoss,
+    getDailyAverageFeeGains,
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { animations, colors, variables } from '../../../../config';
 import { ToggleSwitch, Card, GrayBox, PageLogo, InlineCircle } from '../../../../components/ui';
@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import CardOverview from './CardOverview';
 import { currentPriceRatioExample } from '../../../../config/example-data';
 import { PoolItemInterface } from '../../../../config/types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { getFiatValueFromCryptoAmounts } from '../../../../utils/math';
 
@@ -76,16 +76,18 @@ const CardInfo = ({ address }: Props) => {
         <Card>
             <Wrapper>
                 <CardOverview></CardOverview>
-                <SimulatorButtonWrapper>
-                    Are you wondering how assets' price changes affect your pool balance?
-                    <StyledLink
-                        to={{
-                            pathname: `/simulator/${address}/${selectedPoolId}`,
-                        }}
-                    >
-                        Open in simulator
-                    </StyledLink>
-                </SimulatorButtonWrapper>
+                {selectedPoolId !== 'all' && (
+                    <SimulatorButtonWrapper>
+                        Are you wondering how assets' price changes affect your pool balance?
+                        <StyledLink
+                            to={{
+                                pathname: `/simulator/${address}/${selectedPoolId}`,
+                            }}
+                        >
+                            Open in simulator
+                        </StyledLink>
+                    </SimulatorButtonWrapper>
+                )}
             </Wrapper>
         </Card>
     );

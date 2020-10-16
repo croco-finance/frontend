@@ -10,6 +10,7 @@ import {
     getFiatFromCrypto,
     getFormattedPercentageValue,
     getPoolsSummaryObject,
+    getDailyAverageFeeGains,
 } from '../../../../../utils/math';
 
 const GRID_GAP = 5;
@@ -150,12 +151,6 @@ const CardOverview = ({}: Props) => {
     } = pool;
     const startBalance = endBalanceUSD - netReturnUSD;
 
-    const getDailyAverageFeeGains = (timeStampStart, timeStampEnd, totalFeesUSD) => {
-        const differenceMilliseconds = timeStampEnd - timeStampStart;
-        const differenceDays = differenceMilliseconds / (1000 * 3600 * 24);
-        return totalFeesUSD / differenceDays;
-    };
-
     let averageFeeGains;
     if (selectedPoolId === 'all') {
         averageFeeGains = pool.averageDailyFeesUSD;
@@ -163,8 +158,7 @@ const CardOverview = ({}: Props) => {
         averageFeeGains = getDailyAverageFeeGains(start, end, feesUSD);
     }
 
-    const daysLefStaking = Math.abs(Math.ceil(dexReturnUSD / averageFeeGains));
-    console.log('daysLefStaking', daysLefStaking);
+    const daysLeftStaking = Math.abs(Math.ceil(dexReturnUSD / averageFeeGains));
 
     return (
         <Wrapper>
@@ -223,7 +217,7 @@ const CardOverview = ({}: Props) => {
                         firstColumn="Transactions cost"
                         secondColumn={
                             <FiatAmount
-                                value={-getFiatFromCrypto('eth', 'usd', txCostEth)}
+                                value={getFiatFromCrypto('eth', 'usd', txCostEth)}
                                 usePlusSymbol
                             />
                         }
@@ -234,7 +228,9 @@ const CardOverview = ({}: Props) => {
                         secondColumn={
                             <ImpLossValueWrapper>
                                 {impLossRel && (
-                                    <SubValue>{getFormattedPercentageValue(impLossRel)}</SubValue>
+                                    <SubValue>
+                                        {getFormattedPercentageValue(Math.abs(impLossRel))}
+                                    </SubValue>
                                 )}
 
                                 <FiatAmount value={impLossUSD} usePlusSymbol />
@@ -257,27 +253,29 @@ const CardOverview = ({}: Props) => {
                         color="dark"
                     />
                 </TotalLossRowWrapper>
-                {dexReturnUSD < 0 && (
-                    <DaysLeftWrapper>
-                        <DaysLeftGridWrapper>
-                            <CardRow
-                                firstColumn="Average fee gains"
-                                secondColumn={
-                                    <FiatAmount value={averageFeeGains} usePlusSymbol></FiatAmount>
-                                }
-                                color="dark"
-                            />
+                <DaysLeftWrapper>
+                    <DaysLeftGridWrapper>
+                        <CardRow
+                            firstColumn="Average daily fee gains"
+                            secondColumn={
+                                <FiatAmount value={averageFeeGains} usePlusSymbol></FiatAmount>
+                            }
+                            color="dark"
+                        />
+                        {dexReturnUSD < 0 && (
                             <CardRow
                                 firstColumn="Days left to compensate loss*"
-                                secondColumn={daysLefStaking}
+                                secondColumn={daysLeftStaking}
                                 color="dark"
                             />
-                        </DaysLeftGridWrapper>
+                        )}
+                    </DaysLeftGridWrapper>
+                    {dexReturnUSD < 0 && (
                         <DaysLeftNote>
                             <b>*</b> According to your average trading fee gains
                         </DaysLeftNote>
-                    </DaysLeftWrapper>
-                )}
+                    )}
+                </DaysLeftWrapper>
             </GrayBox>
         </Wrapper>
     );

@@ -137,7 +137,6 @@ const Input = ({
     useDarkBorder = false,
     ...rest
 }: Props) => {
-    const [isHovered, setIsHovered] = React.useState(false);
     const inputAddonRef = createRef<HTMLDivElement>();
     const [inputAddonWidth, setInputAddonWidth] = React.useState(0);
 
@@ -151,11 +150,7 @@ const Input = ({
     }, [inputAddonRef]);
 
     return (
-        <Wrapper
-            {...wrapperProps}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
+        <Wrapper {...wrapperProps}>
             <InputWrapper>
                 {innerAddon && addonAlign === 'left' && (
                     <InputAddon align="left" ref={inputAddonRef}>

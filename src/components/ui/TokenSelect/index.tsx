@@ -10,10 +10,6 @@ const Wrapper = styled.div`
     width: 140px;
     /* border-radius: 50px; */
 `;
-const TokenWrapper = styled.div`
-    padding-right: 10px;
-`;
-const SelectWrapper = styled.div``;
 
 interface Option {
     value: string;

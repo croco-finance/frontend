@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { TokenLogo, FiatAmount, GrayBox, ToggleSwitch } from '../../../../../components/ui';
+import { FiatAmount, GrayBox, ToggleSwitch } from '../../../../../components/ui';
 import { variables, colors } from '../../../../../config';
 import CardRow from '../CardRow';
-import { currentPriceRatioExample } from '../../../../../config/example-data';
-import { PriceRatesInterface } from '../../../../../config/types';
+import { arrangeArray, getBalancerImpLoss } from '../../../../../utils';
+import { currentPriceRatioExample, oldRatioExample } from '../../../../../config/example-data';
+import { PoolItemInterface } from '../../../../../config/types';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    getFiatFromCrypto,
+    getFormattedPercentageValue,
+    getPoolsSummaryObject,
+    getDailyAverageFeeGains,
+} from '../../../../../utils/math';
 
 const GRID_GAP = 5;
 
@@ -107,6 +115,30 @@ interface Props {
 }
 
 const CardOverview = ({}: Props) => {
+    const arr = arrangeArray(-500, 500, 50);
+
+    const [showEth, setShowEth] = useState(false);
+
+    const allPools = useSelector(state => state.allPools);
+    const selectedPoolId = useSelector(state => state.selectedPoolId);
+
+    const pool = allPools[selectedPoolId];
+
+    const {
+        endBalanceUSD,
+        netReturnUSD,
+        feesUSD,
+        txCostEth,
+        impLossUSD,
+        impLossRel,
+        dexReturnUSD,
+        start,
+        end,
+    } = pool;
+
+    const averageFeeGains = getDailyAverageFeeGains(start, end, feesUSD);
+    const daysLeftStaking = Math.abs(Math.ceil(dexReturnUSD / averageFeeGains));
+
     return (
         <Wrapper>
             <SwitchWrapper>
@@ -125,7 +157,7 @@ const CardOverview = ({}: Props) => {
                 <PoolValueGridWrapper>
                     <CardRow
                         firstColumn="Your pool value"
-                        secondColumn={<FiatAmount value={60000}></FiatAmount>}
+                        secondColumn={<FiatAmount value={endBalanceUSD}></FiatAmount>}
                         thirdColumn={
                             <PoolValueWrapper>
                                 <FiatAmount value={20000}></FiatAmount>
@@ -151,14 +183,19 @@ const CardOverview = ({}: Props) => {
                 <GridWrapper>
                     <CardRow
                         firstColumn="Total fee gains"
-                        secondColumn={<FiatAmount value={60000} usePlusSymbol />}
+                        secondColumn={<FiatAmount value={feesUSD} usePlusSymbol />}
                         thirdColumn={<FiatAmount value={20000} usePlusSymbol />}
                         color="dark"
                     />
 
                     <CardRow
                         firstColumn="Deposit tx. cost"
-                        secondColumn={<FiatAmount value={-23} usePlusSymbol />}
+                        secondColumn={
+                            <FiatAmount
+                                value={getFiatFromCrypto('eth', 'usd', txCostEth)}
+                                usePlusSymbol
+                            />
+                        }
                         thirdColumn={<FiatAmount value={-670} usePlusSymbol />}
                         color="dark"
                     />
@@ -166,8 +203,10 @@ const CardOverview = ({}: Props) => {
                         firstColumn="Impermanent loss"
                         secondColumn={
                             <ImpLossValueWrapper>
-                                <SubValue>23.67%</SubValue>
-                                <FiatAmount value={-23} usePlusSymbol />
+                                <SubValue>
+                                    {getFormattedPercentageValue(Math.abs(impLossRel))}
+                                </SubValue>
+                                <FiatAmount value={impLossUSD} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         thirdColumn={
@@ -184,7 +223,7 @@ const CardOverview = ({}: Props) => {
                         firstColumn="Total"
                         secondColumn={
                             <FiatAmount
-                                value={-23}
+                                value={dexReturnUSD}
                                 usePlusSymbol
                                 colorized
                                 useBadgeStyle
@@ -204,14 +243,16 @@ const CardOverview = ({}: Props) => {
                 <DaysLeftWrapper>
                     <DaysLeftGridWrapper>
                         <CardRow
-                            firstColumn="Daily fee gains*"
-                            secondColumn={<FiatAmount value={23} usePlusSymbol></FiatAmount>}
+                            firstColumn="Average daily fee gains*"
+                            secondColumn={
+                                <FiatAmount value={averageFeeGains} usePlusSymbol></FiatAmount>
+                            }
                             thirdColumn={<FiatAmount value={67} usePlusSymbol></FiatAmount>}
                             color="dark"
                         />
                         <CardRow
                             firstColumn="Days left to compensate loss*"
-                            secondColumn={32}
+                            secondColumn={dexReturnUSD < 0 ? daysLeftStaking : 0}
                             thirdColumn={0}
                             color="dark"
                         />
