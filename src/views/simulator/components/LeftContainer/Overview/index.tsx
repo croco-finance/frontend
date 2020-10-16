@@ -31,7 +31,7 @@ const HeaderWrapper = styled(GridWrapper)`
 `;
 
 const TokenInfoWrapper = styled(GridWrapper)<{ rowsCount: number }>`
-    grid-template-rows: ${props => `repeat(${props.rowsCount}, 50px)`};
+    grid-template-rows: ${props => `repeat(${props.rowsCount}, 45px)`};
     border-top: 1px solid ${colors.STROKE_GREY};
     /* border-bottom: 1px solid ${colors.STROKE_GREY}; */
     padding-top: 10px;
@@ -46,10 +46,11 @@ const TokenSymbol = styled.div`
 `;
 
 interface Props {
-    size?: number;
+    currentTokenRates: any;
+    iconSize?: number;
 }
 
-const Overview = ({ size = 20 }: Props) => {
+const Overview = ({ currentTokenRates, iconSize = 20 }: Props) => {
     // const numberOfTokens = Object.keys(balances).length;
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
@@ -60,6 +61,8 @@ const Overview = ({ size = 20 }: Props) => {
 
     const { tokens, tokenWeights, endTokenBalance } = allPools[selectedPoolId];
     const numberOfTokens = tokens.length;
+    console.log('currentTokenRates', currentTokenRates);
+    console.log('tokens', tokens);
 
     return (
         <Wrapper>
@@ -79,14 +82,15 @@ const Overview = ({ size = 20 }: Props) => {
                             key={i}
                             firstColumn={
                                 <TokenWrapper>
-                                    <TokenLogo symbol={token.symbol} size={size} />
+                                    <TokenLogo symbol={token.symbol} size={iconSize} />
                                     <TokenSymbol>{token.symbol}</TokenSymbol>
                                 </TokenWrapper>
                             }
                             secondColumn={getFormattedPercentageValue(tokenWeights[i], true)}
                             thirdColumn={endTokenBalance[i].toFixed(4)}
                             fourthColumn={
-                                <FiatAmount value={currentPriceRatioExample['usd'][token.symbol]} />
+                                // <FiatAmount value={currentPriceRatioExample['usd'][token.symbol]} />
+                                <FiatAmount value={currentTokenRates[token.address]['usd']} />
                             }
                             color="dark"
                         />

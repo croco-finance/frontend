@@ -21,7 +21,6 @@ interface RowContentProps {
 const Col = styled.div<RowContentProps>`
     display: flex;
     align-items: center;
-    height: 36px;
     color: ${props => (props.color === 'light' ? `${colors.FONT_MEDIUM}` : `${colors.FONT_DARK}`)};
 
     /* content alignment styles */

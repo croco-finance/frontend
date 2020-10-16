@@ -70,7 +70,7 @@ const CardInfo = ({ address }: Props) => {
     return (
         <Card>
             <Wrapper>
-                <CardOverview></CardOverview>
+                <CardOverview />
                 {selectedPoolId !== 'all' && (
                     <SimulatorButtonWrapper>
                         Are you wondering how assets' price changes affect your pool balance?

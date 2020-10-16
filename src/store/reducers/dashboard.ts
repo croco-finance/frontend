@@ -5,12 +5,14 @@ interface InitialStateInterface {
     allPools: { [key: string]: types.PoolItemInterface } | {};
     selectedPoolId: string;
     exchangeToPoolMapping: { [key: string]: Array<string> } | {};
+    userAddress: string;
 }
 
 const initialState: InitialStateInterface = {
     allPools: {},
     selectedPoolId: '',
     exchangeToPoolMapping: {},
+    userAddress: '',
 };
 
 // the argument is previous state. For the forst run it is initial state

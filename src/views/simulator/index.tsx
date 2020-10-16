@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { NavBar, SimulatorContainer } from '../../components/layout';
-import { GrayBox, Input, MultipleTokenSelect } from '../../components/ui';
+import { GrayBox, Input, MultipleTokenSelect, Spinner } from '../../components/ui';
 import { animations, colors, variables } from '../../config';
-import { PoolItemsExample } from '../../config/example-data';
+import { PoolItemsExample, poolItemExample1 } from '../../config/example-data';
 import { PoolItemInterface } from '../../config/types';
 import * as actionTypes from '../../store/actions/actionTypes';
 import { getFormattedPercentageValue } from '../../utils';
+import { fetchCurrentFiatRates, fetchTokensCurrentFiatRates } from '../../utils/coingecko';
 import CardInfo from './components/CardInfo';
 import Overview from './components/LeftContainer/Overview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
@@ -127,6 +128,9 @@ const Simulator = (props: RouteComponentProps<any>) => {
     );
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isFetchingPrices, setIsFetchingPrices] = useState(false);
+
+    const [currentTokenRates, setCurrentTokenRates] = useState({});
 
     const dispatch = useDispatch();
     const allPools = useSelector(state => state.allPools);
@@ -144,6 +148,26 @@ const Simulator = (props: RouteComponentProps<any>) => {
             });
         }
     }, []);
+
+    useEffect(() => {
+        setIsFetchingPrices(true);
+        const fetchTokenRates = async () => {
+            // const coinlist = await fetchCurrentFiatRates();
+            const currencies = ['usd'];
+            let fetchedRates = await fetchTokensCurrentFiatRates(
+                allPools[selectedPoolId].tokens,
+                currencies,
+            );
+            console.log('fetchedRates', fetchedRates);
+
+            setCurrentTokenRates(fetchedRates);
+            setIsFetchingPrices(false);
+        };
+
+        if (allPools[selectedPoolId]) {
+            fetchTokenRates();
+        }
+    }, [selectedPoolId]);
 
     // TODO move this to separate hook
     useEffect(() => {
@@ -207,6 +231,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                         <MultipleTokenSelect
                             options={poolOptions}
                             onChange={(option: PoolOption) => {
+                                setIsFetchingPrices(true);
                                 option &&
                                     dispatch({
                                         type: actionTypes.SET_SELECTED_POOL_ID,
@@ -217,9 +242,16 @@ const Simulator = (props: RouteComponentProps<any>) => {
                         ></MultipleTokenSelect>
                     </MultipleSelectWrapper>
                 </ChoosePoolWrapper>
-                <OverviewWrapper>
-                    <Overview />
-                </OverviewWrapper>
+
+                {currentTokenRates ? (
+                    !isFetchingPrices && !isLoading ? (
+                        <OverviewWrapper>
+                            <Overview currentTokenRates={currentTokenRates} />
+                        </OverviewWrapper>
+                    ) : (
+                        <Spinner size={20} />
+                    )
+                ) : null}
 
                 {allPools[selectedPoolId] && (
                     <GrayBox>
