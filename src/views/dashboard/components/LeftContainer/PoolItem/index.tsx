@@ -1,13 +1,9 @@
-import colors from '../../../../../config/colors';
 import React from 'react';
-import styled from 'styled-components';
-import { TokenLogo, FiatAmount } from '../../../../../components/ui';
-import { variables } from '../../../../../config';
-import { currentPriceRatioExample } from '../../../../../config/example-data';
-import { PoolItemInterface } from '../../../../../config/types';
-
-import { getFiatValueFromCryptoAmounts } from '../../../../../utils/math';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
+import { FiatAmount, TokenLogo } from '../../../../../components/ui';
+import { variables } from '../../../../../config';
+import colors from '../../../../../config/colors';
 import * as actionTypes from '../../../../../store/actions/actionTypes';
 
 const Wrapper = styled.div<{ isSelected: boolean }>`
@@ -41,8 +37,6 @@ const Item = styled.div`
 
 const Value = styled(Item)``;
 const Gains = styled(Item)``;
-
-const Balance = styled(Item)``;
 
 const PoolWrapper = styled(Item)`
     flex-direction: column;

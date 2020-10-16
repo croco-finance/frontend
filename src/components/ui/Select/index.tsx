@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactSelect, { components, Props as SelectProps } from 'react-select';
+import ReactSelect, { Props as SelectProps } from 'react-select';
 import styled from 'styled-components';
 import { colors, variables } from '../../../config';
 
@@ -109,10 +109,6 @@ const Wrapper = styled.div<Props>`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-`;
-
-const Label = styled.span`
-    min-height: 32px;
 `;
 
 interface Props extends Omit<SelectProps, 'components'> {

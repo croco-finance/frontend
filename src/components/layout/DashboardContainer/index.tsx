@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LeftFillContainer, RightFillContainer, MainContainer } from '..';
-import colors from '../../../config/colors';
+import { LeftFillContainer, MainContainer, RightFillContainer } from '..';
 
 const Wrapper = styled.div`
     display: flex;

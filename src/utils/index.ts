@@ -1,9 +1,9 @@
 import {
-    countDecimals,
-    getFormattedPercentageValue,
     arrangeArray,
+    countDecimals,
     getBalancerImpLoss,
     getDailyAverageFeeGains,
+    getFormattedPercentageValue,
 } from './math';
 
 export {

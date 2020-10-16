@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactSwitch, { ReactSwitchProps } from 'react-switch';
-import colors from '../../../config/colors';
 import styled, { css } from 'styled-components';
+import colors from '../../../config/colors';
 
 const StyledReactSwitch = styled(({ isSmall, ...rest }) => <ReactSwitch {...rest} />)<
     Pick<Props, 'isSmall'>

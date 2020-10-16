@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FiatAmount, GrayBox, ToggleSwitch } from '../../../../../components/ui';
-import { variables, colors } from '../../../../../config';
-import CardRow from '../CardRow';
-import { arrangeArray, getBalancerImpLoss } from '../../../../../utils';
-import { currentPriceRatioExample, oldRatioExample } from '../../../../../config/example-data';
-import { PoolItemInterface } from '../../../../../config/types';
-import { useDispatch, useSelector } from 'react-redux';
+import { colors, variables } from '../../../../../config';
+import { arrangeArray } from '../../../../../utils';
 import {
+    getDailyAverageFeeGains,
     getFiatFromCrypto,
     getFormattedPercentageValue,
-    getPoolsSummaryObject,
-    getDailyAverageFeeGains,
 } from '../../../../../utils/math';
+import CardRow from '../CardRow';
 
 const GRID_GAP = 5;
 

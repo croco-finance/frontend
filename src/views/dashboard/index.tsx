@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { animations, colors, variables } from '../../config';
-import { Input } from '../../components/ui';
-import { NavBar, DashboardContainer } from '../../components/layout';
-import PoolList from './components/LeftContainer/PoolList';
-import SummaryList from './components/LeftContainer/SummaryList';
-import CardInfo from './components/CardInfo';
-import { Link } from 'react-router-dom';
 import * as H from 'history';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
+import { DashboardContainer, NavBar } from '../../components/layout';
+import { Input } from '../../components/ui';
+import { animations, colors, variables } from '../../config';
 import { PoolItemsExample } from '../../config/example-data';
 import * as actionTypes from '../../store/actions/actionTypes';
+import CardInfo from './components/CardInfo';
+import PoolList from './components/LeftContainer/PoolList';
+import SummaryList from './components/LeftContainer/SummaryList';
 
 const AddressWrapper = styled.div`
     background-color: ${colors.BACKGROUND};

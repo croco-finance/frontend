@@ -1,15 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
-import { animations, colors, variables } from '../../../../config';
-import { ToggleSwitch, Card, GrayBox, PageLogo, InlineCircle } from '../../../../components/ui';
-
-import { Link } from 'react-router-dom';
-import CardOverview from './CardOverview';
-import { currentPriceRatioExample } from '../../../../config/example-data';
-import { PoolItemInterface } from '../../../../config/types';
 import { useSelector } from 'react-redux';
-
-import { getFiatValueFromCryptoAmounts } from '../../../../utils/math';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { Card } from '../../../../components/ui';
+import { animations, colors, variables } from '../../../../config';
+import CardOverview from './CardOverview';
 
 const Wrapper = styled.div`
     /* animation: ${animations.SHOW_UP} 1s; */

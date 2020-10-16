@@ -1,12 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { TokenLogo, FiatAmount } from '../../../../../components/ui';
-import { variables, colors } from '../../../../../config';
+import { FiatAmount, TokenLogo } from '../../../../../components/ui';
+import { colors, variables } from '../../../../../config';
 import { currentPriceRatioExample } from '../../../../../config/example-data';
-import OverviewRow from '../OverviewRow';
-import * as actionTypes from '../../../../../store/actions/actionTypes';
-import { useDispatch, useSelector } from 'react-redux';
 import { getFormattedPercentageValue } from '../../../../../utils';
+import OverviewRow from '../OverviewRow';
 
 const GRID_GAP = 5;
 

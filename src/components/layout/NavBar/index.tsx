@@ -1,9 +1,9 @@
-import colors from '../../../config/colors';
 import React from 'react';
-import styled, { css } from 'styled-components';
 import { NavLink } from 'react-router-dom';
-import { PageLogo } from '../../ui';
+import styled from 'styled-components';
 import { variables } from '../../../config';
+import colors from '../../../config/colors';
+import { PageLogo } from '../../ui';
 
 const linkActiveStyles = {
     color: colors.FONT_DARK,

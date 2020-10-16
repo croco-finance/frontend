@@ -1,5 +1,4 @@
 import { currentPriceRatioExample, PoolItemsDictExample } from '../config/example-data';
-import { PoolItemsInterface, PoolItemInterface } from '../config/types';
 
 const countDecimals = value => {
     if (Math.floor(value) !== value) return value.toString().split('.')[1].length || 0;
@@ -52,7 +51,8 @@ const getPoolsSummaryObject = (pools = PoolItemsDictExample) => {
     let txCostEthSum = 0;
     let averageDailyFeesUSDSum = 0;
 
-    for (const [id, pool] of Object.entries(pools)) {
+    for (const poolId of Object.keys(pools)) {
+        const pool = pools[poolId];
         endBalanceUSDSum += pool.endBalanceUSD;
         netReturnUSDSum += pool.netReturnUSD;
         feesUSDSum += pool.feesUSD;

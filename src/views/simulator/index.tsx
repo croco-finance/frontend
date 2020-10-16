@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import * as H from 'history';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { animations, colors, variables } from '../../config';
-import { Input, GrayBox, MultipleTokenSelect } from '../../components/ui';
 import { NavBar, SimulatorContainer } from '../../components/layout';
+import { GrayBox, Input, MultipleTokenSelect } from '../../components/ui';
+import { animations, colors, variables } from '../../config';
 import { PoolItemsExample } from '../../config/example-data';
 import { PoolItemInterface } from '../../config/types';
+import * as actionTypes from '../../store/actions/actionTypes';
 import { getFormattedPercentageValue } from '../../utils';
+import CardInfo from './components/CardInfo';
 import Overview from './components/LeftContainer/Overview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
-import CardInfo from './components/CardInfo';
-import * as H from 'history';
-import * as actionTypes from '../../store/actions/actionTypes';
-import { useDispatch, useSelector } from 'react-redux';
 
 const AddressWrapper = styled.div`
     background-color: ${colors.BACKGROUND};

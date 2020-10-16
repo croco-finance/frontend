@@ -1,9 +1,8 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
-import Tooltip from '@material-ui/core/Tooltip';
-import { colors } from '../../../config';
+import { withStyles } from '@material-ui/core/styles';
+import React from 'react';
 import styled from 'styled-components';
+import { colors } from '../../../config';
 
 const Wrapper = styled.div<{ width: number }>`
     width: ${props => props.width}px;

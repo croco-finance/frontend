@@ -1,4 +1,4 @@
-import { PoolItemInterface, PoolItemsInterface, PriceRatesInterface, PoolItemsDict } from './types';
+import { PoolItemInterface, PoolItemsDict, PoolItemsInterface, PriceRatesInterface } from './types';
 
 export const poolItemExample1: PoolItemInterface = {
     exchange: 'balancer',

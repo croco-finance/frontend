@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { TokenLogo, FiatAmount, GrayBox, ToggleSwitch } from '../../../../../components/ui';
-import { variables, colors } from '../../../../../config';
-import CardRow from '../CardRow';
-import { currentPriceRatioExample, oldRatioExample } from '../../../../../config/example-data';
-import { PoolItemInterface } from '../../../../../config/types';
-import { useDispatch, useSelector } from 'react-redux';
+import { FiatAmount, GrayBox, ToggleSwitch } from '../../../../../components/ui';
+import { colors, variables } from '../../../../../config';
 import {
+    getDailyAverageFeeGains,
     getFiatFromCrypto,
     getFormattedPercentageValue,
     getPoolsSummaryObject,
-    getDailyAverageFeeGains,
 } from '../../../../../utils/math';
+import CardRow from '../CardRow';
 
 const GRID_GAP = 5;
 
@@ -116,9 +114,7 @@ const PoolValueDifference = styled.div`
     font-size: ${variables.FONT_SIZE.SMALL};
 `;
 
-interface Props {}
-
-const CardOverview = ({}: Props) => {
+const CardOverview = () => {
     const [showEth, setShowEth] = useState(false);
 
     const allPools = useSelector(state => state.allPools);

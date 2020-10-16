@@ -1,10 +1,10 @@
-import { colors, variables } from '../../../../../config';
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { TokenLogo, FiatAmount } from '../../../../../components/ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPoolsSummaryObject } from '../../../../../utils/math';
+import styled from 'styled-components';
+import { FiatAmount, TokenLogo } from '../../../../../components/ui';
+import { colors, variables } from '../../../../../config';
 import * as actionTypes from '../../../../../store/actions/actionTypes';
+import { getPoolsSummaryObject } from '../../../../../utils/math';
 
 const Wrapper = styled.div<{ isSelected: boolean }>`
     display: flex;
@@ -40,8 +40,6 @@ const Item = styled.div`
 
 const Value = styled(Item)``;
 const Gains = styled(Item)``;
-
-const Roi = styled(Item)``;
 
 const ExchangeWrapper = styled(Item)`
     display: flex;

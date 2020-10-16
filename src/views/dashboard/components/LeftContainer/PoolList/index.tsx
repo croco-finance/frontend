@@ -1,10 +1,10 @@
-import colors from '../../../../../config/colors';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import PoolItem from '../PoolItem';
 import { TokenLogo } from '../../../../../components/ui';
 import { variables } from '../../../../../config';
-import { useDispatch, useSelector } from 'react-redux';
+import colors from '../../../../../config/colors';
+import PoolItem from '../PoolItem';
 
 const Wrapper = styled.div`
     padding-left: 0;
@@ -39,8 +39,6 @@ const ExchangeTitle = styled.div`
 const Value = styled(HeaderChild)``;
 
 const Gains = styled(HeaderChild)``;
-
-const Roi = styled(HeaderChild)``;
 
 const ItemsWrapper = styled.div``;
 

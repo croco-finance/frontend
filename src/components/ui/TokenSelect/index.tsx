@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TokenLogo, Select } from '..';
+import { Select, TokenLogo } from '..';
 
 const Wrapper = styled.div`
     display: flex;

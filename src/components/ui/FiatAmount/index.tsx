@@ -45,13 +45,6 @@ const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: b
         `}
 `;
 
-const ColorizeBadge = styled.div`
-    color: white;
-    background-color: ${colors.RED};
-    padding: 5px;
-    border-radius: 5px;
-`;
-
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     value: number;
     currency?: string;

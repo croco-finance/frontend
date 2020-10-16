@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { tokenToString } from 'typescript';
-import { TokenLogo, FiatAmount } from '../../../../../components/ui';
-import { variables, colors } from '../../../../../config';
+import { FiatAmount, TokenLogo } from '../../../../../components/ui';
+import { colors, variables } from '../../../../../config';
 import { currentPriceRatioExample } from '../../../../../config/example-data';
 import PriceChangeRow from './PriceChangeRow';
-import * as actionTypes from '../../../../../store/actions/actionTypes';
-import { useDispatch, useSelector } from 'react-redux';
 
 const GRID_GAP = 5;
 

@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
+import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { animations, colors, variables } from '../../../../config';
 import { Card } from '../../../../components/ui';
-
-import { Link } from 'react-router-dom';
+import { animations, colors, variables } from '../../../../config';
 import CardOverview from './CardOverview';
 import ILGraph from './ILGraph';
 
@@ -62,15 +59,7 @@ QUESTIONS
 
 */
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-    initialPrices?: any;
-    newPrices?: any;
-    userPoolShare?: any;
-    initialTokenBalance?: any;
-    newTokenBalance?: any;
-}
-
-const CardInfo = ({}: Props) => {
+const CardInfo = () => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 

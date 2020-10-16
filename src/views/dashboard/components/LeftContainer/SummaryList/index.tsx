@@ -1,11 +1,10 @@
-import colors from '../../../../../config/colors';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import PoolItem from '../PoolItem';
 import { variables } from '../../../../../config';
-import SummaryItem from '../SummaryItem';
-import { useDispatch, useSelector } from 'react-redux';
+import colors from '../../../../../config/colors';
 import { getPoolsSummaryObject } from '../../../../../utils/math';
+import SummaryItem from '../SummaryItem';
 
 const Wrapper = styled.div`
     padding-left: 0;
@@ -17,7 +16,7 @@ const Header = styled.div`
     align-items: center;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_MEDIUM};
-    /* use the same sside padding as in <OverviewItem> so that the items are aligned */
+    /* use the same side padding as in <OverviewItem> so that the items are aligned */
     padding: 10px 10px 15px 10px;
 `;
 
@@ -37,14 +36,8 @@ const Roi = styled(HeaderChild)``;
 
 const ItemsWrapper = styled.div``;
 
-interface Props {}
-
-const SummaryList = ({}: Props) => {
-    const dispatch = useDispatch();
+const SummaryList = () => {
     const allPools = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    const exchangeToPoolMapping = useSelector(state => state.exchangeToPoolMapping);
-
     const poolsSummaryInfo: any = getPoolsSummaryObject(allPools);
 
     return (

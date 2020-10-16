@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { colors, variables, animations } from '../../config';
+import styled from 'styled-components';
+import { colors, variables } from '../../config';
 
 const MainWrapper = styled.div`
     height: 100vh;
