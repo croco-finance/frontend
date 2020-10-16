@@ -78,10 +78,76 @@ const getPoolsSummaryObject = (pools = PoolItemsDictExample) => {
     return summaryObject;
 };
 
+const arrangeArray = (start, end, step) => {
+    // TODO make sure start % step = 0 and start = -end;
+    const arrLength = 2 * (end / step) + 1;
+    const arr = new Array(arrLength);
+
+    for (let i = 0; i < arrLength; i++) {
+        arr[i] = start + i * step;
+    }
+    return arr;
+};
+
+const sumArr = (total, num) => {
+    return total + num;
+};
+
+const getBalancerImpLoss = (initialBalances, tokenWeights, newTokenPrices) => {
+    const weightsSum = tokenWeights.reduce(sumArr);
+
+    // Make sure the weights sum up to one
+    // if (weightsSum !== 1) throw 'Sum of token weights is not equal to 1';
+
+    // get value of V
+    let V = 1;
+
+    initialBalances.forEach((balance, i) => {
+        V = V * Math.pow(balance, tokenWeights[i]);
+    });
+
+    // compute new token balances
+    const tokenCount = initialBalances.length;
+    let newBalances = new Array(tokenCount);
+
+    for (let i = 0; i < tokenCount; i++) {
+        const firstPart = Math.pow(
+            tokenWeights[i] / newTokenPrices[i],
+            weightsSum - tokenWeights[i],
+        );
+
+        let secondPart = 1;
+        for (let j = 0; j < tokenCount; j++) {
+            if (j !== i) {
+                secondPart =
+                    secondPart * Math.pow(newTokenPrices[j] / tokenWeights[j], tokenWeights[j]);
+            }
+        }
+
+        newBalances[i] = V * firstPart * secondPart;
+    }
+
+    // compute impermanent loss
+    let valuePool = 0;
+    let valueHodl = 0;
+
+    for (let i = 0; i < tokenCount; i++) {
+        valuePool += newBalances[i] * newTokenPrices[i];
+        valueHodl += initialBalances[i] * newTokenPrices[i];
+    }
+
+    const impLossAbs = valuePool - valueHodl;
+    const impLossRel = valuePool / valueHodl - 1;
+
+    return { impLossAbs, impLossRel };
+};
+
 export {
     countDecimals,
     getFiatValueFromCryptoAmounts,
     getFiatFromCrypto,
     getFormattedPercentageValue,
     getPoolsSummaryObject,
+    arrangeArray,
+    getBalancerImpLoss,
 };
