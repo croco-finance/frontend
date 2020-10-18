@@ -1,4 +1,5 @@
 import TokenLogo from './TokenLogo';
+import Icon from './Icon';
 import ToggleSwitch from './ToggleSwitch';
 import Select from './Select';
 import Input from './Input';
@@ -28,4 +29,5 @@ export {
     FiatAmount,
     MultipleTokenLogo,
     MultipleTokenSelect,
+    Icon,
 };

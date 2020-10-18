@@ -27,3 +27,9 @@ export const FONT_FAMILY = {
     OPEN_SANS: 'Open Sans',
     ROBOTO: 'Roboto',
 } as const;
+
+export const LINKS = {
+    TELEGRAM: '#',
+    GITHUB: '#',
+    TWITTER: '#',
+};

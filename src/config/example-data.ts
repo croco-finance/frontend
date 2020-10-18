@@ -62,10 +62,24 @@ export const poolItemExample2: PoolItemInterface = {
     tokenWeights: [0.3, 0.2, 0.5],
     endTokenBalance: [12.32, 74.3, 2.64],
     endBalanceUSD: 60000,
+    // endBalanceETH ...,
+
     netReturnUSD: 3243,
+    // To co tam máš teď v rezervách v USD (fees, všechno) - rezervy v USD v t0.
+    // 1. interakce vs
+
     hodlReturnUSD: 236564,
+    // Návratnost, kdybych tam prvotní dva asety nevložil. Jakou teď má hodnotu to, co jsem tam vložil
+    // hodnota v čase t1 - hodnota assetů v čase t0
+
     dexReturnUSD: 34.53,
+    // Fees - impermanent loss - tx cost
+    // rozdíl oproti HODL
+
     feesUSD: 232.54,
+    // + fees v ETH
+    // + Yield farming
+
     impLossUSD: -113,
     impLossRel: -0.25,
     txCostEth: 0.00145,

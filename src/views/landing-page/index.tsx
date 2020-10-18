@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { colors, variables } from '../../config';
 import { isValidEthereumAddress } from '../../utils/validation';
+import { Icon, PageLogo } from '../../components/ui';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -35,10 +36,37 @@ const ContentWrappper = styled.div`
     }
 `;
 
+const TopBar = styled.div`
+    display: flex;
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    align-items: center;
+`;
+
+const PageLogoWrapper = styled.div`
+    display: flex;
+`;
+
+const CommunityIconsWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+`;
+
+const IconLinkWrappper = styled.a`
+    text-decoration: none;
+    cursor: pointer;
+    margin: 0 10px;
+
+    &:hover {
+        text-decoration: none;
+    }
+`;
 const Headline = styled.h1`
     color: ${colors.FONT_DARK};
     font-weight: ${variables.FONT_WEIGHT.BOLD};
-    font-size: 48px;
+    font-size: 52px;
     margin-top: 240px;
     margin-bottom: 60px;
 `;
@@ -94,11 +122,10 @@ const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
         props.isDisabled &&
         css`
             cursor: not-allowed;
-            background-color: ${colors.FONT_LIGHT};
-            color: ${colors.BACKGROUND_DARK};
+            background-color: #e1e6ef;
 
             &:hover {
-                background-color: ${colors.FONT_LIGHT};
+                background-color: #e1e6ef;
             }
         `}
 `;
@@ -117,10 +144,27 @@ const LandingPage = ({ address = '' }: Props) => {
     return (
         <MainWrapper>
             <ContentWrappper>
+                <TopBar>
+                    <PageLogoWrapper>
+                        <PageLogo height={16} />
+                    </PageLogoWrapper>
+                    <CommunityIconsWrapper>
+                        <IconLinkWrappper rel="noreferrer" href={variables.LINKS.GITHUB}>
+                            <Icon icon="github" size={22} />
+                        </IconLinkWrappper>
+                        <IconLinkWrappper rel="noreferrer" href={variables.LINKS.TELEGRAM}>
+                            <Icon icon="telegram" size={22} />
+                        </IconLinkWrappper>
+                        <IconLinkWrappper rel="noreferrer" href={variables.LINKS.TWITTER}>
+                            <Icon icon="twitter" size={22} />
+                        </IconLinkWrappper>
+                    </CommunityIconsWrapper>
+                </TopBar>
+
                 <Headline>
-                    Don't get your
+                    Don't get your profits
                     <br />
-                    liquidity rewards eaten <br />
+                    eaten <br />
                     {/* stays <HeadlineHighlight>im</HeadlineHighlight>permanent */}
                 </Headline>
                 <AddressInputWrapper>

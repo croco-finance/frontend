@@ -73,7 +73,8 @@ const CardInfo = ({ address }: Props) => {
                 <CardOverview />
                 {selectedPoolId !== 'all' && (
                     <SimulatorButtonWrapper>
-                        Are you wondering how assets' price changes affect your pool balance?
+                        See pool in our simulator to simulate how assets' price changes affect your
+                        funds
                         <StyledLink
                             to={{
                                 pathname: `/simulator/${address}/${selectedPoolId}`,

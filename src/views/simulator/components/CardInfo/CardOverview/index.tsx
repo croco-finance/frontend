@@ -258,8 +258,8 @@ const CardOverview = ({}: Props) => {
                             <FiatAmount
                                 value={dexReturnUSD}
                                 usePlusSymbol
-                                colorized
-                                useBadgeStyle
+                                // colorized
+                                // useBadgeStyle
                             ></FiatAmount>
                         }
                         thirdColumn={
@@ -267,7 +267,7 @@ const CardOverview = ({}: Props) => {
                                 value={670}
                                 usePlusSymbol
                                 colorized
-                                useBadgeStyle
+                                // useBadgeStyle
                             ></FiatAmount>
                         }
                         color="dark"

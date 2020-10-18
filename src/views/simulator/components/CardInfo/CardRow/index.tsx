@@ -50,7 +50,7 @@ const CardRow = ({
             <Col textAlign="left" color={'light'}>
                 {firstColumn}
             </Col>
-            <Col textAlign="right" color={color}>
+            <Col textAlign="right" color={'light'}>
                 {secondColumn}
             </Col>
             <Col textAlign="right" color={color}>
