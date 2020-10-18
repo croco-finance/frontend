@@ -19,10 +19,15 @@ interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
 }
 
 const TokenLogo = ({ symbol, className, size = 32, ...rest }: Props) => {
+    let path = TOKENS['unknown'];
+    if (TOKENS[symbol]) {
+        path = TOKENS[symbol];
+    }
+
     return (
         <SvgWrapper className={className} size={size} {...rest}>
             <ReactSVG
-                src={TOKENS[symbol]}
+                src={path}
                 beforeInjection={(svg: any) => {
                     svg.setAttribute('width', `${size}px`);
                     svg.setAttribute('height', `${size}px`);

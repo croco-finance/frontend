@@ -11,6 +11,7 @@ export const TOKENS: any = {
     usdt: require('../../../data/images/tokens/usdt.svg'),
     wbtc: require('../../../data/images/tokens/wbtc.svg'),
     yfi: require('../../../data/images/tokens/yfi.svg'),
+    unknown: require('../../../data/images/tokens/unknown.svg'),
     uniswap: require('../../../data/images/exchanges/uniswap.svg'),
     balancer: require('../../../data/images/exchanges/balancer.svg'),
 };
