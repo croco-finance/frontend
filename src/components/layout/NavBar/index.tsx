@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { variables } from '../../../config';
 import colors from '../../../config/colors';
@@ -39,8 +39,13 @@ const StyledLink = styled(NavLink)`
 
 const NavBar = () => (
     <Wrapper>
-        <PageLogo height={16}></PageLogo>
-
+        <Link
+            to={{
+                pathname: '/',
+            }}
+        >
+            <PageLogo height={16}></PageLogo>
+        </Link>
         <NavItemsWrapper>
             <StyledLink
                 to={{
