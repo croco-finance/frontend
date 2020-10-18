@@ -22,6 +22,7 @@ export interface PoolItemInterface {
     endTokenBalance: Array<number>; // User token balances
     start: number;
     end: number;
+    tokenPriceUSD: Array<number>;
 }
 
 export type PoolItemsInterface = Record<string, { [key: string]: PoolItemInterface }>;

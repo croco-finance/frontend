@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { colors, variables } from '../../config';
+import { isValidEthereumAddress } from '../../utils/validation';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -42,10 +43,6 @@ const Headline = styled.h1`
     margin-bottom: 60px;
 `;
 
-const HeadlineHighlight = styled.span`
-    color: ${colors.BLUE};
-`;
-
 const AddressInputWrapper = styled.div`
     display: flex;
     justify-content: center;
@@ -60,7 +57,7 @@ const AddressInput = styled.input`
     padding: 20px;
     margin-right: 10px;
     border: none;
-    width: 550px;
+    width: 600px;
     font-size: 20px;
     cursor: text;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
@@ -72,11 +69,11 @@ const AddressInput = styled.input`
     }
 
     &::placeholder {
-        color: ${colors.FONT_MEDIUM};
+        color: ${colors.FONT_LIGHT};
     }
 `;
 
-const DashboardButton = styled(Link)`
+const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
     padding: 20px;
     display: block;
     cursor: pointer;
@@ -92,6 +89,18 @@ const DashboardButton = styled(Link)`
     &:hover {
         background-color: ${colors.BLUE};
     }
+
+    ${props =>
+        props.isDisabled &&
+        css`
+            cursor: not-allowed;
+            background-color: ${colors.FONT_LIGHT};
+            color: ${colors.BACKGROUND_DARK};
+
+            &:hover {
+                background-color: ${colors.FONT_LIGHT};
+            }
+        `}
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -101,15 +110,23 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 const LandingPage = ({ address = '' }: Props) => {
     const [selectedAddress, setSelectedAddress] = useState(address);
 
+    // check if the address user typed in the input is valid Ethereum address
+    const isValidAddress = isValidEthereumAddress(selectedAddress);
+    const linkPath = isValidAddress ? `/dashboard/${selectedAddress}` : '';
+
     return (
         <MainWrapper>
             <ContentWrappper>
                 <Headline>
-                    Make sure your impermanent loss <br />
-                    stays <HeadlineHighlight>im</HeadlineHighlight>permanent
+                    Don't get your
+                    <br />
+                    liquidity rewards eaten <br />
+                    {/* stays <HeadlineHighlight>im</HeadlineHighlight>permanent */}
                 </Headline>
                 <AddressInputWrapper>
                     <AddressInput
+                        type="text"
+                        spellCheck={false}
                         placeholder="Enter valid Ethereum address"
                         value={selectedAddress}
                         onChange={event => {
@@ -117,11 +134,9 @@ const LandingPage = ({ address = '' }: Props) => {
                         }}
                     ></AddressInput>
                     <DashboardButton
+                        isDisabled={!isValidAddress}
                         to={{
-                            pathname: `/dashboard/${selectedAddress}`,
-                            state: {
-                                fromNotifications: true,
-                            },
+                            pathname: linkPath,
                         }}
                     >
                         Let's Go!

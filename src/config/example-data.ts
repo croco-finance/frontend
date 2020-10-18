@@ -32,6 +32,7 @@ export const poolItemExample1: PoolItemInterface = {
     txCostEth: 0.00343,
     start: 975625200000,
     end: 976402800000,
+    tokenPriceUSD: [1.001, 14119.6],
 };
 
 export const poolItemExample2: PoolItemInterface = {
@@ -70,6 +71,7 @@ export const poolItemExample2: PoolItemInterface = {
     txCostEth: 0.00145,
     start: 971128800000,
     end: 973810800000,
+    tokenPriceUSD: [370.32, 1.003, 14004.8],
 };
 
 export const poolItemExample3: PoolItemInterface = {
@@ -100,6 +102,7 @@ export const poolItemExample3: PoolItemInterface = {
     txCostEth: 0.0541,
     start: 1573340400000,
     end: 1604962800000,
+    tokenPriceUSD: [180.32, 27.88],
 };
 
 export const PoolItemsExample: PoolItemsInterface = {
