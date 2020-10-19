@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 const Header = styled.div`
     display: flex;
     align-items: center;
-    font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_LIGHT};
     /* use the same sside padding as in <OverviewItem> so that the items are aligned */
     padding: 10px 10px 15px 10px;
@@ -29,12 +29,7 @@ const HeaderChild = styled.div`
 
 const Exchange = styled(HeaderChild)`
     justify-content: start;
-    padding-left: 5px;
-`;
-
-const ExchangeTitle = styled.div`
-    margin-left: 5px;
-    text-transform: capitalize;
+    padding-left: 12px;
 `;
 
 const Value = styled(HeaderChild)``;
@@ -44,7 +39,7 @@ const Gains = styled(HeaderChild)``;
 const ItemsWrapper = styled.div``;
 
 const PoolGroup = styled.div`
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
 `;
 interface Props {}
 
@@ -53,21 +48,17 @@ const PoolList = ({ ...rest }: Props) => {
 
     return (
         <Wrapper>
+            <Header>
+                <Exchange>Pool</Exchange>
+                <Value>Value</Value>
+                <Gains>Fee Gains</Gains>
+                {/* <Roi>Imp. loss</Roi> */}
+            </Header>
             {/* iterate over all exchanges */}
             {Object.keys(exchangeToPoolMapping).map((exchange, i) => {
                 const poolIds = exchangeToPoolMapping[exchange];
                 return (
                     <PoolGroup>
-                        <Header>
-                            <Exchange>
-                                <TokenLogo symbol={exchange} size={26} />
-                                <ExchangeTitle>{exchange}</ExchangeTitle>
-                            </Exchange>
-                            <Value>Value</Value>
-                            <Gains>Fee Gains</Gains>
-                            {/* <Roi>Imp. loss</Roi> */}
-                        </Header>
-
                         <ItemsWrapper>
                             {poolIds.map((poolId, i) => {
                                 return <PoolItem key={poolId} poolId={poolId} />;

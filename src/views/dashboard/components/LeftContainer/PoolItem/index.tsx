@@ -7,6 +7,7 @@ import colors from '../../../../../config/colors';
 import * as actionTypes from '../../../../../store/actions/actionTypes';
 
 const Wrapper = styled.div<{ isSelected: boolean }>`
+    position: relative;
     display: flex;
     align-items: center;
     background-color: inherit;
@@ -65,6 +66,21 @@ const Circle = styled.div`
     color: ${colors.FONT_LIGHT};
 `;
 
+const ExchangeLogoWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 200px;
+    border: 1px solid ${colors.BACKGROUND_DARK};
+    background-color: white;
+    box-shadow: 2px 2px 4px 0px rgba(215, 216, 222, 1);
+`;
+
 interface PoolItem {
     symbol: string;
     weight: number;
@@ -79,7 +95,7 @@ const PoolItem = ({ poolId }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
-    const { tokens, tokenWeights, feesUsd, endBalanceUsd } = allPools[poolId];
+    const { tokens, tokenWeights, feesUsd, endBalanceUsd, exchange } = allPools[poolId];
 
     let isSelected = selectedPoolId === poolId;
 
@@ -89,6 +105,9 @@ const PoolItem = ({ poolId }: Props) => {
 
     return (
         <Wrapper onClick={event => handleOnClick(event, poolId)} isSelected={isSelected}>
+            <ExchangeLogoWrapper>
+                <TokenLogo symbol={exchange} size={17} />
+            </ExchangeLogoWrapper>
             <PoolWrapper>
                 {tokens.map((token, i) => {
                     return (

@@ -83,6 +83,13 @@ const CardInfoWrapper = styled.div`
     animation: ${animations.SHOW_UP} 1.5s;
 `;
 
+const Headline = styled.div`
+    font-size: ${variables.FONT_SIZE.H2};
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    margin-bottom: 30px;
+    padding-left: 8px;
+`;
+
 // TODO why and how does this actually work?
 interface RouteComponentProps<P> {
     match: match<P>;
@@ -184,6 +191,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                                   <SummaryList />
                               </SummaryWrapper>
 
+                              <Headline>Your liquidity pools</Headline>
                               <PoolList />
                           </>
                       )}

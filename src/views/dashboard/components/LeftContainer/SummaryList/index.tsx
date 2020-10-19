@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 const Header = styled.div`
     display: flex;
     align-items: center;
-    font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_LIGHT};
     /* use the same side padding as in <OverviewItem> so that the items are aligned */
     padding: 10px 10px 15px 10px;
