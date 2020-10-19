@@ -77,7 +77,7 @@ const CardInfo = ({ address }: Props) => {
                         Try how assets' price changes affect your funds
                         <StyledLink
                             to={{
-                                pathname: `/simulator/${userAddress}/${selectedPoolId}`,
+                                pathname: `/simulator/${userAddress}`,
                             }}
                         >
                             Open in simulator

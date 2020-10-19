@@ -36,15 +36,8 @@ const Value = styled(HeaderChild)``;
 
 const Gains = styled(HeaderChild)``;
 
-const ItemsWrapper = styled.div``;
-
-const PoolGroup = styled.div`
-    /* margin-bottom: 30px; */
-`;
-interface Props {}
-
-const PoolList = ({ ...rest }: Props) => {
-    const exchangeToPoolMapping = useSelector(state => state.exchangeToPoolMapping);
+const PoolList = () => {
+    const allPools = useSelector(state => state.allPools);
 
     return (
         <Wrapper>
@@ -52,20 +45,9 @@ const PoolList = ({ ...rest }: Props) => {
                 <Exchange>Pool</Exchange>
                 <Value>Value</Value>
                 <Gains>Fee Gains</Gains>
-                {/* <Roi>Imp. loss</Roi> */}
             </Header>
-            {/* iterate over all exchanges */}
-            {Object.keys(exchangeToPoolMapping).map((exchange, i) => {
-                const poolIds = exchangeToPoolMapping[exchange];
-                return (
-                    <PoolGroup>
-                        <ItemsWrapper>
-                            {poolIds.map((poolId, i) => {
-                                return <PoolItem key={poolId} poolId={poolId} />;
-                            })}
-                        </ItemsWrapper>
-                    </PoolGroup>
-                );
+            {Object.keys(allPools).map((poolId, i) => {
+                return <PoolItem key={poolId} poolId={poolId} />;
             })}
         </Wrapper>
     );

@@ -46,11 +46,10 @@ const TokenSymbol = styled.div`
 `;
 
 interface Props {
-    currentTokenRates: any;
     iconSize?: number;
 }
 
-const Overview = ({ currentTokenRates, iconSize = 20 }: Props) => {
+const Overview = ({ iconSize = 20 }: Props) => {
     // const numberOfTokens = Object.keys(balances).length;
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
@@ -59,10 +58,8 @@ const Overview = ({ currentTokenRates, iconSize = 20 }: Props) => {
         return null;
     }
 
-    const { tokens, tokenWeights, endTokenBalance } = allPools[selectedPoolId];
+    const { tokens, tokenWeights, endTokenBalance, endTokenPricesUsd } = allPools[selectedPoolId];
     const numberOfTokens = tokens.length;
-    console.log('currentTokenRates', currentTokenRates);
-    console.log('tokens', tokens);
 
     return (
         <Wrapper>
@@ -88,10 +85,7 @@ const Overview = ({ currentTokenRates, iconSize = 20 }: Props) => {
                             }
                             secondColumn={getFormattedPercentageValue(tokenWeights[i], true)}
                             thirdColumn={endTokenBalance[i].toFixed(4)}
-                            fourthColumn={
-                                // <FiatAmount value={currentPriceRatioExample['usd'][token.symbol]} />
-                                <FiatAmount value={currentTokenRates[token.address]['usd']} />
-                            }
+                            fourthColumn={<FiatAmount value={endTokenPricesUsd[i]} />}
                             color="dark"
                         />
                     );

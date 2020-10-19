@@ -88,7 +88,7 @@ const FetchPoolsHook = initialAddress => {
 
                 // set new (redux) state variables
                 dispatch({ type: actionTypes.SET_ALL_POOLS, pools: poolsCustomObject });
-                dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
+                // dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
                 dispatch({
                     type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
                     exchangeToPoolMapping: exToPoolMap,

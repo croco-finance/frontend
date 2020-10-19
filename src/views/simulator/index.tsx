@@ -13,6 +13,8 @@ import { fetchCurrentTokenFiatRates } from '../../utils/coingecko';
 import CardInfo from './components/CardInfo';
 import Overview from './components/LeftContainer/Overview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
+import { FetchPoolsHook } from '../../hooks';
+import { validation } from '../../utils';
 
 const AddressWrapper = styled.div`
     background-color: ${colors.BACKGROUND};
@@ -118,97 +120,43 @@ interface match<P> {
     url: string;
 }
 
+const getInitialAddress = (globalAddressState, matchAddressUrl) => {
+    if (globalAddressState) {
+        return globalAddressState;
+    }
+    if (matchAddressUrl) {
+        return matchAddressUrl;
+    }
+
+    return '';
+};
+
 const Simulator = (props: RouteComponentProps<any>) => {
-    const [address, setAddress] = useState(
-        props.match.params.address ? props.match.params.address : '',
-    );
-
-    const [urlPoolId, setUrlPoolId] = useState(
-        props.match.params.poolId ? props.match.params.poolId : '',
-    );
-
-    const [isLoading, setIsLoading] = useState(true);
-    const [isFetchingPrices, setIsFetchingPrices] = useState(false);
-
-    const [currentTokenRates, setCurrentTokenRates] = useState({});
-
-    const dispatch = useDispatch();
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
+    const [inputAddress, setInputAddress] = useState(
+        props.match.params.address ? props.match.params.address : '',
+    );
+
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
+        props.match.params.address ? props.match.params.address : '',
+    );
+
+    const handleAddressChange = inputAddr => {
+        setInputAddress(inputAddr);
+    };
+
+    const dispatch = useDispatch();
+
+    // useEffect(() => {
+    //     const urlPoolId = props.match.params.poolId;
+    //     if (urlPoolId) {
+    //         dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, pools: urlPoolId });
+    //     }
+    // }, []);
+
     const poolOptions = buildPoolOptions(allPools);
-
-    useEffect(() => {
-        setIsLoading(true);
-
-        const urlPoolId = props.match.params.poolId ? props.match.params.poolId : '';
-
-        if (urlPoolId in Object.keys(allPools)) {
-            dispatch({
-                type: actionTypes.SET_SELECTED_POOL_ID,
-                poolId: urlPoolId,
-            });
-        }
-        setIsLoading(false);
-    }, []);
-
-    useEffect(() => {
-        setIsFetchingPrices(true);
-        const fetchTokenRates = async () => {
-            // const coinlist = await fetchCurrentFiatRates();
-            const currencies = ['usd'];
-            let fetchedRates = await fetchCurrentTokenFiatRates(
-                allPools[selectedPoolId].tokens,
-                currencies,
-            );
-            console.log('fetchedRates', fetchedRates);
-
-            setCurrentTokenRates(fetchedRates);
-            setIsFetchingPrices(false);
-        };
-
-        if (allPools[selectedPoolId]) {
-            fetchTokenRates();
-        }
-    }, [selectedPoolId]);
-
-    // TODO move this to separate hook
-    useEffect(() => {
-        const fetchData = async () => {
-            console.log('fetchData()');
-            setIsLoading(true);
-            /* 
-            TODO:
-            1. check if is valid Ethereum address
-            2. if is valid ETH address, fetch pools
-            3. check if there are any pools associated with this address
-            4. if there are some pools, call setPools() and render them, 
-            otherwise tell the user he does not have any pools and he can try our simulator        
-            */
-
-            let allPoolsFetched;
-            let exToPoolMappingFetched = {};
-
-            for (const [exchange, pools] of Object.entries(PoolItemsExample)) {
-                allPoolsFetched = { ...allPoolsFetched, ...pools };
-                exToPoolMappingFetched[exchange] = Object.keys(pools);
-            }
-
-            // set new (redux) state variables
-            dispatch({ type: actionTypes.SET_ALL_POOLS, pools: allPoolsFetched });
-            dispatch({
-                type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
-                exchangeToPoolMapping: exToPoolMappingFetched,
-            });
-
-            setIsLoading(false);
-        };
-
-        // TODO check address validity. Don't fetch data when address is not valid.
-        // If not valid, inform the user it is not valid
-        const isValidEthAddress = true;
-        if (isValidEthAddress) fetchData();
-    }, [address, urlPoolId]);
 
     return (
         <SimulatorContainer>
@@ -220,13 +168,12 @@ const Simulator = (props: RouteComponentProps<any>) => {
                         innerAddon={<AddressLabel>Address:</AddressLabel>}
                         addonAlign="left"
                         placeholder="Enter valid Ethereum address"
-                        value={address}
+                        value={inputAddress}
                         onChange={event => {
-                            setAddress(event.target.value);
+                            handleAddressChange(event.target.value);
                         }}
                     />
                 </AddressWrapper>
-
                 <ChoosePoolWrapper>
                     {/* TODO add Exchange icon (Balancer/Uniswap) */}
                     <PoolSelectLabel>Choose pool:</PoolSelectLabel>
@@ -234,7 +181,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                         <MultipleTokenSelect
                             options={poolOptions}
                             onChange={(option: PoolOption) => {
-                                setIsFetchingPrices(true);
+                                // setIsFetchingPrices(true);
                                 option &&
                                     dispatch({
                                         type: actionTypes.SET_SELECTED_POOL_ID,
@@ -245,17 +192,13 @@ const Simulator = (props: RouteComponentProps<any>) => {
                         ></MultipleTokenSelect>
                     </MultipleSelectWrapper>
                 </ChoosePoolWrapper>
-
-                {currentTokenRates ? (
-                    !isFetchingPrices && !isLoading ? (
-                        <OverviewWrapper>
-                            <Overview currentTokenRates={currentTokenRates} />
-                        </OverviewWrapper>
-                    ) : (
-                        <LoadingBox>Getting data about pool...</LoadingBox>
-                    )
-                ) : null}
-
+                {!isLoading ? (
+                    <OverviewWrapper>
+                        <Overview />
+                    </OverviewWrapper>
+                ) : (
+                    <LoadingBox>Getting data about pool...</LoadingBox>
+                )}
                 {allPools[selectedPoolId] && (
                     <GrayBox>
                         <SimulationBox />

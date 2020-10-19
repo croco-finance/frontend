@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { variables } from '../../../config';
 import colors from '../../../config/colors';
 import { PageLogo } from '../../ui';
+import { useSelector } from 'react-redux';
 
 const linkActiveStyles = {
     color: colors.FONT_DARK,
@@ -37,34 +38,39 @@ const StyledLink = styled(NavLink)`
     }
 `;
 
-const NavBar = () => (
-    <Wrapper>
-        <Link
-            to={{
-                pathname: '/',
-            }}
-        >
-            <PageLogo height={14}></PageLogo>
-        </Link>
-        <NavItemsWrapper>
-            <StyledLink
+const NavBar = () => {
+    const addressGlobal = useSelector(state => state.userAddress);
+    const addressPath = addressGlobal ? addressGlobal : '';
+
+    return (
+        <Wrapper>
+            <Link
                 to={{
-                    pathname: '/dashboard',
+                    pathname: '/',
                 }}
-                activeStyle={linkActiveStyles}
             >
-                Dashboard
-            </StyledLink>
-            <StyledLink
-                to={{
-                    pathname: '/simulator',
-                }}
-                activeStyle={linkActiveStyles}
-            >
-                Simulator
-            </StyledLink>
-        </NavItemsWrapper>
-    </Wrapper>
-);
+                <PageLogo height={14}></PageLogo>
+            </Link>
+            <NavItemsWrapper>
+                <StyledLink
+                    to={{
+                        pathname: `/dashboard/${addressPath}`,
+                    }}
+                    activeStyle={linkActiveStyles}
+                >
+                    Dashboard
+                </StyledLink>
+                <StyledLink
+                    to={{
+                        pathname: `/simulator/${addressPath}`,
+                    }}
+                    activeStyle={linkActiveStyles}
+                >
+                    Simulator
+                </StyledLink>
+            </NavItemsWrapper>
+        </Wrapper>
+    );
+};
 
 export default NavBar;
