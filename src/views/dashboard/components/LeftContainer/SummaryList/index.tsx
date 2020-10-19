@@ -50,8 +50,8 @@ const SummaryList = () => {
             <ItemsWrapper>
                 <SummaryItem
                     exchange="balancer"
-                    value={poolsSummaryInfo.endBalanceUSD}
-                    gainsAbsolute={poolsSummaryInfo.feesUSD}
+                    value={poolsSummaryInfo.endBalanceUsd}
+                    gainsAbsolute={poolsSummaryInfo.feesUsd}
                     roi={5}
                 />
             </ItemsWrapper>

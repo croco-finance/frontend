@@ -34,45 +34,45 @@ const getFormattedPercentageValue = (value: number, hideDecimals = false) => {
     return `${percentageFormat.toFixed(2)}%`;
 };
 
-const getDailyAverageFeeGains = (timeStampStart, timeStampEnd, totalFeesUSD) => {
+const getDailyAverageFeeGains = (timeStampStart, timeStampEnd, totalFeesUsd) => {
     const differenceMilliseconds = timeStampEnd - timeStampStart;
     const differenceDays = differenceMilliseconds / (1000 * 3600 * 24);
-    return totalFeesUSD / differenceDays;
+    return totalFeesUsd / differenceDays;
 };
 
 const getPoolsSummaryObject = (pools = PoolItemsDictExample) => {
     // TODO compute separately for Balancer and for Uniswap
     let summaryObject = {};
-    let endBalanceUSDSum = 0;
-    let netReturnUSDSum = 0;
-    let feesUSDSum = 0;
-    let impLossUSDSum = 0;
-    let dexReturnUSDSum = 0;
+    let endBalanceUsdSum = 0;
+    let netReturnUsdSum = 0;
+    let feesUsdSum = 0;
+    let impLossUsdSum = 0;
+    let dexReturnUsdSum = 0;
     let txCostEthSum = 0;
-    let averageDailyFeesUSDSum = 0;
+    let averageDailyFeesUsdSum = 0;
 
     for (const poolId of Object.keys(pools)) {
         const pool = pools[poolId];
-        endBalanceUSDSum += pool.endBalanceUSD;
-        netReturnUSDSum += pool.netReturnUSD;
-        feesUSDSum += pool.feesUSD;
-        impLossUSDSum += pool.impLossUSD;
-        dexReturnUSDSum += pool.dexReturnUSD;
+        endBalanceUsdSum += pool.endBalanceUsd;
+        netReturnUsdSum += pool.netReturnUsd;
+        feesUsdSum += pool.feesUsd;
+        impLossUsdSum += pool.impLossUsd;
+        dexReturnUsdSum += pool.dexReturnUsd;
         if (pool.txCostEth) {
             txCostEthSum += pool.txCostEth;
         }
-        averageDailyFeesUSDSum += getDailyAverageFeeGains(pool.start, pool.end, pool.feesUSD);
+        averageDailyFeesUsdSum += getDailyAverageFeeGains(pool.start, pool.end, pool.feesUsd);
     }
 
-    summaryObject['endBalanceUSD'] = endBalanceUSDSum;
-    summaryObject['netReturnUSD'] = netReturnUSDSum;
-    summaryObject['feesUSD'] = feesUSDSum;
-    summaryObject['impLossUSD'] = impLossUSDSum;
-    summaryObject['dexReturnUSD'] = dexReturnUSDSum;
+    summaryObject['endBalanceUsd'] = endBalanceUsdSum;
+    summaryObject['netReturnUsd'] = netReturnUsdSum;
+    summaryObject['feesUsd'] = feesUsdSum;
+    summaryObject['impLossUsd'] = impLossUsdSum;
+    summaryObject['dexReturnUsd'] = dexReturnUsdSum;
     summaryObject['txCostEth'] = txCostEthSum;
-    summaryObject['averageDailyFeesUSD'] = averageDailyFeesUSDSum;
+    summaryObject['averageDailyFeesUsd'] = averageDailyFeesUsdSum;
 
-    const impermanentLoss = endBalanceUSDSum / (endBalanceUSDSum - dexReturnUSDSum) - 1;
+    const impermanentLoss = endBalanceUsdSum / (endBalanceUsdSum - dexReturnUsdSum) - 1;
     summaryObject['impLoss'] = impermanentLoss;
 
     return summaryObject;

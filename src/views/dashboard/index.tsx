@@ -13,7 +13,40 @@ import SummaryList from './components/LeftContainer/SummaryList';
 import axios from 'axios';
 import exampleDataJson from '../../config/example-data-json.json';
 import { validation } from '../../utils';
-import { utils } from 'ethers';
+
+const ExceptionWrapper = styled.div`
+    display: flex;
+    height: 260px;
+    align-items: center;
+    justify-content: center;
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    flex-direction: column;
+    background-color: ${colors.BACKGROUND};
+    margin-top: 24px;
+    text-align: center;
+    padding: 20px;
+    line-height: 26px;
+`;
+
+const NoPoolFoundInfo = styled(ExceptionWrapper)`
+    color: ${colors.FONT_MEDIUM};
+`;
+
+const ErrorTextWrapper = styled(ExceptionWrapper)`
+    color: ${colors.RED};
+
+    & > button {
+        color: white;
+        background-color: black;
+        font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 16px auto 0 auto;
+        outline: none;
+    }
+`;
 
 const AddressWrapper = styled.div`
     background-color: ${colors.BACKGROUND};
@@ -68,6 +101,8 @@ const Dashboard = (props: RouteComponentProps<any>) => {
         props.match.params.address ? props.match.params.address : '',
     );
     const [isLoading, setIsLoading] = useState(false);
+    const [noPoolsFound, setNoPoolsFound] = useState(false);
+    const [isFetchError, setIsFetchError] = useState(false);
 
     // use redux actions and state variables
     const dispatch = useDispatch();
@@ -75,47 +110,96 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
+            setNoPoolsFound(false);
+            setIsFetchError(false);
 
-            const data = await axios.get(
-                `${constants.SERVER_STATS_ENDPOINT}/${address.toLowerCase()}/`,
-            );
+            try {
+                // TODO error handling
+                // const response = await axios.get(
+                //     `${constants.SERVER_STATS_ENDPOINT}/${address.trim().toLowerCase()}/`,
+                // );
+                // const fetchedData = response.data;
 
-            console.log('AXIOS DATA', data.data);
-            console.log('exampleDataJson', exampleDataJson);
+                const fetchedData = exampleDataJson;
 
-            /* 
-            TODO:
-            1. check if is valid Ethereum address
-            2. if is valid ETH address, fetch pools
-            3. check if there are any pools associated with this address
-            4. if there are some pools, call setPools() and render them, 
-            otherwise tell the user he does not have any pools and he can try our simulator        
-            */
+                if (fetchedData.length === 0) {
+                    setNoPoolsFound(true);
+                    setIsLoading(false);
+                    return;
+                }
 
-            let allPoolsFetched;
-            let exToPoolMappingFetched = {};
+                let poolsCustomObject = {};
+                let exToPoolMap = {};
 
-            for (const [exchange, pools] of Object.entries(PoolItemsExample)) {
-                allPoolsFetched = { ...allPoolsFetched, ...pools };
-                exToPoolMappingFetched[exchange] = Object.keys(pools);
+                fetchedData.forEach(pool => {
+                    const poolId = pool['poolId'];
+                    const exchange = pool['exchange'];
+
+                    if (!exToPoolMap[exchange]) {
+                        exToPoolMap[exchange] = [];
+                    }
+
+                    poolsCustomObject[poolId] = { ...pool };
+                    exToPoolMap[exchange].push(poolId);
+                });
+
+                console.log('poolsCustomObject', poolsCustomObject);
+                // console.log(JSON.parse(poolsCustomObject))
+                console.log(JSON.stringify(poolsCustomObject));
+
+                // set new (redux) state variables
+                dispatch({ type: actionTypes.SET_ALL_POOLS, pools: poolsCustomObject });
+                dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
+                dispatch({
+                    type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
+                    exchangeToPoolMapping: exToPoolMap,
+                });
+            } catch (e) {
+                console.log('ERROR while fetching data about pools...');
+                setIsFetchError(true);
             }
-
-            // set new (redux) state variables
-            dispatch({ type: actionTypes.SET_ALL_POOLS, pools: allPoolsFetched });
-            dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
-            dispatch({
-                type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
-                exchangeToPoolMapping: exToPoolMappingFetched,
-            });
 
             setIsLoading(false);
         };
 
         // TODO inform user the address is not valid
-        if (validation.isValidEthereumAddress(address)) {
-            fetchData();
-        }
+        // if (validation.isValidEthereumAddress(address.trim())) {
+        //     fetchData();
+        // }
+        fetchData();
     }, [address]);
+
+    let exceptionContent;
+
+    if (isFetchError) {
+        exceptionContent = (
+            <ErrorTextWrapper>
+                An error occurred while fetching data :(
+                <button
+                    onClick={() => {
+                        setAddress(`${address} `); // TODO run fetching procedure again in a cleaner way
+                    }}
+                >
+                    Try again
+                </button>
+            </ErrorTextWrapper>
+        );
+    }
+
+    if (isLoading) {
+        exceptionContent = <LoadingBox>Getting pool data...</LoadingBox>;
+    }
+
+    if (noPoolsFound) {
+        // TODO tell the user he cat try simulator in this case, once the simulator work for manual inputs
+        exceptionContent = (
+            <NoPoolFoundInfo>
+                We didn't find any pools associated with this address.
+                <br />
+                Try different address.
+            </NoPoolFoundInfo>
+        );
+    }
 
     return (
         <DashboardContainer>
@@ -134,8 +218,8 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                     />
                 </AddressWrapper>
 
-                {isLoading ? (
-                    <LoadingBox>Getting pool data...</LoadingBox>
+                {exceptionContent ? (
+                    exceptionContent
                 ) : (
                     <>
                         <SummaryWrapper>

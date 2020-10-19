@@ -7,14 +7,14 @@ export interface InputInterface {
 
 export interface PoolItemInterface {
     exchange: string;
-    hodlReturnUSD: number; // difference in HODL value now and at the beginning
-    netReturnUSD: number; // difference in pool value now and at the beginning
-    dexReturnUSD: number; // fees - impermanent_loss - tx_cost
-    feesUSD: number; // total user's fee gains
+    hodlReturnUsd: number; // difference in HODL value now and at the beginning
+    netReturnUsd: number; // difference in pool value now and at the beginning
+    dexReturnUsd: number; // fees - impermanent_loss - tx_cost
+    feesUsd: number; // total user's fee gains
     impLossRel: number | undefined; //  None in case of changes in lp balance
-    impLossUSD: number; // impermanent loss
+    impLossUsd: number; // impermanent loss
     txCostEth: number | undefined; // v ETH
-    endBalanceUSD: number;
+    endBalanceUsd: number;
     userAddr: string;
     poolId: string; // pool smart contract address
     tokens: Array<{ [key: string]: {} }>;
@@ -22,7 +22,7 @@ export interface PoolItemInterface {
     endTokenBalance: Array<number>; // User token balances
     start: number;
     end: number;
-    tokenPriceUSD: Array<number>;
+    tokenPriceUsd: Array<number>;
 }
 
 export type PoolItemsInterface = Record<string, { [key: string]: PoolItemInterface }>;

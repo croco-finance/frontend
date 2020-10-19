@@ -123,19 +123,19 @@ const CardOverview = ({}: Props) => {
     const pool = allPools[selectedPoolId];
 
     const {
-        endBalanceUSD,
-        netReturnUSD,
-        feesUSD,
+        endBalanceUsd,
+        netReturnUsd,
+        feesUsd,
         txCostEth,
-        impLossUSD,
+        impLossUsd,
         impLossRel,
-        dexReturnUSD,
+        dexReturnUsd,
         start,
         end,
     } = pool;
 
-    const averageFeeGains = getDailyAverageFeeGains(start, end, feesUSD);
-    const daysLeftStaking = Math.abs(Math.ceil(dexReturnUSD / averageFeeGains));
+    const averageFeeGains = getDailyAverageFeeGains(start, end, feesUsd);
+    const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageFeeGains));
 
     const newRateCoefficients = {
         usdt: 1.4,
@@ -190,7 +190,7 @@ const CardOverview = ({}: Props) => {
                 <PoolValueGridWrapper>
                     <CardRow
                         firstColumn="Your pool value"
-                        secondColumn={<FiatAmount value={endBalanceUSD}></FiatAmount>}
+                        secondColumn={<FiatAmount value={endBalanceUsd}></FiatAmount>}
                         thirdColumn={
                             <PoolValueWrapper>
                                 <FiatAmount value={20000}></FiatAmount>
@@ -216,7 +216,7 @@ const CardOverview = ({}: Props) => {
                 <GridWrapper>
                     <CardRow
                         firstColumn="Total fee gains"
-                        secondColumn={<FiatAmount value={feesUSD} usePlusSymbol />}
+                        secondColumn={<FiatAmount value={feesUsd} usePlusSymbol />}
                         thirdColumn={<FiatAmount value={20000} usePlusSymbol />}
                         color="dark"
                     />
@@ -239,7 +239,7 @@ const CardOverview = ({}: Props) => {
                                 <SubValue>
                                     {getFormattedPercentageValue(Math.abs(impLossRel))}
                                 </SubValue>
-                                <FiatAmount value={impLossUSD} usePlusSymbol />
+                                <FiatAmount value={impLossUsd} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         thirdColumn={
@@ -256,7 +256,7 @@ const CardOverview = ({}: Props) => {
                         firstColumn="Total"
                         secondColumn={
                             <FiatAmount
-                                value={dexReturnUSD}
+                                value={dexReturnUsd}
                                 usePlusSymbol
                                 // colorized
                                 // useBadgeStyle
@@ -285,7 +285,7 @@ const CardOverview = ({}: Props) => {
                         />
                         <CardRow
                             firstColumn="Days left to compensate loss*"
-                            secondColumn={dexReturnUSD < 0 ? daysLeftStaking : 0}
+                            secondColumn={dexReturnUsd < 0 ? daysLeftStaking : 0}
                             thirdColumn={0}
                             color="dark"
                         />

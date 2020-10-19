@@ -135,26 +135,26 @@ const CardOverview = () => {
     }
 
     const {
-        endBalanceUSD,
-        netReturnUSD,
-        feesUSD,
+        endBalanceUsd,
+        netReturnUsd,
+        feesUsd,
         txCostEth,
-        impLossUSD,
+        impLossUsd,
         impLossRel,
-        dexReturnUSD,
+        dexReturnUsd,
         start,
         end,
     } = pool;
-    const startBalance = endBalanceUSD - netReturnUSD;
+    const startBalance = endBalanceUsd - netReturnUsd;
 
     let averageFeeGains;
     if (selectedPoolId === 'all') {
-        averageFeeGains = pool.averageDailyFeesUSD;
+        averageFeeGains = pool.averageDailyFeesUsd;
     } else {
-        averageFeeGains = getDailyAverageFeeGains(start, end, feesUSD);
+        averageFeeGains = getDailyAverageFeeGains(start, end, feesUsd);
     }
 
-    const daysLeftStaking = Math.abs(Math.ceil(dexReturnUSD / averageFeeGains));
+    const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageFeeGains));
 
     return (
         <Wrapper>
@@ -179,10 +179,10 @@ const CardOverview = () => {
                         secondColumn={<FiatAmount value={startBalance}></FiatAmount>}
                         thirdColumn={
                             <PoolValueWrapper>
-                                <FiatAmount value={endBalanceUSD}></FiatAmount>
+                                <FiatAmount value={endBalanceUsd}></FiatAmount>
                                 <PoolValueDifference>
                                     <FiatAmount
-                                        value={netReturnUSD}
+                                        value={netReturnUsd}
                                         usePlusSymbol
                                         colorized
                                     ></FiatAmount>
@@ -205,7 +205,7 @@ const CardOverview = () => {
                 <GridWrapper>
                     <CardRow
                         firstColumn="Total fee gains"
-                        secondColumn={<FiatAmount value={feesUSD} usePlusSymbol />}
+                        secondColumn={<FiatAmount value={feesUsd} usePlusSymbol />}
                         color="dark"
                     />
 
@@ -229,7 +229,7 @@ const CardOverview = () => {
                                     </SubValue>
                                 )}
 
-                                <FiatAmount value={impLossUSD} usePlusSymbol />
+                                <FiatAmount value={impLossUsd} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         color="dark"
@@ -240,7 +240,7 @@ const CardOverview = () => {
                         firstColumn="Total"
                         secondColumn={
                             <FiatAmount
-                                value={dexReturnUSD}
+                                value={dexReturnUsd}
                                 usePlusSymbol
                                 colorized
                                 useBadgeStyle
@@ -258,7 +258,7 @@ const CardOverview = () => {
                             }
                             color="dark"
                         />
-                        {dexReturnUSD < 0 && (
+                        {dexReturnUsd < 0 && (
                             <CardRow
                                 firstColumn="Days left to compensate loss*"
                                 secondColumn={daysLeftStaking}
@@ -266,7 +266,7 @@ const CardOverview = () => {
                             />
                         )}
                     </DaysLeftGridWrapper>
-                    {dexReturnUSD < 0 && (
+                    {dexReturnUsd < 0 && (
                         <DaysLeftNote>
                             <b>*</b> According to your average trading fee gains
                         </DaysLeftNote>

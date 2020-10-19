@@ -56,7 +56,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const FiatAmount = ({
     value,
-    currency = 'USD',
+    currency = 'Usd',
     colorized = false,
     usePlusSymbol = false,
     minimumFractionDigits = 2,

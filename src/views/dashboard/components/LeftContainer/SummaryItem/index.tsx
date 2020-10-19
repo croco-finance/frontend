@@ -68,7 +68,7 @@ const SummaryItem = ({ exchange, value, gainsAbsolute, roi }: Props) => {
 
     const poolsSummaryInfo: any = getPoolsSummaryObject(allPools);
 
-    const { feesUSD, endBalanceUSD } = poolsSummaryInfo;
+    const { feesUsd, endBalanceUsd } = poolsSummaryInfo;
 
     let isSelected = selectedPoolId === 'all';
 
@@ -84,10 +84,10 @@ const SummaryItem = ({ exchange, value, gainsAbsolute, roi }: Props) => {
                 <ExchangeTitle>Pools Summary</ExchangeTitle>
             </ExchangeWrapper>
             <Value>
-                <FiatAmount value={endBalanceUSD} />
+                <FiatAmount value={endBalanceUsd} />
             </Value>
             <Gains>
-                <FiatAmount value={feesUSD} usePlusSymbol />
+                <FiatAmount value={feesUsd} usePlusSymbol />
             </Gains>
         </Wrapper>
     );
