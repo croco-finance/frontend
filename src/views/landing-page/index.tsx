@@ -186,7 +186,7 @@ const LandingPage = ({ address = '' }: Props) => {
                         placeholder="Enter valid Ethereum address"
                         value={selectedAddress}
                         onChange={event => {
-                            setSelectedAddress(event.target.value);
+                            setSelectedAddress(event.target.value.trim());
                         }}
                     ></AddressInput>
                     <DashboardButton

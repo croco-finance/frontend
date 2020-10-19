@@ -132,23 +132,23 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     let rightWrapperContent;
     const noPoolsSavedInRedux = Object.keys(allPoolsGlobal).length === 0;
 
+    const refreshPage = () => {
+        window.location.reload();
+    };
+
     if (isFetchError) {
         exceptionContent = (
             <ErrorTextWrapper>
                 An error occurred while fetching data :(
-                <button
-                    onClick={() => {
-                        fetchData(`${inputAddress} `); // TODO run fetching procedure again in a cleaner way
-                    }}
-                >
-                    Try again
-                </button>
+                <button onClick={refreshPage}>Try again</button>
             </ErrorTextWrapper>
         );
     }
 
     if (isLoading) {
-        exceptionContent = <LoadingBox>please wait a sec. We are getting pool data...</LoadingBox>;
+        exceptionContent = (
+            <LoadingBox>Please wait a moment. We are getting pool data...</LoadingBox>
+        );
     }
 
     if (noPoolsFound) {

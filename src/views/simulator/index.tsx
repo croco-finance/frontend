@@ -139,9 +139,11 @@ const Simulator = (props: RouteComponentProps<any>) => {
         props.match.params.address ? props.match.params.address : '',
     );
 
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
-        props.match.params.address ? props.match.params.address : '',
-    );
+    const [isLoading, setIsLoading] = useState(false);
+
+    // const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
+    //     props.match.params.address ? props.match.params.address : '',
+    // );
 
     const handleAddressChange = inputAddr => {
         setInputAddress(inputAddr);
@@ -174,28 +176,31 @@ const Simulator = (props: RouteComponentProps<any>) => {
                         }}
                     />
                 </AddressWrapper>
-                <ChoosePoolWrapper>
-                    {/* TODO add Exchange icon (Balancer/Uniswap) */}
-                    <PoolSelectLabel>Choose pool:</PoolSelectLabel>
-                    <MultipleSelectWrapper>
-                        <MultipleTokenSelect
-                            options={poolOptions}
-                            onChange={(option: PoolOption) => {
-                                // setIsFetchingPrices(true);
-                                option &&
-                                    dispatch({
-                                        type: actionTypes.SET_SELECTED_POOL_ID,
-                                        poolId: option.value.poolId,
-                                    });
-                            }}
-                            selected={buildPoolOption(allPools[selectedPoolId])}
-                        ></MultipleTokenSelect>
-                    </MultipleSelectWrapper>
-                </ChoosePoolWrapper>
+
                 {!isLoading ? (
-                    <OverviewWrapper>
-                        <Overview />
-                    </OverviewWrapper>
+                    <>
+                        <ChoosePoolWrapper>
+                            {/* TODO add Exchange icon (Balancer/Uniswap) */}
+                            <PoolSelectLabel>Choose pool:</PoolSelectLabel>
+                            <MultipleSelectWrapper>
+                                <MultipleTokenSelect
+                                    options={poolOptions}
+                                    onChange={(option: PoolOption) => {
+                                        // setIsFetchingPrices(true);
+                                        option &&
+                                            dispatch({
+                                                type: actionTypes.SET_SELECTED_POOL_ID,
+                                                poolId: option.value.poolId,
+                                            });
+                                    }}
+                                    selected={buildPoolOption(allPools[selectedPoolId])}
+                                ></MultipleTokenSelect>
+                            </MultipleSelectWrapper>
+                        </ChoosePoolWrapper>
+                        <OverviewWrapper>
+                            <Overview />
+                        </OverviewWrapper>
+                    </>
                 ) : (
                     <LoadingBox>Getting data about pool...</LoadingBox>
                 )}

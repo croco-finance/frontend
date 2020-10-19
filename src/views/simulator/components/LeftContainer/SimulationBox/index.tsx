@@ -51,37 +51,41 @@ const TokenSymbol = styled.div`
     margin-left: 10px;
 `;
 
-const getInitialStateCoeffs = (tokens: any, initialValue: number = 1) => {
+const getInitialPriceCoeffs = (tokens: any, initialValue: number = 1) => {
     let coefficients = {};
-    tokens.forEach(token => {
+    let coefficientsArr = new Array(tokens.length);
+    tokens.forEach((token, i) => {
         coefficients[token.symbol] = 1;
     });
 
-    return coefficients;
+    coefficientsArr.fill(1);
+
+    return coefficientsArr;
 };
 
 interface Props {
     tokensPool?: any;
-    currentPrices?: any;
 }
-const SimulationBox = ({ tokensPool, currentPrices = currentPriceRatioExample }: Props) => {
+const SimulationBox = ({ tokensPool }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const pool = allPools[selectedPoolId];
 
-    const [newPriceCoefficients, setNewPriceCoefficients] = useState(
-        getInitialStateCoeffs(pool.tokens),
+    const { endTokenPricesUsd } = pool;
+
+    const [simulatedPriceCoefficients, setSimulatedPriceCoefficients]: any = useState(
+        getInitialPriceCoeffs(pool.tokens),
     );
 
-    const setNewPrices = (newValue, token) => {
-        const newPriceCoefficientsCopy = { ...newPriceCoefficients };
-        newPriceCoefficientsCopy[token] = newValue;
-        setNewPriceCoefficients(newPriceCoefficientsCopy);
+    const setNewPrices = (newValue, index) => {
+        const coefficientsArrCopy = [...simulatedPriceCoefficients];
+        coefficientsArrCopy[index] = newValue;
+        setSimulatedPriceCoefficients(coefficientsArrCopy);
     };
 
     useEffect(() => {
         const newPool = allPools[selectedPoolId];
-        setNewPriceCoefficients(getInitialStateCoeffs(newPool.tokens));
+        setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.tokens));
     }, [selectedPoolId]);
 
     const tokens = pool.tokens;
@@ -92,14 +96,14 @@ const SimulationBox = ({ tokensPool, currentPrices = currentPriceRatioExample }:
             <SubTitle>Relative token price change</SubTitle>
             <GridHeader>Token price</GridHeader>
             <GridWrapper rowsCount={tokens.length}>
-                {tokens.map(token => {
+                {tokens.map((token, i) => {
                     const tokenSymbol = token.symbol;
                     return (
                         <PriceChangeRow
                             key={tokenSymbol}
                             token={tokenSymbol}
                             onSliderChange={newValue => {
-                                setNewPrices(newValue, tokenSymbol);
+                                setNewPrices(newValue, i);
                             }}
                             firstColumn={
                                 <TokenWrapper>
@@ -108,14 +112,9 @@ const SimulationBox = ({ tokensPool, currentPrices = currentPriceRatioExample }:
                                 </TokenWrapper>
                             }
                             fourthColumn={
-                                newPriceCoefficients[tokenSymbol] && (
-                                    <FiatAmount
-                                        value={
-                                            currentPrices.usd[tokenSymbol] *
-                                            newPriceCoefficients[tokenSymbol]
-                                        }
-                                    />
-                                )
+                                <FiatAmount
+                                    value={endTokenPricesUsd[i] * simulatedPriceCoefficients[i]}
+                                />
                             }
                             color="dark"
                         />
