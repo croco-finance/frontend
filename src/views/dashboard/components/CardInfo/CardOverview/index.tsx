@@ -139,6 +139,7 @@ const CardOverview = () => {
         netReturnUsd,
         feesUsd,
         txCostEth,
+        txCostUsd,
         impLossUsd,
         impLossRel,
         dexReturnUsd,
@@ -155,7 +156,6 @@ const CardOverview = () => {
     }
 
     const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageFeeGains));
-
     return (
         <Wrapper>
             <SwitchWrapper>
@@ -208,15 +208,15 @@ const CardOverview = () => {
                         secondColumn={<FiatAmount value={feesUsd} usePlusSymbol />}
                         color="dark"
                     />
+                    {/* <CardRow
+                        firstColumn="Yield farming gains"
+                        secondColumn={<FiatAmount value={feesUsd} usePlusSymbol />}
+                        color="dark"
+                    /> */}
 
                     <CardRow
                         firstColumn="Transactions cost"
-                        secondColumn={
-                            <FiatAmount
-                                value={getFiatFromCrypto('eth', 'usd', txCostEth)}
-                                usePlusSymbol
-                            />
-                        }
+                        secondColumn={<FiatAmount value={-txCostUsd} usePlusSymbol />}
                         color="dark"
                     />
                     <CardRow
@@ -229,7 +229,7 @@ const CardOverview = () => {
                                     </SubValue>
                                 )}
 
-                                <FiatAmount value={impLossUsd} usePlusSymbol />
+                                <FiatAmount value={-impLossUsd} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         color="dark"

@@ -66,6 +66,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const CardInfo = ({ address }: Props) => {
     const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const userAddress = useSelector(state => state.userAddress);
 
     return (
         <Card>
@@ -73,11 +74,10 @@ const CardInfo = ({ address }: Props) => {
                 <CardOverview />
                 {selectedPoolId !== 'all' && (
                     <SimulatorButtonWrapper>
-                        See pool in our simulator to simulate how assets' price changes affect your
-                        funds
+                        Try how assets' price changes affect your funds
                         <StyledLink
                             to={{
-                                pathname: `/simulator/${address}/${selectedPoolId}`,
+                                pathname: `/simulator/${userAddress}/${selectedPoolId}`,
                             }}
                         >
                             Open in simulator

@@ -34,9 +34,9 @@ const getFormattedPercentageValue = (value: number, hideDecimals = false) => {
     return `${percentageFormat.toFixed(2)}%`;
 };
 
-const getDailyAverageFeeGains = (timeStampStart, timeStampEnd, totalFeesUsd) => {
-    const differenceMilliseconds = timeStampEnd - timeStampStart;
-    const differenceDays = differenceMilliseconds / (1000 * 3600 * 24);
+const getDailyAverageFeeGains = (timeStampStartSeconds, timeStampEndSeconds, totalFeesUsd) => {
+    const differenceMilliseconds = timeStampEndSeconds - timeStampStartSeconds;
+    const differenceDays = differenceMilliseconds / (3600 * 24);
     return totalFeesUsd / differenceDays;
 };
 

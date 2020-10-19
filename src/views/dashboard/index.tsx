@@ -148,7 +148,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     }
 
     if (isLoading) {
-        exceptionContent = <LoadingBox>Getting pool data...</LoadingBox>;
+        exceptionContent = <LoadingBox>please wait a sec. We are getting pool data...</LoadingBox>;
     }
 
     if (noPoolsFound) {

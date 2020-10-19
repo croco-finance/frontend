@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { variables } from '../../../config';
 import colors from '../../../config/colors';
 
 const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: boolean }>`
@@ -45,6 +46,10 @@ const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: b
         `}
 `;
 
+const Nan = styled.div`
+    color: ${colors.FONT_LIGHT};
+`;
+
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     value: number;
     currency?: string;
@@ -79,8 +84,13 @@ const FiatAmount = ({
 
     return (
         <Wrapper value={originalValue} colorized={colorized} useBadgeStyle={useBadgeStyle}>
-            {usePlusSymbol && sign}
-            {formatter.format(value)}
+            {value ? (
+                <>
+                    {usePlusSymbol && sign} {formatter.format(value)}{' '}
+                </>
+            ) : (
+                <Nan>-</Nan>
+            )}
         </Wrapper>
     );
 };

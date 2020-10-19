@@ -37,11 +37,11 @@ const FetchPoolsHook = initialAddress => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const fetchData = async (address: string) => {
+        const fetchData = async (queryAddress: string) => {
             setIsLoading(true);
             setNoPoolsFound(false);
             setIsFetchError(false);
-            const query = `${constants.SERVER_STATS_ENDPOINT}${address.trim().toLowerCase()}/`;
+            const query = `${constants.SERVER_STATS_ENDPOINT}${queryAddress.trim().toLowerCase()}/`;
 
             try {
                 // TODO error handling
@@ -49,7 +49,8 @@ const FetchPoolsHook = initialAddress => {
                 // const fetchedData = response.data;
                 const fetchedData = exampleDataJson;
 
-                // const fetchedData = exampleDataJson;
+                // console.log('fetchedData', fetchedData);
+
                 if (fetchedData.length === 0) {
                     setNoPoolsFound(true);
                     setIsLoading(false);
@@ -85,8 +86,6 @@ const FetchPoolsHook = initialAddress => {
                     });
                 });
 
-                console.log('poolsCustomObject', poolsCustomObject);
-
                 // set new (redux) state variables
                 dispatch({ type: actionTypes.SET_ALL_POOLS, pools: poolsCustomObject });
                 dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
@@ -94,6 +93,8 @@ const FetchPoolsHook = initialAddress => {
                     type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
                     exchangeToPoolMapping: exToPoolMap,
                 });
+                console.log();
+                dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
             } catch (e) {
                 console.log('ERROR while fetching data about pools...');
                 setIsFetchError(true);

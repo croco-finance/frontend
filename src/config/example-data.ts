@@ -1,6 +1,6 @@
 import { PoolItemInterface, PoolItemsDict, PoolItemsInterface, PriceRatesInterface } from './types';
 
-export const poolItemExample1: PoolItemInterface = {
+export const poolItemExample1 = {
     exchange: 'balancer',
     poolId: '0x59a19d8c652fa0284f44113d0ff9aba70bd46fb4',
     userAddr: '0xb652c617d18971A53f3727E01f6E86f975312c28',
@@ -35,7 +35,7 @@ export const poolItemExample1: PoolItemInterface = {
     tokenPriceUsd: [1.001, 14119.6],
 };
 
-export const poolItemExample2: PoolItemInterface = {
+export const poolItemExample2 = {
     exchange: 'balancer',
     poolId: '0xf54025af2dc86809be1153c1f20d77adb7e8ecf4',
     userAddr: '0xb652c617d18971A53f3727E01f6E86f975312c28',
@@ -88,7 +88,7 @@ export const poolItemExample2: PoolItemInterface = {
     tokenPriceUsd: [370.32, 1.003, 14004.8],
 };
 
-export const poolItemExample3: PoolItemInterface = {
+export const poolItemExample3 = {
     exchange: 'uniswap',
     poolId: '0xbb2b8038a1640196fbe3e38816f3e67cba72d940',
     userAddr: '0xb652c617d18971A53f3727E01f6E86f975312c28',
@@ -119,7 +119,7 @@ export const poolItemExample3: PoolItemInterface = {
     tokenPriceUsd: [180.32, 27.88],
 };
 
-export const PoolItemsExample: PoolItemsInterface = {
+export const PoolItemsExample = {
     balancer: {
         '0x59a19d8c652fa0284f44113d0ff9aba70bd46fb4': poolItemExample1,
         '0xf54025af2dc86809be1153c1f20d77adb7e8ecf4': poolItemExample2,
@@ -130,7 +130,7 @@ export const PoolItemsExample: PoolItemsInterface = {
 };
 
 // bude se nám hodit i stará cena tokenů, abychom mohli spočítat jak si uživatel polepšil/pohoršil od doby vložení
-export const oldRatioExample: PriceRatesInterface = {
+export const oldRatioExample = {
     usd: {
         usdt: 1.01,
         wbtc: 6343.78,
@@ -148,7 +148,7 @@ export const oldRatioExample: PriceRatesInterface = {
     },
 };
 
-export const currentPriceRatioExample: PriceRatesInterface = {
+export const currentPriceRatioExample = {
     usd: {
         usdt: 1.01,
         wbtc: 10343.78,
@@ -166,7 +166,7 @@ export const currentPriceRatioExample: PriceRatesInterface = {
     },
 };
 
-export const PoolItemsDictExample: PoolItemsDict = {
+export const PoolItemsDictExample = {
     '0x59a19d8c652fa0284f44113d0ff9aba70bd46fb4': poolItemExample1,
     '0xf54025af2dc86809be1153c1f20d77adb7e8ecf4': poolItemExample2,
     '0xbb2b8038a1640196fbe3e38816f3e67cba72d940': poolItemExample3,
