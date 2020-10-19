@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { colors, variables } from '../../config';
+import { colors, variables, constants } from '../../config';
 import { isValidEthereumAddress } from '../../utils/validation';
 import { Icon, PageLogo } from '../../components/ui';
 
@@ -39,7 +39,7 @@ const ContentWrappper = styled.div`
 const TopBar = styled.div`
     display: flex;
     width: 100%;
-    height: 60px;
+    height: 64px;
     flex-direction: row;
     align-items: center;
 `;
@@ -67,7 +67,7 @@ const Headline = styled.h1`
     color: ${colors.FONT_DARK};
     font-weight: ${variables.FONT_WEIGHT.BOLD};
     font-size: 52px;
-    margin-top: 240px;
+    margin-top: 190px;
     margin-bottom: 60px;
 `;
 
@@ -149,20 +149,32 @@ const LandingPage = ({ address = '' }: Props) => {
                         <PageLogo height={16} />
                     </PageLogoWrapper>
                     <CommunityIconsWrapper>
-                        <IconLinkWrappper rel="noreferrer" href={variables.LINKS.GITHUB}>
-                            <Icon icon="github" size={22} />
+                        <IconLinkWrappper
+                            rel="noreferrer"
+                            target="_blank"
+                            href={constants.GITHUB_LINK}
+                        >
+                            <Icon icon="github" size={20} />
                         </IconLinkWrappper>
-                        <IconLinkWrappper rel="noreferrer" href={variables.LINKS.TELEGRAM}>
-                            <Icon icon="telegram" size={22} />
+                        <IconLinkWrappper
+                            rel="noreferrer"
+                            target="_blank"
+                            href={constants.TELEGRAM_LINK}
+                        >
+                            <Icon icon="telegram" size={20} />
                         </IconLinkWrappper>
-                        <IconLinkWrappper rel="noreferrer" href={variables.LINKS.TWITTER}>
-                            <Icon icon="twitter" size={22} />
+                        <IconLinkWrappper
+                            rel="noreferrer"
+                            target="_blank"
+                            href={constants.TWITTER_LINK}
+                        >
+                            <Icon icon="twitter" size={20} />
                         </IconLinkWrappper>
                     </CommunityIconsWrapper>
                 </TopBar>
 
                 <Headline>
-                    Don't get your profits
+                    Don't get your funds
                     <br />
                     eaten <br />
                     {/* stays <HeadlineHighlight>im</HeadlineHighlight>permanent */}

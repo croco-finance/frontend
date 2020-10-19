@@ -13,6 +13,7 @@ import InlineCircle from './InlineCircle';
 import FiatAmount from './FiatAmount';
 import MultipleTokenLogo from './MultipleTokenLogo';
 import MultipleTokenSelect from './MultipleTokenSelect';
+import LoadingBox from './LoadingBox';
 
 export {
     TokenLogo,
@@ -30,4 +31,5 @@ export {
     MultipleTokenLogo,
     MultipleTokenSelect,
     Icon,
+    LoadingBox,
 };

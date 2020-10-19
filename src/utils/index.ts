@@ -1,3 +1,6 @@
+import * as validation from './validation';
+import * as math from './math';
+
 import {
     arrangeArray,
     countDecimals,
@@ -13,3 +16,5 @@ export {
     getBalancerImpLoss,
     getDailyAverageFeeGains,
 };
+
+export { validation, math };

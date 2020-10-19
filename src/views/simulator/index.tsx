@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { NavBar, SimulatorContainer } from '../../components/layout';
-import { GrayBox, Input, MultipleTokenSelect, Spinner } from '../../components/ui';
+import { GrayBox, Input, MultipleTokenSelect, Spinner, LoadingBox } from '../../components/ui';
 import { animations, colors, variables } from '../../config';
 import { PoolItemsExample, poolItemExample1 } from '../../config/example-data';
 import { PoolItemInterface } from '../../config/types';
@@ -252,7 +252,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                             <Overview currentTokenRates={currentTokenRates} />
                         </OverviewWrapper>
                     ) : (
-                        <Spinner size={20} />
+                        <LoadingBox>Getting data about pool...</LoadingBox>
                     )
                 ) : null}
 

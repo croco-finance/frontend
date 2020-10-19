@@ -3,13 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { DashboardContainer, NavBar } from '../../components/layout';
-import { Input } from '../../components/ui';
-import { animations, colors, variables } from '../../config';
+import { Input, LoadingBox } from '../../components/ui';
+import { animations, colors, variables, constants } from '../../config';
 import { PoolItemsExample } from '../../config/example-data';
 import * as actionTypes from '../../store/actions/actionTypes';
 import CardInfo from './components/CardInfo';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
+import axios from 'axios';
+import exampleDataJson from '../../config/example-data-json.json';
+import { validation } from '../../utils';
+import { utils } from 'ethers';
 
 const AddressWrapper = styled.div`
     background-color: ${colors.BACKGROUND};
@@ -23,12 +27,6 @@ const AddressWrapper = styled.div`
 const AddressLabel = styled.div`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     padding-left: 5px;
-`;
-
-const Headline = styled.h2`
-    color: ${colors.FONT_DARK};
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    margin-top: 40px;
 `;
 
 const LeftWrapper = styled.div`
@@ -76,8 +74,15 @@ const Dashboard = (props: RouteComponentProps<any>) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log('fetchData()');
             setIsLoading(true);
+
+            const data = await axios.get(
+                `${constants.SERVER_STATS_ENDPOINT}/${address.toLowerCase()}/`,
+            );
+
+            console.log('AXIOS DATA', data.data);
+            console.log('exampleDataJson', exampleDataJson);
+
             /* 
             TODO:
             1. check if is valid Ethereum address
@@ -106,10 +111,10 @@ const Dashboard = (props: RouteComponentProps<any>) => {
             setIsLoading(false);
         };
 
-        // TODO check address validity. Don't fetch data when address is not valid.
-        // If not valid, inform the user it is not valid
-        const isValidEthAddress = true;
-        if (isValidEthAddress) fetchData();
+        // TODO inform user the address is not valid
+        if (validation.isValidEthereumAddress(address)) {
+            fetchData();
+        }
     }, [address]);
 
     return (
@@ -130,7 +135,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                 </AddressWrapper>
 
                 {isLoading ? (
-                    <h1>Loading...</h1>
+                    <LoadingBox>Getting pool data...</LoadingBox>
                 ) : (
                     <>
                         <SummaryWrapper>
