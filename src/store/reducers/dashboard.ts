@@ -39,6 +39,12 @@ const reducer = (state = initialState, action) => {
                 exchangeToPoolMapping: action.exchangeToPoolMapping,
             };
         }
+        case actionTypes.SET_ADDRESS: {
+            return {
+                ...state,
+                userAddress: action.address,
+            };
+        }
         default:
             return state;
     }

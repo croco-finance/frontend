@@ -20,8 +20,8 @@ interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
 
 const TokenLogo = ({ symbol, className, size = 32, ...rest }: Props) => {
     let path = TOKENS['unknown'];
-    if (TOKENS[symbol]) {
-        path = TOKENS[symbol];
+    if (TOKENS[symbol.toLowerCase()]) {
+        path = TOKENS[symbol.toLowerCase()];
     }
 
     return (

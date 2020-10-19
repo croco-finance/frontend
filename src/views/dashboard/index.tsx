@@ -1,18 +1,15 @@
 import * as H from 'history';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { DashboardContainer, NavBar } from '../../components/layout';
 import { Input, LoadingBox } from '../../components/ui';
-import { animations, colors, variables, constants } from '../../config';
-import { PoolItemsExample } from '../../config/example-data';
-import * as actionTypes from '../../store/actions/actionTypes';
+import { animations, colors, variables } from '../../config';
+import { FetchPoolsHook } from '../../hooks';
+import { validation } from '../../utils';
 import CardInfo from './components/CardInfo';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
-import axios from 'axios';
-import exampleDataJson from '../../config/example-data-json.json';
-import { validation } from '../../utils';
 
 const ExceptionWrapper = styled.div`
     display: flex;
@@ -46,6 +43,11 @@ const ErrorTextWrapper = styled(ExceptionWrapper)`
         margin: 16px auto 0 auto;
         outline: none;
     }
+`;
+
+const NoAddressNoPool = styled(ExceptionWrapper)`
+    color: ${colors.FONT_LIGHT};
+    font-size: ${variables.FONT_SIZE.H2};
 `;
 
 const AddressWrapper = styled.div`
@@ -97,79 +99,31 @@ interface match<P> {
 }
 
 const Dashboard = (props: RouteComponentProps<any>) => {
-    const [address, setAddress] = useState(
+    const [inputAddress, setInputAddress] = useState(
         props.match.params.address ? props.match.params.address : '',
     );
-    const [isLoading, setIsLoading] = useState(false);
-    const [noPoolsFound, setNoPoolsFound] = useState(false);
-    const [isFetchError, setIsFetchError] = useState(false);
 
-    // use redux actions and state variables
-    const dispatch = useDispatch();
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
+        props.match.params.address ? props.match.params.address : '',
+    );
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true);
-            setNoPoolsFound(false);
-            setIsFetchError(false);
+    const allPoolsGlobal = useSelector(state => state.allPools);
 
-            try {
-                // TODO error handling
-                // const response = await axios.get(
-                //     `${constants.SERVER_STATS_ENDPOINT}/${address.trim().toLowerCase()}/`,
-                // );
-                // const fetchedData = response.data;
+    const handleAddressChange = inputAddr => {
+        setInputAddress(inputAddr);
 
-                const fetchedData = exampleDataJson;
-
-                if (fetchedData.length === 0) {
-                    setNoPoolsFound(true);
-                    setIsLoading(false);
-                    return;
-                }
-
-                let poolsCustomObject = {};
-                let exToPoolMap = {};
-
-                fetchedData.forEach(pool => {
-                    const poolId = pool['poolId'];
-                    const exchange = pool['exchange'];
-
-                    if (!exToPoolMap[exchange]) {
-                        exToPoolMap[exchange] = [];
-                    }
-
-                    poolsCustomObject[poolId] = { ...pool };
-                    exToPoolMap[exchange].push(poolId);
-                });
-
-                console.log('poolsCustomObject', poolsCustomObject);
-                // console.log(JSON.parse(poolsCustomObject))
-                console.log(JSON.stringify(poolsCustomObject));
-
-                // set new (redux) state variables
-                dispatch({ type: actionTypes.SET_ALL_POOLS, pools: poolsCustomObject });
-                dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
-                dispatch({
-                    type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
-                    exchangeToPoolMapping: exToPoolMap,
-                });
-            } catch (e) {
-                console.log('ERROR while fetching data about pools...');
-                setIsFetchError(true);
-            }
-
-            setIsLoading(false);
-        };
-
-        // TODO inform user the address is not valid
-        // if (validation.isValidEthereumAddress(address.trim())) {
-        //     fetchData();
-        // }
-        fetchData();
-    }, [address]);
+        if (validation.isValidEthereumAddress(inputAddr)) {
+            fetchData(inputAddr);
+            // change the url so that the user fetches data for the same address when refreshing the page
+            props.history.push({
+                pathname: `/dashboard/${inputAddr}`,
+            });
+        }
+    };
 
     let exceptionContent;
+    let rightWrapperContent;
+    const noPoolsSavedInRedux = Object.keys(allPoolsGlobal).length === 0;
 
     if (isFetchError) {
         exceptionContent = (
@@ -177,7 +131,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                 An error occurred while fetching data :(
                 <button
                     onClick={() => {
-                        setAddress(`${address} `); // TODO run fetching procedure again in a cleaner way
+                        fetchData(`${inputAddress} `); // TODO run fetching procedure again in a cleaner way
                     }}
                 >
                     Try again
@@ -201,6 +155,10 @@ const Dashboard = (props: RouteComponentProps<any>) => {
         );
     }
 
+    if (noPoolsSavedInRedux && !exceptionContent) {
+        rightWrapperContent = <NoAddressNoPool>Input your Ethereum address first!</NoAddressNoPool>;
+    }
+
     return (
         <DashboardContainer>
             <LeftWrapper>
@@ -211,31 +169,32 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                         innerAddon={<AddressLabel>Address:</AddressLabel>}
                         addonAlign="left"
                         placeholder="Enter valid Ethereum address"
-                        value={address}
+                        value={inputAddress}
                         onChange={event => {
-                            setAddress(event.target.value);
+                            handleAddressChange(event.target.value);
                         }}
                     />
                 </AddressWrapper>
 
-                {exceptionContent ? (
-                    exceptionContent
-                ) : (
-                    <>
-                        <SummaryWrapper>
-                            {/* <Headline>Pools Summary</Headline> */}
-                            <SummaryList />
-                        </SummaryWrapper>
+                {exceptionContent
+                    ? exceptionContent
+                    : !noPoolsSavedInRedux && (
+                          <>
+                              <SummaryWrapper>
+                                  <SummaryList />
+                              </SummaryWrapper>
 
-                        {/* <Headline>Your Pools</Headline> */}
-                        <PoolList />
-                    </>
-                )}
+                              <PoolList />
+                          </>
+                      )}
             </LeftWrapper>
             <RightWrapper>
-                <CardInfoWrapper>
-                    <CardInfo address={address} />
-                </CardInfoWrapper>
+                {rightWrapperContent}
+                {!exceptionContent && !noPoolsSavedInRedux && (
+                    <CardInfoWrapper>
+                        <CardInfo />
+                    </CardInfoWrapper>
+                )}
             </RightWrapper>
         </DashboardContainer>
     );

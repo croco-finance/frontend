@@ -15,5 +15,5 @@
     ```
 3. Run the project and open [http://localhost:3000](http://localhost:3000) to view it in the browser.
     ```bash
-    npm run start
+    npm start
     ```
