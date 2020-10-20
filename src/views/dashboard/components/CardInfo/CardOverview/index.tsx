@@ -143,6 +143,7 @@ const CardOverview = () => {
         impLossUsd,
         impLossRel,
         dexReturnUsd,
+        yieldRewardUsd,
         start,
         end,
     } = pool;
@@ -208,26 +209,29 @@ const CardOverview = () => {
                         secondColumn={<FiatAmount value={feesUsd} usePlusSymbol />}
                         color="dark"
                     />
-                    {/* <CardRow
-                        firstColumn="Yield farming gains"
-                        secondColumn={<FiatAmount value={feesUsd} usePlusSymbol />}
-                        color="dark"
-                    /> */}
+                    {yieldRewardUsd ? (
+                        <CardRow
+                            firstColumn="Yield farming gains"
+                            secondColumn={<FiatAmount value={yieldRewardUsd} usePlusSymbol />}
+                            color="dark"
+                        />
+                    ) : null}
 
                     <CardRow
                         firstColumn="Transactions cost"
                         secondColumn={<FiatAmount value={-txCostUsd} usePlusSymbol />}
                         color="dark"
                     />
+
                     <CardRow
                         firstColumn="Impermanent loss"
                         secondColumn={
                             <ImpLossValueWrapper>
-                                {impLossRel && (
+                                {/* {impLossRel && (
                                     <SubValue>
                                         {getFormattedPercentageValue(Math.abs(impLossRel))}
                                     </SubValue>
-                                )}
+                                )} */}
 
                                 <FiatAmount value={-impLossUsd} usePlusSymbol />
                             </ImpLossValueWrapper>
@@ -258,7 +262,7 @@ const CardOverview = () => {
                             }
                             color="dark"
                         />
-                        {dexReturnUsd < 0 && (
+                        {dexReturnUsd <= 0 && dexReturnUsd && (
                             <CardRow
                                 firstColumn="Days left to compensate loss*"
                                 secondColumn={daysLeftStaking}
@@ -266,7 +270,7 @@ const CardOverview = () => {
                             />
                         )}
                     </DaysLeftGridWrapper>
-                    {dexReturnUsd < 0 && (
+                    {dexReturnUsd <= 0 && dexReturnUsd && (
                         <DaysLeftNote>
                             <b>*</b> According to your average trading fee gains
                         </DaysLeftNote>

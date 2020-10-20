@@ -67,27 +67,29 @@ const CardInfo = ({ simulatedCoefficients }: Props) => {
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
     // TODO make the following checks and computations cleaner
-    if (!allPools || !allPools[selectedPoolId]) {
+    if (!allPools) {
         return (
             <SelectPoolWrapper>Please input your Ethereum address on the left</SelectPoolWrapper>
         );
     }
 
     // just in case the Pool summary is selected, return the following message
-    if (selectedPoolId === 'all' || !selectedPoolId) {
+    if (selectedPoolId === 'all' || !selectedPoolId || !allPools[selectedPoolId]) {
         return <SelectPoolWrapper>Select your pool</SelectPoolWrapper>;
     }
+
+    const tokenCount = allPools[selectedPoolId].tokens.length;
 
     return (
         <Card>
             <Wrapper>
                 {/* <SectionTitle>Pool overview</SectionTitle> */}
-                {/* <GrayBox> */}
                 <CardOverview simulatedCoefficients={simulatedCoefficients}></CardOverview>
-                <GraphWrapper>
-                    <ILGraph height={250}></ILGraph>
-                </GraphWrapper>
-                {/* </GrayBox> */}
+                {tokenCount === 2 && (
+                    <GraphWrapper>
+                        <ILGraph height={220}></ILGraph>
+                    </GraphWrapper>
+                )}
             </Wrapper>
         </Card>
     );

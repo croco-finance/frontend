@@ -113,7 +113,7 @@ const PriceChangeRow = ({
                     <MaterialSlider
                         min={0}
                         max={sliderMidValue * 2}
-                        step={sliderMidValue / 100}
+                        step={sliderMidValue / 200}
                         value={sliderValue}
                         onChange={(event, newValue) => handleSliderChange(newValue)}
                     />

@@ -19,6 +19,10 @@ const toNumberAttributes = [
     'netReturnEth',
     'netReturnUsd',
     'txCostEth',
+    'yieldRewardUsd',
+    'yieldRewardEth',
+    'yieldReward',
+    'ethPriceUsdEnd',
 ];
 const toNumberArrayAttributes = [
     'endTokenBalance',
