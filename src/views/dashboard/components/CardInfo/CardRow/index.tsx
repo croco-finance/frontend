@@ -36,6 +36,7 @@ interface Props {
     secondColumn?: React.ReactNode;
     thirdColumn?: React.ReactNode;
     color?: 'light' | 'dark';
+    firstColColor?: 'light' | 'dark';
     showThreeCols?: boolean;
 }
 
@@ -45,11 +46,12 @@ const CardRow = ({
     secondColumn,
     thirdColumn,
     color = 'light',
+    firstColColor = 'light',
     showThreeCols = false,
 }: Props) => {
     return (
         <>
-            <Col textAlign="left" color={'light'}>
+            <Col textAlign="left" color={firstColColor}>
                 {firstColumn}
             </Col>
             <Col textAlign="right" color={color}>

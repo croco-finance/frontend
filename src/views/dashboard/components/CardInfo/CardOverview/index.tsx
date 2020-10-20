@@ -117,16 +117,12 @@ const CardOverview = () => {
     let pool: any = allPools[selectedPoolId];
 
     // TODO make the following checks and computations cleaner
-    if (!allPools) {
+    if (!allPools || !pool) {
         return (
             <Wrapper>
                 <h2>We didn't find any pools associated with this address :( </h2>
             </Wrapper>
         );
-    }
-
-    if (!pool) {
-        pool = getPoolsSummaryObject();
     }
 
     const {
@@ -144,14 +140,9 @@ const CardOverview = () => {
     } = pool;
     const startBalance = endBalanceUsd - netReturnUsd;
 
-    let averageFeeGains;
-    if (selectedPoolId === 'all') {
-        averageFeeGains = pool.averageDailyFeesUsd;
-    } else {
-        averageFeeGains = getDailyAverageFeeGains(start, end, feesUsd);
-    }
-
+    const averageFeeGains = getDailyAverageFeeGains(start, end, feesUsd);
     const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageFeeGains));
+
     return (
         <Wrapper>
             <SwitchWrapper>

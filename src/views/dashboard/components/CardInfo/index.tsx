@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Card } from '../../../../components/ui';
 import { animations, colors, variables } from '../../../../config';
 import CardOverview from './CardOverview';
+import CardPoolsSummary from './CardPoolsSummary';
 
 const Wrapper = styled.div`
     /* animation: ${animations.SHOW_UP} 1s; */
@@ -71,18 +72,22 @@ const CardInfo = ({ address }: Props) => {
     return (
         <Card>
             <Wrapper>
-                <CardOverview />
-                {selectedPoolId !== 'all' && (
-                    <SimulatorButtonWrapper>
-                        Try how assets' price changes affect your funds
-                        <StyledLink
-                            to={{
-                                pathname: `/simulator/${userAddress}`,
-                            }}
-                        >
-                            Open in simulator
-                        </StyledLink>
-                    </SimulatorButtonWrapper>
+                {selectedPoolId === 'all' ? (
+                    <CardPoolsSummary />
+                ) : (
+                    <>
+                        <CardOverview />
+                        <SimulatorButtonWrapper>
+                            Try how assets' price changes affect your funds
+                            <StyledLink
+                                to={{
+                                    pathname: `/simulator/${userAddress}`,
+                                }}
+                            >
+                                Open in simulator
+                            </StyledLink>
+                        </SimulatorButtonWrapper>
+                    </>
                 )}
             </Wrapper>
         </Card>

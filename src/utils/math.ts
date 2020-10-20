@@ -44,36 +44,36 @@ const getPoolsSummaryObject = (pools = PoolItemsDictExample) => {
     // TODO compute separately for Balancer and for Uniswap
     let summaryObject = {};
     let endBalanceUsdSum = 0;
-    let netReturnUsdSum = 0;
+    let endBalanceEthSum = 0;
     let feesUsdSum = 0;
-    let impLossUsdSum = 0;
-    let dexReturnUsdSum = 0;
+    let feesEthSum = 0;
+    let txCostUsdSum = 0;
     let txCostEthSum = 0;
-    let averageDailyFeesUsdSum = 0;
+    let yieldRewardUsdSum = 0;
+    let yieldRewardEthSum = 0;
 
     for (const poolId of Object.keys(pools)) {
         const pool = pools[poolId];
         endBalanceUsdSum += pool.endBalanceUsd;
-        netReturnUsdSum += pool.netReturnUsd;
-        feesUsdSum += pool.feesUsd;
-        impLossUsdSum += pool.impLossUsd;
-        dexReturnUsdSum += pool.dexReturnUsd;
-        if (pool.txCostEth) {
-            txCostEthSum += pool.txCostEth;
-        }
-        averageDailyFeesUsdSum += getDailyAverageFeeGains(pool.start, pool.end, pool.feesUsd);
+        endBalanceEthSum += pool.endBalanceEth;
+        if (pool.feesUsd) feesUsdSum += pool.feesUsd;
+        if (pool.feesEth) feesEthSum += pool.feesEth;
+        if (pool.txCostEth) txCostEthSum += pool.txCostEth;
+        if (pool.txCostUsd) txCostUsdSum += pool.txCostUsd;
+        if (pool.yieldRewardUsd) yieldRewardUsdSum += pool.yieldRewardUsd;
+        if (pool.yieldRewardEth) yieldRewardEthSum += pool.yieldRewardEth;
     }
 
     summaryObject['endBalanceUsd'] = endBalanceUsdSum;
-    summaryObject['netReturnUsd'] = netReturnUsdSum;
+    summaryObject['endBalanceEth'] = endBalanceEthSum;
     summaryObject['feesUsd'] = feesUsdSum;
-    summaryObject['impLossUsd'] = impLossUsdSum;
-    summaryObject['dexReturnUsd'] = dexReturnUsdSum;
+    summaryObject['feesEth'] = feesEthSum;
+    summaryObject['txCostUsd'] = txCostUsdSum;
     summaryObject['txCostEth'] = txCostEthSum;
-    summaryObject['averageDailyFeesUsd'] = averageDailyFeesUsdSum;
-
-    const impermanentLoss = endBalanceUsdSum / (endBalanceUsdSum - dexReturnUsdSum) - 1;
-    summaryObject['impLoss'] = impermanentLoss;
+    summaryObject['yieldRewardUsd'] = yieldRewardUsdSum;
+    summaryObject['yieldRewardEth'] = yieldRewardEthSum;
+    summaryObject['rewardFeesBalanceUSD'] = feesUsdSum + yieldRewardUsdSum - txCostUsdSum;
+    summaryObject['rewardFeesBalanceETH'] = feesEthSum + yieldRewardEthSum - txCostEthSum;
 
     return summaryObject;
 };
