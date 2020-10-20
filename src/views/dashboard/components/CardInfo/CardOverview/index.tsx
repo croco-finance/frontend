@@ -3,12 +3,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FiatAmount, GrayBox, ToggleSwitch } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
-import {
-    getDailyAverageFeeGains,
-    getFiatFromCrypto,
-    getFormattedPercentageValue,
-    getPoolsSummaryObject,
-} from '../../../../../utils/math';
+import { getDailyAverageFeeGains, getPoolsSummaryObject } from '../../../../../utils/math';
 import CardRow from '../CardRow';
 
 const GRID_GAP = 5;

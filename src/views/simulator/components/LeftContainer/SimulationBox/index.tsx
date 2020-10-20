@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FiatAmount, TokenLogo } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
-import { currentPriceRatioExample } from '../../../../../config/example-data';
 import PriceChangeRow from './PriceChangeRow';
 
 const GRID_GAP = 5;
@@ -50,12 +49,6 @@ const TokenSymbol = styled.div`
     text-transform: uppercase;
     margin-left: 10px;
 `;
-
-const getInitialPriceCoeffs = (tokens: any) => {
-    let coefficients = new Array(tokens.length);
-    coefficients.fill(1);
-    return coefficients;
-};
 
 interface Props {
     tokensPool?: any;

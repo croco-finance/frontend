@@ -5,7 +5,6 @@ import { Card } from '../../../../components/ui';
 import { animations, colors, variables } from '../../../../config';
 import CardOverview from './CardOverview';
 import ILGraph from './ILGraph';
-import { math, loss } from '../../../../utils';
 
 const Wrapper = styled.div`
     padding-bottom: 20px;
@@ -50,25 +49,12 @@ const GraphWrapper = styled.div`
     padding: 0 30px;
 `;
 
-/* 
-QUESTIONS
-- když se cena tohoto tokenu zvíší o tolik a cena totohle tokenua  tolik, jaká bude moje loss?
-- Jaká je teď moje impermanent loss?
-- Jak dlouho musím stakovat, abych byl profitable 
-- token Balance after price change
-- Porovnání s ostatními startegiemi 
-- total Balance balance
-
-*/
-
 interface Props {
     simulatedCoefficients: Array<number>;
 }
 const CardInfo = ({ simulatedCoefficients }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
-    const [xRef, setXRef] = useState(150);
-    const [yRef, setYRef] = useState(2);
 
     // TODO make the following checks and computations cleaner
     if (!allPools) {
