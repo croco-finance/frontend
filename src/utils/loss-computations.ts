@@ -48,6 +48,10 @@ const getBalancerSimulationStats = (
     );
 };
 
+const getUniImpLossFromPriceChangeRatio = priceChangeRatio => {
+    return (2 * Math.sqrt(priceChangeRatio)) / (1 + priceChangeRatio) - 1;
+};
+
 const getUniswapSimulationStats = (
     currentTokenBalances: Array<number>,
     newTokenPrices: Array<number>,
@@ -117,4 +121,30 @@ const getStatsFromNewBalances = (
     return { simulatedPoolValue, impLossCompToInitialUsd, impLossCompToInitialRel, newBalances };
 };
 
-export { getBalancerSimulationStats, getUniswapSimulationStats };
+const getGraphData = () => {
+    const steps = 10;
+    const scaleCoeff = 4;
+
+    const priceChangeCoeffArr = math.arrangeArray(1, 2, steps);
+
+    // compute max and min relative price difference
+    const minRelDiff = priceChangeCoeffArr[1] / priceChangeCoeffArr[priceChangeCoeffArr.length - 1]; // second / last:
+    const maxRelDiff = priceChangeCoeffArr[priceChangeCoeffArr.length - 1] / priceChangeCoeffArr[1]; // last / second:
+
+    const relDiffArr = math.arrangeArray(0.1, 4, 0.1);
+    const impLoss = new Array(relDiffArr.length);
+    let graphData = new Array(relDiffArr.length);
+    relDiffArr.forEach((coeff, i) => {
+        const loss = getUniImpLossFromPriceChangeRatio(coeff);
+        graphData[i] = { priceChangeRel: coeff, loss: loss * 100 };
+    });
+
+    return graphData;
+};
+
+export {
+    getBalancerSimulationStats,
+    getUniswapSimulationStats,
+    getGraphData,
+    getUniImpLossFromPriceChangeRatio,
+};

@@ -79,12 +79,14 @@ const getPoolsSummaryObject = (pools = PoolItemsDictExample) => {
 };
 
 const arrangeArray = (start, end, step) => {
+    const stepDecimals = countDecimals(step);
     // TODO make sure start % step = 0 and start = -end;
-    const arrLength = 2 * (end / step) + 1;
+    const arrLength = Math.floor(2 * (end / step) + 1);
     const arr = new Array(arrLength);
-
+    const powerElement = Math.pow(10, stepDecimals);
+    // TODO make this programmatically more stable
     for (let i = 0; i < arrLength; i++) {
-        arr[i] = start + i * step;
+        arr[i] = Math.round((start + i * step) * powerElement) / powerElement;
     }
     return arr;
 };

@@ -49,9 +49,9 @@ const FetchPoolsHook = initialAddress => {
 
             try {
                 // TODO error handling
-                // const response = await axios.get(query);
-                // const fetchedData = response.data;
-                const fetchedData = exampleDataJson;
+                const response = await axios.get(query);
+                const fetchedData = response.data;
+                // const fetchedData = exampleDataJson;
 
                 // console.log('fetchedData', fetchedData);
 

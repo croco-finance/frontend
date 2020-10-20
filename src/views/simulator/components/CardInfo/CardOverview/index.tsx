@@ -112,8 +112,6 @@ interface Props {
 }
 
 const CardOverview = ({ simulatedCoefficients }: Props) => {
-    const arr = math.arrangeArray(-500, 500, 50);
-
     const [showEth, setShowEth] = useState(false);
 
     const allPools = useSelector(state => state.allPools);
@@ -132,7 +130,6 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
         txCostEth,
         txCostUsd,
         impLossUsd,
-        impLossRel,
         dexReturnUsd,
         start,
         end,
@@ -209,7 +206,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
             <GrayBox padding={15}>
                 <PoolValueGridWrapper>
                     <CardRow
-                        firstColumn="Your pool value"
+                        firstColumn="Your pool share value"
                         secondColumn={<FiatAmount value={endBalanceUsd}></FiatAmount>}
                         thirdColumn={
                             <DoubleValueWrapper>

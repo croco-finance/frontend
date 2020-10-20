@@ -176,7 +176,7 @@ const CardOverview = () => {
                 <PoolValueGridWrapper>
                     <CardRow
                         showThreeCols
-                        firstColumn="Your pool value"
+                        firstColumn="Your pool share value"
                         secondColumn={<FiatAmount value={startBalance}></FiatAmount>}
                         thirdColumn={
                             <PoolValueWrapper>

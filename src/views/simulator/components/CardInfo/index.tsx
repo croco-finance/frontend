@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Card } from '../../../../components/ui';
 import { animations, colors, variables } from '../../../../config';
 import CardOverview from './CardOverview';
 import ILGraph from './ILGraph';
+import { math, loss } from '../../../../utils';
 
 const Wrapper = styled.div`
+    padding-bottom: 20px;
+
     /* animation: ${animations.SHOW_UP} 1s; */
-    height: 88vh;
     overflow-y: auto;
     ::-webkit-scrollbar {
         background-color: #fff;
@@ -65,6 +67,8 @@ interface Props {
 const CardInfo = ({ simulatedCoefficients }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const [xRef, setXRef] = useState(150);
+    const [yRef, setYRef] = useState(2);
 
     // TODO make the following checks and computations cleaner
     if (!allPools) {
@@ -78,18 +82,23 @@ const CardInfo = ({ simulatedCoefficients }: Props) => {
         return <SelectPoolWrapper>Select your pool</SelectPoolWrapper>;
     }
 
-    const tokenCount = allPools[selectedPoolId].tokens.length;
-
     return (
         <Card>
             <Wrapper>
                 {/* <SectionTitle>Pool overview</SectionTitle> */}
                 <CardOverview simulatedCoefficients={simulatedCoefficients}></CardOverview>
-                {tokenCount === 2 && (
-                    <GraphWrapper>
-                        <ILGraph height={220}></ILGraph>
-                    </GraphWrapper>
-                )}
+                {/* {tokenCount === 2 && (
+                    <>
+                        <GraphWrapper>
+                            <ILGraph
+                                height={240}
+                                referenceX={currentPriceChangeRatio}
+                                referenceY={currentImpLoss}
+                                data={graphData}
+                            ></ILGraph>
+                        </GraphWrapper>
+                    </>
+                )} */}
             </Wrapper>
         </Card>
     );
