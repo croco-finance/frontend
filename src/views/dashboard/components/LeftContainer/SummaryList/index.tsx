@@ -45,7 +45,7 @@ const SummaryList = () => {
             <Header>
                 <Exchange>&ensp;</Exchange>
                 <Value>Value</Value>
-                <Gains>Fee gains</Gains>
+                <Gains>Rewards</Gains>
             </Header>
             <ItemsWrapper>
                 <SummaryItem

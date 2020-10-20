@@ -132,7 +132,7 @@ const CardPoolsSummary = () => {
                     <CardRow
                         firstColumn="Transaction expenses"
                         secondColumn={
-                            <FiatAmount value={poolsSummaryObject.txCostUsd} usePlusSymbol />
+                            <FiatAmount value={-poolsSummaryObject.txCostUsd} usePlusSymbol />
                         }
                         color="dark"
                     />

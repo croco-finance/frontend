@@ -95,7 +95,9 @@ const PoolItem = ({ poolId }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
-    const { tokens, tokenWeights, feesUsd, endBalanceUsd, exchange } = allPools[poolId];
+    const { tokens, tokenWeights, feesUsd, endBalanceUsd, exchange, yieldRewardUsd } = allPools[
+        poolId
+    ];
 
     let isSelected = selectedPoolId === poolId;
 
@@ -125,9 +127,8 @@ const PoolItem = ({ poolId }: Props) => {
                 <FiatAmount value={endBalanceUsd}></FiatAmount>
             </Value>
             <Gains>
-                <FiatAmount value={feesUsd} usePlusSymbol></FiatAmount>
+                <FiatAmount value={feesUsd + yieldRewardUsd} usePlusSymbol></FiatAmount>
             </Gains>
-            {/* <Balance>5%</Balance> */}
         </Wrapper>
     );
 };

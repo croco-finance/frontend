@@ -44,7 +44,7 @@ const PoolList = () => {
             <Header>
                 <Exchange>Pool</Exchange>
                 <Value>Value</Value>
-                <Gains>Fee Gains</Gains>
+                <Gains>Rewards</Gains>
             </Header>
             {Object.keys(allPools).map((poolId, i) => {
                 return <PoolItem key={poolId} poolId={poolId} />;
