@@ -3,12 +3,11 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FiatAmount, GrayBox, ToggleSwitch } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
-import { arrangeArray } from '../../../../../utils';
+import { math, loss } from '../../../../../utils';
 import {
     getDailyAverageFeeGains,
     getFiatFromCrypto,
     getFormattedPercentageValue,
-    getBalancerImpLoss,
 } from '../../../../../utils/math';
 import CardRow from '../CardRow';
 
@@ -103,17 +102,17 @@ const PoolValueGridWrapper = styled(GridWrapper)`
     padding-top: 0;
     height: 39px;
 `;
-const PoolValueWrapper = styled.div``;
-const PoolValueDifference = styled.div`
+const DoubleValueWrapper = styled.div``;
+const ValueDifference = styled.div`
     font-size: ${variables.FONT_SIZE.SMALL};
 `;
 
 interface Props {
-    userPoolValue?: {};
+    simulatedCoefficients: Array<number>;
 }
 
-const CardOverview = ({}: Props) => {
-    const arr = arrangeArray(-500, 500, 50);
+const CardOverview = ({ simulatedCoefficients }: Props) => {
+    const arr = math.arrangeArray(-500, 500, 50);
 
     const [showEth, setShowEth] = useState(false);
 
@@ -123,29 +122,25 @@ const CardOverview = ({}: Props) => {
     const pool = allPools[selectedPoolId];
 
     const {
+        endTokenBalance,
+        tokenBalanceDiffNoFees,
+        tokenWeights,
+        endTokenPricesUsd,
         endBalanceUsd,
         netReturnUsd,
         feesUsd,
         txCostEth,
+        txCostUsd,
         impLossUsd,
         impLossRel,
         dexReturnUsd,
         start,
         end,
+        exchange,
     } = pool;
 
     const averageFeeGains = getDailyAverageFeeGains(start, end, feesUsd);
     const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageFeeGains));
-
-    const newRateCoefficients = {
-        usdt: 1.4,
-        dai: 2,
-        weth: 4.5,
-        comp: 1.0,
-        link: 0.5,
-        yfi: 0.2,
-        wbtc: 2.4,
-    };
 
     const getNewSimulatedData = (tokens, currentBalances, newRateCoefficients) => {
         // 1. compute new price
@@ -171,6 +166,38 @@ const CardOverview = ({}: Props) => {
         const newDepositCost = 0;
         const newAverageDailyFees = 0;
     };
+    // Array of new prices, not coefficients
+    const newTokenPrices = math.multiplyArraysElementWise(endTokenPricesUsd, simulatedCoefficients);
+
+    let simulatedValues;
+    if (exchange === 'UNI_V2' || exchange === 'UNI_V1') {
+        simulatedValues = loss.getUniswapSimulationStats(
+            endTokenBalance,
+            newTokenPrices,
+            tokenBalanceDiffNoFees,
+        );
+    } else if (exchange === 'BALANCER') {
+        simulatedValues = loss.getBalancerSimulationStats(
+            endTokenBalance,
+            newTokenPrices,
+            tokenBalanceDiffNoFees,
+            tokenWeights,
+        );
+    }
+    const {
+        simulatedPoolValue,
+        impLossCompToInitialUsd,
+        impLossCompToInitialRel,
+        newBalances,
+    } = simulatedValues;
+
+    const impLossDiff = dexReturnUsd + impLossCompToInitialUsd;
+    const poolValueChangeRatio = simulatedPoolValue / endBalanceUsd;
+
+    const simulatedFeesUsd = poolValueChangeRatio * feesUsd;
+    const simulatedTotalHodlComparison = simulatedFeesUsd + impLossCompToInitialUsd - txCostUsd;
+
+    console.log('tokenBalanceDiffNoFees', tokenBalanceDiffNoFees);
 
     return (
         <Wrapper>
@@ -192,12 +219,16 @@ const CardOverview = ({}: Props) => {
                         firstColumn="Your pool value"
                         secondColumn={<FiatAmount value={endBalanceUsd}></FiatAmount>}
                         thirdColumn={
-                            <PoolValueWrapper>
-                                <FiatAmount value={20000}></FiatAmount>
-                                <PoolValueDifference>
-                                    <FiatAmount value={5000} usePlusSymbol colorized></FiatAmount>
-                                </PoolValueDifference>
-                            </PoolValueWrapper>
+                            <DoubleValueWrapper>
+                                <FiatAmount value={simulatedPoolValue}></FiatAmount>
+                                <ValueDifference>
+                                    <FiatAmount
+                                        value={simulatedPoolValue - endBalanceUsd}
+                                        usePlusSymbol
+                                        colorized
+                                    ></FiatAmount>
+                                </ValueDifference>
+                            </DoubleValueWrapper>
                         }
                         color="dark"
                     />
@@ -217,35 +248,35 @@ const CardOverview = ({}: Props) => {
                     <CardRow
                         firstColumn="Total fee gains"
                         secondColumn={<FiatAmount value={feesUsd} usePlusSymbol />}
-                        thirdColumn={<FiatAmount value={20000} usePlusSymbol />}
+                        thirdColumn={<FiatAmount value={simulatedFeesUsd} usePlusSymbol />}
                         color="dark"
                     />
 
                     <CardRow
                         firstColumn="Deposit tx. cost"
-                        secondColumn={
-                            <FiatAmount
-                                value={getFiatFromCrypto('eth', 'usd', txCostEth)}
-                                usePlusSymbol
-                            />
-                        }
-                        thirdColumn={<FiatAmount value={-670} usePlusSymbol />}
+                        secondColumn={<FiatAmount value={-txCostUsd} usePlusSymbol />}
+                        thirdColumn={<FiatAmount value={-txCostUsd} usePlusSymbol />}
                         color="dark"
                     />
                     <CardRow
                         firstColumn="Impermanent loss"
                         secondColumn={
                             <ImpLossValueWrapper>
-                                <SubValue>
+                                {/* <SubValue>
                                     {getFormattedPercentageValue(Math.abs(impLossRel))}
-                                </SubValue>
-                                <FiatAmount value={impLossUsd} usePlusSymbol />
+                                </SubValue> */}
+                                <FiatAmount value={-impLossUsd} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         thirdColumn={
                             <ImpLossValueWrapper>
-                                <SubValue>9.67%</SubValue>
-                                <FiatAmount value={-670} usePlusSymbol />
+                                {/* <SubValue>
+                                    {impLossCompToInitialRel &&
+                                        getFormattedPercentageValue(
+                                            Math.abs(impLossCompToInitialRel),
+                                        )}
+                                </SubValue> */}
+                                <FiatAmount value={impLossCompToInitialUsd} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         color="dark"
@@ -264,7 +295,7 @@ const CardOverview = ({}: Props) => {
                         }
                         thirdColumn={
                             <FiatAmount
-                                value={670}
+                                value={simulatedTotalHodlComparison}
                                 usePlusSymbol
                                 colorized
                                 // useBadgeStyle

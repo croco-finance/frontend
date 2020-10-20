@@ -77,14 +77,18 @@ const FiatAmount = ({
     let sign = '+ ';
     const originalValue = value;
 
-    if (usePlusSymbol && value < 0) {
+    // if the value rounded to two (=displayed format) decimals is less than 0, change symbol
+    const roundedValueTwoDec = Math.round((value + Number.EPSILON) * 100) / 100;
+    if (usePlusSymbol && roundedValueTwoDec < 0) {
         value = Math.abs(value);
         sign = '- ';
+    } else if (roundedValueTwoDec === 0) {
+        sign = '';
     }
 
     return (
         <Wrapper value={originalValue} colorized={colorized} useBadgeStyle={useBadgeStyle}>
-            {value ? (
+            {roundedValueTwoDec ? (
                 <>
                     {usePlusSymbol && sign} {formatter.format(value)}{' '}
                 </>

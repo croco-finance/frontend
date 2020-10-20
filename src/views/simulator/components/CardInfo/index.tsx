@@ -59,16 +59,17 @@ QUESTIONS
 
 */
 
-const CardInfo = () => {
+interface Props {
+    simulatedCoefficients: Array<number>;
+}
+const CardInfo = ({ simulatedCoefficients }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
     // TODO make the following checks and computations cleaner
     if (!allPools || !allPools[selectedPoolId]) {
         return (
-            <SelectPoolWrapper>
-                We didn't find any pools associated with this address :(
-            </SelectPoolWrapper>
+            <SelectPoolWrapper>Please input your Ethereum address on the left</SelectPoolWrapper>
         );
     }
 
@@ -82,7 +83,7 @@ const CardInfo = () => {
             <Wrapper>
                 {/* <SectionTitle>Pool overview</SectionTitle> */}
                 {/* <GrayBox> */}
-                <CardOverview></CardOverview>
+                <CardOverview simulatedCoefficients={simulatedCoefficients}></CardOverview>
                 <GraphWrapper>
                     <ILGraph height={250}></ILGraph>
                 </GraphWrapper>

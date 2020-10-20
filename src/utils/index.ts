@@ -1,20 +1,5 @@
 import * as validation from './validation';
 import * as math from './math';
+import * as loss from './loss-computations';
 
-import {
-    arrangeArray,
-    countDecimals,
-    getBalancerImpLoss,
-    getDailyAverageFeeGains,
-    getFormattedPercentageValue,
-} from './math';
-
-export {
-    countDecimals,
-    getFormattedPercentageValue,
-    arrangeArray,
-    getBalancerImpLoss,
-    getDailyAverageFeeGains,
-};
-
-export { validation, math };
+export { validation, math, loss };

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { FiatAmount, TokenLogo } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import { currentPriceRatioExample } from '../../../../../config/example-data';
-import { getFormattedPercentageValue } from '../../../../../utils';
+import { math } from '../../../../../utils';
 import OverviewRow from '../OverviewRow';
 
 const GRID_GAP = 5;
@@ -83,7 +83,7 @@ const Overview = ({ iconSize = 20 }: Props) => {
                                     <TokenSymbol>{token.symbol}</TokenSymbol>
                                 </TokenWrapper>
                             }
-                            secondColumn={getFormattedPercentageValue(tokenWeights[i], true)}
+                            secondColumn={math.getFormattedPercentageValue(tokenWeights[i], true)}
                             thirdColumn={endTokenBalance[i].toFixed(4)}
                             fourthColumn={<FiatAmount value={endTokenPricesUsd[i]} />}
                             color="dark"

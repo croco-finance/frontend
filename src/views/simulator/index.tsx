@@ -8,7 +8,7 @@ import { animations, colors, variables } from '../../config';
 import { PoolItemsExample, poolItemExample1 } from '../../config/example-data';
 import { PoolItemInterface } from '../../config/types';
 import * as actionTypes from '../../store/actions/actionTypes';
-import { getFormattedPercentageValue } from '../../utils';
+import { math } from '../../utils';
 import { fetchCurrentTokenFiatRates } from '../../utils/coingecko';
 import CardInfo from './components/CardInfo';
 import Overview from './components/LeftContainer/Overview';
@@ -79,7 +79,7 @@ const buildPoolOption = (pool: PoolItemInterface) => {
         let label = '';
 
         tokens.forEach((token, i) => {
-            let tokenWeight = getFormattedPercentageValue(pool.tokenWeights[i], true);
+            let tokenWeight = math.getFormattedPercentageValue(pool.tokenWeights[i], true);
             label = label + ` ${token.symbol.toUpperCase()} ${tokenWeight},`;
             value.tokens[i] = token.symbol;
         });
@@ -170,6 +170,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
 
     const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
         '0xa8EAc1ec5054543ba627d0A06A96bE024a6E924b',
+        // '0xb652c617d18971A53f3727E01f6E86f975312c28',
     );
 
     const handleAddressChange = inputAddr => {
@@ -242,7 +243,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                 )}
             </LeftWrapper>
             <RightWrapper>
-                <CardInfo />
+                <CardInfo simulatedCoefficients={simulatedPriceCoefficients} />
             </RightWrapper>
         </SimulatorContainer>
     );
