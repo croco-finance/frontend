@@ -174,9 +174,9 @@ const LandingPage = ({ address = '' }: Props) => {
                 </TopBar>
 
                 <Headline>
-                    Don't get your funds
+                    Don't let your funds
                     <br />
-                    eaten <br />
+                    be eaten <br />
                     {/* stays <HeadlineHighlight>im</HeadlineHighlight>permanent */}
                 </Headline>
                 <AddressInputWrapper>

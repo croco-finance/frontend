@@ -131,6 +131,12 @@ const getInitialAddress = (globalAddressState, matchAddressUrl) => {
     return '';
 };
 
+const getInitialPriceCoeffs = (tokens: any) => {
+    let coefficients = new Array(tokens.length);
+    coefficients.fill(1);
+    return coefficients;
+};
+
 const Simulator = (props: RouteComponentProps<any>) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
@@ -139,11 +145,32 @@ const Simulator = (props: RouteComponentProps<any>) => {
         props.match.params.address ? props.match.params.address : '',
     );
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [simulatedPriceCoefficients, setSimulatedPriceCoefficients]: any = useState(
+        allPools[selectedPoolId] ? getInitialPriceCoeffs(allPools[selectedPoolId].tokens) : [],
+    );
+
+    const setNewPrices = (newValue, index) => {
+        const coefficientsArrCopy = [...simulatedPriceCoefficients];
+        coefficientsArrCopy[index] = newValue;
+        setSimulatedPriceCoefficients(coefficientsArrCopy);
+    };
+
+    useEffect(() => {
+        if (allPools[selectedPoolId]) {
+            const newPool = allPools[selectedPoolId];
+            setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.tokens));
+        }
+    }, [selectedPoolId]);
+
+    // const [isLoading, setIsLoading] = useState(false);
 
     // const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
     //     props.match.params.address ? props.match.params.address : '',
     // );
+
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
+        '0xa8EAc1ec5054543ba627d0A06A96bE024a6E924b',
+    );
 
     const handleAddressChange = inputAddr => {
         setInputAddress(inputAddr);
@@ -152,6 +179,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
     const dispatch = useDispatch();
 
     // useEffect(() => {
+
     //     const urlPoolId = props.match.params.poolId;
     //     if (urlPoolId) {
     //         dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, pools: urlPoolId });
@@ -206,7 +234,10 @@ const Simulator = (props: RouteComponentProps<any>) => {
                 )}
                 {allPools[selectedPoolId] && (
                     <GrayBox>
-                        <SimulationBox />
+                        <SimulationBox
+                            onChange={setNewPrices}
+                            simulatedCoefficients={simulatedPriceCoefficients}
+                        />
                     </GrayBox>
                 )}
             </LeftWrapper>
