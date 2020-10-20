@@ -59,7 +59,6 @@ interface Props {
     fourthColumn?: React.ReactNode;
     color?: 'light' | 'dark';
     onSliderChange?: any;
-    token: string;
     defaultSliderValue?: number;
 }
 

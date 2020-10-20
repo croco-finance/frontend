@@ -51,59 +51,43 @@ const TokenSymbol = styled.div`
     margin-left: 10px;
 `;
 
-const getInitialPriceCoeffs = (tokens: any, initialValue: number = 1) => {
-    let coefficients = {};
-    let coefficientsArr = new Array(tokens.length);
-    tokens.forEach((token, i) => {
-        coefficients[token.symbol] = 1;
-    });
-
-    coefficientsArr.fill(1);
-
-    return coefficientsArr;
+const getInitialPriceCoeffs = (tokens: any) => {
+    let coefficients = new Array(tokens.length);
+    coefficients.fill(1);
+    return coefficients;
 };
 
 interface Props {
     tokensPool?: any;
+    onChange: any;
+    simulatedCoefficients: any;
 }
-const SimulationBox = ({ tokensPool }: Props) => {
+const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
+
+    if (!allPools[selectedPoolId]) {
+        return null;
+    }
+
     const pool = allPools[selectedPoolId];
-
-    const { endTokenPricesUsd } = pool;
-
-    const [simulatedPriceCoefficients, setSimulatedPriceCoefficients]: any = useState(
-        getInitialPriceCoeffs(pool.tokens),
-    );
-
-    const setNewPrices = (newValue, index) => {
-        const coefficientsArrCopy = [...simulatedPriceCoefficients];
-        coefficientsArrCopy[index] = newValue;
-        setSimulatedPriceCoefficients(coefficientsArrCopy);
-    };
-
-    useEffect(() => {
-        const newPool = allPools[selectedPoolId];
-        setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.tokens));
-    }, [selectedPoolId]);
-
-    const tokens = pool.tokens;
+    const { endTokenPricesUsd, tokens, poolId } = pool;
 
     return (
         <Wrapper>
             <Title>Simulation Box</Title>
             <SubTitle>Relative token price change</SubTitle>
-            <GridHeader>Token price</GridHeader>
+            <GridHeader>Simulated price</GridHeader>
             <GridWrapper rowsCount={tokens.length}>
                 {tokens.map((token, i) => {
                     const tokenSymbol = token.symbol;
                     return (
                         <PriceChangeRow
-                            key={tokenSymbol}
-                            token={tokenSymbol}
+                            // make sure the id is unique to the pool and the token. We want the token sliders
+                            // to re/render if in the new pool are the same tokens as in the previous pool
+                            key={`${poolId}${tokenSymbol}`}
                             onSliderChange={newValue => {
-                                setNewPrices(newValue, i);
+                                onChange(newValue, i);
                             }}
                             firstColumn={
                                 <TokenWrapper>
@@ -113,7 +97,7 @@ const SimulationBox = ({ tokensPool }: Props) => {
                             }
                             fourthColumn={
                                 <FiatAmount
-                                    value={endTokenPricesUsd[i] * simulatedPriceCoefficients[i]}
+                                    value={endTokenPricesUsd[i] * simulatedCoefficients[i]}
                                 />
                             }
                             color="dark"
