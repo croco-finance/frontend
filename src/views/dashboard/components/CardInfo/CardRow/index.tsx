@@ -13,7 +13,7 @@ const leftAlignedStyles = css`
 `;
 
 interface RowContentProps {
-    color?: 'light' | 'dark';
+    color?: 'light' | 'dark' | 'lightest';
     textAlign?: 'left' | 'right';
 }
 
@@ -23,6 +23,8 @@ const Col = styled.div<RowContentProps>`
     align-items: center;
     /* height: 36px; */
     color: ${props => (props.color === 'light' ? `${colors.FONT_MEDIUM}` : `${colors.FONT_DARK}`)};
+    /* color: ${props =>
+        props.color === 'lightest' ? `${colors.FONT_LIGHT}` : `${colors.FONT_MEDIUM}`}; */
 
     /* content alignment styles */
     ${props =>
@@ -35,8 +37,8 @@ interface Props {
     firstColumn?: React.ReactNode;
     secondColumn?: React.ReactNode;
     thirdColumn?: React.ReactNode;
-    color?: 'light' | 'dark';
-    firstColColor?: 'light' | 'dark';
+    color?: 'light' | 'dark' | 'lightest';
+    firstColColor?: 'light' | 'dark' | 'lightest';
     showThreeCols?: boolean;
 }
 

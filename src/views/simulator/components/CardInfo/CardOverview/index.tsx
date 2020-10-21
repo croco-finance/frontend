@@ -1,33 +1,57 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatAmount, GrayBox, ToggleSwitch } from '../../../../../components/ui';
+import { FiatAmount, GrayBox, ToggleSwitch, MultipleTokenLogo } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import { math, loss } from '../../../../../utils';
-import {
-    getDailyAverageFeeGains,
-    getFiatFromCrypto,
-    getFormattedPercentageValue,
-} from '../../../../../utils/math';
 import CardRow from '../CardRow';
+import { getTokenSymbolArr } from '../../../../../utils';
 
 const GRID_GAP = 5;
 
 const Wrapper = styled.div``;
 
-const SwitchWrapper = styled.div`
+const Headline = styled.div`
+    padding: 0 10px;
+    /* font-weight: ${variables.FONT_WEIGHT.MEDIUM}; */
+    font-size: ${variables.FONT_SIZE.SMALL};
+    margin-top: 0;
+    display: flex;
+    flex-direction: row;
+    height: 44px;
+    width: 100%;
+    justify-self: flex-start;
+    align-items: center;
+`;
+
+const HeadlineText = styled.div`
+    margin-left: 6px;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    color: ${colors.FONT_LIGHT};
+`;
+
+const Header = styled.div`
     display: flex;
     width: 100%;
-    justify-content: flex-end;
     align-items: center;
-    padding: 0 10px;
+    padding: 0 10px 10px 10px;
+    align-items: center;
+    /* border-bottom: 1px solid ${colors.BACKGROUND_DARK}; */
+`;
+
+const ToggleWrapper = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const ToggleLabel = styled.div`
     font-size: ${variables.FONT_SIZE.TINY};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_MEDIUM};
+    color: ${colors.FONT_LIGHT};
     margin-right: 6px;
+    min-width: 100px;
+    justify-self: flex-end;
+    text-align: right;
 `;
 
 const GridWrapper = styled.div`
@@ -120,6 +144,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
     const pool = allPools[selectedPoolId];
 
     const {
+        tokens,
         endTokenBalance,
         tokenBalanceDiffNoFees,
         tokenWeights,
@@ -137,7 +162,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
         yieldRewardUsd,
     } = pool;
 
-    const averageFeeGains = getDailyAverageFeeGains(start, end, feesUsd);
+    const averageFeeGains = math.getDailyAverageFeeGains(start, end, feesUsd);
     const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageFeeGains));
 
     // ----- GET SIMULATION VALUES -----
@@ -174,7 +199,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
     const simulatedTotalHodlComparison =
         simulatedFeesUsd + yieldRewardUsd + impLossCompToInitialUsd - txCostUsd;
 
-    const averageFeeGainsSim = getDailyAverageFeeGains(start, end, simulatedFeesUsd);
+    const averageFeeGainsSim = math.getDailyAverageFeeGains(start, end, simulatedFeesUsd);
     const daysLeftStakingSim = Math.abs(
         Math.ceil(simulatedTotalHodlComparison / averageFeeGainsSim),
     );
@@ -189,12 +214,20 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
         showDaysLeftStaking = false;
     }
 
+    const tokenSymbols = getTokenSymbolArr(tokens);
+
     return (
         <Wrapper>
-            <SwitchWrapper>
-                <ToggleLabel>Show ETH</ToggleLabel>
-                <ToggleSwitch checked={false} onChange={() => {}} isSmall />
-            </SwitchWrapper>
+            <Header>
+                <Headline>
+                    <MultipleTokenLogo size={18} tokens={tokenSymbols} />
+                    <HeadlineText>Liquidity pool</HeadlineText>
+                </Headline>
+                <ToggleWrapper>
+                    {/* <ToggleLabel>Show ETH</ToggleLabel>
+                    <ToggleSwitch checked={false} onChange={() => setShowEth(!showEth)} isSmall /> */}
+                </ToggleWrapper>
+            </Header>
             <HeaderWrapper>
                 <CardRow
                     firstColumn="Pool overview"

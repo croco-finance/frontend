@@ -1,29 +1,57 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatAmount, GrayBox, ToggleSwitch } from '../../../../../components/ui';
+import { FiatAmount, GrayBox, ToggleSwitch, MultipleTokenLogo } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
-import { getDailyAverageFeeGains, getPoolsSummaryObject } from '../../../../../utils/math';
+import { getDailyAverageFeeGains } from '../../../../../utils/math';
+import { getTokenSymbolArr } from '../../../../../utils';
 import CardRow from '../CardRow';
 
 const GRID_GAP = 5;
 
 const Wrapper = styled.div``;
 
-const SwitchWrapper = styled.div`
+const Headline = styled.div`
+    padding: 0 10px;
+    /* font-weight: ${variables.FONT_WEIGHT.MEDIUM}; */
+    font-size: ${variables.FONT_SIZE.SMALL};
+    margin-top: 0;
+    display: flex;
+    flex-direction: row;
+    height: 44px;
+    width: 100%;
+    justify-self: flex-start;
+    align-items: center;
+`;
+
+const HeadlineText = styled.div`
+    margin-left: 6px;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    color: ${colors.FONT_LIGHT};
+`;
+
+const Header = styled.div`
     display: flex;
     width: 100%;
-    justify-content: flex-end;
     align-items: center;
-    padding: 0 10px;
-    margin-bottom: 40px;
+    padding: 0 10px 10px 10px;
+    align-items: center;
+    /* border-bottom: 1px solid ${colors.BACKGROUND_DARK}; */
+`;
+
+const ToggleWrapper = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const ToggleLabel = styled.div`
     font-size: ${variables.FONT_SIZE.TINY};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_MEDIUM};
+    color: ${colors.FONT_LIGHT};
     margin-right: 6px;
+    min-width: 100px;
+    justify-self: flex-end;
+    text-align: right;
 `;
 
 const GridWrapper = styled.div`
@@ -49,6 +77,8 @@ const HeaderWrapper = styled(GridWrapper)`
     margin-top: 20px;
     margin-bottom: -5px;
     font-size: ${variables.FONT_SIZE.SMALL};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    color: ${colors.FONT_LIGHT};
 `;
 
 const HodlHeaderWrapper = styled(HeaderWrapper)`
@@ -59,7 +89,7 @@ const TotalLossRowWrapper = styled(GridWrapper)`
     /* grid-template-rows: repeat(1, 50px); */
     border-top: 1px solid ${colors.STROKE_GREY};
     margin-top: 3px;
-    padding-top: 3px;
+    padding-top: 6px;
 `;
 
 const DaysLeftWrapper = styled.div`
@@ -126,6 +156,7 @@ const CardOverview = () => {
     }
 
     const {
+        tokens,
         endBalanceUsd,
         netReturnUsd,
         feesUsd,
@@ -143,12 +174,21 @@ const CardOverview = () => {
     const averageFeeGains = getDailyAverageFeeGains(start, end, feesUsd);
     const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageFeeGains));
 
+    const tokenSymbols = getTokenSymbolArr(tokens);
+
     return (
         <Wrapper>
-            <SwitchWrapper>
-                <ToggleLabel>Show ETH</ToggleLabel>
-                <ToggleSwitch checked={false} onChange={() => setShowEth(!showEth)} isSmall />
-            </SwitchWrapper>
+            <Header>
+                <Headline>
+                    <MultipleTokenLogo size={18} tokens={tokenSymbols} />
+                    <HeadlineText>Liquidity pool</HeadlineText>
+                </Headline>
+                <ToggleWrapper>
+                    <ToggleLabel>Show ETH</ToggleLabel>
+                    <ToggleSwitch checked={false} onChange={() => setShowEth(!showEth)} isSmall />
+                </ToggleWrapper>
+            </Header>
+
             <HeaderWrapper>
                 <CardRow
                     showThreeCols

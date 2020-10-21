@@ -10,19 +10,48 @@ const GRID_GAP = 5;
 
 const Wrapper = styled.div``;
 
-const SwitchWrapper = styled.div`
+const Headline = styled.div`
+    padding: 0 10px;
+    /* font-weight: ${variables.FONT_WEIGHT.MEDIUM}; */
+    font-size: ${variables.FONT_SIZE.SMALL};
+    margin-top: 0;
+    display: flex;
+    flex-direction: row;
+    height: 44px;
+    width: 100%;
+    justify-self: flex-start;
+    align-items: center;
+`;
+
+const HeadlineText = styled.div`
+    margin-left: 6px;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    color: ${colors.FONT_LIGHT};
+`;
+
+const Header = styled.div`
     display: flex;
     width: 100%;
-    justify-content: flex-end;
     align-items: center;
-    padding: 0 10px;
+    padding: 0 10px 10px 10px;
+    align-items: center;
+    margin-bottom: 20px;
+    /* border-bottom: 1px solid ${colors.BACKGROUND_DARK}; */
+`;
+
+const ToggleWrapper = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const ToggleLabel = styled.div`
     font-size: ${variables.FONT_SIZE.TINY};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_MEDIUM};
+    color: ${colors.FONT_LIGHT};
     margin-right: 6px;
+    min-width: 100px;
+    justify-self: flex-end;
+    text-align: right;
 `;
 
 const GridWrapper = styled.div`
@@ -61,13 +90,6 @@ const TotalLossRowWrapper = styled(GridWrapper)`
     padding-top: 6px;
 `;
 
-const Headline = styled.div`
-    padding: 20px;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    font-size: ${variables.FONT_SIZE.H2};
-    margin-top: 0;
-`;
-
 const CardPoolsSummary = () => {
     const [showEth, setShowEth] = useState(false);
 
@@ -86,11 +108,15 @@ const CardPoolsSummary = () => {
 
     return (
         <Wrapper>
-            <SwitchWrapper>
-                <ToggleLabel>Show ETH</ToggleLabel>
-                <ToggleSwitch checked={false} onChange={() => setShowEth(!showEth)} isSmall />
-            </SwitchWrapper>
-            <Headline>Summary of all your pools</Headline>
+            <Header>
+                <Headline>
+                    <HeadlineText>Summary of all your liquidity pools</HeadlineText>
+                </Headline>
+                <ToggleWrapper>
+                    <ToggleLabel>Show ETH</ToggleLabel>
+                    <ToggleSwitch checked={false} onChange={() => setShowEth(!showEth)} isSmall />
+                </ToggleWrapper>
+            </Header>
 
             <GrayBox padding={15}>
                 <GridWrapper>
