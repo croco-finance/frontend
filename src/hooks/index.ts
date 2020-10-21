@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import exampleDataJson from '../config/example-data-json.json';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actionTypes from '../store/actions/actionTypes';
 import axios from 'axios';
 import { constants } from '../config';
@@ -37,6 +37,10 @@ const FetchPoolsHook = initialAddress => {
     const [isLoading, setIsLoading] = useState(false);
     const [noPoolsFound, setNoPoolsFound] = useState(false);
     const [isFetchError, setIsFetchError] = useState(false);
+
+    const globalAddress = useSelector(state => state.userAddress);
+    const globalAllPools = useSelector(state => state.allPools);
+    const globalSelectedPoolId = useSelector(state => state.selectedPoolId);
 
     // use redux actions and state variables
     const dispatch = useDispatch();
@@ -109,11 +113,17 @@ const FetchPoolsHook = initialAddress => {
         };
 
         // TODO inform user the address is not valid
-        if (validation.isValidEthereumAddress(address.trim())) {
+        /* fetch data only if 
+            - is valid eth address
+            - address is different from already loaded or no pools were found 
+        */
+        const allPoolsGlobalCount = Object.keys(globalAllPools).length;
+        if (
+            validation.isValidEthereumAddress(address.trim()) &&
+            (address !== globalAddress || allPoolsGlobalCount === 0 || !globalSelectedPoolId)
+        ) {
             fetchData(address);
         }
-
-        // fetchData(address);
     }, [address]);
 
     return [{ isLoading, noPoolsFound, isFetchError }, setAddress] as const;

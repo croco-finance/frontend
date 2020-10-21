@@ -16,6 +16,45 @@ import SimulationBox from './components/LeftContainer/SimulationBox';
 import { FetchPoolsHook } from '../../hooks';
 import { validation } from '../../utils';
 
+const ExceptionWrapper = styled.div`
+    display: flex;
+    height: 260px;
+    align-items: center;
+    justify-content: center;
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    flex-direction: column;
+    background-color: ${colors.BACKGROUND};
+    margin-top: 24px;
+    text-align: center;
+    padding: 20px;
+    line-height: 26px;
+`;
+
+const NoPoolFoundInfo = styled(ExceptionWrapper)`
+    color: ${colors.FONT_MEDIUM};
+`;
+
+const ErrorTextWrapper = styled(ExceptionWrapper)`
+    color: ${colors.RED};
+
+    & > button {
+        color: white;
+        background-color: black;
+        font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 16px auto 0 auto;
+        outline: none;
+    }
+`;
+
+const NoAddressNoPool = styled(ExceptionWrapper)`
+    color: ${colors.FONT_LIGHT};
+    font-size: ${variables.FONT_SIZE.H2};
+`;
+
 const AddressWrapper = styled.div`
     background-color: ${colors.BACKGROUND};
     width: 100%;
@@ -140,6 +179,7 @@ const getInitialPriceCoeffs = (tokens: any) => {
 const Simulator = (props: RouteComponentProps<any>) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const dispatch = useDispatch();
 
     const [inputAddress, setInputAddress] = useState(
         props.match.params.address ? props.match.params.address : '',
@@ -149,10 +189,28 @@ const Simulator = (props: RouteComponentProps<any>) => {
         allPools[selectedPoolId] ? getInitialPriceCoeffs(allPools[selectedPoolId].tokens) : [],
     );
 
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
+        props.match.params.address ? props.match.params.address : '',
+    );
+
     const setNewPrices = (newValue, index) => {
         const coefficientsArrCopy = [...simulatedPriceCoefficients];
         coefficientsArrCopy[index] = newValue;
         setSimulatedPriceCoefficients(coefficientsArrCopy);
+    };
+
+    const handleAddressChange = inputAddr => {
+        console.log('address changed');
+        // show in the input whatever user typed in, even if it's not a valid ETH address
+        setInputAddress(inputAddr);
+
+        if (validation.isValidEthereumAddress(inputAddr)) {
+            fetchData(inputAddr);
+            // change the url so that the user fetches data for the same address when refreshing the page
+            props.history.push({
+                pathname: `/simulator/${inputAddr}`,
+            });
+        }
     };
 
     useEffect(() => {
@@ -162,32 +220,39 @@ const Simulator = (props: RouteComponentProps<any>) => {
         }
     }, [selectedPoolId]);
 
-    // const [isLoading, setIsLoading] = useState(false);
+    const poolOptions = buildPoolOptions(allPools);
 
-    // const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
-    //     props.match.params.address ? props.match.params.address : '',
-    // );
+    let exceptionContent;
 
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
-        '0xa8EAc1ec5054543ba627d0A06A96bE024a6E924b',
-        // '0xb652c617d18971A53f3727E01f6E86f975312c28',
-    );
-
-    const handleAddressChange = inputAddr => {
-        setInputAddress(inputAddr);
+    const refreshPage = () => {
+        window.location.reload();
     };
 
-    const dispatch = useDispatch();
+    if (isFetchError) {
+        exceptionContent = (
+            <ErrorTextWrapper>
+                An error occurred while fetching data :(
+                <button onClick={refreshPage}>Try again</button>
+            </ErrorTextWrapper>
+        );
+    }
 
-    // useEffect(() => {
+    if (isLoading) {
+        exceptionContent = (
+            <LoadingBox>Please wait a moment. We are getting pool data...</LoadingBox>
+        );
+    }
 
-    //     const urlPoolId = props.match.params.poolId;
-    //     if (urlPoolId) {
-    //         dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, pools: urlPoolId });
-    //     }
-    // }, []);
-
-    const poolOptions = buildPoolOptions(allPools);
+    if (noPoolsFound) {
+        // TODO tell the user he cat try simulator in this case, once the simulator work for manual inputs
+        exceptionContent = (
+            <NoPoolFoundInfo>
+                We didn't find any pools associated with this address.
+                <br />
+                Try different address.
+            </NoPoolFoundInfo>
+        );
+    }
 
     return (
         <SimulatorContainer>
@@ -206,7 +271,9 @@ const Simulator = (props: RouteComponentProps<any>) => {
                     />
                 </AddressWrapper>
 
-                {!isLoading ? (
+                {exceptionContent ? (
+                    exceptionContent
+                ) : allPools ? (
                     <>
                         <ChoosePoolWrapper>
                             {/* TODO add Exchange icon (Balancer/Uniswap) */}
@@ -230,9 +297,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                             <Overview />
                         </OverviewWrapper>
                     </>
-                ) : (
-                    <LoadingBox>Getting data about pool...</LoadingBox>
-                )}
+                ) : null}
                 {allPools[selectedPoolId] && (
                     <GrayBox>
                         <SimulationBox

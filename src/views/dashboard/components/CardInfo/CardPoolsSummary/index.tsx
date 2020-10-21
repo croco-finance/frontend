@@ -104,7 +104,6 @@ const CardPoolsSummary = () => {
     }
 
     let poolsSummaryObject: any = math.getPoolsSummaryObject(allPools);
-    console.log('poolsSummaryObject', poolsSummaryObject);
 
     return (
         <Wrapper>

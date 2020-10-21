@@ -58,14 +58,14 @@ const CardInfo = ({ simulatedCoefficients }: Props) => {
 
     // TODO make the following checks and computations cleaner
     if (!allPools) {
-        return (
-            <SelectPoolWrapper>Please input your Ethereum address on the left</SelectPoolWrapper>
-        );
+        return null;
+        // <SelectPoolWrapper>Please input your Ethereum address on the left</SelectPoolWrapper>
     }
 
     // just in case the Pool summary is selected, return the following message
     if (selectedPoolId === 'all' || !selectedPoolId || !allPools[selectedPoolId]) {
-        return <SelectPoolWrapper>Select your pool</SelectPoolWrapper>;
+        // return <SelectPoolWrapper>Select your pool</SelectPoolWrapper>;
+        return null;
     }
 
     return (

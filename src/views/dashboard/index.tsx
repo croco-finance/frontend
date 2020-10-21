@@ -1,5 +1,5 @@
 import * as H from 'history';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { DashboardContainer, NavBar } from '../../components/layout';
@@ -116,6 +116,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     const [inputAddress, setInputAddress] = useState(
         props.match.params.address ? props.match.params.address : '',
     );
+    const allPoolsGlobal = useSelector(state => state.allPools);
 
     const [invalidAddressInput, setInvalidAddressInput] = useState(false);
 
@@ -124,9 +125,8 @@ const Dashboard = (props: RouteComponentProps<any>) => {
         props.match.params.address ? props.match.params.address : '',
     );
 
-    const allPoolsGlobal = useSelector(state => state.allPools);
-
     const handleAddressChange = inputAddr => {
+        console.log('address changed');
         setInvalidAddressInput(false);
         // show in the input whatever user typed in, even if it's not a valid ETH address
         setInputAddress(inputAddr);
