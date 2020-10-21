@@ -16,6 +16,7 @@ const leftAlignedStyles = css`
 const SliderWrapper = styled.div`
     display: flex;
     align-items: center;
+    justify-self: flex-start;
 `;
 
 const SliderLabel = styled.div`
@@ -30,7 +31,7 @@ const SliderRightLabel = styled(SliderLabel)`
 `;
 
 const InputWrapper = styled.div`
-    max-width: 85px;
+    max-width: 76px;
 `;
 
 interface RowContentProps {
@@ -80,10 +81,13 @@ const PriceChangeRow = ({
     const handleInputChange = event => {
         let typedValueFloat = parseFloat(event.target.value);
 
-        if (!isNaN(typedValueFloat)) {
-            handleSliderChange(typedValueFloat);
-            setSliderMidValue(typedValueFloat);
-        }
+        // TODO handle the situation when user types in empty string
+        // if (!isNaN(typedValueFloat)) {
+        //     handleSliderChange(typedValueFloat);
+        //     setSliderMidValue(typedValueFloat);
+        // }
+        handleSliderChange(typedValueFloat);
+        setSliderMidValue(typedValueFloat);
     };
 
     return (
@@ -99,7 +103,7 @@ const PriceChangeRow = ({
                         useDarkBorder
                         variant="small"
                         type="number"
-                        value={sliderValue.toString()}
+                        value={sliderValue.toFixed(2)}
                         onChange={event => {
                             handleInputChange(event);
                         }}
@@ -117,7 +121,10 @@ const PriceChangeRow = ({
                         value={sliderValue}
                         onChange={(event, newValue) => handleSliderChange(newValue)}
                     />
-                    <SliderRightLabel>{sliderMidValue * 2}x</SliderRightLabel>
+                    <SliderRightLabel>
+                        {/* handle the situation when user types in empty string */}
+                        {sliderMidValue * 2 ? `${sliderMidValue * 2}x` : ''}
+                    </SliderRightLabel>
                 </SliderWrapper>
             </Col>
             <Col textAlign="right" color={'light'}>

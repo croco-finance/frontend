@@ -13,7 +13,7 @@ const GridWrapper = styled.div<{ rowsCount: number }>`
     flex-grow: 1;
     display: grid;
     grid-gap: ${GRID_GAP}px;
-    grid-template-columns: 110px minmax(110px, auto) minmax(100px, auto) minmax(110px, auto);
+    grid-template-columns: 100px minmax(100px, auto) minmax(120px, auto) minmax(110px, auto);
     grid-template-rows: ${props => `repeat(${props.rowsCount}, 55px)`};
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
