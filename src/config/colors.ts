@@ -22,8 +22,8 @@ export default {
     FONT_MEDIUM: '#657795',
     FONT_DARK: '#002237',
 
-    RED: '#ff656d',
-    GREEN: '#1cc763',
+    RED: '#ed1b24',
+    GREEN: '#40bf4a',
     BLUE: '#0264f7',
 
     BLACK0: '#000000',

@@ -49,7 +49,7 @@ const NavBar = () => {
                     pathname: '/',
                 }}
             >
-                <PageLogo height={14}></PageLogo>
+                <PageLogo height={20}></PageLogo>
             </Link>
             <NavItemsWrapper>
                 <StyledLink

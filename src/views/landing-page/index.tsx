@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { colors, variables, constants } from '../../config';
 import { isValidEthereumAddress } from '../../utils/validation';
 import { Icon, PageLogo } from '../../components/ui';
+import LandingPageText from './components/LandingPageText';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -16,17 +17,13 @@ const MainWrapper = styled.div`
     text-align: center;
 `;
 
-const ContentWrappper = styled.div`
-    width: 1100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    animation: showup 1.6s;
+const AnimatedWrapper = styled.div`
+    animation: showup 1.8s;
 
     @keyframes showup {
         0% {
             opacity: 0;
-            transform: translateY(5%);
+            transform: translateY(8%);
         }
 
         100% {
@@ -34,6 +31,12 @@ const ContentWrappper = styled.div`
             transform: translateY(0%);
         }
     }
+`;
+const ContentWrappper = styled.div`
+    width: 1100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const TopBar = styled.div`
@@ -63,22 +66,19 @@ const IconLinkWrappper = styled.a`
         text-decoration: none;
     }
 `;
-const Headline = styled.h1`
-    color: ${colors.FONT_DARK};
-    font-weight: ${variables.FONT_WEIGHT.BOLD};
-    font-size: 52px;
-    margin-top: 190px;
+const IllustrationWrapper = styled.h1`
+    margin-top: 130px;
     margin-bottom: 60px;
 `;
 
 const AddressInputWrapper = styled.div`
     display: flex;
     justify-content: center;
-    /* border: 5px solid ${colors.STROKE_GREY}; */
-    border: 10px solid #eff2f9;
+    border: 1px solid ${colors.BACKGROUND};
+    /* border: 7px solid ${colors.FONT_DARK}; */
     padding: 10px;
     border-radius: 18px;
-    box-shadow: rgba(33, 35, 74, 0.11) 0px 8px 40px;
+    box-shadow: rgb(12 22 53 / 11%) 0px 8px 40px;
 `;
 
 const AddressInput = styled.input`
@@ -90,6 +90,7 @@ const AddressInput = styled.input`
     cursor: text;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_DARK};
+    letter-spacing: 0.5px;
 
     &:focus {
         border: none;
@@ -98,6 +99,7 @@ const AddressInput = styled.input`
 
     &::placeholder {
         color: ${colors.FONT_LIGHT};
+        /* color: #c4c4c8; */
     }
 `;
 
@@ -115,17 +117,17 @@ const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
     transition: 0.1s;
 
     &:hover {
-        background-color: ${colors.BLUE};
+        background-color: #075cda;
     }
 
     ${props =>
         props.isDisabled &&
         css`
             cursor: not-allowed;
-            background-color: #e1e6ef;
+            background-color: ${colors.BACKGROUND_DARK};
 
             &:hover {
-                background-color: #e1e6ef;
+                background-color: ${colors.BACKGROUND_DARK};
             }
         `}
 `;
@@ -146,7 +148,7 @@ const LandingPage = ({ address = '' }: Props) => {
             <ContentWrappper>
                 <TopBar>
                     <PageLogoWrapper>
-                        <PageLogo height={16} />
+                        <PageLogo height={20} />
                     </PageLogoWrapper>
                     <CommunityIconsWrapper>
                         <IconLinkWrappper
@@ -173,31 +175,30 @@ const LandingPage = ({ address = '' }: Props) => {
                     </CommunityIconsWrapper>
                 </TopBar>
 
-                <Headline>
-                    Don't let your funds
-                    <br />
-                    be eaten <br />
-                    {/* stays <HeadlineHighlight>im</HeadlineHighlight>permanent */}
-                </Headline>
-                <AddressInputWrapper>
-                    <AddressInput
-                        type="text"
-                        spellCheck={false}
-                        placeholder="Enter valid Ethereum address"
-                        value={selectedAddress}
-                        onChange={event => {
-                            setSelectedAddress(event.target.value.trim());
-                        }}
-                    ></AddressInput>
-                    <DashboardButton
-                        isDisabled={!isValidAddress}
-                        to={{
-                            pathname: linkPath,
-                        }}
-                    >
-                        Let's Go!
-                    </DashboardButton>
-                </AddressInputWrapper>
+                <AnimatedWrapper>
+                    <IllustrationWrapper>
+                        <LandingPageText />
+                    </IllustrationWrapper>
+                    <AddressInputWrapper>
+                        <AddressInput
+                            type="text"
+                            spellCheck={false}
+                            placeholder="Enter valid Ethereum address"
+                            value={selectedAddress}
+                            onChange={event => {
+                                setSelectedAddress(event.target.value.trim());
+                            }}
+                        ></AddressInput>
+                        <DashboardButton
+                            isDisabled={!isValidAddress}
+                            to={{
+                                pathname: linkPath,
+                            }}
+                        >
+                            Let's Go!
+                        </DashboardButton>
+                    </AddressInputWrapper>
+                </AnimatedWrapper>
             </ContentWrappper>
         </MainWrapper>
     );
