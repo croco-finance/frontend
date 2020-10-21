@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatAmount, TokenLogo } from '../../../../../components/ui';
+import { FiatValue, TokenLogo } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import { currentPriceRatioExample } from '../../../../../config/example-data';
 import { math } from '../../../../../utils';
@@ -85,7 +85,7 @@ const Overview = ({ iconSize = 20 }: Props) => {
                             }
                             secondColumn={math.getFormattedPercentageValue(tokenWeights[i], true)}
                             thirdColumn={endTokenBalance[i].toFixed(4)}
-                            fourthColumn={<FiatAmount value={endTokenPricesUsd[i]} />}
+                            fourthColumn={<FiatValue value={endTokenPricesUsd[i]} />}
                             color="dark"
                         />
                     );

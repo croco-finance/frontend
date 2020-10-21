@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatAmount, GrayBox, ToggleSwitch, MultipleTokenLogo } from '../../../../../components/ui';
+import { FiatValue, GrayBox, ToggleSwitch, MultipleTokenLogo } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import { getDailyAverageFeeGains } from '../../../../../utils/math';
 import { getTokenSymbolArr } from '../../../../../utils';
@@ -203,16 +203,16 @@ const CardOverview = () => {
                     <CardRow
                         showThreeCols
                         firstColumn="Your pool share value"
-                        secondColumn={<FiatAmount value={startBalance}></FiatAmount>}
+                        secondColumn={<FiatValue value={startBalance}></FiatValue>}
                         thirdColumn={
                             <PoolValueWrapper>
-                                <FiatAmount value={endBalanceUsd}></FiatAmount>
+                                <FiatValue value={endBalanceUsd}></FiatValue>
                                 <PoolValueDifference>
-                                    <FiatAmount
+                                    <FiatValue
                                         value={netReturnUsd}
                                         usePlusSymbol
                                         colorized
-                                    ></FiatAmount>
+                                    ></FiatValue>
                                 </PoolValueDifference>
                             </PoolValueWrapper>
                         }
@@ -232,20 +232,20 @@ const CardOverview = () => {
                 <GridWrapper>
                     <CardRow
                         firstColumn="Total fee gains"
-                        secondColumn={<FiatAmount value={feesUsd} usePlusSymbol />}
+                        secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
                         color="dark"
                     />
                     {yieldRewardUsd ? (
                         <CardRow
                             firstColumn="Yield farming gains"
-                            secondColumn={<FiatAmount value={yieldRewardUsd} usePlusSymbol />}
+                            secondColumn={<FiatValue value={yieldRewardUsd} usePlusSymbol />}
                             color="dark"
                         />
                     ) : null}
 
                     <CardRow
                         firstColumn="Transactions cost"
-                        secondColumn={<FiatAmount value={-txCostUsd} usePlusSymbol />}
+                        secondColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
                         color="dark"
                     />
 
@@ -259,7 +259,7 @@ const CardOverview = () => {
                                     </SubValue>
                                 )} */}
 
-                                <FiatAmount value={-impLossUsd} usePlusSymbol />
+                                <FiatValue value={-impLossUsd} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         color="dark"
@@ -269,12 +269,12 @@ const CardOverview = () => {
                     <CardRow
                         firstColumn="Total"
                         secondColumn={
-                            <FiatAmount
+                            <FiatValue
                                 value={dexReturnUsd}
                                 usePlusSymbol
                                 colorized
                                 useBadgeStyle
-                            ></FiatAmount>
+                            ></FiatValue>
                         }
                         color="dark"
                     />
@@ -284,7 +284,7 @@ const CardOverview = () => {
                         <CardRow
                             firstColumn="Average daily fee gains"
                             secondColumn={
-                                <FiatAmount value={averageFeeGains} usePlusSymbol></FiatAmount>
+                                <FiatValue value={averageFeeGains} usePlusSymbol></FiatValue>
                             }
                             color="dark"
                         />

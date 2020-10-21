@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatAmount, TokenLogo } from '../../../../../components/ui';
+import { FiatValue, TokenLogo } from '../../../../../components/ui';
 import { variables } from '../../../../../config';
 import colors from '../../../../../config/colors';
 import * as actionTypes from '../../../../../store/actions/actionTypes';
@@ -124,10 +124,10 @@ const PoolItem = ({ poolId }: Props) => {
             </PoolWrapper>
 
             <Value>
-                <FiatAmount value={endBalanceUsd}></FiatAmount>
+                <FiatValue value={endBalanceUsd}></FiatValue>
             </Value>
             <Gains>
-                <FiatAmount value={feesUsd + yieldRewardUsd} usePlusSymbol></FiatAmount>
+                <FiatValue value={feesUsd + yieldRewardUsd} usePlusSymbol></FiatValue>
             </Gains>
         </Wrapper>
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatAmount, TokenLogo } from '../../../../../components/ui';
+import { FiatValue, TokenLogo } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import * as actionTypes from '../../../../../store/actions/actionTypes';
 import { getPoolsSummaryObject } from '../../../../../utils/math';
@@ -84,10 +84,10 @@ const SummaryItem = ({ exchange, value, gainsAbsolute, roi }: Props) => {
                 <ExchangeTitle>Pools Summary</ExchangeTitle>
             </ExchangeWrapper>
             <Value>
-                <FiatAmount value={endBalanceUsd} />
+                <FiatValue value={endBalanceUsd} />
             </Value>
             <Gains>
-                <FiatAmount value={feesUsd + yieldRewardUsd} usePlusSymbol />
+                <FiatValue value={feesUsd + yieldRewardUsd} usePlusSymbol />
             </Gains>
         </Wrapper>
     );

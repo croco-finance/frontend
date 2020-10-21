@@ -10,7 +10,7 @@ import Card from './Card';
 import GrayBox from './GrayBox';
 import PageLogo from './PageLogo';
 import InlineCircle from './InlineCircle';
-import FiatAmount from './FiatAmount';
+import FiatValue from './FiatValue';
 import MultipleTokenLogo from './MultipleTokenLogo';
 import MultipleTokenSelect from './MultipleTokenSelect';
 import LoadingBox from './LoadingBox';
@@ -27,7 +27,7 @@ export {
     GrayBox,
     PageLogo,
     InlineCircle,
-    FiatAmount,
+    FiatValue,
     MultipleTokenLogo,
     MultipleTokenSelect,
     Icon,

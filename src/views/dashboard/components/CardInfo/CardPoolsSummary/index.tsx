@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatAmount, GrayBox, ToggleSwitch } from '../../../../../components/ui';
+import { FiatValue, GrayBox, ToggleSwitch } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import { math } from '../../../../../utils';
 import CardRow from '../CardRow';
@@ -123,7 +123,7 @@ const CardPoolsSummary = () => {
                     <CardRow
                         firstColumn="Value locked in pools"
                         secondColumn={
-                            <FiatAmount value={poolsSummaryObject.endBalanceUsd}></FiatAmount>
+                            <FiatValue value={poolsSummaryObject.endBalanceUsd}></FiatValue>
                         }
                         color="dark"
                     />
@@ -138,7 +138,7 @@ const CardPoolsSummary = () => {
                     <CardRow
                         firstColumn="Fees earned"
                         secondColumn={
-                            <FiatAmount value={poolsSummaryObject.feesUsd} usePlusSymbol />
+                            <FiatValue value={poolsSummaryObject.feesUsd} usePlusSymbol />
                         }
                         color="dark"
                     />
@@ -146,7 +146,7 @@ const CardPoolsSummary = () => {
                         <CardRow
                             firstColumn="Yield farming gains"
                             secondColumn={
-                                <FiatAmount
+                                <FiatValue
                                     value={poolsSummaryObject.yieldRewardUsd}
                                     usePlusSymbol
                                 />
@@ -158,7 +158,7 @@ const CardPoolsSummary = () => {
                     <CardRow
                         firstColumn="Transaction expenses"
                         secondColumn={
-                            <FiatAmount value={-poolsSummaryObject.txCostUsd} usePlusSymbol />
+                            <FiatValue value={-poolsSummaryObject.txCostUsd} usePlusSymbol />
                         }
                         color="dark"
                     />
@@ -167,12 +167,12 @@ const CardPoolsSummary = () => {
                     <CardRow
                         firstColumn="Total"
                         secondColumn={
-                            <FiatAmount
+                            <FiatValue
                                 value={poolsSummaryObject.rewardFeesBalanceUSD}
                                 usePlusSymbol
                                 colorized
                                 useBadgeStyle
-                            ></FiatAmount>
+                            ></FiatValue>
                         }
                         color="dark"
                     />

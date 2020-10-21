@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatAmount, TokenLogo } from '../../../../../components/ui';
+import { FiatValue, TokenLogo } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import PriceChangeRow from './PriceChangeRow';
 
@@ -89,7 +89,7 @@ const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) =
                                 </TokenWrapper>
                             }
                             fourthColumn={
-                                <FiatAmount
+                                <FiatValue
                                     value={endTokenPricesUsd[i] * simulatedCoefficients[i]}
                                 />
                             }

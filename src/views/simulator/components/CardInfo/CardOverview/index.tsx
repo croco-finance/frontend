@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatAmount, GrayBox, ToggleSwitch, MultipleTokenLogo } from '../../../../../components/ui';
+import { FiatValue, GrayBox, ToggleSwitch, MultipleTokenLogo } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import { math, loss } from '../../../../../utils';
 import CardRow from '../CardRow';
@@ -240,16 +240,16 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                 <PoolValueGridWrapper>
                     <CardRow
                         firstColumn="Your pool share value"
-                        secondColumn={<FiatAmount value={endBalanceUsd}></FiatAmount>}
+                        secondColumn={<FiatValue value={endBalanceUsd}></FiatValue>}
                         thirdColumn={
                             <DoubleValueWrapper>
-                                <FiatAmount value={simulatedPoolValue}></FiatAmount>
+                                <FiatValue value={simulatedPoolValue}></FiatValue>
                                 <ValueDifference>
-                                    <FiatAmount
+                                    <FiatValue
                                         value={simulatedPoolValue - endBalanceUsd}
                                         usePlusSymbol
                                         colorized
-                                    ></FiatAmount>
+                                    ></FiatValue>
                                 </ValueDifference>
                             </DoubleValueWrapper>
                         }
@@ -270,24 +270,24 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                 <GridWrapper>
                     <CardRow
                         firstColumn="Total fee gains"
-                        secondColumn={<FiatAmount value={feesUsd} usePlusSymbol />}
-                        thirdColumn={<FiatAmount value={simulatedFeesUsd} usePlusSymbol />}
+                        secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
+                        thirdColumn={<FiatValue value={simulatedFeesUsd} usePlusSymbol />}
                         color="dark"
                     />
 
                     {yieldRewardUsd ? (
                         <CardRow
                             firstColumn="Yield farming gains"
-                            secondColumn={<FiatAmount value={yieldRewardUsd} usePlusSymbol />}
-                            thirdColumn={<FiatAmount value={yieldRewardUsd} usePlusSymbol />}
+                            secondColumn={<FiatValue value={yieldRewardUsd} usePlusSymbol />}
+                            thirdColumn={<FiatValue value={yieldRewardUsd} usePlusSymbol />}
                             color="dark"
                         />
                     ) : null}
 
                     <CardRow
                         firstColumn="Deposit tx. cost"
-                        secondColumn={<FiatAmount value={-txCostUsd} usePlusSymbol />}
-                        thirdColumn={<FiatAmount value={-txCostUsd} usePlusSymbol />}
+                        secondColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
+                        thirdColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
                         color="dark"
                     />
                     <CardRow
@@ -297,7 +297,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                                 {/* <SubValue>
                                     {getFormattedPercentageValue(Math.abs(impLossRel))}
                                 </SubValue> */}
-                                <FiatAmount value={-impLossUsd} usePlusSymbol />
+                                <FiatValue value={-impLossUsd} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         thirdColumn={
@@ -308,7 +308,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                                             Math.abs(impLossCompToInitialRel),
                                         )}
                                 </SubValue> */}
-                                <FiatAmount value={impLossCompToInitialUsd} usePlusSymbol />
+                                <FiatValue value={impLossCompToInitialUsd} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         color="dark"
@@ -318,20 +318,20 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                     <CardRow
                         firstColumn="Total"
                         secondColumn={
-                            <FiatAmount
+                            <FiatValue
                                 value={dexReturnUsd}
                                 usePlusSymbol
                                 // colorized
                                 // useBadgeStyle
-                            ></FiatAmount>
+                            ></FiatValue>
                         }
                         thirdColumn={
-                            <FiatAmount
+                            <FiatValue
                                 value={simulatedTotalHodlComparison}
                                 usePlusSymbol
                                 colorized
                                 useBadgeStyle
-                            ></FiatAmount>
+                            ></FiatValue>
                         }
                         color="dark"
                     />
@@ -341,10 +341,10 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                         <CardRow
                             firstColumn="Average daily fee gains*"
                             secondColumn={
-                                <FiatAmount value={averageFeeGains} usePlusSymbol></FiatAmount>
+                                <FiatValue value={averageFeeGains} usePlusSymbol></FiatValue>
                             }
                             thirdColumn={
-                                <FiatAmount value={averageFeeGainsSim} usePlusSymbol></FiatAmount>
+                                <FiatValue value={averageFeeGainsSim} usePlusSymbol></FiatValue>
                             }
                             color="dark"
                         />

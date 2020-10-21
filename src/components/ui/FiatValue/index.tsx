@@ -59,7 +59,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     useBadgeStyle?: boolean;
 }
 
-const FiatAmount = ({
+const FiatValue = ({
     value,
     currency = 'Usd',
     colorized = false,
@@ -99,4 +99,4 @@ const FiatAmount = ({
     );
 };
 
-export default FiatAmount;
+export default FiatValue;
