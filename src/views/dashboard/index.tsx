@@ -73,12 +73,20 @@ const LeftWrapper = styled.div`
     width: 50%;
     padding: 0px 50px 20px 0;
     /* animation: ${animations.SHOW_UP} 1.5s; */
+    @media (max-width: 1100px) {
+        width: 100%;
+        padding: 20px;
+    }
 `;
 
 const RightWrapper = styled.div`
     padding: 40px 0px 20px 50px;
     width: 50%;
     background-color: ${colors.BACKGROUND};
+    @media (max-width: 1100px) {
+        width: 100%;
+        padding: 20px;
+    }
 `;
 
 const SummaryWrapper = styled.div`

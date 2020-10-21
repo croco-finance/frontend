@@ -10,6 +10,10 @@ const Wrapper = styled.div`
     flex: 1000 1 0%;
     -webkit-box-flex: 1000;
     color: ${colors.FONT_DARK};
+
+    @media (max-width: 1100px) {
+        flex-direction: column;
+    }
 `;
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;

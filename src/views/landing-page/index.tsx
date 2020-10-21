@@ -33,7 +33,7 @@ const AnimatedWrapper = styled.div`
     }
 `;
 const ContentWrappper = styled.div`
-    width: 1100px;
+    max-width: 1100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -69,6 +69,11 @@ const IconLinkWrappper = styled.a`
 const IllustrationWrapper = styled.h1`
     margin-top: 130px;
     margin-bottom: 60px;
+
+    @media (max-width: 900px) {
+        font-size: ${variables.FONT_SIZE.NORMAL};
+        margin-top: 90px;
+    }
 `;
 
 const AddressInputWrapper = styled.div`
@@ -77,6 +82,8 @@ const AddressInputWrapper = styled.div`
     border: 1px solid ${colors.BACKGROUND};
     /* border: 7px solid ${colors.FONT_DARK}; */
     padding: 10px;
+    /* max-width: 600px; */
+
     border-radius: 18px;
     box-shadow: rgb(12 22 53 / 11%) 0px 8px 40px;
 `;
@@ -85,7 +92,7 @@ const AddressInput = styled.input`
     padding: 20px;
     margin-right: 10px;
     border: none;
-    width: 600px;
+    flex-grow: 1;
     font-size: 20px;
     cursor: text;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
@@ -101,11 +108,15 @@ const AddressInput = styled.input`
         color: ${colors.FONT_LIGHT};
         /* color: #c4c4c8; */
     }
+    @media (max-width: 900px) {
+        font-size: ${variables.FONT_SIZE.NORMAL};
+    }
 `;
 
 const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
     padding: 20px;
-    display: block;
+    display: flex;
+    align-items: center;
     cursor: pointer;
     background-color: ${colors.BLUE};
     color: white;
@@ -130,6 +141,10 @@ const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
                 background-color: ${colors.BACKGROUND_DARK};
             }
         `}
+    @media (max-width: 900px) {
+        font-size: ${variables.FONT_SIZE.NORMAL};
+        padding: 10px;
+    }
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {

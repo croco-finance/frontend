@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import colors from '../../../config/colors';
 
 const Wrapper = styled.div`
     display: flex;
@@ -7,6 +8,10 @@ const Wrapper = styled.div`
     -webkit-box-flex: 1;
     padding-left: 15px;
     background-color: white;
+
+    @media (max-width: 1100px) {
+        background-color: ${colors.BACKGROUND};
+    }
 `;
 
 const LeftFillContainer = () => <Wrapper></Wrapper>;

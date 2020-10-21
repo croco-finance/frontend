@@ -9,6 +9,10 @@ const Wrapper = styled.div`
     padding: 40px;
     margin: 0;
     padding-top: 100px;
+
+    @media (max-width: 1100px) {
+        width: 100%;
+    }
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {

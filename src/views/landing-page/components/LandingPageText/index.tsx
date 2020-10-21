@@ -5,11 +5,15 @@ import image from '../../../../data/images/landing-page-text.svg';
 
 const SvgWrapper = styled.img`
     display: inline-block;
-    height: ${props => props.height}px;
+    max-height: ${props => props.height}px;
 
     div {
-        height: ${props => props.height}px;
+        max-height: ${props => props.height}px;
         line-height: ${props => props.height}px;
+    }
+
+    @media (max-width: 900px) {
+        max-height: 90px;
     }
 `;
 
