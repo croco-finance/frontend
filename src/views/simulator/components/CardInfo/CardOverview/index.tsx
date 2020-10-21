@@ -200,7 +200,11 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
     const simulatedTotalHodlComparison =
         simulatedFeesUsd + yieldRewardUsd + impLossCompToInitialUsd - txCostUsd;
 
-    const averageFeeGainsSim = math.getDailyAverageFeeGains(start, end, simulatedFeesUsd);
+    const averageFeeGainsSim = math.getDailyAverageFeeGains(
+        start,
+        end,
+        simulatedFeesUsd + yieldRewardUsd,
+    );
     const daysLeftStakingSim = Math.abs(
         Math.ceil(simulatedTotalHodlComparison / averageFeeGainsSim),
     );

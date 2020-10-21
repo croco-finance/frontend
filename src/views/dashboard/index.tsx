@@ -30,11 +30,9 @@ const NoPoolFoundInfo = styled(ExceptionWrapper)`
 `;
 
 const ErrorTextWrapper = styled(ExceptionWrapper)`
-    color: ${colors.RED};
-
     & > button {
         color: white;
-        background-color: black;
+        background-color: ${colors.BLUE};
         font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
         padding: 10px;
         border: none;

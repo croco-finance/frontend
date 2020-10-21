@@ -58,7 +58,7 @@ const FetchPoolsHook = initialAddress => {
                 const fetchedData = response.data;
                 // const fetchedData = exampleDataJson;
 
-                // console.log('fetchedData', fetchedData);
+                console.log('fetchedData', fetchedData);
 
                 if (fetchedData.length === 0) {
                     setNoPoolsFound(true);
