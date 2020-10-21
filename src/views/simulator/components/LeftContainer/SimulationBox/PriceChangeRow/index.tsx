@@ -103,7 +103,7 @@ const PriceChangeRow = ({
                         useDarkBorder
                         variant="small"
                         type="number"
-                        value={sliderValue.toFixed(2)}
+                        value={sliderValue.toString()}
                         onChange={event => {
                             handleInputChange(event);
                         }}
