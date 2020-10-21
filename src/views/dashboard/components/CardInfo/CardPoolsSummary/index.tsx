@@ -11,7 +11,7 @@ const GRID_GAP = 5;
 const Wrapper = styled.div``;
 
 const Headline = styled.div`
-    padding: 0 10px;
+    padding: 0 6px;
     /* font-weight: ${variables.FONT_WEIGHT.MEDIUM}; */
     font-size: ${variables.FONT_SIZE.NORMAL};
     margin-top: 0;
@@ -110,7 +110,7 @@ const CardPoolsSummary = () => {
         <Wrapper>
             <Header>
                 <Headline>
-                    <HeadlineText>Summary of all your liquidity pools</HeadlineText>
+                    <HeadlineText>Summary of all your liquidity pool positions</HeadlineText>
                 </Headline>
                 {/* <ToggleWrapper>
                     <ToggleLabel>Show ETH</ToggleLabel>

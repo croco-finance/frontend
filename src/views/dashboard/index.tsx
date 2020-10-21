@@ -51,12 +51,19 @@ const NoAddressNoPool = styled(ExceptionWrapper)`
 `;
 
 const AddressWrapper = styled.div`
-    background-color: ${colors.BACKGROUND};
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     border-radius: 5px;
     margin-top: 20px;
+`;
+
+const InputErrorMessage = styled.div`
+    margin-top: 6px;
+    font-size: ${variables.FONT_SIZE.SMALL};
+    color: ${colors.RED};
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
 `;
 
 const AddressLabel = styled.div`
@@ -110,6 +117,9 @@ const Dashboard = (props: RouteComponentProps<any>) => {
         props.match.params.address ? props.match.params.address : '',
     );
 
+    const [invalidAddressInput, setInvalidAddressInput] = useState(false);
+
+    // on component startup fetch pools
     const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
         props.match.params.address ? props.match.params.address : '',
     );
@@ -117,14 +127,19 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     const allPoolsGlobal = useSelector(state => state.allPools);
 
     const handleAddressChange = inputAddr => {
+        setInvalidAddressInput(false);
+        // show in the input whatever user typed in, even if it's not a valid ETH address
         setInputAddress(inputAddr);
 
         if (validation.isValidEthereumAddress(inputAddr)) {
+            setInvalidAddressInput(false);
             fetchData(inputAddr);
             // change the url so that the user fetches data for the same address when refreshing the page
             props.history.push({
                 pathname: `/dashboard/${inputAddr}`,
             });
+        } else {
+            if (inputAddr.trim()) setInvalidAddressInput(true);
         }
     };
 
@@ -163,7 +178,9 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     }
 
     if (noPoolsSavedInRedux && !exceptionContent) {
-        rightWrapperContent = <NoAddressNoPool>Input your Ethereum address first!</NoAddressNoPool>;
+        rightWrapperContent = (
+            <NoAddressNoPool>Input valid Ethereum address first!</NoAddressNoPool>
+        );
     }
 
     return (
@@ -181,6 +198,9 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                             handleAddressChange(event.target.value);
                         }}
                     />
+                    {invalidAddressInput ? (
+                        <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>
+                    ) : null}
                 </AddressWrapper>
 
                 {exceptionContent
