@@ -23,7 +23,7 @@ export default {
     FONT_DARK: '#002237',
 
     RED: '#ff656d',
-    GREEN: '#1cce65',
+    GREEN: '#1cc763',
     BLUE: '#0264f7',
 
     BLACK0: '#000000',

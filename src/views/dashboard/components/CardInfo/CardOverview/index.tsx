@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatValue, GrayBox, ToggleSwitch, MultipleTokenLogo } from '../../../../../components/ui';
+import {
+    FiatValue,
+    CryptoValue,
+    GrayBox,
+    ToggleSwitch,
+    MultipleTokenLogo,
+    CryptoFiatValue,
+} from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import { getDailyAverageFeeGains } from '../../../../../utils/math';
 import { getTokenSymbolArr } from '../../../../../utils';
@@ -155,25 +162,35 @@ const CardOverview = () => {
         );
     }
 
-    const {
+    let {
         tokens,
         endBalanceUsd,
+        endBalanceEth,
         netReturnUsd,
+        netReturnEth,
         feesUsd,
+        feesEth,
         txCostEth,
         txCostUsd,
         impLossUsd,
+        impLossEth,
         impLossRel,
         dexReturnUsd,
         yieldRewardUsd,
+        yieldRewardEth,
         start,
         end,
     } = pool;
-    const startBalance = endBalanceUsd - netReturnUsd;
+    const startBalanceUsd = endBalanceUsd - netReturnUsd;
+    const startBalanceEth = endBalanceEth - netReturnEth;
 
-    const averageFeeGains = getDailyAverageFeeGains(start, end, feesUsd);
-    const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageFeeGains));
+    const averageRewardsUsd = getDailyAverageFeeGains(start, end, feesUsd + yieldRewardUsd);
+    const daysLeftStaking = Math.abs(Math.floor(dexReturnUsd / averageRewardsUsd));
 
+    if (!txCostEth) {
+        txCostEth = 0;
+    }
+    const dexReturnEth = feesEth + yieldRewardEth - txCostEth - impLossEth;
     const tokenSymbols = getTokenSymbolArr(tokens);
 
     return (
@@ -203,16 +220,29 @@ const CardOverview = () => {
                     <CardRow
                         showThreeCols
                         firstColumn="Your pool share value"
-                        secondColumn={<FiatValue value={startBalance}></FiatValue>}
+                        secondColumn={
+                            <CryptoFiatValue
+                                showCrypto={showEth}
+                                fiatValue={startBalanceUsd}
+                                cryptoValue={startBalanceEth}
+                            />
+                        }
                         thirdColumn={
                             <PoolValueWrapper>
-                                <FiatValue value={endBalanceUsd}></FiatValue>
+                                <CryptoFiatValue
+                                    showCrypto={showEth}
+                                    fiatValue={endBalanceUsd}
+                                    cryptoValue={endBalanceEth}
+                                />
+
                                 <PoolValueDifference>
-                                    <FiatValue
-                                        value={netReturnUsd}
+                                    <CryptoFiatValue
+                                        showCrypto={showEth}
+                                        fiatValue={netReturnUsd}
+                                        cryptoValue={netReturnEth}
                                         usePlusSymbol
                                         colorized
-                                    ></FiatValue>
+                                    />
                                 </PoolValueDifference>
                             </PoolValueWrapper>
                         }
@@ -222,30 +252,47 @@ const CardOverview = () => {
             </GrayBox>
 
             <HodlHeaderWrapper>
-                <CardRow
-                    firstColumn="Gains compared to HODL"
-                    secondColumn="Current"
-                    color="light"
-                />
+                <CardRow firstColumn="Gains compared to HODL" secondColumn="Today" color="light" />
             </HodlHeaderWrapper>
             <GrayBox padding={15}>
                 <GridWrapper>
                     <CardRow
-                        firstColumn="Total fee gains"
-                        secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
+                        firstColumn="Fees earned"
+                        secondColumn={
+                            <CryptoFiatValue
+                                showCrypto={false}
+                                fiatValue={feesUsd}
+                                cryptoValue={feesEth}
+                                usePlusSymbol
+                            />
+                        }
                         color="dark"
                     />
                     {yieldRewardUsd ? (
                         <CardRow
                             firstColumn="Yield farming gains"
-                            secondColumn={<FiatValue value={yieldRewardUsd} usePlusSymbol />}
+                            secondColumn={
+                                <CryptoFiatValue
+                                    showCrypto={false}
+                                    fiatValue={yieldRewardUsd}
+                                    cryptoValue={yieldRewardEth}
+                                    usePlusSymbol
+                                />
+                            }
                             color="dark"
                         />
                     ) : null}
 
                     <CardRow
-                        firstColumn="Transactions cost"
-                        secondColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
+                        firstColumn="Transactions expenses"
+                        secondColumn={
+                            <CryptoFiatValue
+                                showCrypto={false}
+                                fiatValue={-txCostUsd}
+                                cryptoValue={-txCostEth}
+                                usePlusSymbol
+                            />
+                        }
                         color="dark"
                     />
 
@@ -259,7 +306,12 @@ const CardOverview = () => {
                                     </SubValue>
                                 )} */}
 
-                                <FiatValue value={-impLossUsd} usePlusSymbol />
+                                <CryptoFiatValue
+                                    showCrypto={false}
+                                    fiatValue={-impLossUsd}
+                                    cryptoValue={-impLossEth}
+                                    usePlusSymbol
+                                />
                             </ImpLossValueWrapper>
                         }
                         color="dark"
@@ -269,12 +321,14 @@ const CardOverview = () => {
                     <CardRow
                         firstColumn="Total"
                         secondColumn={
-                            <FiatValue
-                                value={dexReturnUsd}
+                            <CryptoFiatValue
+                                showCrypto={false}
+                                fiatValue={dexReturnUsd}
+                                cryptoValue={dexReturnEth}
                                 usePlusSymbol
                                 colorized
                                 useBadgeStyle
-                            ></FiatValue>
+                            />
                         }
                         color="dark"
                     />
@@ -282,9 +336,9 @@ const CardOverview = () => {
                 <DaysLeftWrapper>
                     <DaysLeftGridWrapper>
                         <CardRow
-                            firstColumn="Average daily fee gains"
+                            firstColumn="Average daily rewards"
                             secondColumn={
-                                <FiatValue value={averageFeeGains} usePlusSymbol></FiatValue>
+                                <FiatValue value={averageRewardsUsd} usePlusSymbol></FiatValue>
                             }
                             color="dark"
                         />
@@ -298,7 +352,7 @@ const CardOverview = () => {
                     </DaysLeftGridWrapper>
                     {dexReturnUsd <= 0 && dexReturnUsd && (
                         <DaysLeftNote>
-                            <b>*</b> According to your average trading fee gains
+                            <b>*</b> According to your average rewards (fees + yield).
                         </DaysLeftNote>
                     )}
                 </DaysLeftWrapper>

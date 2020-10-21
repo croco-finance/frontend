@@ -14,6 +14,8 @@ import FiatValue from './FiatValue';
 import MultipleTokenLogo from './MultipleTokenLogo';
 import MultipleTokenSelect from './MultipleTokenSelect';
 import LoadingBox from './LoadingBox';
+import CryptoValue from './CryptoValue';
+import CryptoFiatValue from './CryptoFiatValue';
 
 export {
     TokenLogo,
@@ -32,4 +34,6 @@ export {
     MultipleTokenSelect,
     Icon,
     LoadingBox,
+    CryptoValue,
+    CryptoFiatValue,
 };

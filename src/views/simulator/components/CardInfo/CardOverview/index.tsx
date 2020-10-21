@@ -18,7 +18,7 @@ const Headline = styled.div`
     margin-top: 0;
     display: flex;
     flex-direction: row;
-    height: 44px;
+    height: 36px;
     width: 100%;
     justify-self: flex-start;
     align-items: center;
@@ -34,7 +34,7 @@ const Header = styled.div`
     display: flex;
     width: 100%;
     align-items: center;
-    padding: 0 10px 10px 10px;
+    padding: 0 10px 0px 10px;
     align-items: center;
     /* border-bottom: 1px solid ${colors.BACKGROUND_DARK}; */
 `;
@@ -143,7 +143,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
 
     const pool = allPools[selectedPoolId];
 
-    const {
+    let {
         tokens,
         endTokenBalance,
         tokenBalanceDiffNoFees,
@@ -162,8 +162,8 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
         yieldRewardUsd,
     } = pool;
 
-    const averageFeeGains = math.getDailyAverageFeeGains(start, end, feesUsd);
-    const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageFeeGains));
+    const averageRewardsUsd = math.getDailyAverageFeeGains(start, end, feesUsd + yieldRewardUsd);
+    const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageRewardsUsd));
 
     // ----- GET SIMULATION VALUES -----
     // Array of new prices, not coefficients
@@ -196,6 +196,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
     const simulatedFeesUsd = poolValueChangeRatio * feesUsd;
 
     // TODO check if yield token is also part of pool (if yes, change its price accordingly)
+    if (!txCostUsd) txCostUsd = 0;
     const simulatedTotalHodlComparison =
         simulatedFeesUsd + yieldRewardUsd + impLossCompToInitialUsd - txCostUsd;
 
@@ -269,7 +270,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
             <GrayBox padding={15}>
                 <GridWrapper>
                     <CardRow
-                        firstColumn="Total fee gains"
+                        firstColumn="Fees earned"
                         secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
                         thirdColumn={<FiatValue value={simulatedFeesUsd} usePlusSymbol />}
                         color="dark"
@@ -285,7 +286,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                     ) : null}
 
                     <CardRow
-                        firstColumn="Deposit tx. cost"
+                        firstColumn="Transactions expenses"
                         secondColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
                         thirdColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
                         color="dark"
@@ -339,9 +340,9 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                 <DaysLeftWrapper>
                     <DaysLeftGridWrapper>
                         <CardRow
-                            firstColumn="Average daily fee gains*"
+                            firstColumn="Average daily rewards"
                             secondColumn={
-                                <FiatValue value={averageFeeGains} usePlusSymbol></FiatValue>
+                                <FiatValue value={averageRewardsUsd} usePlusSymbol></FiatValue>
                             }
                             thirdColumn={
                                 <FiatValue value={averageFeeGainsSim} usePlusSymbol></FiatValue>
@@ -362,7 +363,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
 
                     {showDaysLeftStaking ? (
                         <DaysLeftNote>
-                            <b>*</b> According to your average trading fee gains
+                            <b>*</b> According to your average daily rewards (fees + yield).
                         </DaysLeftNote>
                     ) : null}
                 </DaysLeftWrapper>

@@ -37,7 +37,7 @@ const SimulatorButtonWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 34px auto 0 auto;
+    margin: 24px auto 0 auto;
     padding: 4px 20px;
     flex-direction: column;
     color: ${colors.FONT_MEDIUM};
@@ -78,7 +78,7 @@ const CardInfo = ({ address }: Props) => {
                     <>
                         <CardOverview />
                         <SimulatorButtonWrapper>
-                            Try how assets' price changes affect your funds
+                            See how changes in assets' price affect your funds
                             <StyledLink
                                 to={{
                                     pathname: `/simulator/${userAddress}`,

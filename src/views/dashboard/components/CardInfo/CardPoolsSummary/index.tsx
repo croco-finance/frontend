@@ -13,7 +13,7 @@ const Wrapper = styled.div``;
 const Headline = styled.div`
     padding: 0 10px;
     /* font-weight: ${variables.FONT_WEIGHT.MEDIUM}; */
-    font-size: ${variables.FONT_SIZE.SMALL};
+    font-size: ${variables.FONT_SIZE.NORMAL};
     margin-top: 0;
     display: flex;
     flex-direction: row;
@@ -26,7 +26,7 @@ const Headline = styled.div`
 const HeadlineText = styled.div`
     margin-left: 6px;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
+    color: ${colors.FONT_DARK};
 `;
 
 const Header = styled.div`
@@ -35,7 +35,7 @@ const Header = styled.div`
     align-items: center;
     padding: 0 10px 10px 10px;
     align-items: center;
-    margin-bottom: 20px;
+    /* margin-bottom: 14px; */
     /* border-bottom: 1px solid ${colors.BACKGROUND_DARK}; */
 `;
 
@@ -112,10 +112,10 @@ const CardPoolsSummary = () => {
                 <Headline>
                     <HeadlineText>Summary of all your liquidity pools</HeadlineText>
                 </Headline>
-                <ToggleWrapper>
+                {/* <ToggleWrapper>
                     <ToggleLabel>Show ETH</ToggleLabel>
                     <ToggleSwitch checked={false} onChange={() => setShowEth(!showEth)} isSmall />
-                </ToggleWrapper>
+                </ToggleWrapper> */}
             </Header>
 
             <GrayBox padding={15}>
@@ -156,7 +156,7 @@ const CardPoolsSummary = () => {
                     ) : null}
 
                     <CardRow
-                        firstColumn="Transaction expenses"
+                        firstColumn="Transactions expenses"
                         secondColumn={
                             <FiatValue value={-poolsSummaryObject.txCostUsd} usePlusSymbol />
                         }
