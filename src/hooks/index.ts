@@ -102,7 +102,6 @@ const FetchPoolsHook = initialAddress => {
                     type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
                     exchangeToPoolMapping: exToPoolMap,
                 });
-                console.log();
                 dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
             } catch (e) {
                 console.log('ERROR while fetching data about pools...');
@@ -120,7 +119,7 @@ const FetchPoolsHook = initialAddress => {
         const allPoolsGlobalCount = Object.keys(globalAllPools).length;
         if (
             validation.isValidEthereumAddress(address.trim()) &&
-            (address !== globalAddress || allPoolsGlobalCount === 0 || !globalSelectedPoolId)
+            (address !== globalAddress || allPoolsGlobalCount === 0)
         ) {
             fetchData(address);
         }

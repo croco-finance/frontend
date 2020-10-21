@@ -193,8 +193,6 @@ const CardOverview = () => {
     const dexReturnEth = feesEth + yieldRewardEth - txCostEth - impLossEth;
     const tokenSymbols = getTokenSymbolArr(tokens);
 
-    console.log('yieldRewardUsd', yieldRewardUsd);
-
     return (
         <Wrapper>
             <Header>

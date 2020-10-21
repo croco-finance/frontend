@@ -204,7 +204,6 @@ const Simulator = (props: RouteComponentProps<any>) => {
     };
 
     const handleAddressChange = inputAddr => {
-        console.log('address changed');
         // show in the input whatever user typed in, even if it's not a valid ETH address
         setInputAddress(inputAddr);
 
@@ -242,9 +241,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
     }
 
     if (isLoading) {
-        exceptionContent = (
-            <LoadingBox>Please wait a moment. We are getting pool data...</LoadingBox>
-        );
+        exceptionContent = <LoadingBox>Wait a moment. We are getting pool data...</LoadingBox>;
     }
 
     if (noPoolsFound) {
@@ -253,7 +250,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
             <NoPoolFoundInfo>
                 We didn't find any pools associated with this address.
                 <br />
-                Try different address.
+                Try different address or refresh the page.
             </NoPoolFoundInfo>
         );
     }
