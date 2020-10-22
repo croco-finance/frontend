@@ -334,7 +334,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                         </DashboardButton>
                     </AddressInputWrapper>
                     <PortisButtonWrapper>
-                        Or login using
+                        Or log in using
                         <PortisButton onClick={handlePortisLogin}>
                             {portisLoading ? (
                                 <Spinner size={12} color={'#4b6b9a'} />
