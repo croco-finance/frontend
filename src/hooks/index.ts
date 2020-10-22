@@ -32,6 +32,10 @@ const toNumberArrayAttributes = [
     'tokenWeights',
 ];
 
+// if the "end" timestamp of pool is older than this, we will consider an inactive pool
+// (user withdrew all funds from that pool)
+const INACTIVE_POOL_THRESHOLD_SECONDS = 14400; // 14400 sec = 4 hours
+
 const FetchPoolsHook = initialAddress => {
     const [address, setAddress] = useState(initialAddress);
     const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +44,6 @@ const FetchPoolsHook = initialAddress => {
 
     const globalAddress = useSelector(state => state.userAddress);
     const globalAllPools = useSelector(state => state.allPools);
-    const globalSelectedPoolId = useSelector(state => state.selectedPoolId);
 
     // use redux actions and state variables
     const dispatch = useDispatch();
@@ -58,7 +61,7 @@ const FetchPoolsHook = initialAddress => {
                 const fetchedData = response.data;
                 // const fetchedData = exampleDataJson;
 
-                console.log('fetchedData', fetchedData);
+                // console.log('fetchedData', fetchedData);
 
                 if (fetchedData.length === 0) {
                     setNoPoolsFound(true);
@@ -68,17 +71,29 @@ const FetchPoolsHook = initialAddress => {
 
                 let poolsCustomObject = {};
                 let exToPoolMap = {};
+                let activePoolIds: Array<string> = [];
+                let inactivePoolIds: Array<string> = [];
+                const currentTimestampSeconds = Date.now() / 1000;
 
                 fetchedData.forEach((pool: any) => {
-                    const poolId = pool['poolId'];
-                    const exchange = pool['exchange'];
+                    const poolId: string = pool['poolId'];
+                    const exchange: string = pool['exchange'];
+                    const isActive =
+                        currentTimestampSeconds - pool['end'] < INACTIVE_POOL_THRESHOLD_SECONDS;
 
                     if (!exToPoolMap[exchange]) {
                         exToPoolMap[exchange] = [];
                     }
 
+                    if (isActive) {
+                        activePoolIds.push(poolId);
+                    } else {
+                        inactivePoolIds.push(poolId);
+                    }
+
                     poolsCustomObject[poolId] = { ...pool };
                     exToPoolMap[exchange].push(poolId);
+                    poolsCustomObject[poolId]['isActive'] = isActive;
 
                     toNumberAttributes.forEach(attribute => {
                         poolsCustomObject[poolId][attribute] = parseFloat(
@@ -101,6 +116,11 @@ const FetchPoolsHook = initialAddress => {
                 dispatch({
                     type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
                     exchangeToPoolMapping: exToPoolMap,
+                });
+                dispatch({ type: actionTypes.SET_ACTIVE_POOL_IDS, activePoolIds: activePoolIds });
+                dispatch({
+                    type: actionTypes.SET_INACTIVE_POOL_IDS,
+                    inactivePoolIds: inactivePoolIds,
                 });
                 dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
             } catch (e) {

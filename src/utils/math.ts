@@ -40,7 +40,10 @@ const getDailyAverageFeeGains = (timeStampStartSeconds, timeStampEndSeconds, tot
     return totalFeesUsd / differenceDays;
 };
 
-const getPoolsSummaryObject = (pools = PoolItemsDictExample) => {
+const getPoolsSummaryObject = (
+    allPools = PoolItemsDictExample,
+    filteredPoolIds: Array<string> | 'all',
+) => {
     // TODO compute separately for Balancer and for Uniswap
     let summaryObject = {};
     let endBalanceUsdSum = 0;
@@ -52,16 +55,18 @@ const getPoolsSummaryObject = (pools = PoolItemsDictExample) => {
     let yieldRewardUsdSum = 0;
     let yieldRewardEthSum = 0;
 
-    for (const poolId of Object.keys(pools)) {
-        const pool = pools[poolId];
-        endBalanceUsdSum += pool.endBalanceUsd;
-        endBalanceEthSum += pool.endBalanceEth;
-        if (pool.feesUsd) feesUsdSum += pool.feesUsd;
-        if (pool.feesEth) feesEthSum += pool.feesEth;
-        if (pool.txCostEth) txCostEthSum += pool.txCostEth;
-        if (pool.txCostUsd) txCostUsdSum += pool.txCostUsd;
-        if (pool.yieldRewardUsd) yieldRewardUsdSum += pool.yieldRewardUsd;
-        if (pool.yieldRewardEth) yieldRewardEthSum += pool.yieldRewardEth;
+    for (const poolId of Object.keys(allPools)) {
+        if (filteredPoolIds.includes(poolId) || filteredPoolIds === 'all') {
+            const pool = allPools[poolId];
+            endBalanceUsdSum += pool.endBalanceUsd;
+            endBalanceEthSum += pool.endBalanceEth;
+            if (pool.feesUsd) feesUsdSum += pool.feesUsd;
+            if (pool.feesEth) feesEthSum += pool.feesEth;
+            if (pool.txCostEth) txCostEthSum += pool.txCostEth;
+            if (pool.txCostUsd) txCostUsdSum += pool.txCostUsd;
+            if (pool.yieldRewardUsd) yieldRewardUsdSum += pool.yieldRewardUsd;
+            if (pool.yieldRewardEth) yieldRewardEthSum += pool.yieldRewardEth;
+        }
     }
 
     summaryObject['endBalanceUsd'] = endBalanceUsdSum;

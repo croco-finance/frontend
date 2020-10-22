@@ -17,7 +17,7 @@ const Header = styled.div`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_LIGHT};
     /* use the same side padding as in <OverviewItem> so that the items are aligned */
-    padding: 10px 10px 15px 10px;
+    padding: 10px;
 `;
 
 const HeaderChild = styled.div`
@@ -32,13 +32,20 @@ const Value = styled(HeaderChild)``;
 
 const Gains = styled(HeaderChild)``;
 
-const Roi = styled(HeaderChild)``;
-
 const ItemsWrapper = styled.div``;
 
 const SummaryList = () => {
     const allPools = useSelector(state => state.allPools);
-    const poolsSummaryInfo: any = getPoolsSummaryObject(allPools);
+    const activePoolIds = useSelector(state => state.activePoolIds);
+    const inactivePoolIds = useSelector(state => state.inactivePoolIds);
+    const poolsSummaryInfo: any = getPoolsSummaryObject(allPools, activePoolIds);
+
+    console.log('activePoolIds', activePoolIds);
+
+    if (activePoolIds.length <= 0) {
+        console.log('aaa');
+        return null;
+    }
 
     return (
         <Wrapper>
@@ -49,7 +56,7 @@ const SummaryList = () => {
             </Header>
             <ItemsWrapper>
                 <SummaryItem
-                    exchange="balancer"
+                    headline="Active Pools Summary"
                     value={poolsSummaryInfo.endBalanceUsd}
                     gainsAbsolute={poolsSummaryInfo.feesUsd}
                     roi={5}

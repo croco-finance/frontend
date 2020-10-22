@@ -72,6 +72,8 @@ const AddressLabel = styled.div`
 const LeftWrapper = styled.div`
     width: 50%;
     padding: 0px 50px 20px 0;
+    max-height: 98vh;
+    overflow-y: auto;
     /* animation: ${animations.SHOW_UP} 1.5s; */
     @media (max-width: 1100px) {
         width: 100%;
@@ -123,7 +125,6 @@ const Dashboard = (props: RouteComponentProps<any>) => {
         props.match.params.address ? props.match.params.address : '',
     );
     const allPoolsGlobal = useSelector(state => state.allPools);
-
     const [invalidAddressInput, setInvalidAddressInput] = useState(false);
 
     // on component startup fetch pools

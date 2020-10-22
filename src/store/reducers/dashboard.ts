@@ -6,6 +6,8 @@ interface InitialStateInterface {
     selectedPoolId: string;
     exchangeToPoolMapping: { [key: string]: Array<string> } | {};
     userAddress: string;
+    activePoolIds: Array<string>;
+    inactivePoolIds: Array<string>;
 }
 
 const initialState: InitialStateInterface = {
@@ -13,6 +15,8 @@ const initialState: InitialStateInterface = {
     selectedPoolId: '',
     exchangeToPoolMapping: {},
     userAddress: '',
+    activePoolIds: [],
+    inactivePoolIds: [],
 };
 
 // the argument is previous state. For the forst run it is initial state
@@ -30,6 +34,20 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedPoolId: action.poolId,
+            };
+        }
+
+        case actionTypes.SET_ACTIVE_POOL_IDS: {
+            return {
+                ...state,
+                activePoolIds: action.activePoolIds,
+            };
+        }
+
+        case actionTypes.SET_INACTIVE_POOL_IDS: {
+            return {
+                ...state,
+                inactivePoolIds: action.inactivePoolIds,
             };
         }
 

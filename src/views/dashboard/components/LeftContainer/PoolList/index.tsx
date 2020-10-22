@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { TokenLogo } from '../../../../../components/ui';
+import { TokenLogo, InlineCircle } from '../../../../../components/ui';
 import { variables } from '../../../../../config';
 import colors from '../../../../../config/colors';
 import PoolItem from '../PoolItem';
@@ -9,6 +9,20 @@ import PoolItem from '../PoolItem';
 const Wrapper = styled.div`
     padding-left: 0;
     margin-bottom: 65px;
+`;
+
+const ActiveExchange = styled.div`
+    display: flex;
+    margin-left: -15px;
+    align-items: center;
+`;
+
+const ActiveHeadlineText = styled.div`
+    margin-left: 2px;
+`;
+
+const InactiveHeadline = styled.div<{ noMarginTop: boolean }>`
+    margin-top: ${props => (props.noMarginTop ? 0 : '32px')};
 `;
 
 const Header = styled.div`
@@ -38,17 +52,46 @@ const Gains = styled(HeaderChild)``;
 
 const PoolList = () => {
     const allPools = useSelector(state => state.allPools);
+    const activePoolIds = useSelector(state => state.activePoolIds);
+    const inactivePoolIds = useSelector(state => state.inactivePoolIds);
 
     return (
         <Wrapper>
-            <Header>
-                <Exchange>Pool</Exchange>
-                <Value>Value</Value>
-                <Gains>Rewards</Gains>
-            </Header>
-            {Object.keys(allPools).map((poolId, i) => {
-                return <PoolItem key={poolId} poolId={poolId} />;
-            })}
+            {activePoolIds.length > 0 ? (
+                <>
+                    <Header>
+                        <Exchange>
+                            <ActiveExchange>
+                                <InlineCircle size={26} color={colors.GREEN} />
+                                <ActiveHeadlineText>Active positions</ActiveHeadlineText>
+                            </ActiveExchange>
+                        </Exchange>
+                        <Value>Value</Value>
+                        <Gains>Rewards</Gains>
+                    </Header>
+                    {activePoolIds.map(poolId => {
+                        return <PoolItem key={poolId} poolId={poolId} />;
+                    })}
+                </>
+            ) : null}
+
+            {inactivePoolIds.length > 0 ? (
+                <>
+                    <Header>
+                        <Exchange>
+                            <InactiveHeadline noMarginTop={activePoolIds.length === 0}>
+                                Past positions
+                            </InactiveHeadline>
+                        </Exchange>
+                        <Value> </Value>
+                        <Gains> </Gains>
+                    </Header>
+
+                    {inactivePoolIds.map(poolId => {
+                        return <PoolItem key={poolId} poolId={poolId} />;
+                    })}
+                </>
+            ) : null}
         </Wrapper>
     );
 };

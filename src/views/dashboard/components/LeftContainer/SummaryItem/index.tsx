@@ -49,24 +49,26 @@ const ExchangeWrapper = styled(Item)`
 `;
 
 const ExchangeTitle = styled.div`
-    font-size: 18px;
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    font-size: 15px;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     margin-left: 5px;
 `;
 
 interface Props {
-    exchange: string;
+    headline: string;
     value: number;
     gainsAbsolute: number;
     roi: number;
 }
 
-const SummaryItem = ({ exchange, value, gainsAbsolute, roi }: Props) => {
+const SummaryItem = ({ headline, value, gainsAbsolute, roi }: Props) => {
     const dispatch = useDispatch();
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const activePoolIds = useSelector(state => state.activePoolIds);
+    const inactivePoolIds = useSelector(state => state.inactivePoolIds);
 
-    const poolsSummaryInfo: any = getPoolsSummaryObject(allPools);
+    const poolsSummaryInfo: any = getPoolsSummaryObject(allPools, activePoolIds);
 
     const { feesUsd, endBalanceUsd, yieldRewardUsd } = poolsSummaryInfo;
 
@@ -81,7 +83,7 @@ const SummaryItem = ({ exchange, value, gainsAbsolute, roi }: Props) => {
         <Wrapper onClick={event => handleOnClick(event, 'all')} isSelected={isSelected}>
             <ExchangeWrapper>
                 {/* <TokenLogo symbol={exchange} size={26} /> */}
-                <ExchangeTitle>Pools Summary</ExchangeTitle>
+                <ExchangeTitle>{headline}</ExchangeTitle>
             </ExchangeWrapper>
             <Value>
                 <FiatValue value={endBalanceUsd} />

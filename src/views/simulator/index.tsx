@@ -111,8 +111,18 @@ const MultipleSelectWrapper = styled.div`
 const PoolSelectLabel = styled(SectionLabel)``;
 
 const OverviewWrapper = styled.div`
-    margin: 35px auto;
+    margin: 20px auto 25px auto;
     padding: 20px 15px;
+`;
+
+const InactivePoolWarning = styled.div`
+    margin-top: 30px;
+    padding: 10px;
+    border-radius: 3px;
+    font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    background-color: #f7f4ff;
+    border: 1px solid #baa6f9;
+    color: #673df1;
 `;
 
 const buildPoolOption = (pool: PoolItemInterface) => {
@@ -162,17 +172,6 @@ interface match<P> {
     path: string;
     url: string;
 }
-
-const getInitialAddress = (globalAddressState, matchAddressUrl) => {
-    if (globalAddressState) {
-        return globalAddressState;
-    }
-    if (matchAddressUrl) {
-        return matchAddressUrl;
-    }
-
-    return '';
-};
 
 const getInitialPriceCoeffs = (tokens: any) => {
     let coefficients = new Array(tokens.length);
@@ -294,18 +293,26 @@ const Simulator = (props: RouteComponentProps<any>) => {
                                 ></MultipleTokenSelect>
                             </MultipleSelectWrapper>
                         </ChoosePoolWrapper>
-                        <OverviewWrapper>
-                            <Overview />
-                        </OverviewWrapper>
                     </>
                 ) : null}
                 {allPools[selectedPoolId] && (
-                    <GrayBox>
-                        <SimulationBox
-                            onChange={setNewPrices}
-                            simulatedCoefficients={simulatedPriceCoefficients}
-                        />
-                    </GrayBox>
+                    <>
+                        {!allPools[selectedPoolId].isActive ? (
+                            <InactivePoolWarning>
+                                You have already withdrawn all funds from this pool. Below you see
+                                prices and balances at the time of your final withdrawal.
+                            </InactivePoolWarning>
+                        ) : null}
+                        <OverviewWrapper>
+                            <Overview />
+                        </OverviewWrapper>
+                        <GrayBox>
+                            <SimulationBox
+                                onChange={setNewPrices}
+                                simulatedCoefficients={simulatedPriceCoefficients}
+                            />
+                        </GrayBox>
+                    </>
                 )}
             </LeftWrapper>
             <RightWrapper>

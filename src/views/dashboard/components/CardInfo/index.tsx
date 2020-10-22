@@ -61,13 +61,14 @@ const StyledLink = styled(Link)`
     }
 `;
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-    address?: string;
-}
-
-const CardInfo = ({ address }: Props) => {
+const CardInfo = () => {
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const userAddress = useSelector(state => state.userAddress);
+    const activePoolIds = useSelector(state => state.activePoolIds);
+
+    if (activePoolIds.length <= 0 && selectedPoolId === 'all') {
+        return null;
+    }
 
     return (
         <Card>
@@ -77,16 +78,18 @@ const CardInfo = ({ address }: Props) => {
                 ) : (
                     <>
                         <CardOverview />
-                        <SimulatorButtonWrapper>
-                            See how changes in assets' price affect your funds
-                            <StyledLink
-                                to={{
-                                    pathname: `/simulator/${userAddress}`,
-                                }}
-                            >
-                                Open in simulator
-                            </StyledLink>
-                        </SimulatorButtonWrapper>
+                        {activePoolIds.includes(selectedPoolId) ? (
+                            <SimulatorButtonWrapper>
+                                See how changes in assets' prices affect your funds
+                                <StyledLink
+                                    to={{
+                                        pathname: `/simulator/${userAddress}`,
+                                    }}
+                                >
+                                    Open in simulator
+                                </StyledLink>
+                            </SimulatorButtonWrapper>
+                        ) : null}
                     </>
                 )}
             </Wrapper>
