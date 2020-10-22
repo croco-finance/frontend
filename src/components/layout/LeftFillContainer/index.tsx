@@ -12,6 +12,10 @@ const Wrapper = styled.div`
     @media (max-width: 1100px) {
         background-color: ${colors.BACKGROUND};
     }
+
+    @media (max-width: 520px) {
+        padding: 0;
+    }
 `;
 
 const LeftFillContainer = () => <Wrapper></Wrapper>;

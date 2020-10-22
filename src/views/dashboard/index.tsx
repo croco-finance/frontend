@@ -79,6 +79,10 @@ const LeftWrapper = styled.div`
         width: 100%;
         padding: 20px;
     }
+
+    @media (max-width: 520px) {
+        padding: 10px;
+    }
 `;
 
 const RightWrapper = styled.div`
@@ -88,6 +92,10 @@ const RightWrapper = styled.div`
     @media (max-width: 1100px) {
         width: 100%;
         padding: 20px;
+    }
+
+    @media (max-width: 520px) {
+        padding: 10px;
     }
 `;
 

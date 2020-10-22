@@ -26,6 +26,10 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
         background-color: ${props =>
             props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND_DARK};
     }
+
+    @media (max-width: 520px) {
+        padding: 4px;
+    }
 `;
 
 const Item = styled.div`
@@ -34,6 +38,10 @@ const Item = styled.div`
     justify-content: center;
     align-items: center;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+
+    @media (max-width: 520px) {
+        font-size: ${variables.FONT_SIZE.SMALL};
+    }
 `;
 
 const Value = styled(Item)``;

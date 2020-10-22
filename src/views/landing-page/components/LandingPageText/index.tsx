@@ -13,7 +13,7 @@ const SvgWrapper = styled.img`
     }
 
     @media (max-width: 900px) {
-        max-height: 90px;
+        max-height: 80px;
     }
 `;
 

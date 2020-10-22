@@ -8,6 +8,10 @@ const Wrapper = styled.div`
     -webkit-box-flex: 1;
     background-color: ${colors.BACKGROUND};
     padding-right: 15px;
+
+    @media (max-width: 520px) {
+        padding: 0;
+    }
 `;
 
 const RightFillContainer = () => <Wrapper></Wrapper>;

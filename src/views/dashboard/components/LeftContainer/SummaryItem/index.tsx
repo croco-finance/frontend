@@ -36,6 +36,10 @@ const Item = styled.div`
     flex: 0 0 33%;
     justify-content: center;
     color: ${colors.FONT_DARK};
+
+    @media (max-width: 520px) {
+        font-size: ${variables.FONT_SIZE.SMALL};
+    }
 `;
 
 const Value = styled(Item)``;

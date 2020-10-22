@@ -20,6 +20,11 @@ const Wrapper = styled.div`
     width: 100%;
     height: 80px;
     align-items: center;
+
+    @media (max-width: 520px) {
+        padding: 0 10px 10px 10px;
+        height: 70px;
+    }
 `;
 
 const NavItemsWrapper = styled.div`

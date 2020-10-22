@@ -50,7 +50,11 @@ const Col = styled.div<RowContentProps>`
     ${props =>
         props.textAlign === 'left'
             ? leftAlignedStyles
-            : rightAlignedStyles}/* justify-content: center; */
+            : rightAlignedStyles} /* justify-content: center; */
+
+@media (max-width: 580px) {
+        font-size: ${variables.FONT_SIZE.SMALL};
+    }
 `;
 
 interface Props {

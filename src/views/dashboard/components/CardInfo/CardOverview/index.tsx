@@ -75,6 +75,10 @@ const GridWrapper = styled.div`
     word-break: break-all;
     padding: 0px 10px;
     font-size: ${variables.FONT_SIZE.NORMAL};
+
+    @media (max-width: 520px) {
+        font-size: ${variables.FONT_SIZE.SMALL};
+    }
 `;
 
 const HeaderWrapper = styled(GridWrapper)`
@@ -180,6 +184,7 @@ const CardOverview = () => {
         yieldRewardEth,
         start,
         end,
+        isActive,
     } = pool;
     const startBalanceUsd = endBalanceUsd - netReturnUsd;
     const startBalanceEth = endBalanceEth - netReturnEth;
@@ -342,7 +347,7 @@ const CardOverview = () => {
                             }
                             color="dark"
                         />
-                        {dexReturnUsd <= 0 && dexReturnUsd && (
+                        {dexReturnUsd <= 0 && dexReturnUsd && isActive && (
                             <CardRow
                                 firstColumn="Days left to compensate loss*"
                                 secondColumn={daysLeftStaking}
@@ -350,7 +355,7 @@ const CardOverview = () => {
                             />
                         )}
                     </DaysLeftGridWrapper>
-                    {dexReturnUsd <= 0 && dexReturnUsd && (
+                    {dexReturnUsd <= 0 && dexReturnUsd && isActive && (
                         <DaysLeftNote>
                             <b>*</b> According to your average rewards (fees + yield).
                         </DaysLeftNote>

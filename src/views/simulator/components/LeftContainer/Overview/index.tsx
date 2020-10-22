@@ -24,6 +24,10 @@ const GridWrapper = styled.div`
     overflow-x: auto; /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
     word-break: break-all;
     padding: 0px 10px;
+
+    @media (max-width: 520px) {
+        font-size: ${variables.FONT_SIZE.SMALL};
+    }
 `;
 
 const HeaderWrapper = styled(GridWrapper)`

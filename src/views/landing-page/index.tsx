@@ -36,11 +36,15 @@ const AnimatedWrapper = styled.div`
         }
     }
 `;
-const ContentWrappper = styled.div`
+const ContentWrapper = styled.div`
     max-width: 1100px;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    @media (max-width: 900px) {
+        width: 90%;
+    }
 `;
 
 const TopBar = styled.div`
@@ -61,7 +65,7 @@ const CommunityIconsWrapper = styled.div`
     justify-content: flex-end;
 `;
 
-const IconLinkWrappper = styled.a`
+const IconLinkWrapper = styled.a`
     text-decoration: none;
     cursor: pointer;
     margin: 0 10px;
@@ -101,7 +105,7 @@ const AddressInput = styled.input`
     cursor: text;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_DARK};
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
 
     &:focus {
         border: none;
@@ -113,7 +117,9 @@ const AddressInput = styled.input`
         /* color: #c4c4c8; */
     }
     @media (max-width: 900px) {
-        font-size: ${variables.FONT_SIZE.NORMAL};
+        font-size: ${variables.FONT_SIZE.SMALL};
+        padding: 8px;
+        margin-right: 5px;
     }
 `;
 
@@ -131,8 +137,8 @@ const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
     border-radius: 10px;
     text-decoration: none;
     transition: 0.1s;
-    min-width: 130px;
-    min-height: 66px;
+    width: 130px;
+    height: 66px;
 
     &:hover {
         background-color: #075cda;
@@ -150,7 +156,10 @@ const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
         `}
     @media (max-width: 900px) {
         font-size: ${variables.FONT_SIZE.NORMAL};
-        padding: 10px;
+        font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+        padding: 5px;
+        width: 85px;
+        height: 40px;
     }
 `;
 
@@ -266,33 +275,33 @@ const LandingPage = (props: RouteComponentProps<any>) => {
 
     return (
         <MainWrapper>
-            <ContentWrappper>
+            <ContentWrapper>
                 <TopBar>
                     <PageLogoWrapper>
                         <PageLogo height={20} />
                     </PageLogoWrapper>
                     <CommunityIconsWrapper>
-                        <IconLinkWrappper
+                        <IconLinkWrapper
                             rel="noreferrer"
                             target="_blank"
                             href={constants.GITHUB_LINK}
                         >
                             <Icon icon="github" size={20} />
-                        </IconLinkWrappper>
-                        <IconLinkWrappper
+                        </IconLinkWrapper>
+                        <IconLinkWrapper
                             rel="noreferrer"
                             target="_blank"
                             href={constants.TELEGRAM_LINK}
                         >
                             <Icon icon="telegram" size={20} />
-                        </IconLinkWrappper>
-                        <IconLinkWrappper
+                        </IconLinkWrapper>
+                        <IconLinkWrapper
                             rel="noreferrer"
                             target="_blank"
                             href={constants.TWITTER_LINK}
                         >
                             <Icon icon="twitter" size={20} />
-                        </IconLinkWrappper>
+                        </IconLinkWrapper>
                     </CommunityIconsWrapper>
                 </TopBar>
 
@@ -336,7 +345,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                         </PortisButton>
                     </PortisButtonWrapper>
                 </AnimatedWrapper>
-            </ContentWrappper>
+            </ContentWrapper>
         </MainWrapper>
     );
 };

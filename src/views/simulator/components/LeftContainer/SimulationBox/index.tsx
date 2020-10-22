@@ -7,7 +7,11 @@ import PriceChangeRow from './PriceChangeRow';
 
 const GRID_GAP = 5;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+    @media (max-width: 580px) {
+        font-size: ${variables.FONT_SIZE.SMALL};
+    }
+`;
 
 const GridWrapper = styled.div<{ rowsCount: number }>`
     flex-grow: 1;
