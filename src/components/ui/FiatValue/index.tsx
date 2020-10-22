@@ -44,6 +44,18 @@ const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: b
 
             border-radius: 5px;
         `}
+
+        ${props =>
+        !props.colorized &&
+        props.useBadgeStyle &&
+        props.value &&
+        css`
+            background-color: ${colors.FONT_DARK};
+            color: white;
+            padding: 5px;
+            margin: -5px;
+            border-radius: 5px;
+        `}
 `;
 
 const Nan = styled.div`

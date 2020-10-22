@@ -82,7 +82,7 @@ const GridWrapper = styled.div`
 `;
 
 const HeaderWrapper = styled(GridWrapper)`
-    grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto);
+    grid-template-columns: 190px minmax(100px, auto) minmax(140px, auto);
     grid-template-rows: repeat(1, 40px);
     padding: 0px 25px;
     margin-top: 20px;
@@ -93,7 +93,7 @@ const HeaderWrapper = styled(GridWrapper)`
 `;
 
 const HodlHeaderWrapper = styled(HeaderWrapper)`
-    grid-template-columns: 190px minmax(100px, auto);
+    grid-template-columns: 280px 2px minmax(100px, auto);
 `;
 
 const TotalLossRowWrapper = styled(GridWrapper)`
@@ -198,6 +198,8 @@ const CardOverview = () => {
     const dexReturnEth = feesEth + yieldRewardEth - txCostEth - impLossEth;
     const tokenSymbols = getTokenSymbolArr(tokens);
 
+    const endTimeText = isActive ? 'Today' : 'Withdrawal time';
+
     return (
         <Wrapper>
             <Header>
@@ -216,7 +218,7 @@ const CardOverview = () => {
                     showThreeCols
                     firstColumn="Pool overview"
                     secondColumn="Initial"
-                    thirdColumn="Current"
+                    thirdColumn={endTimeText}
                     color="light"
                 />
             </HeaderWrapper>
@@ -257,7 +259,13 @@ const CardOverview = () => {
             </GrayBox>
 
             <HodlHeaderWrapper>
-                <CardRow firstColumn="Gains compared to HODL" secondColumn="Today" color="light" />
+                <CardRow
+                    showThreeCols
+                    firstColumn="Your balance compared to HODL strategy"
+                    secondColumn=""
+                    thirdColumn={endTimeText}
+                    color="light"
+                />
             </HodlHeaderWrapper>
             <GrayBox padding={15}>
                 <GridWrapper>
@@ -331,7 +339,6 @@ const CardOverview = () => {
                                 fiatValue={dexReturnUsd}
                                 cryptoValue={dexReturnEth}
                                 usePlusSymbol
-                                colorized
                                 useBadgeStyle
                             />
                         }

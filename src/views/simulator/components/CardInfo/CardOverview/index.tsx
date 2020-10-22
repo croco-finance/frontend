@@ -59,7 +59,9 @@ const GridWrapper = styled.div`
     display: grid;
     grid-gap: ${GRID_GAP}px;
 
-    grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto);
+    /* grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto); */
+    grid-template-columns: 265px minmax(100px, auto) minmax(100px, auto);
+
     grid-auto-rows: 40px;
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
@@ -76,6 +78,10 @@ const HeaderWrapper = styled(GridWrapper)`
     margin-top: 20px;
     margin-bottom: -5px;
     font-size: ${variables.FONT_SIZE.SMALL};
+`;
+
+const HodlHeaderWrapper = styled(HeaderWrapper)`
+    /* grid-template-columns: 280px 2px minmax(100px, auto); */
 `;
 
 const TotalLossRowWrapper = styled(GridWrapper)`
@@ -263,14 +269,14 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                 </PoolValueGridWrapper>
             </GrayBox>
 
-            <HeaderWrapper>
+            <HodlHeaderWrapper>
                 <CardRow
-                    firstColumn="Gains compared to HODL"
+                    firstColumn="Your balance compared to HODL strategy"
                     secondColumn="Current"
                     thirdColumn="Simulated"
                     color="light"
                 />
-            </HeaderWrapper>
+            </HodlHeaderWrapper>
             <GrayBox padding={15}>
                 <GridWrapper>
                     <CardRow
@@ -334,7 +340,6 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                             <FiatValue
                                 value={simulatedTotalHodlComparison}
                                 usePlusSymbol
-                                colorized
                                 useBadgeStyle
                             ></FiatValue>
                         }
