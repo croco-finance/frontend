@@ -200,10 +200,10 @@ const CardOverview = () => {
                     <MultipleTokenLogo size={18} tokens={tokenSymbols} />
                     <HeadlineText>Liquidity pool</HeadlineText>
                 </Headline>
-                <ToggleWrapper>
+                {/* <ToggleWrapper>
                     <ToggleLabel>Show ETH</ToggleLabel>
                     <ToggleSwitch checked={false} onChange={() => setShowEth(!showEth)} isSmall />
-                </ToggleWrapper>
+                </ToggleWrapper> */}
             </Header>
 
             <HeaderWrapper>

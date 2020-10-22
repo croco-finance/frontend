@@ -13,13 +13,13 @@ const Wrapper = styled.div<Props>`
     align-items: center;
 `;
 
-const StyledLoader = styled.div<{ size: number; strokeWidth: number }>`
+const StyledLoader = styled.div<{ size: number; strokeWidth: number; color: string }>`
     position: relative;
     text-indent: -9999em;
-    border-top: ${props => `${props.strokeWidth}px`} solid ${colors.BLUE};
-    border-right: ${props => `${props.strokeWidth}px`} solid ${colors.BLUE};
-    border-bottom: ${props => `${props.strokeWidth}px`} solid ${colors.BLUE};
-    border-left: ${props => `${props.strokeWidth}px`} solid transparent;
+    border-top: ${props => `${props.strokeWidth}px solid ${props.color}`};
+    border-right: ${props => `${props.strokeWidth}px solid ${props.color}`};
+    border-bottom: ${props => `${props.strokeWidth}px solid ${props.color}`};
+    border-left: ${props => `${props.strokeWidth}px solid transparent`};
     transform: translateZ(0);
     animation: ${SPIN} 1.1s infinite linear;
     &,
@@ -34,11 +34,18 @@ interface Props {
     className?: string;
     size?: number;
     strokeWidth?: number;
+    color?: string;
 }
 
-const Spinner = ({ className, size = 100, strokeWidth = 2, ...rest }: Props) => (
+const Spinner = ({
+    className,
+    size = 100,
+    strokeWidth = 2,
+    color = colors.BLUE,
+    ...rest
+}: Props) => (
     <Wrapper className={className} size={size} {...rest}>
-        <StyledLoader size={size} strokeWidth={strokeWidth} />
+        <StyledLoader size={size} strokeWidth={strokeWidth} color={color} />
     </Wrapper>
 );
 

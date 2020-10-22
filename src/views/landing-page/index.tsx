@@ -1,10 +1,13 @@
+import * as H from 'history';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { colors, variables, constants } from '../../config';
 import { isValidEthereumAddress } from '../../utils/validation';
-import { Icon, PageLogo } from '../../components/ui';
+import { Icon, PageLogo, Spinner } from '../../components/ui';
 import LandingPageText from './components/LandingPageText';
+import Portis from '@portis/web3';
+import Web3 from 'web3';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -147,16 +150,77 @@ const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
     }
 `;
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-    address: string;
+const PortisButtonWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    color: ${colors.FONT_MEDIUM};
+    margin: 50px auto 10px auto;
+    justify-content: center;
+`;
+
+const PortisButton = styled.button`
+    display: flex;
+    align-items: center;
+    border: none;
+    padding: 6px 8px;
+    color: #4b6b9aff;
+    outline: none;
+    background-color: #def3ff;
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    font-size: ${variables.FONT_SIZE.SMALL};
+    border-radius: 5px;
+    margin-left: 8px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #caecff;
+    }
+`;
+
+const PortisButtonText = styled.div`
+    margin-left: 5px;
+`;
+
+const portis = new Portis('a73f6025-1669-49cf-9880-a81d3de67e7f', 'mainnet');
+const web3 = new Web3(portis.provider);
+
+interface RouteComponentProps<P> {
+    match: match<P>;
+    location: H.Location;
+    history: H.History;
+    staticContext?: any;
 }
 
-const LandingPage = ({ address = '' }: Props) => {
-    const [selectedAddress, setSelectedAddress] = useState(address);
+interface match<P> {
+    params: P;
+    isExact: boolean;
+    path: string;
+    url: string;
+}
+
+// props: RouteComponentProps<any>
+const LandingPage = (props: RouteComponentProps<any>) => {
+    const [selectedAddress, setSelectedAddress] = useState('');
+    const [portisLoading, setPortisLoading] = useState(false);
 
     // check if the address user typed in the input is valid Ethereum address
     const isValidAddress = isValidEthereumAddress(selectedAddress);
     const linkPath = isValidAddress ? `/dashboard/${selectedAddress}` : '';
+
+    const handlePortisLogin = async () => {
+        setPortisLoading(true);
+        try {
+            const accounts = await web3.eth.getAccounts();
+            setPortisLoading(false);
+            // TODO how Portis handles this in case the user have multiple accounts
+            props.history.push({
+                pathname: `/dashboard/${accounts[0]}`,
+            });
+        } catch (e) {
+            console.log('Error when trying to log in using Portis');
+            setPortisLoading(false);
+        }
+    };
 
     return (
         <MainWrapper>
@@ -213,6 +277,17 @@ const LandingPage = ({ address = '' }: Props) => {
                             Let's Go!
                         </DashboardButton>
                     </AddressInputWrapper>
+                    <PortisButtonWrapper>
+                        Or login using
+                        <PortisButton onClick={handlePortisLogin}>
+                            {portisLoading ? (
+                                <Spinner size={12} color={'#4b6b9a'} />
+                            ) : (
+                                <Icon icon="portis" size={14} />
+                            )}
+                            <PortisButtonText>Portis</PortisButtonText>
+                        </PortisButton>
+                    </PortisButtonWrapper>
                 </AnimatedWrapper>
             </ContentWrappper>
         </MainWrapper>
