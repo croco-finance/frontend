@@ -37,13 +37,9 @@ const ItemsWrapper = styled.div``;
 const SummaryList = () => {
     const allPools = useSelector(state => state.allPools);
     const activePoolIds = useSelector(state => state.activePoolIds);
-    const inactivePoolIds = useSelector(state => state.inactivePoolIds);
     const poolsSummaryInfo: any = getPoolsSummaryObject(allPools, activePoolIds);
 
-    console.log('activePoolIds', activePoolIds);
-
     if (activePoolIds.length <= 0) {
-        console.log('aaa');
         return null;
     }
 

@@ -51,7 +51,6 @@ const Value = styled(HeaderChild)``;
 const Gains = styled(HeaderChild)``;
 
 const PoolList = () => {
-    const allPools = useSelector(state => state.allPools);
     const activePoolIds = useSelector(state => state.activePoolIds);
     const inactivePoolIds = useSelector(state => state.inactivePoolIds);
 

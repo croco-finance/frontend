@@ -66,7 +66,6 @@ const SummaryItem = ({ headline, value, gainsAbsolute, roi }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const activePoolIds = useSelector(state => state.activePoolIds);
-    const inactivePoolIds = useSelector(state => state.inactivePoolIds);
 
     const poolsSummaryInfo: any = getPoolsSummaryObject(allPools, activePoolIds);
 
