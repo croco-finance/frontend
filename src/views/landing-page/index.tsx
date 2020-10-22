@@ -8,6 +8,7 @@ import { Icon, PageLogo, Spinner } from '../../components/ui';
 import LandingPageText from './components/LandingPageText';
 import Portis from '@portis/web3';
 import Web3 from 'web3';
+import { PORTIS_DAPP_KEY } from '../../config/constants';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -120,6 +121,7 @@ const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
     padding: 20px;
     display: flex;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
     background-color: ${colors.BLUE};
     color: white;
@@ -129,6 +131,8 @@ const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
     border-radius: 10px;
     text-decoration: none;
     transition: 0.1s;
+    min-width: 130px;
+    min-height: 66px;
 
     &:hover {
         background-color: #075cda;
@@ -178,10 +182,10 @@ const PortisButton = styled.button`
 `;
 
 const PortisButtonText = styled.div`
-    margin-left: 5px;
+    margin-left: 4px;
 `;
 
-const portis = new Portis('a73f6025-1669-49cf-9880-a81d3de67e7f', 'mainnet');
+const portis = new Portis(PORTIS_DAPP_KEY, 'mainnet');
 const web3 = new Web3(portis.provider);
 
 interface RouteComponentProps<P> {
@@ -200,12 +204,50 @@ interface match<P> {
 
 // props: RouteComponentProps<any>
 const LandingPage = (props: RouteComponentProps<any>) => {
-    const [selectedAddress, setSelectedAddress] = useState('');
+    const [inputAddress, setInputAddress] = useState('');
+    const [linkAddress, setLinkAddress] = useState('');
     const [portisLoading, setPortisLoading] = useState(false);
+    const [isValidAddress, setIsValidAddress] = useState(false);
+    const [loadingEnsDomain, setLoadingEnsDomain] = useState(false);
 
     // check if the address user typed in the input is valid Ethereum address
-    const isValidAddress = isValidEthereumAddress(selectedAddress);
-    const linkPath = isValidAddress ? `/dashboard/${selectedAddress}` : '';
+    const linkPath = isValidAddress ? `/dashboard/${linkAddress}` : '';
+
+    const handleAddressChange = async input => {
+        setIsValidAddress(false);
+        setLoadingEnsDomain(false); // just to double check
+
+        // check for ETH address validity
+        if (isValidEthereumAddress(input)) {
+            setInputAddress(input);
+            setLinkAddress(input);
+            setIsValidAddress(true);
+            return;
+        }
+
+        // check if valid ENS name
+        if (input.includes('.eth')) {
+            try {
+                setLoadingEnsDomain(true);
+                const ensAddress = await web3.eth.ens.getAddress(input);
+                if (ensAddress) {
+                    setLoadingEnsDomain(false);
+                    setInputAddress(input);
+                    setIsValidAddress(true);
+                    setLinkAddress(ensAddress);
+                    return;
+                }
+            } catch (e) {
+                console.log('Could not get eth address from ENS name');
+                setIsValidAddress(false);
+            }
+        }
+
+        setIsValidAddress(false);
+        setLoadingEnsDomain(false);
+        setLinkAddress(input);
+        setLinkAddress('');
+    };
 
     const handlePortisLogin = async () => {
         setPortisLoading(true);
@@ -262,10 +304,11 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                         <AddressInput
                             type="text"
                             spellCheck={false}
-                            placeholder="Enter valid Ethereum address"
-                            value={selectedAddress}
+                            placeholder="Enter ENS domain or valid Ethereum address"
+                            value={inputAddress}
                             onChange={event => {
-                                setSelectedAddress(event.target.value.trim());
+                                handleAddressChange(event.target.value.trim());
+                                setInputAddress(event.target.value.trim());
                             }}
                         ></AddressInput>
                         <DashboardButton
@@ -274,7 +317,11 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                                 pathname: linkPath,
                             }}
                         >
-                            Let's Go!
+                            {loadingEnsDomain ? (
+                                <Spinner size={14} color={colors.FONT_MEDIUM} />
+                            ) : (
+                                "Let's Go!"
+                            )}
                         </DashboardButton>
                     </AddressInputWrapper>
                     <PortisButtonWrapper>
