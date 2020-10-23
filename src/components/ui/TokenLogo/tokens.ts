@@ -13,6 +13,7 @@ export const TOKENS: any = {
     usdc: require('../../../data/images/tokens/usdc.svg'),
     usdt: require('../../../data/images/tokens/usdt.svg'),
     wbtc: require('../../../data/images/tokens/wbtc.svg'),
+    yam: require('../../../data/images/tokens/yam.svg'),
     yfi: require('../../../data/images/tokens/yfi.svg'),
     snx: require('../../../data/images/tokens/snx.svg'),
     weth: require('../../../data/images/tokens/weth.svg'),
