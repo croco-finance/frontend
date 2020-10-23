@@ -166,6 +166,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
         end,
         exchange,
         yieldRewardUsd,
+        hodlReturnUsd,
     } = pool;
 
     const averageRewardsUsd = math.getDailyAverageFeeGains(start, end, feesUsd + yieldRewardUsd);
@@ -330,7 +331,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                         firstColumn="Total"
                         secondColumn={
                             <FiatValue
-                                value={dexReturnUsd}
+                                value={netReturnUsd - hodlReturnUsd}
                                 usePlusSymbol
                                 // colorized
                                 // useBadgeStyle

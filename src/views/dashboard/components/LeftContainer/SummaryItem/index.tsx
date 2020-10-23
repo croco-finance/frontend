@@ -53,8 +53,8 @@ const ExchangeWrapper = styled(Item)`
 `;
 
 const ExchangeTitle = styled.div`
-    font-size: 15px;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    font-size: ${variables.FONT_SIZE.NORMAL};
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     margin-left: 5px;
 `;
 

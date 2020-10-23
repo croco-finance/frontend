@@ -16,7 +16,7 @@ const GridWrapper = styled.div`
     display: grid;
     grid-gap: ${GRID_GAP}px;
 
-    grid-template-columns: 140px minmax(60px, auto) minmax(130px, auto) minmax(130px, auto);
+    grid-template-columns: 140px minmax(70px, auto) minmax(130px, auto) minmax(140px, auto);
 
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
@@ -62,7 +62,9 @@ const Overview = ({ iconSize = 20 }: Props) => {
         return null;
     }
 
-    const { tokens, tokenWeights, endTokenBalance, endTokenPricesUsd } = allPools[selectedPoolId];
+    const { tokens, tokenWeights, endTokenBalance, endTokenPricesUsd, isActive } = allPools[
+        selectedPoolId
+    ];
     const numberOfTokens = tokens.length;
 
     return (
@@ -72,7 +74,7 @@ const Overview = ({ iconSize = 20 }: Props) => {
                     firstColumn="Token"
                     secondColumn="Weight"
                     thirdColumn="Your balance"
-                    fourthColumn="Current price"
+                    fourthColumn={isActive ? 'Current price' : 'Withdrawal price'}
                     color="light"
                 />
             </HeaderWrapper>

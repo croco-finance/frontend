@@ -185,6 +185,7 @@ const CardOverview = () => {
         start,
         end,
         isActive,
+        hodlReturnUsd,
     } = pool;
     const startBalanceUsd = endBalanceUsd - netReturnUsd;
     const startBalanceEth = endBalanceEth - netReturnEth;
@@ -336,7 +337,7 @@ const CardOverview = () => {
                         secondColumn={
                             <CryptoFiatValue
                                 showCrypto={false}
-                                fiatValue={dexReturnUsd}
+                                fiatValue={netReturnUsd - hodlReturnUsd}
                                 cryptoValue={dexReturnEth}
                                 usePlusSymbol
                                 useBadgeStyle

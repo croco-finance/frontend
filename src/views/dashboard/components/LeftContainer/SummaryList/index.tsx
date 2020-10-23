@@ -52,7 +52,7 @@ const SummaryList = () => {
             </Header>
             <ItemsWrapper>
                 <SummaryItem
-                    headline="Active Pools Summary"
+                    headline="All active pools"
                     value={poolsSummaryInfo.endBalanceUsd}
                     gainsAbsolute={poolsSummaryInfo.feesUsd}
                     roi={5}
