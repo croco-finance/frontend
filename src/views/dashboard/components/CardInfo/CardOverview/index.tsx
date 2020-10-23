@@ -197,16 +197,23 @@ const CardOverview = () => {
         txCostEth = 0;
     }
     const dexReturnEth = feesEth + yieldRewardEth - txCostEth - impLossEth;
-    const tokenSymbols = getTokenSymbolArr(tokens);
+    const tokenSymbolsArr = getTokenSymbolArr(tokens);
 
     const endTimeText = isActive ? 'Today' : 'Withdrawal time';
+
+    let tokenSymbolsString = '';
+    tokenSymbolsArr.forEach(symbol => {
+        console.log('symbol', symbol);
+        tokenSymbolsString = tokenSymbolsString + ', ' + symbol;
+    });
+    tokenSymbolsString = tokenSymbolsString.substring(1); //delete first char (comma)
 
     return (
         <Wrapper>
             <Header>
                 <Headline>
-                    <MultipleTokenLogo size={18} tokens={tokenSymbols} />
-                    <HeadlineText>Liquidity pool</HeadlineText>
+                    <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />
+                    <HeadlineText>{tokenSymbolsString}</HeadlineText>
                 </Headline>
                 {/* <ToggleWrapper>
                     <ToggleLabel>Show ETH</ToggleLabel>

@@ -65,6 +65,9 @@ const TokenSymbol = styled.div`
     margin-left: 10px;
     text-transform: uppercase;
     min-width: 48px;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const Circle = styled.div`
