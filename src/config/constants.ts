@@ -5,3 +5,5 @@ export const TWITTER_LINK = 'https://twitter.com/CrocoFinance';
 export const SERVER_STATS_ENDPOINT = 'https://croco.finance/api/v1/cumulative/';
 
 export const PORTIS_DAPP_KEY = 'a73f6025-1669-49cf-9880-a81d3de67e7f';
+
+export const GOOGLE_ANALYTICS_TRACKING_ID = 'G-Z20W1K81CF';

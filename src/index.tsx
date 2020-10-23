@@ -7,13 +7,19 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducer from './store/reducers/dashboard';
+import { createBrowserHistory } from 'history';
+import ReactGA from 'react-ga';
+import { GOOGLE_ANALYTICS_TRACKING_ID } from './config/constants';
+import './App.css';
 
+ReactGA.initialize(GOOGLE_ANALYTICS_TRACKING_ID);
 const store = createStore(reducer);
+const history = createBrowserHistory();
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <BrowserRouter>
+            <BrowserRouter history={history}>
                 <App />
             </BrowserRouter>
         </Provider>
