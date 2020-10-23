@@ -225,7 +225,7 @@ const CardOverview = () => {
                 <CardRow
                     showThreeCols
                     firstColumn="Pool overview"
-                    secondColumn="Initial"
+                    secondColumn={impLossUsd ? 'Initial' : ''}
                     thirdColumn={endTimeText}
                     color="light"
                 />
@@ -236,11 +236,15 @@ const CardOverview = () => {
                         showThreeCols
                         firstColumn="Your pool share value"
                         secondColumn={
-                            <CryptoFiatValue
-                                showCrypto={showEth}
-                                fiatValue={startBalanceUsd}
-                                cryptoValue={startBalanceEth}
-                            />
+                            impLossUsd ? (
+                                <CryptoFiatValue
+                                    showCrypto={showEth}
+                                    fiatValue={startBalanceUsd}
+                                    cryptoValue={startBalanceEth}
+                                />
+                            ) : (
+                                ''
+                            )
                         }
                         thirdColumn={
                             <PoolValueWrapper>
@@ -250,15 +254,17 @@ const CardOverview = () => {
                                     cryptoValue={endBalanceEth}
                                 />
 
-                                <PoolValueDifference>
-                                    <CryptoFiatValue
-                                        showCrypto={showEth}
-                                        fiatValue={netReturnUsd}
-                                        cryptoValue={netReturnEth}
-                                        usePlusSymbol
-                                        colorized
-                                    />
-                                </PoolValueDifference>
+                                {impLossUsd ? (
+                                    <PoolValueDifference>
+                                        <CryptoFiatValue
+                                            showCrypto={showEth}
+                                            fiatValue={netReturnUsd}
+                                            cryptoValue={netReturnEth}
+                                            usePlusSymbol
+                                            colorized
+                                        />
+                                    </PoolValueDifference>
+                                ) : null}
                             </PoolValueWrapper>
                         }
                         color="dark"
