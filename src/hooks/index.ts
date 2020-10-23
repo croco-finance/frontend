@@ -26,7 +26,8 @@ const toNumberAttributes = [
     'ethPriceUsdEnd',
 ];
 const toNumberArrayAttributes = [
-    'endTokenBalance',
+    'endTokenBalances',
+    'startTokenBalances',
     'endTokenPricesUsd',
     'tokenBalanceDiffNoFees',
     'tokenWeights',

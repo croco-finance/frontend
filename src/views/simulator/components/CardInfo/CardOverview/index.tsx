@@ -151,7 +151,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
 
     let {
         tokens,
-        endTokenBalance,
+        endTokenBalances,
         tokenBalanceDiffNoFees,
         tokenWeights,
         endTokenPricesUsd,
@@ -167,6 +167,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
         exchange,
         yieldRewardUsd,
         hodlReturnUsd,
+        startTokenBalances,
     } = pool;
 
     const averageRewardsUsd = math.getDailyAverageFeeGains(start, end, feesUsd + yieldRewardUsd);
@@ -179,19 +180,22 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
     let simulatedValues;
     if (exchange === 'UNI_V2' || exchange === 'UNI_V1') {
         simulatedValues = loss.getUniswapSimulationStats(
-            endTokenBalance,
+            startTokenBalances,
+            endTokenBalances,
             newTokenPrices,
             tokenBalanceDiffNoFees,
         );
     } else if (exchange === 'BALANCER') {
         simulatedValues = loss.getBalancerSimulationStats(
-            endTokenBalance,
+            startTokenBalances,
+            endTokenBalances,
             newTokenPrices,
             tokenBalanceDiffNoFees,
             tokenWeights,
         );
     }
     const {
+        // simulatedFeesUsd,
         simulatedPoolValue,
         impLossCompToInitialUsd,
         impLossCompToInitialRel,
@@ -199,7 +203,6 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
     } = simulatedValues;
 
     const poolValueChangeRatio = simulatedPoolValue / endBalanceUsd;
-
     const simulatedFeesUsd = poolValueChangeRatio * feesUsd;
 
     // TODO check if yield token is also part of pool (if yes, change its price accordingly)

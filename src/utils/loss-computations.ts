@@ -1,6 +1,7 @@
 import { math } from '.';
 
 const getBalancerSimulationStats = (
+    initialTokenBalances: Array<number>,
     currentTokenBalances: Array<number>,
     newTokenPrices: Array<number>,
     cumulatedTokenBalanceDiff: Array<number>,
@@ -8,18 +9,33 @@ const getBalancerSimulationStats = (
 ) => {
     const weightsSum = tokenWeights.reduce(math.sumArr);
 
+    // how much tokens I should have at the beginning (if the current balance didn't included fees)
+    let hodlTokenBalances = math.subtractArraysElementWise(
+        currentTokenBalances,
+        cumulatedTokenBalanceDiff,
+    );
+
+    // compute fees as the difference of what "I should've had" and what I actually had
+    let feeBalances = math.subtractArraysElementWise(hodlTokenBalances, initialTokenBalances);
+
+    // compute simulated token difference if we neglect fees
+    let currentTokenBalancesNoFees = math.subtractArraysElementWise(
+        currentTokenBalances,
+        feeBalances,
+    );
+
     // Make sure the weights sum up to one
     // if (weightsSum !== 1) throw 'Sum of token weights is not equal to 1';
 
     // get value of V
     let V = 1;
 
-    currentTokenBalances.forEach((balance, i) => {
+    currentTokenBalancesNoFees.forEach((balance, i) => {
         V = V * Math.pow(balance, tokenWeights[i]);
     });
 
     // compute new token balances
-    const tokenCount = currentTokenBalances.length;
+    const tokenCount = currentTokenBalancesNoFees.length;
     let newBalances = new Array(tokenCount);
 
     for (let i = 0; i < tokenCount; i++) {
@@ -41,8 +57,10 @@ const getBalancerSimulationStats = (
     }
 
     return getStatsFromNewBalances(
+        feeBalances,
+        initialTokenBalances,
         newBalances,
-        currentTokenBalances,
+        currentTokenBalancesNoFees,
         cumulatedTokenBalanceDiff,
         newTokenPrices,
     );
@@ -53,12 +71,34 @@ const getUniImpLossFromPriceChangeRatio = priceChangeRatio => {
 };
 
 const getUniswapSimulationStats = (
+    initialTokenBalances: Array<number>,
     currentTokenBalances: Array<number>,
     newTokenPrices: Array<number>,
     cumulatedTokenBalanceDiff: Array<number>,
 ) => {
+    /*
+    First get how much the tokens balance changed compared to your initial deposit since the first deposit
+    (without fees)
+    */
+
+    // how much tokens I should have at the beginning (if the current balance didn't included fees)
+    let hodlTokenBalances = math.subtractArraysElementWise(
+        currentTokenBalances,
+        cumulatedTokenBalanceDiff,
+    );
+
+    // compute fees as the difference of what "I should've had" and what I actually had
+    let feeBalances = math.subtractArraysElementWise(hodlTokenBalances, initialTokenBalances);
+
+    // compute simulated token difference if we neglect fees
+    let currentTokenBalancesNoFees = math.subtractArraysElementWise(
+        currentTokenBalances,
+        feeBalances,
+    );
+
+    // compute token change
     // get value of k
-    const k = currentTokenBalances[0] * currentTokenBalances[1];
+    const k = currentTokenBalancesNoFees[0] * currentTokenBalancesNoFees[1];
 
     // get price change ratio of the two tokens
     const priceRatioChange = newTokenPrices[0] / newTokenPrices[1];
@@ -67,19 +107,23 @@ const getUniswapSimulationStats = (
     const tokenCount = 2;
     let newBalances = new Array(tokenCount);
 
-    // compute new toke balances
+    // compute new token balances
     newBalances[0] = Math.sqrt(k / priceRatioChange);
     newBalances[1] = Math.sqrt(k * priceRatioChange);
 
     return getStatsFromNewBalances(
+        feeBalances,
+        initialTokenBalances,
         newBalances,
-        currentTokenBalances,
+        currentTokenBalancesNoFees,
         cumulatedTokenBalanceDiff,
         newTokenPrices,
     );
 };
 
 const getStatsFromNewBalances = (
+    currentFeeBalances: Array<number>,
+    initialTokenBalances: Array<number>,
     newBalances: Array<number>,
     currentTokenBalances: Array<number>,
     cumulatedTokenBalanceDiff: Array<number>,
@@ -100,25 +144,27 @@ const getStatsFromNewBalances = (
 
     // compute impermanent loss
     let impLossCompToInitialUsd = 0;
-    let impLossCompToCurrentUsd = 0;
     let simulatedPoolValue = 0;
     let simulatedHodlValue = 0;
-
-    let hodlTokenBalances = math.subtractArraysElementWise(
-        currentTokenBalances,
-        cumulatedTokenBalanceDiff,
-    );
+    let simulatedFeesUsd = 0;
 
     // TODO what if there is more deposits?
     for (let i = 0; i < tokenCount; i++) {
         impLossCompToInitialUsd += newTotalTokenDiff[i] * newTokenPrices[i];
         simulatedPoolValue += newBalances[i] * newTokenPrices[i];
-        simulatedHodlValue += hodlTokenBalances[i] * newTokenPrices[i];
+        simulatedHodlValue += initialTokenBalances[i] * newTokenPrices[i];
+        simulatedFeesUsd += currentFeeBalances[i] * newTokenPrices[i];
     }
 
     const impLossCompToInitialRel = simulatedPoolValue / simulatedHodlValue - 1;
 
-    return { simulatedPoolValue, impLossCompToInitialUsd, impLossCompToInitialRel, newBalances };
+    return {
+        simulatedPoolValue,
+        impLossCompToInitialUsd,
+        impLossCompToInitialRel,
+        newBalances,
+        simulatedFeesUsd,
+    };
 };
 
 const getGraphData = () => {

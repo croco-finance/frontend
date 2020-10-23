@@ -19,7 +19,7 @@ export interface PoolItemInterface {
     poolId: string; // pool smart contract address
     tokens: Array<{ [key: string]: {} }>;
     tokenWeights: Array<number>;
-    endTokenBalance: Array<number>; // User token balances
+    endTokenBalances: Array<number>; // User token balances
     endTokenPricesUsd: Array<number>;
     start: number;
     end: number;

@@ -62,7 +62,7 @@ const Overview = ({ iconSize = 20 }: Props) => {
         return null;
     }
 
-    const { tokens, tokenWeights, endTokenBalance, endTokenPricesUsd, isActive } = allPools[
+    const { tokens, tokenWeights, endTokenBalances, endTokenPricesUsd, isActive } = allPools[
         selectedPoolId
     ];
     const numberOfTokens = tokens.length;
@@ -90,7 +90,7 @@ const Overview = ({ iconSize = 20 }: Props) => {
                                 </TokenWrapper>
                             }
                             secondColumn={math.getFormattedPercentageValue(tokenWeights[i], true)}
-                            thirdColumn={endTokenBalance[i].toFixed(4)}
+                            thirdColumn={endTokenBalances[i].toFixed(4)}
                             fourthColumn={<FiatValue value={endTokenPricesUsd[i]} />}
                             color="dark"
                         />
