@@ -7,25 +7,19 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducer from './store/reducers/dashboard';
-import { createBrowserHistory } from 'history';
 import ReactGA from 'react-ga';
 import { GOOGLE_ANALYTICS_TRACKING_ID } from './config/constants';
 import './App.css';
 
 ReactGA.initialize(GOOGLE_ANALYTICS_TRACKING_ID);
-const store = createStore(reducer);
-const history = createBrowserHistory();
+ReactGA.pageview(window.location.pathname + window.location.search);
 
-// Initialize google analytics page view tracking
-history.listen(location => {
-    ReactGA.set({ page: location.pathname }); // Update the user's current page
-    ReactGA.pageview(location.pathname); // Record a pageview for the given page
-});
+const store = createStore(reducer);
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <BrowserRouter history={history}>
+            <BrowserRouter>
                 <App />
             </BrowserRouter>
         </Provider>
