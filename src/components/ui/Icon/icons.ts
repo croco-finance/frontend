@@ -4,5 +4,6 @@ export const ICONS: any = {
     twitter: require('../../../data/images/icons/twitter.svg'),
     telegram: require('../../../data/images/icons/telegram.svg'),
     discord: require('../../../data/images/icons/discord.svg'),
+    discordFull: require('../../../data/images/icons/discord-full.svg'),
     portis: require('../../../data/images/icons/portis.svg'),
 };

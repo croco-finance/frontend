@@ -10,6 +10,7 @@ import Portis from '@portis/web3';
 import Web3 from 'web3';
 import { PORTIS_DAPP_KEY } from '../../config/constants';
 import { Event } from '../../config/analytics';
+import { RouteComponentProps, withRouter } from 'react-router';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -198,20 +199,6 @@ const PortisButtonText = styled.div`
 const portis = new Portis(PORTIS_DAPP_KEY, 'mainnet');
 const web3 = new Web3(portis.provider);
 
-interface RouteComponentProps<P> {
-    match: match<P>;
-    location: H.Location;
-    history: H.History;
-    staticContext?: any;
-}
-
-interface match<P> {
-    params: P;
-    isExact: boolean;
-    path: string;
-    url: string;
-}
-
 // props: RouteComponentProps<any>
 const LandingPage = (props: RouteComponentProps<any>) => {
     const [inputAddress, setInputAddress] = useState('');
@@ -290,9 +277,9 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                         <IconLinkWrapper
                             rel="noreferrer"
                             target="_blank"
-                            href={constants.GITHUB_LINK}
+                            href={constants.DISCORD_LINK}
                         >
-                            <Icon icon="github" size={20} />
+                            <Icon icon="discord" size={20} />
                         </IconLinkWrapper>
                         <IconLinkWrapper
                             rel="noreferrer"
@@ -358,4 +345,4 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         </MainWrapper>
     );
 };
-export default LandingPage;
+export default withRouter(LandingPage);
