@@ -7,12 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducer from './store/reducers/dashboard';
-import ReactGA from 'react-ga';
-import { GOOGLE_ANALYTICS_TRACKING_ID } from './config/constants';
 import './App.css';
-
-ReactGA.initialize(GOOGLE_ANALYTICS_TRACKING_ID);
-ReactGA.pageview(window.location.pathname + window.location.search);
 
 const store = createStore(reducer);
 

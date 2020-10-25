@@ -9,6 +9,7 @@ import LandingPageText from './components/LandingPageText';
 import Portis from '@portis/web3';
 import Web3 from 'web3';
 import { PORTIS_DAPP_KEY } from '../../config/constants';
+import { Event } from '../../config/analytics';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -273,6 +274,12 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         }
     };
 
+    const handleButtonOnClick = () => {
+        // fire custom Google Analytics event
+        console.log('handleButtonOnClick');
+        Event('ADDRESS INPUT', "Landing Page let's go button pressed", inputAddress);
+    };
+
     return (
         <MainWrapper>
             <ContentWrapper>
@@ -321,6 +328,9 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                             }}
                         ></AddressInput>
                         <DashboardButton
+                            onClick={e => {
+                                handleButtonOnClick();
+                            }}
                             isDisabled={!isValidAddress}
                             to={{
                                 pathname: linkPath,

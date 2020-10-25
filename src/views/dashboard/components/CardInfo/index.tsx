@@ -6,6 +6,7 @@ import { Card } from '../../../../components/ui';
 import { animations, colors, variables } from '../../../../config';
 import CardOverview from './CardOverview';
 import CardPoolsSummary from './CardPoolsSummary';
+import { Event } from '../../../../config/analytics';
 
 const Wrapper = styled.div`
     /* animation: ${animations.SHOW_UP} 1s; */
@@ -82,6 +83,13 @@ const CardInfo = () => {
                             <SimulatorButtonWrapper>
                                 See how changes in assets' prices affect your funds
                                 <StyledLink
+                                    onClick={e => {
+                                        Event(
+                                            'SIMULATOR',
+                                            'Went to simulator from pool card',
+                                            userAddress,
+                                        );
+                                    }}
                                     to={{
                                         pathname: `/simulator/${userAddress}`,
                                     }}

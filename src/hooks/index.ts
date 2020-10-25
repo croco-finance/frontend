@@ -5,6 +5,7 @@ import * as actionTypes from '../store/actions/actionTypes';
 import axios from 'axios';
 import { constants } from '../config';
 import { validation } from '../utils';
+import { Event } from '../config/analytics';
 
 const toNumberAttributes = [
     'dexReturnUsd',
@@ -124,9 +125,12 @@ const FetchPoolsHook = initialAddress => {
                     inactivePoolIds: inactivePoolIds,
                 });
                 dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
+
+                Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
             } catch (e) {
                 console.log('ERROR while fetching data about pools...');
                 setIsFetchError(true);
+                Event('ADDRESS INPUT', 'Data fetching hook fail', queryAddress);
             }
 
             setIsLoading(false);
