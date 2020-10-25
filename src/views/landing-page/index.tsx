@@ -271,7 +271,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
             <ContentWrapper>
                 <TopBar>
                     <PageLogoWrapper>
-                        <PageLogo height={18} />
+                        <PageLogo height={20} />
                     </PageLogoWrapper>
                     <CommunityIconsWrapper>
                         <IconLinkWrapper
