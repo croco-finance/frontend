@@ -126,6 +126,10 @@ const FetchPoolsHook = initialAddress => {
                 });
                 dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
 
+                // save address to browser local storage
+                localStorage.setItem('address', queryAddress);
+
+                // fire Google Analytics event
                 Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
             } catch (e) {
                 console.log('ERROR while fetching data about pools...');

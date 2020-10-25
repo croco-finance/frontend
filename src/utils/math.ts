@@ -1,5 +1,3 @@
-import { currentPriceRatioExample, PoolItemsDictExample } from '../config/example-data';
-
 const countDecimals = value => {
     if (Math.floor(value) !== value) return value.toString().split('.')[1].length || 0;
     return 0;
@@ -19,10 +17,6 @@ const getFiatValueFromCryptoAmounts = (
     return fiatSum;
 };
 
-const getFiatFromCrypto = (cryptoSymbol: string, fiatSymbol: string, cryptoAmount: number) => {
-    return cryptoAmount * currentPriceRatioExample[fiatSymbol][cryptoSymbol];
-};
-
 const getFormattedPercentageValue = (value: number, hideDecimals = false) => {
     let percentageFormat = 100 * value;
     const numOfDecimals = countDecimals(percentageFormat);
@@ -40,10 +34,7 @@ const getDailyAverageFeeGains = (timeStampStartSeconds, timeStampEndSeconds, tot
     return totalFeesUsd / differenceDays;
 };
 
-const getPoolsSummaryObject = (
-    allPools = PoolItemsDictExample,
-    filteredPoolIds: Array<string> | 'all',
-) => {
+const getPoolsSummaryObject = (allPools: any, filteredPoolIds: Array<string> | 'all') => {
     // TODO compute separately for Balancer and for Uniswap
     let summaryObject = {};
     let endBalanceUsdSum = 0;
@@ -136,7 +127,6 @@ const subtractArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => 
 export {
     countDecimals,
     getFiatValueFromCryptoAmounts,
-    getFiatFromCrypto,
     getFormattedPercentageValue,
     getPoolsSummaryObject,
     arrangeArray,

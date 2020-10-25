@@ -5,12 +5,23 @@ import Simulator from './views/simulator';
 import LandingPage from './views/landing-page';
 import './App.css';
 import { PageView, initGA } from './config/analytics';
+import { RouteComponentProps, withRouter } from 'react-router';
 
-function App() {
-    // enable Google Analytics
+const App = (props: RouteComponentProps<any>) => {
     useEffect(() => {
+        // enable Google Analytics
         initGA();
         PageView();
+
+        // check if there is any address stored in browser local storage
+        const addressLocalStorage = localStorage.getItem('address');
+
+        // if there is some valid address, go directly to dashboard so that the user doesn't have to paste his address again
+        if (addressLocalStorage) {
+            props.history.push({
+                pathname: `/dashboard/${addressLocalStorage}`,
+            });
+        }
     }, []);
 
     return (
@@ -21,6 +32,6 @@ function App() {
             <Route path="/" component={LandingPage} />
         </Switch>
     );
-}
+};
 
-export default App;
+export default withRouter(App);

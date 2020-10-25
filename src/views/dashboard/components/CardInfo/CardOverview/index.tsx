@@ -203,7 +203,6 @@ const CardOverview = () => {
 
     let tokenSymbolsString = '';
     tokenSymbolsArr.forEach(symbol => {
-        console.log('symbol', symbol);
         tokenSymbolsString = tokenSymbolsString + ', ' + symbol;
     });
     tokenSymbolsString = tokenSymbolsString.substring(1); //delete first char (comma)

@@ -124,7 +124,7 @@ const AddressInput = styled.input`
     }
 `;
 
-const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
+const DashboardButton = styled(Link)<{ active: boolean }>`
     padding: 20px;
     display: flex;
     align-items: center;
@@ -146,7 +146,7 @@ const DashboardButton = styled(Link)<{ isDisabled: boolean }>`
     }
 
     ${props =>
-        props.isDisabled &&
+        !props.active &&
         css`
             cursor: not-allowed;
             background-color: ${colors.BACKGROUND_DARK};
@@ -276,7 +276,6 @@ const LandingPage = (props: RouteComponentProps<any>) => {
 
     const handleButtonOnClick = () => {
         // fire custom Google Analytics event
-        console.log('handleButtonOnClick');
         Event('ADDRESS INPUT', "Landing Page let's go button pressed", inputAddress);
     };
 
@@ -331,7 +330,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                             onClick={e => {
                                 handleButtonOnClick();
                             }}
-                            isDisabled={!isValidAddress}
+                            active={isValidAddress}
                             to={{
                                 pathname: linkPath,
                             }}

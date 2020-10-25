@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FiatValue, TokenLogo } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
-import { currentPriceRatioExample } from '../../../../../config/example-data';
 import { math } from '../../../../../utils';
 import OverviewRow from '../OverviewRow';
 

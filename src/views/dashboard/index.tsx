@@ -1,4 +1,3 @@
-import * as H from 'history';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -10,6 +9,7 @@ import { validation } from '../../utils';
 import CardInfo from './components/CardInfo';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
+import { RouteComponentProps, withRouter } from 'react-router';
 
 const ExceptionWrapper = styled.div`
     display: flex;
@@ -112,21 +112,6 @@ const Headline = styled.div`
     margin-bottom: 30px;
     padding-left: 8px;
 `;
-
-// TODO why and how does this actually work?
-interface RouteComponentProps<P> {
-    match: match<P>;
-    location: H.Location;
-    history: H.History;
-    staticContext?: any;
-}
-
-interface match<P> {
-    params: P;
-    isExact: boolean;
-    path: string;
-    url: string;
-}
 
 const Dashboard = (props: RouteComponentProps<any>) => {
     const [inputAddress, setInputAddress] = useState(
@@ -240,4 +225,4 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     );
 };
 
-export default Dashboard;
+export default withRouter(Dashboard);

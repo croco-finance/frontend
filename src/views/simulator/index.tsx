@@ -5,16 +5,15 @@ import styled from 'styled-components';
 import { NavBar, SimulatorContainer } from '../../components/layout';
 import { GrayBox, Input, MultipleTokenSelect, Spinner, LoadingBox } from '../../components/ui';
 import { animations, colors, variables } from '../../config';
-import { PoolItemsExample, poolItemExample1 } from '../../config/example-data';
 import { PoolItemInterface } from '../../config/types';
 import * as actionTypes from '../../store/actions/actionTypes';
 import { math } from '../../utils';
-import { fetchCurrentTokenFiatRates } from '../../utils/coingecko';
 import CardInfo from './components/CardInfo';
 import Overview from './components/LeftContainer/Overview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
 import { FetchPoolsHook } from '../../hooks';
 import { validation } from '../../utils';
+import { RouteComponentProps, withRouter } from 'react-router';
 
 const ExceptionWrapper = styled.div`
     display: flex;
@@ -158,20 +157,6 @@ const buildPoolOptions = (pools: any) => {
 };
 
 type PoolOption = ReturnType<typeof buildPoolOption>;
-
-interface RouteComponentProps<P> {
-    match: match<P>;
-    location: H.Location;
-    history: H.History;
-    staticContext?: any;
-}
-
-interface match<P> {
-    params: P;
-    isExact: boolean;
-    path: string;
-    url: string;
-}
 
 const getInitialPriceCoeffs = (tokens: any) => {
     let coefficients = new Array(tokens.length);
@@ -323,4 +308,4 @@ const Simulator = (props: RouteComponentProps<any>) => {
         </SimulatorContainer>
     );
 };
-export default Simulator;
+export default withRouter(Simulator);
