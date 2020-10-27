@@ -104,7 +104,7 @@ const FetchPoolsHook = initialAddress => {
                     });
 
                     toNumberArrayAttributes.forEach(arrayAttribute => {
-                        poolsCustomObject[poolId][arrayAttribute].forEach((stringValue, i) => {
+                        poolsCustomObject[poolId][arrayAttribute]?.forEach((stringValue, i) => {
                             poolsCustomObject[poolId][arrayAttribute][i] = parseFloat(
                                 poolsCustomObject[poolId][arrayAttribute][i],
                             );
