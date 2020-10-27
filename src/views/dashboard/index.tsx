@@ -5,6 +5,7 @@ import { DashboardContainer, NavBar } from '../../components/layout';
 import { Input, LoadingBox } from '../../components/ui';
 import { animations, colors, variables } from '../../config';
 import { FetchPoolsHook } from '../../hooks';
+import { FetchPoolStatsHook } from '../../hooks/stats';
 import { validation } from '../../utils';
 import CardInfo from './components/CardInfo';
 import PoolList from './components/LeftContainer/PoolList';
@@ -70,9 +71,9 @@ const AddressLabel = styled.div`
 `;
 
 const LeftWrapper = styled.div`
-    width: 50%;
+    width: 48%;
     padding: 0px 50px 20px 0;
-    max-height: 98vh;
+    max-height: 99vh;
     overflow-y: auto;
     /* animation: ${animations.SHOW_UP} 1.5s; */
     @media (max-width: 1100px) {
@@ -83,11 +84,31 @@ const LeftWrapper = styled.div`
     @media (max-width: 520px) {
         padding: 10px;
     }
+
+    ::-webkit-scrollbar {
+        background-color: #fff;
+        width: 10px;
+    }
+    /* background of the scrollbar except button or resizer */
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+    /* scrollbar itself */
+    ::-webkit-scrollbar-thumb {
+        /* 7F7F7F for mac-like color */
+        background-color: #babac0;
+        border-radius: 10px;
+        border: 2px solid #fff;
+    }
+    /* set button(top and bottom of the scrollbar) */
+    ::-webkit-scrollbar-button {
+        display: none;
+    }
 `;
 
 const RightWrapper = styled.div`
     padding: 40px 0px 20px 50px;
-    width: 50%;
+    width: 52%;
     background-color: ${colors.BACKGROUND};
     @media (max-width: 1100px) {
         width: 100%;
@@ -124,6 +145,10 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
         props.match.params.address ? props.match.params.address : '',
     );
+
+    // const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolStatsHook(
+    //     props.match.params.address ? props.match.params.address : '',
+    // );
 
     const handleAddressChange = inputAddr => {
         setInvalidAddressInput(false);

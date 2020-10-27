@@ -8,6 +8,7 @@ interface InitialStateInterface {
     userAddress: string;
     activePoolIds: Array<string>;
     inactivePoolIds: Array<string>;
+    poolSnapshotsGrouped: { [key: string]: any } | {};
 }
 
 const initialState: InitialStateInterface = {
@@ -17,6 +18,7 @@ const initialState: InitialStateInterface = {
     userAddress: '',
     activePoolIds: [],
     inactivePoolIds: [],
+    poolSnapshotsGrouped: {},
 };
 
 // the argument is previous state. For the forst run it is initial state
@@ -61,6 +63,14 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 userAddress: action.address,
+            };
+        }
+        case actionTypes.SET_POOL_SNAPSHOTS_GROUPED: {
+            // todo make sure you do deep copy
+            return {
+                ...state,
+                // poolGroups: action.poolGroups,
+                poolGroups: JSON.parse(JSON.stringify(action.snapshotsGrouped)),
             };
         }
         default:

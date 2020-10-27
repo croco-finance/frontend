@@ -11,8 +11,11 @@ import {
 } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import { getDailyAverageFeeGains } from '../../../../../utils/math';
+import { getPoolStats } from '../../../../../utils/loss-computations';
+
 import { getTokenSymbolArr } from '../../../../../utils';
 import CardRow from '../CardRow';
+import Graph from '../Graph';
 
 const GRID_GAP = 5;
 
@@ -150,12 +153,23 @@ const PoolValueDifference = styled.div`
     font-size: ${variables.FONT_SIZE.SMALL};
 `;
 
+const GraphWrapper = styled.div`
+    padding: 40px 10px 0 10px;
+`;
+
 const CardOverview = () => {
     const [showEth, setShowEth] = useState(false);
 
     const allPools = useSelector(state => state.allPools);
+    const poolGroups = useSelector(state => state.poolGroups);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     let pool: any = allPools[selectedPoolId];
+
+    // Get pool group
+    // const poolSnapshots = poolGroups['0xd3d2e2692501a5c9ca623199d38826e513033a17'];
+
+    // Compute imp loss, fees, hold, ETH hold, token hold fo each snapshot
+    // getPoolStats(poolSnapshots);
 
     // TODO make the following checks and computations cleaner
     if (!allPools || !pool) {
@@ -382,6 +396,9 @@ const CardOverview = () => {
                     )}
                 </DaysLeftWrapper>
             </GrayBox>
+            {/* <GraphWrapper>
+                <Graph />
+            </GraphWrapper> */}
         </Wrapper>
     );
 };
