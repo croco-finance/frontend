@@ -1,5 +1,8 @@
 export type PoolId = string;
 
+export type UniswapName = 'UNI_V2' | 'UNI_V1' | 'Uniswap' | 'uniswap';
+export type BalancerName = 'BALANCER';
+
 export interface InputInterface {
     address: string; // '0x2bb665722a122dd8a80c9d8625430fa1bcc6c3fc'
     exchange: string;

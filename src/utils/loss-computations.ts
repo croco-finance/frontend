@@ -1,5 +1,66 @@
 import { math } from '.';
 
+const getNewBalancesBalancer = (
+    initialTokenBalances: Array<number>,
+    newTokenPrices: Array<number>,
+    tokenWeights: Array<number>,
+) => {
+    // get new balances of tokens in the pool after price change (without fees)
+    const tokenCount = initialTokenBalances.length;
+
+    // get value of V
+    let V = 1;
+
+    initialTokenBalances.forEach((balance, i) => {
+        V = V * Math.pow(balance, tokenWeights[i]);
+    });
+
+    // compute new token balances
+    let newBalances = new Array(tokenCount);
+    const weightsSum = tokenWeights.reduce(math.sumArr);
+
+    for (let i = 0; i < tokenCount; i++) {
+        const firstEquationPart = Math.pow(
+            tokenWeights[i] / newTokenPrices[i],
+            weightsSum - tokenWeights[i],
+        );
+
+        let secondEquationPart = 1;
+        for (let j = 0; j < tokenCount; j++) {
+            if (j !== i) {
+                secondEquationPart =
+                    secondEquationPart *
+                    Math.pow(newTokenPrices[j] / tokenWeights[j], tokenWeights[j]);
+            }
+        }
+
+        newBalances[i] = V * firstEquationPart * secondEquationPart;
+    }
+
+    return newBalances;
+};
+
+const getNewBalancesUniswap = (
+    initialTokenBalances: Array<number>,
+    newTokenPrices: Array<number>,
+) => {
+    // get value of k
+    const k = initialTokenBalances[0] * initialTokenBalances[1];
+
+    // get price change ratio of the two tokens
+    const priceRatioChange = newTokenPrices[0] / newTokenPrices[1];
+
+    // compute new token balances
+    const tokenCount = 2;
+    let newBalances = new Array(tokenCount);
+
+    // compute new token balances
+    newBalances[0] = Math.sqrt(k / priceRatioChange);
+    newBalances[1] = Math.sqrt(k * priceRatioChange);
+
+    return newBalances;
+};
+
 const getBalancerSimulationStats = (
     initialTokenBalances: Array<number>,
     currentTokenBalances: Array<number>,
@@ -27,34 +88,11 @@ const getBalancerSimulationStats = (
     // Make sure the weights sum up to one
     // if (weightsSum !== 1) throw 'Sum of token weights is not equal to 1';
 
-    // get value of V
-    let V = 1;
-
-    currentTokenBalancesNoFees.forEach((balance, i) => {
-        V = V * Math.pow(balance, tokenWeights[i]);
-    });
-
-    // compute new token balances
-    const tokenCount = currentTokenBalancesNoFees.length;
-    let newBalances = new Array(tokenCount);
-
-    for (let i = 0; i < tokenCount; i++) {
-        const firstEquationPart = Math.pow(
-            tokenWeights[i] / newTokenPrices[i],
-            weightsSum - tokenWeights[i],
-        );
-
-        let secondEquationPart = 1;
-        for (let j = 0; j < tokenCount; j++) {
-            if (j !== i) {
-                secondEquationPart =
-                    secondEquationPart *
-                    Math.pow(newTokenPrices[j] / tokenWeights[j], tokenWeights[j]);
-            }
-        }
-
-        newBalances[i] = V * firstEquationPart * secondEquationPart;
-    }
+    const newBalances = getNewBalancesBalancer(
+        currentTokenBalancesNoFees,
+        newTokenPrices,
+        tokenWeights,
+    );
 
     return getStatsFromNewBalances(
         feeBalances,
@@ -96,20 +134,7 @@ const getUniswapSimulationStats = (
         feeBalances,
     );
 
-    // compute token change
-    // get value of k
-    const k = currentTokenBalancesNoFees[0] * currentTokenBalancesNoFees[1];
-
-    // get price change ratio of the two tokens
-    const priceRatioChange = newTokenPrices[0] / newTokenPrices[1];
-
-    // compute new token balances
-    const tokenCount = 2;
-    let newBalances = new Array(tokenCount);
-
-    // compute new token balances
-    newBalances[0] = Math.sqrt(k / priceRatioChange);
-    newBalances[1] = Math.sqrt(k * priceRatioChange);
+    const newBalances = getNewBalancesUniswap(currentTokenBalancesNoFees, newTokenPrices);
 
     return getStatsFromNewBalances(
         feeBalances,
@@ -188,9 +213,68 @@ const getGraphData = () => {
     return graphData;
 };
 
+const getPoolStats = (poolSnapshots: Array<any>) => {
+    console.log('poolSnapshots', poolSnapshots);
+
+    poolSnapshots.forEach(snapshot => {
+        const {
+            exchange,
+            startTokenBalances,
+            endTokenBalances,
+            tokenWeights,
+            tokenBalanceDiffNoFees,
+            endTokenPricesUsd,
+            ethPriceUsdEnd,
+            txCostEth,
+        } = snapshot;
+
+        // compute theoretical new token balances after price change without fees
+        let newBalancesNoFees;
+
+        if (exchange === 'UNI_V2' || exchange === 'UNI_V1') {
+            newBalancesNoFees = getNewBalancesUniswap(startTokenBalances, endTokenPricesUsd);
+        } else if (exchange === 'BALANCER') {
+            newBalancesNoFees = getNewBalancesBalancer(
+                startTokenBalances,
+                endTokenPricesUsd,
+                tokenWeights,
+            );
+        }
+
+        // get how much the user gained on fees
+        const fees = math.subtractArraysElementWise(endTokenBalances, newBalancesNoFees);
+
+        const hodlValue = math.multiplyArraysElementWise(startTokenBalances, endTokenPricesUsd);
+        const poolValue = math.multiplyArraysElementWise(endTokenBalances, endTokenPricesUsd);
+
+        console.log('startTokenBalances', startTokenBalances);
+        console.log('endTokenBalances', endTokenBalances);
+        console.log('newBalancesNoFees', newBalancesNoFees);
+        console.log('fees', fees);
+        console.log('endTokenPricesUsd', endTokenPricesUsd);
+
+        const yieldRewardToken = 0;
+
+        const txCostUsd = txCostEth * ethPriceUsdEnd;
+
+        const initialEthAmount = 0;
+
+        let ethHodl = 0; // potřebuji cenu ETH na začátku a cenu ETH na konci intervalu
+
+        // compute imp loss
+        // compute fees
+        // compute hodl
+        // compute compute hodl ETH
+        // compute hodl Token
+        // get tx expenses
+        // get yield
+    });
+};
+
 export {
     getBalancerSimulationStats,
     getUniswapSimulationStats,
     getGraphData,
     getUniImpLossFromPriceChangeRatio,
+    getPoolStats,
 };
