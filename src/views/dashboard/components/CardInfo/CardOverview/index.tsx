@@ -8,6 +8,7 @@ import {
     ToggleSwitch,
     MultipleTokenLogo,
     CryptoFiatValue,
+    Icon,
 } from '../../../../../components/ui';
 import { colors, variables } from '../../../../../config';
 import { getDailyAverageFeeGains } from '../../../../../utils/math';
@@ -16,6 +17,8 @@ import { getPoolStats } from '../../../../../utils/loss-computations';
 import { getTokenSymbolArr } from '../../../../../utils';
 import CardRow from '../CardRow';
 import Graph from '../Graph';
+import { Collapse } from 'react-collapse';
+import CollapsibleDiv from '../CollapsibleDiv';
 
 const GRID_GAP = 5;
 
@@ -69,7 +72,7 @@ const GridWrapper = styled.div`
     display: grid;
     grid-gap: ${GRID_GAP}px;
 
-    grid-template-columns: 190px minmax(100px, auto);
+    grid-template-columns: 250px minmax(100px, auto);
     grid-auto-rows: 40px;
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
@@ -85,18 +88,41 @@ const GridWrapper = styled.div`
 `;
 
 const HeaderWrapper = styled(GridWrapper)`
-    grid-template-columns: 190px minmax(100px, auto) minmax(140px, auto);
-    grid-template-rows: repeat(1, 40px);
+    grid-template-rows: repeat(1, 48px);
     padding: 0px 25px;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: -5px;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_LIGHT};
 `;
 
-const HodlHeaderWrapper = styled(HeaderWrapper)`
-    grid-template-columns: 280px 2px minmax(100px, auto);
+const StrategyHeaderGridWrapper = styled(GridWrapper)`
+    grid-template-columns: minmax(100px, auto) minmax(100px, auto) 26px;
+`;
+
+const PoolValueRow = styled(GridWrapper)`
+    border-bottom: 1px solid ${colors.STROKE_GREY};
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+`;
+
+const StrategyItem = styled(GrayBox)`
+    margin-bottom: 6px;
+`;
+
+const CollapseIconWrapper = styled.div`
+    cursor: pointer;
+    border-radius: 20px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background-color: #dcdce6; // used only here
+    }
 `;
 
 const TotalLossRowWrapper = styled(GridWrapper)`
@@ -115,8 +141,8 @@ const DaysLeftWrapper = styled.div`
 `;
 
 const DaysLeftGridWrapper = styled(GridWrapper)`
-    grid-template-columns: 190px minmax(100px, auto);
-    font-size: ${variables.FONT_SIZE.SMALL};
+    grid-template-columns: 250px minmax(100px, auto);
+    font-size: 15px;
     grid-auto-rows: 37px;
 `;
 
@@ -126,25 +152,13 @@ const DaysLeftNote = styled.div`
     padding: 10px;
 `;
 
-const SubValue = styled.div`
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_MEDIUM};
-    font-size: ${variables.FONT_SIZE.SMALL};
-    background-color: ${colors.BACKGROUND_DARK};
-    padding: 3px;
-    border-radius: 3px;
-    margin-right: 8px;
-    /* border-right: 1px solid ${colors.STROKE_GREY}; */
-    padding: 2px 3px;
-`;
-
 const ImpLossValueWrapper = styled.div`
     display: flex;
     align-items: center;
 `;
-const PoolValueGridWrapper = styled(GridWrapper)`
-    grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto);
-    align-items: baseline;
+const PoolOverviewGrid = styled(GridWrapper)`
+    grid-template-columns: 190px minmax(100px, auto);
+    align-items: center;
     padding-top: 0;
     min-height: 40px;
 `;
@@ -159,6 +173,7 @@ const GraphWrapper = styled.div`
 
 const CardOverview = () => {
     const [showEth, setShowEth] = useState(false);
+    const [isHodlCollapseOpened, setIsHodlCollapseOpened] = useState(false);
 
     const allPools = useSelector(state => state.allPools);
     const poolGroups = useSelector(state => state.poolGroups);
@@ -221,6 +236,53 @@ const CardOverview = () => {
     });
     tokenSymbolsString = tokenSymbolsString.substring(1); //delete first char (comma)
 
+    const poolBalanceUsd = feesUsd + yieldRewardUsd - txCostUsd;
+
+    const feesRow = (
+        <CardRow
+            firstColumn="Fees earned"
+            secondColumn={
+                <CryptoFiatValue
+                    showCrypto={false}
+                    fiatValue={feesUsd}
+                    cryptoValue={feesEth}
+                    usePlusSymbol
+                />
+            }
+            color="dark"
+        />
+    );
+
+    const yieldRow = yieldRewardUsd ? (
+        <CardRow
+            firstColumn="Yield farming rewards"
+            secondColumn={
+                <CryptoFiatValue
+                    showCrypto={false}
+                    fiatValue={yieldRewardUsd}
+                    cryptoValue={yieldRewardEth}
+                    usePlusSymbol
+                />
+            }
+            color="dark"
+        />
+    ) : null;
+
+    const txCostRow = (
+        <CardRow
+            firstColumn="Transactions cost"
+            secondColumn={
+                <CryptoFiatValue
+                    showCrypto={false}
+                    fiatValue={-txCostUsd}
+                    cryptoValue={-txCostEth}
+                    usePlusSymbol
+                />
+            }
+            color="dark"
+        />
+    );
+
     return (
         <Wrapper>
             <Header>
@@ -235,31 +297,25 @@ const CardOverview = () => {
             </Header>
 
             <HeaderWrapper>
-                <CardRow
-                    showThreeCols
-                    firstColumn="Pool overview"
-                    secondColumn={impLossUsd ? 'Initial' : ''}
-                    thirdColumn={endTimeText}
-                    color="light"
-                />
+                <CardRow firstColumn="Pool overview" secondColumn={endTimeText} color="light" />
             </HeaderWrapper>
             <GrayBox padding={15}>
-                <PoolValueGridWrapper>
+                <PoolValueRow>
                     <CardRow
-                        showThreeCols
+                        // showThreeCols=
                         firstColumn="Your pool share value"
+                        // secondColumn={
+                        //     impLossUsd ? (
+                        //         <CryptoFiatValue
+                        //             showCrypto={showEth}
+                        //             fiatValue={startBalanceUsd}
+                        //             cryptoValue={startBalanceEth}
+                        //         />
+                        //     ) : (
+                        //         ''
+                        //     )
+                        // }
                         secondColumn={
-                            impLossUsd ? (
-                                <CryptoFiatValue
-                                    showCrypto={showEth}
-                                    fiatValue={startBalanceUsd}
-                                    cryptoValue={startBalanceEth}
-                                />
-                            ) : (
-                                ''
-                            )
-                        }
-                        thirdColumn={
                             <PoolValueWrapper>
                                 <CryptoFiatValue
                                     showCrypto={showEth}
@@ -267,7 +323,7 @@ const CardOverview = () => {
                                     cryptoValue={endBalanceEth}
                                 />
 
-                                {impLossUsd ? (
+                                {/* {impLossUsd ? (
                                     <PoolValueDifference>
                                         <CryptoFiatValue
                                             showCrypto={showEth}
@@ -277,75 +333,81 @@ const CardOverview = () => {
                                             colorized
                                         />
                                     </PoolValueDifference>
-                                ) : null}
+                                ) : null} */}
                             </PoolValueWrapper>
                         }
                         color="dark"
                     />
-                </PoolValueGridWrapper>
-            </GrayBox>
-
-            <HodlHeaderWrapper>
-                <CardRow
-                    showThreeCols
-                    firstColumn="Your balance compared to HODL strategy"
-                    secondColumn=""
-                    thirdColumn={endTimeText}
-                    color="light"
-                />
-            </HodlHeaderWrapper>
-            <GrayBox padding={15}>
-                <GridWrapper>
-                    <CardRow
-                        firstColumn="Fees earned"
-                        secondColumn={
-                            <CryptoFiatValue
-                                showCrypto={false}
-                                fiatValue={feesUsd}
-                                cryptoValue={feesEth}
-                                usePlusSymbol
-                            />
-                        }
-                        color="dark"
-                    />
-                    {yieldRewardUsd ? (
+                </PoolValueRow>
+                <PoolOverviewGrid>
+                    {feesRow}
+                    {yieldRow}
+                    {txCostRow}
+                </PoolOverviewGrid>
+                <DaysLeftWrapper>
+                    <DaysLeftGridWrapper>
                         <CardRow
-                            firstColumn="Yield farming gains"
+                            firstColumn="Total (rewards - expenses)"
                             secondColumn={
-                                <CryptoFiatValue
-                                    showCrypto={false}
-                                    fiatValue={yieldRewardUsd}
-                                    cryptoValue={yieldRewardEth}
+                                <FiatValue
+                                    value={poolBalanceUsd}
                                     usePlusSymbol
-                                />
+                                    colorized
+                                    useBadgeStyle
+                                ></FiatValue>
                             }
                             color="dark"
                         />
-                    ) : null}
+                    </DaysLeftGridWrapper>
+                </DaysLeftWrapper>
+            </GrayBox>
 
+            <HeaderWrapper>
+                <CardRow
+                    firstColumn="Comparison to other strategies"
+                    secondColumn={endTimeText}
+                    color="light"
+                />
+            </HeaderWrapper>
+            <StrategyItem padding={15}>
+                <StrategyHeaderGridWrapper>
                     <CardRow
-                        firstColumn="Transactions expenses"
+                        showThreeCols
+                        firstColumn="If you HODL'd deposited tokens"
                         secondColumn={
-                            <CryptoFiatValue
-                                showCrypto={false}
-                                fiatValue={-txCostUsd}
-                                cryptoValue={-txCostEth}
-                                usePlusSymbol
-                            />
+                            <FiatValue value={netReturnUsd - hodlReturnUsd} usePlusSymbol />
+                        }
+                        thirdColumn={
+                            <CollapseIconWrapper>
+                                <Icon icon="arrow_down" size={16} />
+                            </CollapseIconWrapper>
                         }
                         color="dark"
                     />
+                </StrategyHeaderGridWrapper>
+            </StrategyItem>
 
+            <StrategyItem padding={15}>
+                <StrategyHeaderGridWrapper>
+                    <CardRow
+                        showThreeCols
+                        firstColumn="If you converted all deposits to ETH"
+                        secondColumn={
+                            <FiatValue value={netReturnUsd - hodlReturnUsd} usePlusSymbol />
+                        }
+                        thirdColumn={
+                            <CollapseIconWrapper>
+                                <Icon icon="arrow_down" size={16} />
+                            </CollapseIconWrapper>
+                        }
+                        color="dark"
+                    />
+                </StrategyHeaderGridWrapper>
+                {/* <GridWrapper>
                     <CardRow
                         firstColumn="Impermanent loss"
                         secondColumn={
                             <ImpLossValueWrapper>
-                                {/* {impLossRel && (
-                                    <SubValue>
-                                        {getFormattedPercentageValue(Math.abs(impLossRel))}
-                                    </SubValue>
-                                )} */}
-
                                 <CryptoFiatValue
                                     showCrypto={false}
                                     fiatValue={-impLossUsd}
@@ -356,8 +418,8 @@ const CardOverview = () => {
                         }
                         color="dark"
                     />
-                </GridWrapper>
-                <TotalLossRowWrapper>
+                </GridWrapper> */}
+                {/* <TotalLossRowWrapper>
                     <CardRow
                         firstColumn="Total"
                         secondColumn={
@@ -371,8 +433,8 @@ const CardOverview = () => {
                         }
                         color="dark"
                     />
-                </TotalLossRowWrapper>
-                <DaysLeftWrapper>
+                </TotalLossRowWrapper> */}
+                {/* <DaysLeftWrapper>
                     <DaysLeftGridWrapper>
                         <CardRow
                             firstColumn="Average daily rewards"
@@ -394,8 +456,11 @@ const CardOverview = () => {
                             <b>*</b> According to your average rewards (fees + yield).
                         </DaysLeftNote>
                     )}
-                </DaysLeftWrapper>
-            </GrayBox>
+                </DaysLeftWrapper> */}
+            </StrategyItem>
+
+            {/* <CollapsibleDiv /> */}
+            {/* <h3>Pool value in time</h3> */}
             {/* <GraphWrapper>
                 <Graph />
             </GraphWrapper> */}

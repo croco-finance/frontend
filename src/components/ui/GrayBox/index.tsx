@@ -15,8 +15,10 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     padding?: number;
 }
 
-const GrayBox = ({ children, padding = 20 }: Props) => (
-    <Wrapper padding={padding}>{children}</Wrapper>
+const GrayBox = ({ children, className, padding = 20 }: Props) => (
+    <Wrapper padding={padding} className={className}>
+        {children}
+    </Wrapper>
 );
 
 export default GrayBox;
