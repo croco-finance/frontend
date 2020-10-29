@@ -3,9 +3,19 @@ import exampleDataJson from '../config/example-data-json.json';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionTypes from '../store/actions/actionTypes';
 import axios from 'axios';
+import { setupCache } from 'axios-cache-adapter'
 import { constants } from '../config';
 import { validation } from '../utils';
 import { Event } from '../config/analytics';
+
+// Create `axios-cache-adapter` instance
+const cache = setupCache({
+    maxAge: 2 * 60 * 60 * 1000 // cache timeout in milliseconds (2 hours)
+})
+
+const api = axios.create({
+    adapter: cache.adapter
+})
 
 const toNumberAttributes = [
     'dexReturnUsd',
@@ -59,7 +69,7 @@ const FetchPoolsHook = initialAddress => {
 
             try {
                 // TODO error handling
-                const response = await axios.get(query, { timeout: 60000 });
+                const response = await api.get(query, { timeout: 60000 });
                 const fetchedData = response.data;
                 // const fetchedData = exampleDataJson;
 

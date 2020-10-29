@@ -14,6 +14,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/styled-components": "^5.1.4",
     "axios": "^0.20.0",
+    "axios-cache-adapter": "^2.5.0",
     "coingecko-api": "^1.0.10",
     "ethers": "^5.0.17",
     "react": "^16.14.0",
