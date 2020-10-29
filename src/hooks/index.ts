@@ -3,19 +3,19 @@ import exampleDataJson from '../config/example-data-json.json';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionTypes from '../store/actions/actionTypes';
 import axios from 'axios';
-import { setupCache } from 'axios-cache-adapter'
+import { setupCache } from 'axios-cache-adapter';
 import { constants } from '../config';
 import { validation } from '../utils';
 import { Event } from '../config/analytics';
 
 // Create `axios-cache-adapter` instance
 const cache = setupCache({
-    maxAge: 2 * 60 * 60 * 1000 // cache timeout in milliseconds (2 hours)
-})
+    maxAge: 2 * 60 * 60 * 1000, // cache timeout in milliseconds (2 hours)
+});
 
 const api = axios.create({
-    adapter: cache.adapter
-})
+    adapter: cache.adapter,
+});
 
 const toNumberAttributes = [
     'dexReturnUsd',
@@ -78,6 +78,15 @@ const FetchPoolsHook = initialAddress => {
                 if (fetchedData.length === 0) {
                     setNoPoolsFound(true);
                     setIsLoading(false);
+                    // make sure to change the redux state address, so that the hook will
+                    // run again after providing a different address
+                    dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
+                    dispatch({ type: actionTypes.SET_ALL_POOLS, pools: {} });
+                    dispatch({ type: actionTypes.SET_ACTIVE_POOL_IDS, activePoolIds: [] });
+                    dispatch({
+                        type: actionTypes.SET_INACTIVE_POOL_IDS,
+                        inactivePoolIds: [],
+                    });
                     return;
                 }
 

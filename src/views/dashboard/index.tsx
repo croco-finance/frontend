@@ -72,7 +72,7 @@ const AddressLabel = styled.div`
 
 const LeftWrapper = styled.div`
     width: 48%;
-    padding: 0px 50px 20px 0;
+    padding: 0px 40px 20px 0;
     max-height: 99vh;
     overflow-y: auto;
     /* animation: ${animations.SHOW_UP} 1.5s; */
