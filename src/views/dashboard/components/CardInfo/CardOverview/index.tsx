@@ -255,7 +255,7 @@ const CardOverview = () => {
 
     const yieldRow = yieldRewardUsd ? (
         <CardRow
-            firstColumn="Yield farming rewards"
+            firstColumn="Yield farming"
             secondColumn={
                 <CryptoFiatValue
                     showCrypto={false}
