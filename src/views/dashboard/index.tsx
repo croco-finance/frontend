@@ -6,6 +6,7 @@ import { Input, LoadingBox } from '../../components/ui';
 import { animations, colors, variables } from '../../config';
 import { FetchPoolsHook } from '../../hooks';
 import { FetchPoolStatsHook } from '../../hooks/stats';
+import { FetchPoolSnapsHook } from '../../hooks/snaps';
 import { validation } from '../../utils';
 import CardInfo from './components/CardInfo';
 import PoolList from './components/LeftContainer/PoolList';
@@ -142,13 +143,17 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     const [invalidAddressInput, setInvalidAddressInput] = useState(false);
 
     // on component startup fetch pools
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
-        props.match.params.address ? props.match.params.address : '',
-    );
+    // const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
+    //     props.match.params.address ? props.match.params.address : '',
+    // );
 
     // const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolStatsHook(
     //     props.match.params.address ? props.match.params.address : '',
     // );
+
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolSnapsHook(
+        props.match.params.address ? props.match.params.address : '',
+    );
 
     const handleAddressChange = inputAddr => {
         setInvalidAddressInput(false);
@@ -225,7 +230,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                     ) : null}
                 </AddressWrapper>
 
-                {exceptionContent
+                {/* {exceptionContent
                     ? exceptionContent
                     : !noPoolsSavedInRedux && (
                           <>
@@ -236,15 +241,15 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                               <Headline>Your liquidity pools</Headline>
                               <PoolList />
                           </>
-                      )}
+                      )} */}
             </LeftWrapper>
             <RightWrapper>
-                {rightWrapperContent}
+                {/* {rightWrapperContent}
                 {!exceptionContent && !noPoolsSavedInRedux && (
                     <CardInfoWrapper>
                         <CardInfo />
                     </CardInfoWrapper>
-                )}
+                )} */}
             </RightWrapper>
         </DashboardContainer>
     );

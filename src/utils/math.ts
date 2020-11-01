@@ -124,6 +124,14 @@ const subtractArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => 
     return result;
 };
 
+const divideEachArrayElementByValue = (arr: Array<number>, value: number) => {
+    for (let i = 0, length = arr.length; i < length; i++) {
+        arr[i] = arr[i] / value;
+    }
+
+    return arr;
+};
+
 export {
     countDecimals,
     getFiatValueFromCryptoAmounts,
@@ -135,4 +143,5 @@ export {
     subtractArraysElementWise,
     sumArraysElementWise,
     sumArr,
+    divideEachArrayElementByValue,
 };

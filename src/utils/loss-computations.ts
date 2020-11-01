@@ -216,7 +216,7 @@ const getGraphData = () => {
 const getPoolStats = (poolSnapshots: Array<any>) => {
     console.log('poolSnapshots', poolSnapshots);
 
-    poolSnapshots.forEach(snapshot => {
+    poolSnapshots.forEach((snapshot, i) => {
         const {
             exchange,
             startTokenBalances,
@@ -268,6 +268,8 @@ const getPoolStats = (poolSnapshots: Array<any>) => {
         // compute hodl Token
         // get tx expenses
         // get yield
+
+        return 3;
     });
 };
 
@@ -277,4 +279,6 @@ export {
     getGraphData,
     getUniImpLossFromPriceChangeRatio,
     getPoolStats,
+    getNewBalancesUniswap,
+    getNewBalancesBalancer,
 };

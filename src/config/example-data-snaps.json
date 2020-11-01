@@ -1,0 +1,468 @@
+[
+    {
+      "exchange": "UNI_V2",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0xbb2b8038a1640196fbe3e38816f3e67cba72d940",
+      "liquidityTokenBalance": "0.000039532619811031",
+      "liquidityTokenTotalSupply": "1.000913386965362953",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "WBTC",
+            "name": "Wrapped BTC",
+            "contract_address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "19475.11753048",
+          "price": "10411.94357745976624103424192"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "605447.405058638893477053",
+          "price": "334.9156726043218483329835585"
+        }
+      ],
+      "timestamp": 1600943069,
+      "txCostEth": null,
+      "yieldReward": {
+        "token": {
+          "symbol": "UNI",
+          "name": "Uniswap",
+          "contract_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+          "platform": "ethereum"
+        },
+        "price": "2.354524489229880957845414835",
+        "amount": "32.199942976382628599"
+      },
+      "ethPrice": "334.9156726043218483329835585031281"
+    },
+    {
+      "exchange": "UNI_V2",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0xbb2b8038a1640196fbe3e38816f3e67cba72d940",
+      "liquidityTokenBalance": "0.000039532619811031",
+      "liquidityTokenTotalSupply": "1.515941770423128355",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "WBTC",
+            "name": "Wrapped BTC",
+            "contract_address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "27706.87071996",
+          "price": "13535.41577335414057044267464"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "981683.734098702300842095",
+          "price": "382.0212171667949871788012820"
+        }
+      ],
+      "timestamp": 1604093678,
+      "txCostEth": null,
+      "yieldReward": {
+        "token": {
+          "symbol": "UNI",
+          "name": "Uniswap",
+          "contract_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+          "platform": "ethereum"
+        },
+        "price": "2.354524489229880957845414835",
+        "amount": "32.199942976382628599"
+      },
+      "ethPrice": "382.0287110781820992181552378391566"
+    },
+    {
+      "exchange": "UNI_V2",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0xd3d2e2692501a5c9ca623199d38826e513033a17",
+      "liquidityTokenBalance": "94.992101336051394155",
+      "liquidityTokenTotalSupply": "236452.550245596152456179",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "UNI",
+            "name": "Uniswap",
+            "contract_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "3200195.156105598683101728",
+          "price": "6.299519934121184553320710127"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "53005.59485437764378959",
+          "price": "380.3314203783587847676041273"
+        }
+      ],
+      "timestamp": 1600440725,
+      "txCostEth": null,
+      "yieldReward": null,
+      "ethPrice": "380.3317168619588080377247888829223"
+    },
+    {
+      "exchange": "UNI_V2",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0xd3d2e2692501a5c9ca623199d38826e513033a17",
+      "liquidityTokenBalance": "94.992101336051394155",
+      "liquidityTokenTotalSupply": "357564.524115545418314087",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "UNI",
+            "name": "Uniswap",
+            "contract_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "8450759.944474213247437803",
+          "price": "2.354521390992189146927246257"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "52085.572109649865578738",
+          "price": "382.0154843939614060860103455"
+        }
+      ],
+      "timestamp": 1604093678,
+      "txCostEth": null,
+      "yieldReward": null,
+      "ethPrice": "382.0287110781820992181552378391566"
+    },
+    {
+      "exchange": "BALANCER",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0x5e37910cfb8de1b14ec4e4bac0bec27c35dc07d5",
+      "liquidityTokenBalance": "212.403388821642907275",
+      "liquidityTokenTotalSupply": "39046.303666888708360714",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "sETH",
+            "name": "Synth sETH",
+            "contract_address": "0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "5382.93120468939109292",
+          "price": "402.5813627820208098984794386"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "5529.978439329915470616",
+          "price": "391.8763524886925878668527774"
+        }
+      ],
+      "timestamp": 1598084370,
+      "txCostEth": "0.020305360000000000",
+      "yieldReward": {
+        "token": {
+          "symbol": "BAL",
+          "name": "Balancer",
+          "contract_address": "0xba100000625a3754423978a60c9317c58a424e3d",
+          "platform": "ethereum"
+        },
+        "price": "10.11787799981675760737860205566693",
+        "amount": "10.28199162367215294883333333"
+      },
+      "ethPrice": "391.8763524886925878668527775149294"
+    },
+    {
+      "exchange": "BALANCER",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0xb38b0c480a451db976837a1a464af95bb0f3f5e2",
+      "liquidityTokenBalance": "52.798195704341342601",
+      "liquidityTokenTotalSupply": "4735.143301053187830508",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "KEEP",
+            "name": "KEEP Token",
+            "contract_address": "0x85eee30c52b0b379b046fb0f85f4f3dc3009afec",
+            "platform": "ethereum"
+          },
+          "weight": "0.8",
+          "reserve": "896838.090371304019288782",
+          "price": "1.319650239066042042249368505"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.2",
+          "reserve": "739.614694041764830401",
+          "price": "400.0436341706837927947836373"
+        }
+      ],
+      "timestamp": 1597860767,
+      "txCostEth": "0.034719256000000000",
+      "yieldReward": {
+        "token": {
+          "symbol": "BAL",
+          "name": "Balancer",
+          "contract_address": "0xba100000625a3754423978a60c9317c58a424e3d",
+          "platform": "ethereum"
+        },
+        "price": "10.11787799981675760737860205566693",
+        "amount": "10.28199162367215294883333333"
+      },
+      "ethPrice": "400.04363417068379279478363730831"
+    },
+    {
+      "exchange": "BALANCER",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0xb38b0c480a451db976837a1a464af95bb0f3f5e2",
+      "liquidityTokenBalance": "0",
+      "liquidityTokenTotalSupply": "9741.958933043845357712",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "KEEP",
+            "name": "KEEP Token",
+            "contract_address": "0x85eee30c52b0b379b046fb0f85f4f3dc3009afec",
+            "platform": "ethereum"
+          },
+          "weight": "0.8",
+          "reserve": "1909543.579490878164818808",
+          "price": "0.9822408630264505533619871811"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.2",
+          "reserve": "1374.320256601237676252",
+          "price": "341.1926231343392049289906869"
+        }
+      ],
+      "timestamp": 1600785402,
+      "txCostEth": "0.030341024000000000",
+      "yieldReward": {
+        "token": {
+          "symbol": "BAL",
+          "name": "Balancer",
+          "contract_address": "0xba100000625a3754423978a60c9317c58a424e3d",
+          "platform": "ethereum"
+        },
+        "price": "10.11787799981675760737860205566693",
+        "amount": "0.9879982220578716371666666666"
+      },
+      "ethPrice": "341.1926231343392049289906869144923"
+    },
+    {
+      "exchange": "BALANCER",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0x5e37910cfb8de1b14ec4e4bac0bec27c35dc07d5",
+      "liquidityTokenBalance": "92.403388821642907275",
+      "liquidityTokenTotalSupply": "21692.780575002979584397",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "sETH",
+            "name": "Synth sETH",
+            "contract_address": "0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "3034.62463447354288401",
+          "price": "340.0408939118922019172246121"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "3028.435734734200080042",
+          "price": "340.7358001882777926908054529"
+        }
+      ],
+      "timestamp": 1600786962,
+      "txCostEth": "0.036771750000000000",
+      "yieldReward": {
+        "token": {
+          "symbol": "BAL",
+          "name": "Balancer",
+          "contract_address": "0xba100000625a3754423978a60c9317c58a424e3d",
+          "platform": "ethereum"
+        },
+        "price": "10.11787799981675760737860205566693",
+        "amount": "0.9879982220578716371666666666"
+      },
+      "ethPrice": "340.7358001882777926908054529827755"
+    },
+    {
+      "exchange": "BALANCER",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0x5e37910cfb8de1b14ec4e4bac0bec27c35dc07d5",
+      "liquidityTokenBalance": "172.403388821642907275",
+      "liquidityTokenTotalSupply": "21772.780575002979584397",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "sETH",
+            "name": "Synth sETH",
+            "contract_address": "0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "3034.62463447354288401",
+          "price": "342.6310138031779218796309993"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "3050.812706687115806757",
+          "price": "340.8129619831176402351754716"
+        }
+      ],
+      "timestamp": 1600785911,
+      "txCostEth": "0.036771750000000000",
+      "yieldReward": {
+        "token": {
+          "symbol": "BAL",
+          "name": "Balancer",
+          "contract_address": "0xba100000625a3754423978a60c9317c58a424e3d",
+          "platform": "ethereum"
+        },
+        "price": "10.11787799981675760737860205566693",
+        "amount": "0.6832402559645650038333333333"
+      },
+      "ethPrice": "340.8129619831176402351754716218807"
+    },
+    {
+      "exchange": "BALANCER",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0xb38b0c480a451db976837a1a464af95bb0f3f5e2",
+      "liquidityTokenBalance": "27.798195704341342601",
+      "liquidityTokenTotalSupply": "8993.540737015856059546",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "KEEP",
+            "name": "KEEP Token",
+            "contract_address": "0x85eee30c52b0b379b046fb0f85f4f3dc3009afec",
+            "platform": "ethereum"
+          },
+          "weight": "0.8",
+          "reserve": "1774258.562720094078548755",
+          "price": "1.057771971811150677851072069"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.2",
+          "reserve": "1234.445264608384839424",
+          "price": "380.0818538087703984693886131"
+        }
+      ],
+      "timestamp": 1600351905,
+      "txCostEth": "0.072357688000000000",
+      "yieldReward": {
+        "token": {
+          "symbol": "BAL",
+          "name": "Balancer",
+          "contract_address": "0xba100000625a3754423978a60c9317c58a424e3d",
+          "platform": "ethereum"
+        },
+        "price": "10.11787799981675760737860205566693",
+        "amount": "0.6832402559645650038333333333"
+      },
+      "ethPrice": "380.0818538087703984693886131059479"
+    },
+    {
+      "exchange": "BALANCER",
+      "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+      "poolId": "0x5e37910cfb8de1b14ec4e4bac0bec27c35dc07d5",
+      "liquidityTokenBalance": "0",
+      "liquidityTokenTotalSupply": "20980.606559682594247889",
+      "tokens": [
+        {
+          "token": {
+            "symbol": "sETH",
+            "name": "Synth sETH",
+            "contract_address": "0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "2919.555769451062068415",
+          "price": "336.8337920232799363653349080"
+        },
+        {
+          "token": {
+            "symbol": "WETH",
+            "name": "Wrapped Ether",
+            "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "platform": "ethereum"
+          },
+          "weight": "0.5",
+          "reserve": "2944.528763108252440575",
+          "price": "333.9770537033440540040736435"
+        }
+      ],
+      "timestamp": 1600942417,
+      "txCostEth": "0.013240260000000000",
+      "yieldReward": {
+        "token": {
+          "symbol": "BAL",
+          "name": "Balancer",
+          "contract_address": "0xba100000625a3754423978a60c9317c58a424e3d",
+          "platform": "ethereum"
+        },
+        "price": "10.11787799981675760737860205566693",
+        "amount": "0.3047579660933066333333333333"
+      },
+      "ethPrice": "333.9770537033440540040736434830997"
+    }
+  ]
