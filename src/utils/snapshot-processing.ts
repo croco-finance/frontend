@@ -115,6 +115,7 @@ const getIntervalStats = (snapshot1: any, snapshot2: any) => {
     // *** Stats Computations ***
 
     // compute theoretical new token balances after price change without fees
+    let statsReturnObject = {};
     let newBalancesNoFees;
 
     if (exchange === 'UNI_V2' || exchange === 'UNI_V1') {
@@ -128,20 +129,39 @@ const getIntervalStats = (snapshot1: any, snapshot2: any) => {
     }
 
     // get how much the user gained on fees
-    const fees = math.subtractArraysElementWise(endTokenBalances, newBalancesNoFees);
-
+    const feesTokens = math.subtractArraysElementWise(endTokenBalances, newBalancesNoFees);
     const hodlValue = math.multiplyArraysElementWise(startTokenBalances, endTokenPrices);
     const poolValue = math.multiplyArraysElementWise(endTokenBalances, endTokenPrices);
 
+    // the difference of you token holdings compared to the stat amount
+    const tokenDiffNoFees = math.subtractArraysElementWise(startTokenBalances, newBalancesNoFees);
+
+    // how much yield rewards the users earned in this period
+    const yieldRewardTokenAmount = endYieldRewardAmount - startYieldRewardAmount;
+
     // compute ETH value of each token reserve at the beginning
     const startTokenValue = math.multiplyArraysElementWise(startTokenBalances, startTokenPrices);
+    // this his how much ETH was your initial deposit worth at the beginning of the interval
     const startTokensToEthValue = math.divideEachArrayElementByValue(
         startTokenValue,
         startEthPrice,
     );
 
     const endTokenValue = math.multiplyArraysElementWise(endTokenBalances, endTokenPrices);
+    // this his how much ETH was your initial deposit worth at the end on the interval
     const endTokensToEthValue = math.divideEachArrayElementByValue(endTokenValue, endEthPrice);
+
+    statsReturnObject['yieldRewardTokenAmount'] = yieldRewardTokenAmount;
+    statsReturnObject['feesRewardTokenAmounts'] = feesTokens;
+    statsReturnObject['tokenDiffNoFees'] = tokenDiffNoFees;
+
+    // hodl value cna be also computed in historical and current terms
+    statsReturnObject['hodlValue'] = hodlValue;
+    statsReturnObject['poolValue'] = poolValue;
+    statsReturnObject['ethHodlAmount'] = poolValue;
+
+    // the impermanent loss can be computed according to current and historical prices. Which one is right?
+    // I will compute it by multiplying tokenDiffNoFees by token's (historical/today's) prices,
 
     return 4;
 };
