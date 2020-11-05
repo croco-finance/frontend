@@ -2,168 +2,166 @@ import { math } from '.';
 import * as loss from './loss-computations';
 
 const getPoolStats = (poolSnapshots: Array<any>) => {
-    console.log('poolSnapshots', poolSnapshots);
+    // console.log('poolSnapshots', poolSnapshots);
     let intervalStats = new Array();
 
     poolSnapshots.forEach((snapshot, i) => {
+        // console.log('poolSnapshots.forEach()');
         if (i > 0) {
             intervalStats.push(getIntervalStats(poolSnapshots[i - 1], poolSnapshots[i]));
         }
-
-        // const {
-        //     exchange,
-        //     startTokenBalances,
-        //     endTokenBalances,
-        //     tokenWeights,
-        //     tokenBalanceDiffNoFees,
-        //     endTokenPricesUsd,
-        //     ethPriceUsdEnd,
-        //     txCostEth,
-        // } = snapshot;
-
-        // // compute theoretical new token balances after price change without fees
-        // let newBalancesNoFees;
-
-        // if (exchange === 'UNI_V2' || exchange === 'UNI_V1') {
-        //     newBalancesNoFees = loss.getNewBalancesUniswap(startTokenBalances, endTokenPricesUsd);
-        // } else if (exchange === 'BALANCER') {
-        //     newBalancesNoFees = loss.getNewBalancesBalancer(
-        //         startTokenBalances,
-        //         endTokenPricesUsd,
-        //         tokenWeights,
-        //     );
-        // }
-
-        // // get how much the user gained on fees
-        // const fees = math.subtractArraysElementWise(endTokenBalances, newBalancesNoFees);
-
-        // const hodlValue = math.multiplyArraysElementWise(startTokenBalances, endTokenPricesUsd);
-        // const poolValue = math.multiplyArraysElementWise(endTokenBalances, endTokenPricesUsd);
-
-        // console.log('startTokenBalances', startTokenBalances);
-        // console.log('endTokenBalances', endTokenBalances);
-        // console.log('newBalancesNoFees', newBalancesNoFees);
-        // console.log('fees', fees);
-        // console.log('endTokenPricesUsd', endTokenPricesUsd);
-
-        // const yieldRewardToken = 0;
-
-        // const txCostUsd = txCostEth * ethPriceUsdEnd;
-
-        // const initialEthAmount = 0;
-
-        // let ethHodl = 0; // potřebuji cenu ETH na začátku a cenu ETH na konci intervalu
-
-        // compute imp loss
-        // compute fees
-        // compute hodl
-        // compute compute hodl ETH
-        // compute hodl Token
-        // get tx expenses
-        // get yield
-        // compute if isaActive
     });
 
-    console.log('intervalStats', intervalStats);
-    return 5;
+    return intervalStats;
 };
 
 const getIntervalStats = (snapshot1: any, snapshot2: any) => {
     // variables declaration
-    const { exchange, txCostEth } = snapshot1;
+    const { exchange } = snapshot1;
 
     const reserveTokensCount = snapshot1.tokens.length;
-
-    const startTokenBalances = new Array(reserveTokensCount);
-    const endTokenBalances = new Array(reserveTokensCount);
     const tokenWeights = new Array(reserveTokensCount);
-    const startTokenPrices = new Array(reserveTokensCount);
-    const endTokenPrices = new Array(reserveTokensCount);
 
-    const startYieldRewardPrice = snapshot1.yieldReward.price;
-    const endYieldRewardPrice = snapshot2.yieldReward.price;
+    const userTokenBalancesStart = new Array(reserveTokensCount);
+    const userTokenBalancesEnd = new Array(reserveTokensCount);
 
-    const startYieldRewardAmount = snapshot1.yieldReward.price;
-    const endYieldRewardAmount = snapshot2.yieldReward.price;
+    const totalTokenReservesStart = new Array(reserveTokensCount);
+    const totalTokenReservesEnd = new Array(reserveTokensCount);
 
-    const startTimestamp = snapshot1.timestamp;
-    const endTimestamp = snapshot2.timestamp;
+    const tokenPricesStart = new Array(reserveTokensCount);
+    const tokenPricesEnd = new Array(reserveTokensCount);
 
-    const startLpTokenBalance = snapshot1.liquidityTokenBalance;
-    const endLpTokenBalance = snapshot2.liquidityTokenBalance;
+    // yield reward
+    const yieldTokenPriceStart = snapshot1.yieldReward ? snapshot1.yieldReward.price : null;
+    const yieldTokenPriceEnd = snapshot2.yieldReward ? snapshot2.yieldReward.price : null;
 
-    const startLpTokenTotalSupply = snapshot1.liquidityTokenTotalSupply;
-    const endLpTokenTotalSupply = snapshot2.liquidityTokenTotalSupply;
+    const yieldRewardAmountStart = snapshot1.yieldReward ? snapshot1.yieldReward.amount : null;
+    const yieldRewardAmountEnd = snapshot2.yieldReward ? snapshot2.yieldReward.amount : null;
 
-    const startEthPrice = snapshot1.ethPrice;
-    const endEthPrice = snapshot2.ethPrice;
+    // liquidity pool tokens
+    const lpTokenUserBalanceStart = snapshot1.liquidityTokenBalance;
+    const lpTokenUserBalanceEnd = snapshot2.liquidityTokenBalance;
+
+    const lpTokenTotalSupplyStart = snapshot1.liquidityTokenTotalSupply;
+    const lpTokenTotalSupplyEnd = snapshot2.liquidityTokenTotalSupply; // this is how much the user had BEFORE he made deposit/withdraw
+
+    const userPoolShareStart = lpTokenUserBalanceStart / lpTokenTotalSupplyStart;
+    const userPoolShareEnd = lpTokenUserBalanceStart / lpTokenTotalSupplyEnd;
+
+    // token prices
+    const ethPriceStart = snapshot1.ethPrice;
+    const ethPriceEnd = snapshot2.ethPrice;
 
     // get token balances at the beginning of the interval
-    // also save token weights into and array
     snapshot1.tokens.forEach((tokenData, i) => {
-        startTokenBalances[i] = tokenData.reserve;
+        totalTokenReservesStart[i] = tokenData.reserve;
+        userTokenBalancesStart[i] = userPoolShareStart * tokenData.reserve;
+
         tokenWeights[i] = tokenData.weight;
-        startTokenPrices[i] = tokenData.price;
+        tokenPricesStart[i] = tokenData.price;
     });
 
-    // get token balances at the end of the interval
+    // Compute theoretical token balances if no fees were gained
     snapshot2.tokens.forEach((tokenData, i) => {
-        endTokenBalances[i] = tokenData.reserve;
-        endTokenPrices[i] = tokenData.price;
+        totalTokenReservesEnd[i] = tokenData.reserve;
+        userTokenBalancesEnd[i] = userPoolShareEnd * tokenData.reserve;
+        tokenPricesEnd[i] = tokenData.price;
     });
 
     // *** Stats Computations ***
-
     // compute theoretical new token balances after price change without fees
     let statsReturnObject = {};
     let newBalancesNoFees;
 
     if (exchange === 'UNI_V2' || exchange === 'UNI_V1') {
-        newBalancesNoFees = loss.getNewBalancesUniswap(startTokenBalances, endTokenPrices);
+        newBalancesNoFees = loss.getNewBalancesUniswap(userTokenBalancesStart, tokenPricesEnd);
     } else if (exchange === 'BALANCER') {
         newBalancesNoFees = loss.getNewBalancesBalancer(
-            startTokenBalances,
-            endTokenPrices,
+            userTokenBalancesStart,
+            tokenPricesEnd,
             tokenWeights,
         );
     }
 
     // get how much the user gained on fees
-    const feesTokens = math.subtractArraysElementWise(endTokenBalances, newBalancesNoFees);
-    const hodlValue = math.multiplyArraysElementWise(startTokenBalances, endTokenPrices);
-    const poolValue = math.multiplyArraysElementWise(endTokenBalances, endTokenPrices);
+    const feesTokenAmounts = math.subtractArraysElementWise(
+        userTokenBalancesEnd,
+        newBalancesNoFees,
+    );
+    const hodlValueUsd = math.multiplyArraysElementWise(userTokenBalancesStart, tokenPricesEnd);
+    const poolValueUsd = math.multiplyArraysElementWise(userTokenBalancesEnd, tokenPricesEnd);
 
-    // the difference of you token holdings compared to the stat amount
-    const tokenDiffNoFees = math.subtractArraysElementWise(startTokenBalances, newBalancesNoFees);
-
-    // how much yield rewards the users earned in this period
-    const yieldRewardTokenAmount = endYieldRewardAmount - startYieldRewardAmount;
-
-    // compute ETH value of each token reserve at the beginning
-    const startTokenValue = math.multiplyArraysElementWise(startTokenBalances, startTokenPrices);
-    // this his how much ETH was your initial deposit worth at the beginning of the interval
-    const startTokensToEthValue = math.divideEachArrayElementByValue(
-        startTokenValue,
-        startEthPrice,
+    // the difference of you token holdings compared to the start amount
+    const tokenDiffNoFees = math.subtractArraysElementWise(
+        newBalancesNoFees,
+        userTokenBalancesStart,
     );
 
-    const endTokenValue = math.multiplyArraysElementWise(endTokenBalances, endTokenPrices);
-    // this his how much ETH was your initial deposit worth at the end on the interval
-    const endTokensToEthValue = math.divideEachArrayElementByValue(endTokenValue, endEthPrice);
+    // compute ETH value of each token reserve at the beginning
+    const startTokenValue = math.multiplyArraysElementWise(
+        userTokenBalancesStart,
+        tokenPricesStart,
+    );
 
-    statsReturnObject['yieldRewardTokenAmount'] = yieldRewardTokenAmount;
-    statsReturnObject['feesRewardTokenAmounts'] = feesTokens;
+    // this his how much ETH was your initial deposit worth at the beginning of the interval
+    // array[5.0 ETH, 5.0 ETH]
+    const startEthAmount = math.sumArr(
+        math.divideEachArrayElementByValue(startTokenValue, ethPriceStart),
+    );
+
+    const endTokenValues = math.multiplyArraysElementWise(userTokenBalancesEnd, tokenPricesEnd);
+
+    // this his how much ETH wis the pool worth at the end of interval
+    const endEthAmount = math.sumArr(
+        math.divideEachArrayElementByValue(endTokenValues, ethPriceEnd),
+    );
+
+    // this is how much would your assets be worth if you put everything to ETH instead of pooled tokens
+    const ethHodlValueUsd = startEthAmount * ethPriceEnd;
+
+    // Timestamp
+    statsReturnObject['timestampStart'] = snapshot1.timestamp;
+    statsReturnObject['timestampEnd'] = snapshot2.timestamp;
+
+    // Token balances
+    statsReturnObject['startUserTokenBalances'] = userTokenBalancesStart;
+    statsReturnObject['endUserTokenBalances'] = userTokenBalancesEnd;
+
+    // Fees and imp. loss
+    statsReturnObject['feesTokenAmounts'] = feesTokenAmounts;
     statsReturnObject['tokenDiffNoFees'] = tokenDiffNoFees;
 
-    // hodl value cna be also computed in historical and current terms
-    statsReturnObject['hodlValue'] = hodlValue;
-    statsReturnObject['poolValue'] = poolValue;
-    statsReturnObject['ethHodlAmount'] = poolValue;
+    // User's pool share
+    statsReturnObject['userPoolShareStart'] = userPoolShareStart;
+    statsReturnObject['userPoolShareEnd'] = userPoolShareEnd;
 
-    // the impermanent loss can be computed according to current and historical prices. Which one is right?
-    // I will compute it by multiplying tokenDiffNoFees by token's (historical/today's) prices,
+    // Token prices
+    statsReturnObject['startTokenPrices'] = tokenPricesStart;
+    statsReturnObject['endTokenPrices'] = tokenPricesEnd;
 
-    return 4;
+    statsReturnObject['startEthPrice'] = ethPriceStart;
+    statsReturnObject['endEthPrice'] = ethPriceEnd;
+
+    // TX Cost
+    statsReturnObject['startTxCostEth'] = snapshot1.txCostEth;
+    statsReturnObject['endTxCostEth'] = snapshot2.txCostEth;
+
+    // Yield reward
+    statsReturnObject['yieldRewardAmountStart'] = yieldRewardAmountStart;
+    statsReturnObject['yieldRewardAmountEnd'] = yieldRewardAmountEnd;
+    statsReturnObject['yieldTokenPriceStart'] = yieldTokenPriceStart;
+    statsReturnObject['yieldTokenPriceEnd'] = yieldTokenPriceEnd;
+
+    // Strategy values (for interval start/end prices, not current prices)
+    statsReturnObject['hodlValueUsd'] = hodlValueUsd;
+    statsReturnObject['poolValueUsd'] = poolValueUsd;
+    statsReturnObject['ethHodlValueUsd'] = ethHodlValueUsd;
+
+    // TODO
+    // statsReturnObject['singleTokenHodl'] = 0;
+    // statsReturnObject['startTxType'] = 'deposit';
+
+    return statsReturnObject;
 };
 
 export { getPoolStats };

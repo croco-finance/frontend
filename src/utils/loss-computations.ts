@@ -17,7 +17,7 @@ const getNewBalancesBalancer = (
 
     // compute new token balances
     let newBalances = new Array(tokenCount);
-    const weightsSum = tokenWeights.reduce(math.sumArr);
+    const weightsSum = math.sumArr(tokenWeights);
 
     for (let i = 0; i < tokenCount; i++) {
         const firstEquationPart = Math.pow(
@@ -68,7 +68,7 @@ const getBalancerSimulationStats = (
     cumulatedTokenBalanceDiff: Array<number>,
     tokenWeights: Array<number>,
 ) => {
-    const weightsSum = tokenWeights.reduce(math.sumArr);
+    const weightsSum = math.sumArr(tokenWeights);
 
     // how much tokens I should have at the beginning (if the current balance didn't included fees)
     let hodlTokenBalances = math.subtractArraysElementWise(

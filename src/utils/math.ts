@@ -87,8 +87,9 @@ const arrangeArray = (start, end, step) => {
     return arr;
 };
 
-const sumArr = (total, num) => {
-    return total + num;
+const sumArr = (arr: Array<number>) => {
+    // default value is 0
+    return arr.reduce((a, b) => a + b, 0);
 };
 
 const multiplyArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
