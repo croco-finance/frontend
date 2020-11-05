@@ -124,8 +124,8 @@ const getIntervalStats = (snapshot1: any, snapshot2: any) => {
     statsReturnObject['timestampEnd'] = snapshot2.timestamp;
 
     // Token balances
-    statsReturnObject['startUserTokenBalances'] = userTokenBalancesStart;
-    statsReturnObject['endUserTokenBalances'] = userTokenBalancesEnd;
+    statsReturnObject['userTokenBalancesStart'] = userTokenBalancesStart;
+    statsReturnObject['userTokenBalancesEnd'] = userTokenBalancesEnd;
 
     // Fees and imp. loss
     statsReturnObject['feesTokenAmounts'] = feesTokenAmounts;
@@ -136,15 +136,15 @@ const getIntervalStats = (snapshot1: any, snapshot2: any) => {
     statsReturnObject['userPoolShareEnd'] = userPoolShareEnd;
 
     // Token prices
-    statsReturnObject['startTokenPrices'] = tokenPricesStart;
-    statsReturnObject['endTokenPrices'] = tokenPricesEnd;
+    statsReturnObject['tokenPricesStart'] = tokenPricesStart;
+    statsReturnObject['tokenPricesEnd'] = tokenPricesEnd;
 
-    statsReturnObject['startEthPrice'] = ethPriceStart;
-    statsReturnObject['endEthPrice'] = ethPriceEnd;
+    statsReturnObject['ethPriceStart'] = ethPriceStart;
+    statsReturnObject['ethPriceEnd'] = ethPriceEnd;
 
     // TX Cost
-    statsReturnObject['startTxCostEth'] = snapshot1.txCostEth;
-    statsReturnObject['endTxCostEth'] = snapshot2.txCostEth;
+    statsReturnObject['txCostEthStart'] = snapshot1.txCostEth;
+    statsReturnObject['txCostEthEnd'] = snapshot2.txCostEth;
 
     // Yield reward
     statsReturnObject['yieldRewardAmountStart'] = yieldRewardAmountStart;
