@@ -1,19 +1,17 @@
-import * as H from 'history';
+import * as actionTypes from '@actionTypes';
+import { NavBar, SimulatorContainer } from '@components/layout';
+import { GrayBox, Input, LoadingBox, MultipleTokenSelect } from '@components/ui';
+import { animations, colors, variables } from '@config';
+import { mathUtils, validationUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { NavBar, SimulatorContainer } from '../../components/layout';
-import { GrayBox, Input, MultipleTokenSelect, Spinner, LoadingBox } from '../../components/ui';
-import { animations, colors, variables } from '../../config';
 import { PoolItemInterface } from '../../config/types';
-import * as actionTypes from '../../store/actions/actionTypes';
-import { math } from '../../utils';
+import { FetchPoolsHook } from '../../hooks';
 import CardInfo from './components/CardInfo';
 import Overview from './components/LeftContainer/Overview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
-import { FetchPoolsHook } from '../../hooks';
-import { validation } from '../../utils';
-import { RouteComponentProps, withRouter } from 'react-router';
 
 const ExceptionWrapper = styled.div`
     display: flex;
@@ -131,7 +129,7 @@ const buildPoolOption = (pool: PoolItemInterface) => {
         let label = '';
 
         tokens.forEach((token, i) => {
-            let tokenWeight = math.getFormattedPercentageValue(pool.tokenWeights[i], true);
+            let tokenWeight = mathUtils.getFormattedPercentageValue(pool.tokenWeights[i], true);
             label = label + ` ${token.symbol.toUpperCase()} ${tokenWeight},`;
             value.tokens[i] = token.symbol;
         });
@@ -191,7 +189,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
         // show in the input whatever user typed in, even if it's not a valid ETH address
         setInputAddress(inputAddr);
 
-        if (validation.isValidEthereumAddress(inputAddr)) {
+        if (validationUtils.isValidEthereumAddress(inputAddr)) {
             fetchData(inputAddr);
             // change the url so that the user fetches data for the same address when refreshing the page
             props.history.push({

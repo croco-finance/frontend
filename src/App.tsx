@@ -1,15 +1,15 @@
+import { constants } from '@config';
 import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import Dashboard from './views/dashboard';
-import Simulator from './views/simulator';
-import LandingPage from './views/landing-page';
-import { RouteComponentProps, withRouter } from 'react-router';
 import ReactGA from 'react-ga';
-import { GOOGLE_ANALYTICS_TRACKING_ID } from './config/constants';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
+import Dashboard from './views/dashboard';
+import LandingPage from './views/landing-page';
+import Simulator from './views/simulator';
 
 // this is still not working properly. I am using GA script in index.html to track basic traffic
-ReactGA.initialize(GOOGLE_ANALYTICS_TRACKING_ID);
+ReactGA.initialize(constants.GOOGLE_ANALYTICS_TRACKING_ID);
 
 const App = (props: RouteComponentProps<any>) => {
     useEffect(() => {

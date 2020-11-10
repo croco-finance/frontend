@@ -8,12 +8,9 @@ import {
     ToggleSwitch,
     MultipleTokenLogo,
     CryptoFiatValue,
-} from '../../../../../components/ui';
-import { colors, variables } from '../../../../../config';
-import { getDailyAverageFeeGains } from '../../../../../utils/math';
-import { getPoolStats } from '../../../../../utils/loss-computations';
-
-import { getTokenSymbolArr } from '../../../../../utils';
+} from '@components/ui';
+import { colors, variables } from '@config';
+import { mathUtils, lossUtils, getTokenSymbolArr } from '@utils';
 import CardRow from '../CardRow';
 import Graph from '../Graph';
 
@@ -169,7 +166,7 @@ const CardOverview = () => {
     // const poolSnapshots = poolGroups['0xd3d2e2692501a5c9ca623199d38826e513033a17'];
 
     // Compute imp loss, fees, hold, ETH hold, token hold fo each snapshot
-    // getPoolStats(poolSnapshots);
+    // lossUtils.getPoolStats(poolSnapshots);
 
     // TODO make the following checks and computations cleaner
     if (!allPools || !pool) {
@@ -204,7 +201,11 @@ const CardOverview = () => {
     const startBalanceUsd = endBalanceUsd - netReturnUsd;
     const startBalanceEth = endBalanceEth - netReturnEth;
 
-    const averageRewardsUsd = getDailyAverageFeeGains(start, end, feesUsd + yieldRewardUsd);
+    const averageRewardsUsd = mathUtils.getDailyAverageFeeGains(
+        start,
+        end,
+        feesUsd + yieldRewardUsd,
+    );
     const daysLeftStaking = Math.abs(Math.floor(dexReturnUsd / averageRewardsUsd));
 
     if (!txCostEth) {

@@ -1,16 +1,13 @@
-import * as H from 'history';
+import { Icon, PageLogo, Spinner } from '@components/ui';
+import { analytics, colors, constants, variables } from '@config';
+import Portis from '@portis/web3';
+import { validationUtils } from '@utils';
 import React, { useState } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { colors, variables, constants } from '../../config';
-import { isValidEthereumAddress } from '../../utils/validation';
-import { Icon, PageLogo, Spinner } from '../../components/ui';
-import LandingPageText from './components/LandingPageText';
-import Portis from '@portis/web3';
 import Web3 from 'web3';
-import { PORTIS_DAPP_KEY } from '../../config/constants';
-import { Event } from '../../config/analytics';
-import { RouteComponentProps, withRouter } from 'react-router';
+import LandingPageText from './components/LandingPageText';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -196,7 +193,7 @@ const PortisButtonText = styled.div`
     margin-left: 4px;
 `;
 
-const portis = new Portis(PORTIS_DAPP_KEY, 'mainnet');
+const portis = new Portis(constants.PORTIS_DAPP_KEY, 'mainnet');
 const web3 = new Web3(portis.provider);
 
 // props: RouteComponentProps<any>
@@ -215,7 +212,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         setLoadingEnsDomain(false); // just to double check
 
         // check for ETH address validity
-        if (isValidEthereumAddress(input)) {
+        if (validationUtils.isValidEthereumAddress(input)) {
             setInputAddress(input);
             setLinkAddress(input);
             setIsValidAddress(true);
@@ -263,7 +260,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
 
     const handleButtonOnClick = () => {
         // fire custom Google Analytics event
-        Event('ADDRESS INPUT', "Landing Page let's go button pressed", inputAddress);
+        analytics.Event('ADDRESS INPUT', "Landing Page let's go button pressed", inputAddress);
     };
 
     return (
