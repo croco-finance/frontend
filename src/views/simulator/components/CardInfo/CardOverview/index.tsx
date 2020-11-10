@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatValue, GrayBox, ToggleSwitch, MultipleTokenLogo } from '../../../../../components/ui';
-import { colors, variables } from '../../../../../config';
-import { math, loss } from '../../../../../utils';
+import { FiatValue, GrayBox, ToggleSwitch, MultipleTokenLogo } from '@components/ui';
+import { colors, variables } from '@config';
+import { mathUtils, lossUtils, getTokenSymbolArr } from '@utils';
 import CardRow from '../CardRow';
-import { getTokenSymbolArr } from '../../../../../utils';
 
 const GRID_GAP = 5;
 
@@ -170,23 +169,30 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
         startTokenBalances,
     } = pool;
 
-    const averageRewardsUsd = math.getDailyAverageFeeGains(start, end, feesUsd + yieldRewardUsd);
+    const averageRewardsUsd = mathUtils.getDailyAverageFeeGains(
+        start,
+        end,
+        feesUsd + yieldRewardUsd,
+    );
     const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageRewardsUsd));
 
     // ----- GET SIMULATION VALUES -----
     // Array of new prices, not coefficients
-    const newTokenPrices = math.multiplyArraysElementWise(endTokenPricesUsd, simulatedCoefficients);
+    const newTokenPrices = mathUtils.multiplyArraysElementWise(
+        endTokenPricesUsd,
+        simulatedCoefficients,
+    );
 
     let simulatedValues;
     if (exchange === 'UNI_V2' || exchange === 'UNI_V1') {
-        simulatedValues = loss.getUniswapSimulationStats(
+        simulatedValues = lossUtils.getUniswapSimulationStats(
             startTokenBalances,
             endTokenBalances,
             newTokenPrices,
             tokenBalanceDiffNoFees,
         );
     } else if (exchange === 'BALANCER') {
-        simulatedValues = loss.getBalancerSimulationStats(
+        simulatedValues = lossUtils.getBalancerSimulationStats(
             startTokenBalances,
             endTokenBalances,
             newTokenPrices,
@@ -210,7 +216,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
     const simulatedTotalHodlComparison =
         simulatedFeesUsd + yieldRewardUsd + impLossCompToInitialUsd - txCostUsd;
 
-    const averageFeeGainsSim = math.getDailyAverageFeeGains(
+    const averageFeeGainsSim = mathUtils.getDailyAverageFeeGains(
         start,
         end,
         simulatedFeesUsd + yieldRewardUsd,

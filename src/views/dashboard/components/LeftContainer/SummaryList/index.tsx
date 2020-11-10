@@ -1,9 +1,8 @@
+import { colors, variables } from '@config';
+import { mathUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { variables } from '../../../../../config';
-import colors from '../../../../../config/colors';
-import { getPoolsSummaryObject } from '../../../../../utils/math';
 import SummaryItem from '../SummaryItem';
 
 const Wrapper = styled.div`
@@ -37,7 +36,7 @@ const ItemsWrapper = styled.div``;
 const SummaryList = () => {
     const allPools = useSelector(state => state.allPools);
     const activePoolIds = useSelector(state => state.activePoolIds);
-    const poolsSummaryInfo: any = getPoolsSummaryObject(allPools, activePoolIds);
+    const poolsSummaryInfo: any = mathUtils.getPoolsSummaryObject(allPools, activePoolIds);
 
     if (activePoolIds.length <= 0) {
         return null;

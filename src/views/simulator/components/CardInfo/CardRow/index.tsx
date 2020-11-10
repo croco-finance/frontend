@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { colors } from '../../../../../config';
+import { colors } from '@config';
 
 const rightAlignedStyles = css`
     text-align: right;

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { colors, variables } from '../../../../../config';
+import { colors, variables } from '@config';
 import React, { PureComponent } from 'react';
 import {
     AreaChart,

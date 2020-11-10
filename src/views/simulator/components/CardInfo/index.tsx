@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import { Card } from '@components/ui';
+import { animations, colors, variables } from '@config';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Card } from '../../../../components/ui';
-import { animations, colors, variables } from '../../../../config';
 import CardOverview from './CardOverview';
-import ILGraph from './ILGraph';
 
 const Wrapper = styled.div`
     padding-bottom: 20px;

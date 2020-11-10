@@ -1,0 +1,11 @@
+/* tsconfig.paths.json */
+{
+    "compilerOptions": {
+      "paths": {
+        "@components/*": ["src/components/*"],
+        "@config": ["src/config"],
+        "@utils": ["src/utils"],
+        "@views/*": ["src/views/*"],
+        "@actionTypes": ["src/store/actions/actionTypes"]
+      }  
+}}
