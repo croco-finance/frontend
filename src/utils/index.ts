@@ -1,6 +1,6 @@
-import * as validation from './validation';
-import * as math from './math';
-import * as loss from './loss-computations';
+import * as validationUtils from './validation';
+import * as mathUtils from './math';
+import * as lossUtils from './loss-computations';
 
 const getTokenSymbolArr = (tokensArr: Array<any>) => {
     const tokenSymbolsArr = new Array(tokensArr.length);
@@ -11,4 +11,4 @@ const getTokenSymbolArr = (tokensArr: Array<any>) => {
     return tokenSymbolsArr;
 };
 
-export { validation, math, loss, getTokenSymbolArr };
+export { validationUtils, mathUtils, lossUtils, getTokenSymbolArr };

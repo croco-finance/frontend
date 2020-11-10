@@ -1,9 +1,8 @@
+import { InlineCircle } from '@components/ui';
+import { colors, variables } from '@config';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { TokenLogo, InlineCircle } from '../../../../../components/ui';
-import { variables } from '../../../../../config';
-import colors from '../../../../../config/colors';
 import PoolItem from '../PoolItem';
 
 const Wrapper = styled.div`

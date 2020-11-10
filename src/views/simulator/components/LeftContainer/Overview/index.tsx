@@ -1,9 +1,9 @@
+import { FiatValue, TokenLogo } from '@components/ui';
+import { colors, variables } from '@config';
+import { mathUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatValue, TokenLogo } from '../../../../../components/ui';
-import { colors, variables } from '../../../../../config';
-import { math } from '../../../../../utils';
 import OverviewRow from '../OverviewRow';
 
 const GRID_GAP = 5;
@@ -88,7 +88,10 @@ const Overview = ({ iconSize = 20 }: Props) => {
                                     <TokenSymbol>{token.symbol}</TokenSymbol>
                                 </TokenWrapper>
                             }
-                            secondColumn={math.getFormattedPercentageValue(tokenWeights[i], true)}
+                            secondColumn={mathUtils.getFormattedPercentageValue(
+                                tokenWeights[i],
+                                true,
+                            )}
                             thirdColumn={endTokenBalances[i].toFixed(4)}
                             fourthColumn={<FiatValue value={endTokenPricesUsd[i]} />}
                             color="dark"

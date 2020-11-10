@@ -1,7 +1,7 @@
+import { TokenLogo } from '@components/ui';
+import { variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
-import { TokenLogo } from '../../../../../components/ui';
-import { variables } from '../../../../../config';
 
 const Wrapper = styled.div``;
 const ItemWrapper = styled.div`

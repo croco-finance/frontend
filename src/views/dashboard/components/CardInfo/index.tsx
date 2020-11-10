@@ -1,12 +1,11 @@
+import { Card } from '@components/ui';
+import { analytics, animations, colors, variables } from '@config';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Card } from '../../../../components/ui';
-import { animations, colors, variables } from '../../../../config';
 import CardOverview from './CardOverview';
 import CardPoolsSummary from './CardPoolsSummary';
-import { Event } from '../../../../config/analytics';
 
 const Wrapper = styled.div`
     /* animation: ${animations.SHOW_UP} 1s; */
@@ -84,7 +83,7 @@ const CardInfo = () => {
                                 See how changes in assets' prices affect your funds
                                 <StyledLink
                                     onClick={e => {
-                                        Event(
+                                        analytics.Event(
                                             'SIMULATOR',
                                             'Went to simulator from pool card',
                                             userAddress,

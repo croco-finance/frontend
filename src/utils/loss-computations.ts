@@ -1,4 +1,4 @@
-import { math } from '.';
+import { mathUtils } from '.';
 
 const getNewBalancesBalancer = (
     initialTokenBalances: Array<number>,
@@ -17,7 +17,7 @@ const getNewBalancesBalancer = (
 
     // compute new token balances
     let newBalances = new Array(tokenCount);
-    const weightsSum = tokenWeights.reduce(math.sumArr);
+    const weightsSum = tokenWeights.reduce(mathUtils.sumArr);
 
     for (let i = 0; i < tokenCount; i++) {
         const firstEquationPart = Math.pow(
@@ -68,19 +68,19 @@ const getBalancerSimulationStats = (
     cumulatedTokenBalanceDiff: Array<number>,
     tokenWeights: Array<number>,
 ) => {
-    const weightsSum = tokenWeights.reduce(math.sumArr);
+    const weightsSum = tokenWeights.reduce(mathUtils.sumArr);
 
     // how much tokens I should have at the beginning (if the current balance didn't included fees)
-    let hodlTokenBalances = math.subtractArraysElementWise(
+    let hodlTokenBalances = mathUtils.subtractArraysElementWise(
         currentTokenBalances,
         cumulatedTokenBalanceDiff,
     );
 
     // compute fees as the difference of what "I should've had" and what I actually had
-    let feeBalances = math.subtractArraysElementWise(hodlTokenBalances, initialTokenBalances);
+    let feeBalances = mathUtils.subtractArraysElementWise(hodlTokenBalances, initialTokenBalances);
 
     // compute simulated token difference if we neglect fees
-    let currentTokenBalancesNoFees = math.subtractArraysElementWise(
+    let currentTokenBalancesNoFees = mathUtils.subtractArraysElementWise(
         currentTokenBalances,
         feeBalances,
     );
@@ -120,16 +120,16 @@ const getUniswapSimulationStats = (
     */
 
     // how much tokens I should have at the beginning (if the current balance didn't included fees)
-    let hodlTokenBalances = math.subtractArraysElementWise(
+    let hodlTokenBalances = mathUtils.subtractArraysElementWise(
         currentTokenBalances,
         cumulatedTokenBalanceDiff,
     );
 
     // compute fees as the difference of what "I should've had" and what I actually had
-    let feeBalances = math.subtractArraysElementWise(hodlTokenBalances, initialTokenBalances);
+    let feeBalances = mathUtils.subtractArraysElementWise(hodlTokenBalances, initialTokenBalances);
 
     // compute simulated token difference if we neglect fees
-    let currentTokenBalancesNoFees = math.subtractArraysElementWise(
+    let currentTokenBalancesNoFees = mathUtils.subtractArraysElementWise(
         currentTokenBalances,
         feeBalances,
     );
@@ -157,12 +157,12 @@ const getStatsFromNewBalances = (
     const tokenCount = newTokenPrices.length;
 
     // compute new difference in token balances compared to the first user's input
-    const simulatedTokenBalanceDiff = math.subtractArraysElementWise(
+    const simulatedTokenBalanceDiff = mathUtils.subtractArraysElementWise(
         newBalances,
         currentTokenBalances,
     );
 
-    const newTotalTokenDiff = math.sumArraysElementWise(
+    const newTotalTokenDiff = mathUtils.sumArraysElementWise(
         cumulatedTokenBalanceDiff,
         simulatedTokenBalanceDiff,
     );
@@ -196,13 +196,13 @@ const getGraphData = () => {
     const steps = 10;
     const scaleCoeff = 4;
 
-    const priceChangeCoeffArr = math.arrangeArray(1, 2, steps);
+    const priceChangeCoeffArr = mathUtils.arrangeArray(1, 2, steps);
 
     // compute max and min relative price difference
     const minRelDiff = priceChangeCoeffArr[1] / priceChangeCoeffArr[priceChangeCoeffArr.length - 1]; // second / last:
     const maxRelDiff = priceChangeCoeffArr[priceChangeCoeffArr.length - 1] / priceChangeCoeffArr[1]; // last / second:
 
-    const relDiffArr = math.arrangeArray(0.1, 4, 0.1);
+    const relDiffArr = mathUtils.arrangeArray(0.1, 4, 0.1);
     const impLoss = new Array(relDiffArr.length);
     let graphData = new Array(relDiffArr.length);
     relDiffArr.forEach((coeff, i) => {
@@ -242,10 +242,13 @@ const getPoolStats = (poolSnapshots: Array<any>) => {
         }
 
         // get how much the user gained on fees
-        const fees = math.subtractArraysElementWise(endTokenBalances, newBalancesNoFees);
+        const fees = mathUtils.subtractArraysElementWise(endTokenBalances, newBalancesNoFees);
 
-        const hodlValue = math.multiplyArraysElementWise(startTokenBalances, endTokenPricesUsd);
-        const poolValue = math.multiplyArraysElementWise(endTokenBalances, endTokenPricesUsd);
+        const hodlValue = mathUtils.multiplyArraysElementWise(
+            startTokenBalances,
+            endTokenPricesUsd,
+        );
+        const poolValue = mathUtils.multiplyArraysElementWise(endTokenBalances, endTokenPricesUsd);
 
         console.log('startTokenBalances', startTokenBalances);
         console.log('endTokenBalances', endTokenBalances);

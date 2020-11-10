@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { FiatValue, GrayBox, InlineCircle } from '@components/ui';
+import { colors, variables } from '@config';
+import { mathUtils } from '@utils';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatValue, GrayBox, ToggleSwitch, InlineCircle } from '../../../../../components/ui';
-import { colors, variables } from '../../../../../config';
-import { math } from '../../../../../utils';
 import CardRow from '../CardRow';
 
 const GRID_GAP = 5;
@@ -102,7 +102,7 @@ const CardPoolsSummary = () => {
         );
     }
 
-    let activePoolsSummaryObject: any = math.getPoolsSummaryObject(allPools, activePoolIds);
+    let activePoolsSummaryObject: any = mathUtils.getPoolsSummaryObject(allPools, activePoolIds);
 
     return (
         <Wrapper>
