@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { DashboardContainer, NavBar } from '@components/layout';
+import { Input, LoadingBox } from '@components/ui';
+import { animations, colors, variables } from '@config';
+import { validationUtils } from '@utils';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { DashboardContainer, NavBar } from '../../components/layout';
-import { Input, LoadingBox } from '../../components/ui';
-import { animations, colors, variables } from '../../config';
 import { FetchPoolsHook } from '../../hooks';
 import { FetchPoolStatsHook } from '../../hooks/stats';
 import { FetchPoolSnapsHook } from '../../hooks/snaps';
-import { validation } from '../../utils';
 import CardInfo from './components/CardInfo';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
-import { RouteComponentProps, withRouter } from 'react-router';
 
 const ExceptionWrapper = styled.div`
     display: flex;
@@ -160,7 +160,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
         // show in the input whatever user typed in, even if it's not a valid ETH address
         setInputAddress(inputAddr);
 
-        if (validation.isValidEthereumAddress(inputAddr)) {
+        if (validationUtils.isValidEthereumAddress(inputAddr)) {
             setInvalidAddressInput(false);
             fetchData(inputAddr);
             // change the url so that the user fetches data for the same address when refreshing the page

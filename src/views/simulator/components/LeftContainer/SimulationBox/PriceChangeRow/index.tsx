@@ -1,7 +1,7 @@
+import { Input, MaterialSlider } from '@components/ui';
+import { colors, variables } from '@config';
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Input, MaterialSlider } from '../../../../../../components/ui';
-import { colors, variables } from '../../../../../../config';
 
 const rightAlignedStyles = css`
     text-align: right;

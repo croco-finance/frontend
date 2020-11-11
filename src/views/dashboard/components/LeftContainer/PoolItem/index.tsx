@@ -1,10 +1,9 @@
+import * as actionTypes from '@actionTypes';
+import { FiatValue, TokenLogo } from '@components/ui';
+import { colors, variables } from '@config';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatValue, TokenLogo } from '../../../../../components/ui';
-import { variables } from '../../../../../config';
-import colors from '../../../../../config/colors';
-import * as actionTypes from '../../../../../store/actions/actionTypes';
 
 const Wrapper = styled.div<{ isSelected: boolean }>`
     position: relative;

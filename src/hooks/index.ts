@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import exampleDataJson from '../config/example-data-json.json';
 import { useDispatch, useSelector } from 'react-redux';
-import * as actionTypes from '../store/actions/actionTypes';
+import * as actionTypes from '@actionTypes';
 import axios from 'axios';
 import { setupCache } from 'axios-cache-adapter';
 import { constants } from '../config';
-import { validation } from '../utils';
-import { Event } from '../config/analytics';
+import { validationUtils } from '../utils';
+import { analytics } from '@config';
 
 // Create `axios-cache-adapter` instance
 const cache = setupCache({
@@ -46,7 +46,7 @@ const toNumberArrayAttributes = [
 
 // if the "end" timestamp of pool is older than this, we will consider an inactive pool
 // (user withdrew all funds from that pool)
-const INACTIVE_POOL_THRESHOLD_SECONDS = 14400; // 14400 sec = 4 hours
+const INACTIVE_POOL_THRESHOLD_SECONDS = 4 * 3600; //  = 4 hours
 
 const FetchPoolsHook = initialAddress => {
     const [address, setAddress] = useState(initialAddress);
@@ -149,11 +149,11 @@ const FetchPoolsHook = initialAddress => {
                 localStorage.setItem('address', queryAddress);
 
                 // fire Google Analytics event
-                Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
+                analytics.Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
             } catch (e) {
                 console.log('ERROR while fetching data about pools...');
                 setIsFetchError(true);
-                Event('ADDRESS INPUT', 'Data fetching hook fail', queryAddress);
+                analytics.Event('ADDRESS INPUT', 'Data fetching hook fail', queryAddress);
             }
 
             setIsLoading(false);
@@ -166,7 +166,7 @@ const FetchPoolsHook = initialAddress => {
         */
         const allPoolsGlobalCount = Object.keys(globalAllPools).length;
         if (
-            validation.isValidEthereumAddress(address.trim()) &&
+            validationUtils.isValidEthereumAddress(address.trim()) &&
             (address !== globalAddress || allPoolsGlobalCount === 0)
         ) {
             fetchData(address);

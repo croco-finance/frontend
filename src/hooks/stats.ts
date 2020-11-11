@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import exampleDataJson from '../config/example-data-stats.json';
 import { useDispatch, useSelector } from 'react-redux';
-import * as actionTypes from '../store/actions/actionTypes';
+import * as actionTypes from '@actionTypes';
 import axios from 'axios';
-import { constants } from '../config';
-import { validation } from '../utils';
-import { Event } from '../config/analytics';
+import { constants, analytics } from '@config';
+import { validationUtils } from '@utils';
 
 const toNumberAttributes = [
     'dexReturnUsd',
@@ -146,11 +145,11 @@ const FetchPoolStatsHook = initialAddress => {
                 localStorage.setItem('address', queryAddress);
 
                 // fire Google Analytics event
-                Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
+                analytics.Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
             } catch (e) {
                 console.log('ERROR while fetching data about pools...');
                 setIsFetchError(true);
-                Event('ADDRESS INPUT', 'Data fetching hook fail', queryAddress);
+                analytics.Event('ADDRESS INPUT', 'Data fetching hook fail', queryAddress);
             }
 
             setIsLoading(false);
@@ -163,7 +162,7 @@ const FetchPoolStatsHook = initialAddress => {
         */
         const allPoolsGlobalCount = Object.keys(globalAllPools).length;
         if (
-            validation.isValidEthereumAddress(address.trim()) &&
+            validationUtils.isValidEthereumAddress(address.trim()) &&
             (address !== globalAddress || allPoolsGlobalCount === 0)
         ) {
             fetchData(address);
