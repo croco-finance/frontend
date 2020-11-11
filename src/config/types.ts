@@ -33,3 +33,45 @@ export interface PoolItemInterface {
     feesEth: number;
     endBalanceEth: number;
 }
+
+export interface IntervalStats {
+    timestampStart: number;
+    timestampEnd: number;
+    userTokenBalancesStart: any;
+    userTokenBalancesEnd: any;
+    feesTokenAmounts: any;
+    tokenDiffNoFees: any;
+    userPoolShareStart: any;
+    userPoolShareEnd: any;
+    tokenPricesStart: any;
+    tokenPricesEnd: any;
+    ethPriceStart: any;
+    ethPriceEnd: any;
+    txCostEthStart: any;
+    txCostEthEnd: any;
+    yieldTokenAmountStart: any;
+    yieldTokenAmountEnd: any;
+    yieldTokenPriceStart: any;
+    yieldTokenPriceEnd: any;
+}
+
+export interface CumulativeStats {
+    poolValueUsd: any;
+    tokenBalances: number;
+    feesTokenAmounts: any;
+    feesUsd: number;
+    yieldTokenAmount: number | null;
+    yieldUsd: number | null;
+    tokenPricesEnd: any;
+    yieldTokenPriceEnd: number;
+    txCostEth: number;
+    ethPriceEnd: number;
+    totalUsd: number;
+}
+
+export interface Pool {
+    exchange: string;
+    userAddr: string;
+    poolId: string;
+    isActive: boolean;
+}
