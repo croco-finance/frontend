@@ -71,6 +71,7 @@ export interface CumulativeStats {
     tokenPricesEnd: any;
     yieldTokenPriceEnd: number | null;
     txCostEth: number;
+    txCostUsd: number;
     ethPriceEnd: number;
     rewardsMinusExpensesUsd: number;
     timestampEnd: number;

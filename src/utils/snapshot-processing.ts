@@ -192,6 +192,7 @@ const getCumulativeStats = (
 
     let cumulativeStats: types.CumulativeStats = {
         txCostEth: 0,
+        txCostUsd: 0,
         // tokens: lastSnapshot.tokens;
         tokenBalances: lastInterval.userTokenBalancesEnd,
         feesTokenAmounts: new Array(pooledTokensCount).fill(0),
