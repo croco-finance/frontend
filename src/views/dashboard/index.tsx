@@ -230,7 +230,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                     ) : null}
                 </AddressWrapper>
 
-                {/* {exceptionContent
+                {exceptionContent
                     ? exceptionContent
                     : !noPoolsSavedInRedux && (
                           <>
@@ -241,7 +241,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                               <Headline>Your liquidity pools</Headline>
                               <PoolList />
                           </>
-                      )} */}
+                      )}
             </LeftWrapper>
             <RightWrapper>
                 {/* {rightWrapperContent}

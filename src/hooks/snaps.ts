@@ -4,18 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actionTypes from '../store/actions/actionTypes';
 import axios from 'axios';
 import { constants, types } from '@config';
-import { validationUtils, lossUtils, statsComputations } from '@utils';
+import { validationUtils, lossUtils, statsComputations, parseSnapshotToNumberValues } from '@utils';
 import { Event } from '../config/analytics';
-
-const toNumberAttributes = [
-    'ethPrice',
-    'liquidityTokenBalance',
-    'liquidityTokenTotalSupply',
-    'txCostEth',
-];
-
-const toNumberReserveTokenAttributes = ['price', 'reserve', 'weight'];
-const toNumberYieldTokenAttributes = ['price', 'amount'];
 
 // if the "end" timestamp of pool is older than this, we will consider an inactive pool
 // (user withdrew all funds from that pool)
@@ -29,6 +19,18 @@ const compare = (a, b) => {
         return 1;
     }
     return 0;
+};
+
+const getTokensCustomObj = (tokens: Array<types.PooledTokenInfo>) => {
+    const tokensCount = tokens.length;
+    let tokensCustomObj = Array(tokensCount);
+
+    tokens.forEach((token, i) => {
+        tokensCustomObj[i] = { ...token.token };
+        tokensCustomObj[i]['weight'] = token.weight;
+    });
+
+    return tokensCustomObj;
 };
 
 const FetchPoolSnapsHook = initialAddress => {
@@ -98,7 +100,7 @@ const FetchPoolSnapsHook = initialAddress => {
             const currentTimestampSeconds = Date.now() / 1000;
 
             fetchedData.forEach((snapshot: any) => {
-                let snapshotNumbers = { ...snapshot };
+                snapshot = parseSnapshotToNumberValues(snapshot);
 
                 const poolId: string = snapshot['poolId'];
                 const exchange: string = snapshot['exchange'];
@@ -112,6 +114,8 @@ const FetchPoolSnapsHook = initialAddress => {
                         exchange: exchange,
                         poolId: poolId,
                         userAddr: snapshot['userAddr'],
+                        yieldReward: snapshot['yieldReward'],
+                        tokens: getTokensCustomObj(snapshot['tokens']),
                     };
                 }
 
@@ -121,27 +125,8 @@ const FetchPoolSnapsHook = initialAddress => {
 
                 exToPoolMap[exchange].push(poolId);
 
-                // convert strings to numbers
-                toNumberAttributes.forEach(attribute => {
-                    snapshotNumbers[attribute] = parseFloat(snapshotNumbers[attribute]);
-                });
-
-                snapshotNumbers['tokens']?.forEach(token => {
-                    toNumberReserveTokenAttributes.forEach(attribute => {
-                        token[attribute] = parseFloat(token[attribute]);
-                    });
-                });
-
-                toNumberYieldTokenAttributes.forEach(attribute => {
-                    if (snapshotNumbers['yieldReward']) {
-                        snapshotNumbers['yieldReward'][attribute] = parseFloat(
-                            snapshotNumbers['yieldReward'][attribute],
-                        );
-                    }
-                });
-
                 // push numbers snapshot to custom object
-                snapshotsGrouped[poolId]['snapshots'].push(snapshotNumbers);
+                snapshotsGrouped[poolId]['snapshots'].push(snapshot);
             });
 
             for (const [poolId, snapshotsGroup] of Object.entries(snapshotsGrouped)) {

@@ -74,6 +74,7 @@ export interface CumulativeStats {
     ethPriceEnd: number;
     rewardsMinusExpensesUsd: number;
     timestampEnd: number;
+    // rewardsSumUsd: number;
 }
 
 export interface Pool {
@@ -102,8 +103,8 @@ export interface PoolItem {
     poolId: string;
     userAddr: string;
     isActive: boolean;
-    tokens: Array<{ [key: string]: {} }>;
-    tokenWeights: Array<number>;
+    tokens: Array<TokenItemGeneric>;
+    yieldToken: Token | null;
     hasYieldReward: boolean;
     timestampEnd: number;
     snapshots: Array<PoolSnap>;
@@ -130,3 +131,9 @@ export interface YieldTokenInfo {
     amount: number;
     token: Token;
 }
+
+export interface TokenItemGeneric extends Token {
+    weight: number;
+}
+
+export type AllPoolsGlobal = { [key: string]: PoolItem };

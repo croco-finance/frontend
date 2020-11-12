@@ -1,6 +1,6 @@
 import * as actionTypes from '@actionTypes';
 import { FiatValue, TokenLogo } from '@components/ui';
-import { colors, variables } from '@config';
+import { colors, variables, types } from '@config';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -102,12 +102,12 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const PoolItem = ({ poolId }: Props) => {
     const dispatch = useDispatch();
-    const allPools = useSelector(state => state.allPools);
+    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
-    const { tokens, tokenWeights, feesUsd, endBalanceUsd, exchange, yieldRewardUsd } = allPools[
-        poolId
-    ];
+    const { tokens, exchange } = allPools[poolId];
+
+    const { feesUsd, poolValueUsd, yieldUsd } = allPools[poolId].cumulativeStats;
 
     let isSelected = selectedPoolId === poolId;
 
@@ -127,17 +127,20 @@ const PoolItem = ({ poolId }: Props) => {
                             <TokenLogo symbol={token.symbol} size={18} />
                             <TokenSymbol>{token.symbol}</TokenSymbol>
                             <Circle>&bull;</Circle>
-                            <TokenWeight>{tokenWeights[i].toFixed(2)}%</TokenWeight>
+                            <TokenWeight>{token.weight.toFixed(2)}%</TokenWeight>
                         </TokenItem>
                     );
                 })}
             </PoolWrapper>
 
             <Value>
-                <FiatValue value={endBalanceUsd}></FiatValue>
+                <FiatValue value={poolValueUsd}></FiatValue>
             </Value>
             <Gains>
-                <FiatValue value={feesUsd + yieldRewardUsd} usePlusSymbol></FiatValue>
+                <FiatValue
+                    value={yieldUsd ? feesUsd + yieldUsd : feesUsd}
+                    usePlusSymbol
+                ></FiatValue>
             </Gains>
         </Wrapper>
     );
