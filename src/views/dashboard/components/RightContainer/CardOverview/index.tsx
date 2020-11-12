@@ -90,18 +90,12 @@ const HeaderWrapper = styled(GridWrapper)`
     margin-bottom: -5px;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
+    /* color: ${colors.FONT_LIGHT}; */
+    color: red;
 `;
 
 const HodlHeaderWrapper = styled(HeaderWrapper)`
     grid-template-columns: 280px 2px minmax(100px, auto);
-`;
-
-const TotalLossRowWrapper = styled(GridWrapper)`
-    /* grid-template-rows: repeat(1, 50px); */
-    border-top: 1px solid ${colors.STROKE_GREY};
-    margin-top: 3px;
-    padding-top: 6px;
 `;
 
 const DaysLeftWrapper = styled.div`
@@ -171,6 +165,21 @@ const CollapseIconWrapper = styled.div`
         background-color: #dcdce6; // used only here
     }
 `;
+
+const RewardsExpensesWrapper = styled(GrayBox)`
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+`;
+
+const TotalLossRowWrapper = styled(GrayBox)`
+    background-color: ${colors.BACKGROUND_DARK};
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+`;
+
+const TotalLossRow = styled(GridWrapper)``;
 
 const CardOverview = () => {
     const [showEth, setShowEth] = useState(false);
@@ -289,36 +298,40 @@ const CardOverview = () => {
                 </PoolValueGridWrapper>
             </GrayBox>
 
-            <HodlHeaderWrapper>
+            <HeaderWrapper>
                 <CardRow
                     showThreeCols
                     firstColumn="Rewards & Expenses"
-                    secondColumn=""
+                    secondColumn="Crypto"
                     thirdColumn={endTimeText}
                     color="light"
                 />
-            </HodlHeaderWrapper>
-            <GrayBox padding={15}>
+            </HeaderWrapper>
+            <RewardsExpensesWrapper padding={15}>
                 <GridWrapper>
                     {feesRow}
                     {yieldRow}
                     {txCostRow}
                 </GridWrapper>
-                <TotalLossRowWrapper>
+            </RewardsExpensesWrapper>
+            <TotalLossRowWrapper>
+                <TotalLossRow>
                     <CardRow
                         firstColumn="Total"
                         secondColumn={
                             <FiatValue
-                                value={netReturnUsd - hodlReturnUsd}
+                                value={rewardsMinusExpensesUsd}
                                 usePlusSymbol
                                 useBadgeStyle
+                                colorized
                             />
                         }
                         color="dark"
                     />
-                </TotalLossRowWrapper>
-            </GrayBox>
-            <HeaderWrapper>
+                </TotalLossRow>
+            </TotalLossRowWrapper>
+
+            {/* <HeaderWrapper>
                 <CardRow
                     firstColumn="Comparison to other strategies"
                     secondColumn={endTimeText}
@@ -341,63 +354,8 @@ const CardOverview = () => {
                         color="dark"
                     />
                 </StrategyHeaderGridWrapper>
-            </StrategyItem>
+            </StrategyItem> */}
 
-            <GrayBox padding={15}>
-                <GridWrapper>
-                    <CardRow
-                        firstColumn="Impermanent loss"
-                        secondColumn={
-                            <ImpLossValueWrapper>
-                                {/* {impLossRel && (
-                                    <SubValue>
-                                        {getFormattedPercentageValue(Math.abs(impLossRel))}
-                                    </SubValue>
-                                )} */}
-
-                                <FiatValue value={-impLossUsd} usePlusSymbol />
-                            </ImpLossValueWrapper>
-                        }
-                        color="dark"
-                    />
-                </GridWrapper>
-                <TotalLossRowWrapper>
-                    <CardRow
-                        firstColumn="Total"
-                        secondColumn={
-                            <FiatValue
-                                value={netReturnUsd - hodlReturnUsd}
-                                usePlusSymbol
-                                useBadgeStyle
-                            />
-                        }
-                        color="dark"
-                    />
-                </TotalLossRowWrapper>
-                <DaysLeftWrapper>
-                    <DaysLeftGridWrapper>
-                        <CardRow
-                            firstColumn="Average daily rewards"
-                            secondColumn={
-                                <FiatValue value={averageRewardsUsd} usePlusSymbol></FiatValue>
-                            }
-                            color="dark"
-                        />
-                        {dexReturnUsd <= 0 && dexReturnUsd && isActive && (
-                            <CardRow
-                                firstColumn="Days left to compensate loss*"
-                                secondColumn={daysLeftStaking}
-                                color="dark"
-                            />
-                        )}
-                    </DaysLeftGridWrapper>
-                    {dexReturnUsd <= 0 && dexReturnUsd && isActive && (
-                        <DaysLeftNote>
-                            <b>*</b> According to your average rewards (fees + yield).
-                        </DaysLeftNote>
-                    )}
-                </DaysLeftWrapper>
-            </GrayBox>
             {/* <GraphWrapper>
                 <Graph />
             </GraphWrapper> */}

@@ -254,7 +254,7 @@ const getCumulativeStats = (
     if (cumulativeStats['yieldUsd']) {
         // compute overall rewards
         cumulativeStats['rewardsMinusExpensesUsd'] =
-            cumulativeStats['feesUsd'] - cumulativeStats['txCostUsd'] - cumulativeStats['yieldUsd'];
+            cumulativeStats['feesUsd'] + cumulativeStats['yieldUsd'] - cumulativeStats['txCostUsd'];
     } else {
         // omit yield reward if not present
         cumulativeStats['rewardsMinusExpensesUsd'] =
