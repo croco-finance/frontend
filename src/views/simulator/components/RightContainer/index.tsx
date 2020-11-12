@@ -51,7 +51,7 @@ const GraphWrapper = styled.div`
 interface Props {
     simulatedCoefficients: Array<number>;
 }
-const CardInfo = ({ simulatedCoefficients }: Props) => {
+const RightContainer = ({ simulatedCoefficients }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
@@ -88,4 +88,4 @@ const CardInfo = ({ simulatedCoefficients }: Props) => {
         </Card>
     );
 };
-export default CardInfo;
+export default RightContainer;

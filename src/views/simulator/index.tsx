@@ -9,7 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 import { PoolItemInterface } from '../../config/types';
 import { FetchPoolsHook } from '../../hooks';
-import CardInfo from './components/CardInfo';
+import RightContainer from './components/RightContainer';
 import Overview from './components/LeftContainer/Overview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
 
@@ -300,7 +300,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
             </LeftWrapper>
             <RightWrapper>
                 <CardInfoWrapper>
-                    <CardInfo simulatedCoefficients={simulatedPriceCoefficients} />
+                    <RightContainer simulatedCoefficients={simulatedPriceCoefficients} />
                 </CardInfoWrapper>
             </RightWrapper>
         </SimulatorContainer>

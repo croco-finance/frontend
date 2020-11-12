@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { FetchPoolsHook } from '../../hooks';
 import { FetchPoolStatsHook } from '../../hooks/stats';
 import { FetchPoolSnapsHook } from '../../hooks/snaps';
-import CardInfo from './components/CardInfo';
+import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
 
@@ -244,12 +244,12 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                       )}
             </LeftWrapper>
             <RightWrapper>
-                {/* {rightWrapperContent}
+                {rightWrapperContent}
                 {!exceptionContent && !noPoolsSavedInRedux && (
                     <CardInfoWrapper>
-                        <CardInfo />
+                        <RightContainer />
                     </CardInfoWrapper>
-                )} */}
+                )}
             </RightWrapper>
         </DashboardContainer>
     );

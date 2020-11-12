@@ -61,7 +61,7 @@ const StyledLink = styled(Link)`
     }
 `;
 
-const CardInfo = () => {
+const RightContainer = () => {
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const userAddress = useSelector(state => state.userAddress);
     const activePoolIds = useSelector(state => state.activePoolIds);
@@ -103,4 +103,4 @@ const CardInfo = () => {
         </Card>
     );
 };
-export default CardInfo;
+export default RightContainer;
