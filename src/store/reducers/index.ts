@@ -1,5 +1,5 @@
-import * as actionTypes from '../actions/actionTypes';
-import * as types from '../../config/types';
+import * as actionTypes from '@actionTypes';
+import { types } from '@config';
 
 interface InitialStateInterface {
     allPools: { [key: string]: types.PoolItemInterface } | {};

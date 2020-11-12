@@ -1,6 +1,7 @@
 import * as validationUtils from './validation';
 import * as mathUtils from './math';
 import * as lossUtils from './loss-computations';
+import * as statsComputations from './snapshot-processing';
 
 const getTokenSymbolArr = (tokensArr: Array<any>) => {
     const tokenSymbolsArr = new Array(tokensArr.length);
@@ -11,4 +12,4 @@ const getTokenSymbolArr = (tokensArr: Array<any>) => {
     return tokenSymbolsArr;
 };
 
-export { validationUtils, mathUtils, lossUtils, getTokenSymbolArr };
+export { validationUtils, mathUtils, lossUtils, getTokenSymbolArr, statsComputations };

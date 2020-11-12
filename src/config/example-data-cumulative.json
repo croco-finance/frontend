@@ -1,0 +1,184 @@
+[
+    {
+        "exchange": "UNI_V2",
+        "hodlReturnUsd": "7229.07354449134525515277948",
+        "netReturnUsd": "7575.957052540813737775149744",
+        "dexReturnUsd": "346.8835080494684826223702608",
+        "feesUsd": "93.00440020663254109785993668",
+        "impLossRel": "-0.0011003360140903812007659970",
+        "impLossUsd": "25.57929588722839592190999",
+        "impLossEth": "0.05521755694059470014144874898",
+        "txCostEth": null,
+        "txCostUsd": null,
+        "endBalanceUsd": "23314.22931655281545950951716",
+        "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+        "poolId": "0xbb2b8038a1640196fbe3e38816f3e67cba72d940",
+        "tokens": [
+            {
+                "symbol": "WBTC",
+                "name": "Wrapped BTC",
+                "contract_address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+                "platform": "ethereum"
+            },
+            {
+                "symbol": "WETH",
+                "name": "Wrapped Ether",
+                "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                "platform": "ethereum"
+            }
+        ],
+        "tokenWeights": ["0.5", "0.5"],
+        "startTokenBalances": ["0.7691998399999955080960438832", "23.91308018401669842864379327"],
+        "endTokenBalances": ["0.7368726696979297001617136861", "25.16252005430884112551421262"],
+        "endTokenPricesUsd": ["15819.71368683693125230636148", "463.2729405924601828977802836"],
+        "start": 1600939469,
+        "end": 1605168798,
+        "tokenBalanceDiffNoFees": [
+            "-0.0352666798926855950278705188",
+            "1.14906232602235095744350804"
+        ],
+        "hodlReturnEth": "2.35628956862672418351466378",
+        "netReturnEth": "2.699995100752606623133573222",
+        "feesEth": "0.2007668931457845602752644557",
+        "endBalanceEth": "50.32799927286531090093606605",
+        "ethPriceUsdEnd": "463.245701267581354855947642645682",
+        "yieldReward": "91.788952023038092783",
+        "yieldRewardUsd": "279.4584037300643374464203141",
+        "yieldRewardEth": "0.1981561959206925794850937222"
+    },
+    {
+        "exchange": "UNI_V2",
+        "hodlReturnUsd": "-2419.72878872277515797440140",
+        "netReturnUsd": "-2847.05165242018778025770729",
+        "dexReturnUsd": "-427.3228636974126222833058888",
+        "feesUsd": "923.4793026470491476790883112",
+        "impLossRel": "-0.0980396400818987390751392668",
+        "impLossUsd": "1350.80216634446176996239420",
+        "impLossEth": "2.915951864525144118624059169",
+        "txCostEth": null,
+        "txCostUsd": null,
+        "endBalanceUsd": "13350.79958979232799894623223",
+        "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+        "poolId": "0xd3d2e2692501a5c9ca623199d38826e513033a17",
+        "tokens": [
+            {
+                "symbol": "UNI",
+                "name": "Uniswap",
+                "contract_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+                "platform": "ethereum"
+            },
+            {
+                "symbol": "WETH",
+                "name": "Wrapped Ether",
+                "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                "platform": "ethereum"
+            }
+        ],
+        "tokenWeights": ["0.5", "0.5"],
+        "startTokenBalances": ["1285.641716480432042468050320", "21.29439006919107114698937709"],
+        "endTokenBalances": ["2192.554321778842527544623541", "14.41100834144350736100708372"],
+        "endTokenPricesUsd": ["3.044576696955148409986922728", "463.2153168421182996748088613"],
+        "start": 1600437125,
+        "end": 1605168798,
+        "tokenBalanceDiffNoFees": ["755.252884659641254737446025", "-7.88019602670327666511218515"],
+        "hodlReturnEth": "-12.84616667132226308384275968",
+        "netReturnEth": "-13.76862070063786621628652684",
+        "feesEth": "1.993497835209540986180292017",
+        "endBalanceEth": "28.82012623810749529877230987",
+        "ethPriceUsdEnd": "463.245701267581354855947642645682",
+        "yieldReward": "0",
+        "yieldRewardUsd": "0",
+        "yieldRewardEth": "0"
+    },
+    {
+        "exchange": "BALANCER",
+        "hodlReturnUsd": "-3484.293798136676717419412715",
+        "netReturnUsd": "-3382.181349365006439842264414",
+        "dexReturnUsd": null,
+        "feesUsd": "2.615443335787221400015968691",
+        "impLossRel": null,
+        "impLossUsd": null,
+        "impLossEth": null,
+        "txCostEth": "0.107089120000000000",
+        "txCostUsd": "49.54564124765775203875580244",
+        "endBalanceUsd": "8662.281340638551511071419671",
+        "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+        "poolId": "0x5e37910cfb8de1b14ec4e4bac0bec27c35dc07d5",
+        "tokens": [
+            {
+                "symbol": "sETH",
+                "name": "Synth sETH",
+                "contract_address": "0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb",
+                "platform": "ethereum"
+            },
+            {
+                "symbol": "WETH",
+                "name": "Wrapped Ether",
+                "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                "platform": "ethereum"
+            }
+        ],
+        "tokenWeights": ["0.5", "0.5"],
+        "startTokenBalances": ["29.28197351083348166363299084", "30.08187844475388608969275846"],
+        "endTokenBalances": ["12.85839120921672023460331085", "12.96837798373544008305879265"],
+        "endTokenPricesUsd": ["336.8337920232799363653349080", "333.9770537033440540040736435"],
+        "start": 1598080770,
+        "end": 1600938817,
+        "tokenBalanceDiffNoFees": ["0.33895919226990052049781494", "-0.34406326645378182369617782"],
+        "hodlReturnEth": "-0.68395809669070439451412367",
+        "netReturnEth": "-0.3552406960857253251457562774",
+        "feesEth": "0.007676290869388254276247114284",
+        "endBalanceEth": "59.52413430413525366514148054",
+        "ethPriceUsdEnd": "333.9770537033440540040736434830997",
+        "yieldReward": "12.5627460338812028565",
+        "yieldRewardUsd": "150.4608077279350061912256866",
+        "yieldRewardEth": "0.3252095459524500679703522426"
+    },
+    {
+        "exchange": "BALANCER",
+        "hodlReturnUsd": "-3346.007490155406597008629983",
+        "netReturnUsd": "-3224.519022075355154673715247",
+        "dexReturnUsd": null,
+        "feesUsd": "94.97631024249205313006240200",
+        "impLossRel": null,
+        "impLossUsd": null,
+        "impLossEth": null,
+        "txCostEth": "0.172137224000000000",
+        "txCostUsd": "79.64066887160620927720541775",
+        "endBalanceUsd": "6690.027431291836951902287804",
+        "userAddr": "0xc143cb83b3fb5f367d2272b5814ba7bab2c9d70d",
+        "poolId": "0xb38b0c480a451db976837a1a464af95bb0f3f5e2",
+        "tokens": [
+            {
+                "symbol": "KEEP",
+                "name": "KEEP Token",
+                "contract_address": "0x85eee30c52b0b379b046fb0f85f4f3dc3009afec",
+                "platform": "ethereum"
+            },
+            {
+                "symbol": "WETH",
+                "name": "Wrapped Ether",
+                "contract_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                "platform": "ethereum"
+            }
+        ],
+        "tokenWeights": ["0.8", "0.2"],
+        "startTokenBalances": ["9999.999999999999657339645302", "8.246914375989021157696597740"],
+        "endTokenBalances": ["5448.787712357010860153952959", "3.921554557560140651200915389"],
+        "endTokenPricesUsd": ["0.9822408630264505533619871811", "341.1926231343392049289906869"],
+        "start": 1597857167,
+        "end": 1600781802,
+        "tokenBalanceDiffNoFees": [
+            "308.868803160369985156077874",
+            "-0.943986465190614934445409248"
+        ],
+        "hodlReturnEth": "-4.63198446496218359567157378",
+        "netReturnEth": "-4.167870284499131093816845635",
+        "feesEth": "0.2505201393855536535251603530",
+        "endBalanceEth": "36.23516286463006825020422960",
+        "ethPriceUsdEnd": "341.1926231343392049289906869144923",
+        "yieldReward": "11.6484721356012829565",
+        "yieldRewardUsd": "139.5107822439552615440230355",
+        "yieldRewardEth": "0.3015419020683899248850402538"
+    }
+]

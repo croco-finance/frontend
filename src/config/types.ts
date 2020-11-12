@@ -40,6 +40,7 @@ export interface IntervalStats {
     userTokenBalancesStart: any;
     userTokenBalancesEnd: any;
     feesTokenAmounts: any;
+    feesUsdEndPrice: number;
     tokenDiffNoFees: any;
     userPoolShareStart: any;
     userPoolShareEnd: any;
@@ -49,24 +50,30 @@ export interface IntervalStats {
     ethPriceEnd: any;
     txCostEthStart: any;
     txCostEthEnd: any;
+    yieldTokenAmount: number;
     yieldTokenAmountStart: any;
     yieldTokenAmountEnd: any;
     yieldTokenPriceStart: any;
     yieldTokenPriceEnd: any;
+    // strategies
+    hodlValueUsd: any;
+    poolValueUsd: any;
+    ethHodlValueUsd: any;
 }
 
 export interface CumulativeStats {
     poolValueUsd: any;
-    tokenBalances: number;
+    tokenBalances: any;
     feesTokenAmounts: any;
     feesUsd: number;
     yieldTokenAmount: number | null;
     yieldUsd: number | null;
     tokenPricesEnd: any;
-    yieldTokenPriceEnd: number;
+    yieldTokenPriceEnd: number | null;
     txCostEth: number;
     ethPriceEnd: number;
-    totalUsd: number;
+    rewardsMinusExpensesUsd: number;
+    timestampEnd: number;
 }
 
 export interface Pool {
@@ -74,4 +81,52 @@ export interface Pool {
     userAddr: string;
     poolId: string;
     isActive: boolean;
+}
+
+// snap of pool which I get from server
+export interface PoolSnap {
+    ethPrice: number;
+    exchange: string;
+    liquidityTokenBalance: string;
+    liquidityTokenTotalSupply: boolean;
+    poolId: string;
+    timestamp: number;
+    tokens: Array<PooledTokenInfo>;
+    txCostEth: number;
+    userAddr: string;
+    yieldReward: null | YieldTokenInfo;
+}
+
+export interface PoolItem {
+    exchange: string;
+    poolId: string;
+    userAddr: string;
+    isActive: boolean;
+    tokens: Array<{ [key: string]: {} }>;
+    tokenWeights: Array<number>;
+    hasYieldReward: boolean;
+    timestampEnd: number;
+    snapshots: Array<PoolSnap>;
+    intervalStats: Array<IntervalStats>;
+    cumulativeStats: CumulativeStats;
+}
+
+export interface Token {
+    contract_address: string;
+    name: string;
+    platform: string;
+    symbol: string;
+}
+
+export interface PooledTokenInfo {
+    price: number;
+    reserve: number;
+    weight: number;
+    token: Token;
+}
+
+export interface YieldTokenInfo {
+    price: number;
+    amount: number;
+    token: Token;
 }
