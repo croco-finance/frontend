@@ -180,7 +180,7 @@ const getIntervalStats = (snapshot1: any, snapshot2: any) => {
 };
 
 const getCumulativeStats = (
-    poolSnapshots: Array<types.PoolSnap>,
+    poolSnapshots: Array<types.PoolSnapshot>,
     intervalStats: Array<types.IntervalStats>,
 ) => {
     const pooledTokensCount = intervalStats[0].userTokenBalancesStart.length;

@@ -3,6 +3,8 @@ export type PoolId = string;
 export type UniswapName = 'UNI_V2' | 'UNI_V1' | 'Uniswap' | 'uniswap';
 export type BalancerName = 'BALANCER';
 
+export type Exchange = 'UNI_V2' | 'UNI_V1' | 'BALANCER';
+
 export interface InputInterface {
     address: string; // '0x2bb665722a122dd8a80c9d8625430fa1bcc6c3fc'
     exchange: string;
@@ -86,9 +88,9 @@ export interface Pool {
 }
 
 // snap of pool which I get from server
-export interface PoolSnap {
+export interface PoolSnapshot {
     ethPrice: number;
-    exchange: string;
+    exchange: string; // todo add supported exchange names
     liquidityTokenBalance: string;
     liquidityTokenTotalSupply: boolean;
     poolId: string;
@@ -108,7 +110,7 @@ export interface PoolItem {
     yieldToken: Token | null;
     hasYieldReward: boolean;
     timestampEnd: number;
-    snapshots: Array<PoolSnap>;
+    snapshots: Array<PoolSnapshot>;
     intervalStats: Array<IntervalStats>;
     cumulativeStats: CumulativeStats;
 }

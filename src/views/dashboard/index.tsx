@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 import { FetchPoolsHook } from '../../hooks';
 import { FetchPoolStatsHook } from '../../hooks/stats';
-import { FetchPoolSnapsHook } from '../../hooks/snaps';
+import { FetchPoolSnapshotsHook } from '../../hooks/snaps';
 import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
@@ -72,7 +72,7 @@ const AddressLabel = styled.div`
 `;
 
 const LeftWrapper = styled.div`
-    width: 42%;
+    width: 44%;
     padding: 0px 40px 20px 0;
     max-height: 99vh;
     overflow-y: auto;
@@ -109,7 +109,7 @@ const LeftWrapper = styled.div`
 
 const RightWrapper = styled.div`
     padding: 40px 0px 20px 50px;
-    width: 58%;
+    width: 56%;
     background-color: ${colors.BACKGROUND};
     @media (max-width: 1100px) {
         width: 100%;
@@ -151,7 +151,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     //     props.match.params.address ? props.match.params.address : '',
     // );
 
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolSnapsHook(
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolSnapshotsHook(
         props.match.params.address ? props.match.params.address : '',
     );
 

@@ -14,6 +14,7 @@ import { colors, variables, types } from '@config';
 import { mathUtils, lossUtils, getTokenSymbolArr } from '@utils';
 import CardRow from '../CardRow';
 import Graph from '../Graph';
+import VerticalCryptoAmounts from '../VerticalCryptoAmounts';
 
 const GRID_GAP = 5;
 
@@ -67,8 +68,8 @@ const GridWrapper = styled.div`
     display: grid;
     grid-gap: ${GRID_GAP}px;
 
-    grid-template-columns: 190px minmax(100px, auto);
-    grid-auto-rows: 40px;
+    grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto);
+    /* grid-auto-rows: 40px; */
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
@@ -179,7 +180,9 @@ const TotalLossRowWrapper = styled(GrayBox)`
     padding-bottom: 12px;
 `;
 
-const TotalLossRow = styled(GridWrapper)``;
+const TotalLossRow = styled(GridWrapper)`
+    height: 40px;
+`;
 
 const CardOverview = () => {
     const [showEth, setShowEth] = useState(false);
@@ -209,6 +212,9 @@ const CardOverview = () => {
         txCostUsd,
         rewardsMinusExpensesUsd,
         poolValueUsd,
+        tokenBalances,
+        feesTokenAmounts,
+        yieldTokenAmount,
     } = pool.cumulativeStats;
 
     // const startBalanceEth = endBalanceEth - netReturnEth;
@@ -231,8 +237,10 @@ const CardOverview = () => {
     // const dexReturnEth = feesEth + yieldRewardEth - txCostEth - impLossEth;
 
     const tokenSymbolsArr = getTokenSymbolArr(tokens);
+    const yieldTokenSymbol = 'UNI';
 
-    const endTimeText = isActive ? 'Today' : 'Withdrawal time';
+    const endTimeText = isActive ? 'Value today' : 'Withdrawal time';
+    const poolShareValueText = isActive ? 'Your pool share value' : 'End pool share value';
 
     let tokenSymbolsString = '';
     tokenSymbolsArr.forEach(symbol => {
@@ -242,24 +250,43 @@ const CardOverview = () => {
 
     const feesRow = (
         <CardRow
+            showThreeCols
             firstColumn="Fees earned"
-            secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
+            secondColumn={
+                <VerticalCryptoAmounts
+                    tokenSymbols={tokenSymbolsArr}
+                    tokenAmounts={feesTokenAmounts}
+                />
+            }
+            thirdColumn={<FiatValue value={feesUsd} usePlusSymbol />}
             color="dark"
         />
     );
 
-    const yieldRow = yieldUsd ? (
-        <CardRow
-            firstColumn="Yield farming gains"
-            secondColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
-            color="dark"
-        />
-    ) : null;
+    const yieldRow =
+        yieldUsd && yieldTokenAmount ? (
+            <CardRow
+                showThreeCols
+                firstColumn="Yield farming gains"
+                secondColumn={
+                    <VerticalCryptoAmounts
+                        tokenSymbols={[yieldTokenSymbol]}
+                        tokenAmounts={[yieldTokenAmount]}
+                    />
+                }
+                thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+                color="dark"
+            />
+        ) : null;
 
     const txCostRow = (
         <CardRow
+            showThreeCols
             firstColumn="Transactions expenses"
-            secondColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
+            secondColumn={
+                <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
+            }
+            thirdColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
             color="dark"
         />
     );
@@ -281,7 +308,7 @@ const CardOverview = () => {
                 <CardRow
                     showThreeCols
                     firstColumn="Pool overview"
-                    secondColumn="Crypto"
+                    secondColumn=""
                     thirdColumn={endTimeText}
                     color="light"
                 />
@@ -290,8 +317,13 @@ const CardOverview = () => {
                 <PoolValueGridWrapper>
                     <CardRow
                         showThreeCols
-                        firstColumn="Your pool share value"
-                        secondColumn={'TOKENS'}
+                        firstColumn={poolShareValueText}
+                        secondColumn={
+                            <VerticalCryptoAmounts
+                                tokenSymbols={tokenSymbolsArr}
+                                tokenAmounts={tokenBalances}
+                            />
+                        }
                         thirdColumn={<FiatValue value={poolValueUsd} />}
                         color="dark"
                     />
@@ -302,7 +334,7 @@ const CardOverview = () => {
                 <CardRow
                     showThreeCols
                     firstColumn="Rewards & Expenses"
-                    secondColumn="Crypto"
+                    secondColumn=""
                     thirdColumn={endTimeText}
                     color="light"
                 />
@@ -317,8 +349,10 @@ const CardOverview = () => {
             <TotalLossRowWrapper>
                 <TotalLossRow>
                     <CardRow
+                        showThreeCols
                         firstColumn="Total"
-                        secondColumn={
+                        secondColumn={<></>}
+                        thirdColumn={
                             <FiatValue
                                 value={rewardsMinusExpensesUsd}
                                 usePlusSymbol
@@ -356,9 +390,9 @@ const CardOverview = () => {
                 </StrategyHeaderGridWrapper>
             </StrategyItem> */}
 
-            {/* <GraphWrapper>
+            <GraphWrapper>
                 <Graph />
-            </GraphWrapper> */}
+            </GraphWrapper>
         </Wrapper>
     );
 };

@@ -33,7 +33,7 @@ const getTokensCustomObj = (tokens: Array<types.PooledTokenInfo>) => {
     return tokensCustomObj;
 };
 
-const FetchPoolSnapsHook = initialAddress => {
+const FetchPoolSnapshotsHook = initialAddress => {
     const [address, setAddress] = useState(initialAddress);
     const [isLoading, setIsLoading] = useState(false);
     const [noPoolsFound, setNoPoolsFound] = useState(false);
@@ -213,4 +213,4 @@ const FetchPoolSnapsHook = initialAddress => {
     return [{ isLoading, noPoolsFound, isFetchError }, setAddress] as const;
 };
 
-export { FetchPoolSnapsHook };
+export { FetchPoolSnapshotsHook };
