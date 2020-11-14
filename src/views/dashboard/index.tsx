@@ -70,7 +70,7 @@ const AddressLabel = styled.div`
 `;
 
 const LeftWrapper = styled.div`
-    width: 44%;
+    width: 46%;
     padding: 0px 40px 20px 0;
     max-height: 99vh;
     overflow-y: auto;
@@ -107,7 +107,7 @@ const LeftWrapper = styled.div`
 
 const RightWrapper = styled.div`
     padding: 40px 0px 20px 50px;
-    width: 56%;
+    width: 54%;
     background-color: ${colors.BACKGROUND};
     @media (max-width: 1100px) {
         width: 100%;
