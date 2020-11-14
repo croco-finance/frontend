@@ -1,13 +1,12 @@
 import * as actionTypes from '@actionTypes';
 import { NavBar, SimulatorContainer } from '@components/layout';
 import { GrayBox, Input, LoadingBox, MultipleTokenSelect } from '@components/ui';
-import { animations, colors, variables } from '@config';
+import { animations, colors, variables, types } from '@config';
 import { mathUtils, validationUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { PoolItemInterface } from '../../config/types';
 import { FetchPoolsHook } from '../../hooks';
 import RightContainer from './components/RightContainer';
 import Overview from './components/LeftContainer/Overview';
@@ -122,14 +121,14 @@ const InactivePoolWarning = styled.div`
     color: #673df1;
 `;
 
-const buildPoolOption = (pool: PoolItemInterface) => {
+const buildPoolOption = (pool: types.PoolItem) => {
     if (pool) {
         const tokens: any = pool.tokens;
         let value = { poolId: pool.poolId, tokens: new Array(tokens.length) };
         let label = '';
 
         tokens.forEach((token, i) => {
-            let tokenWeight = mathUtils.getFormattedPercentageValue(pool.tokenWeights[i], true);
+            let tokenWeight = mathUtils.getFormattedPercentageValue(pool.tokens[i].weight, true);
             label = label + ` ${token.symbol.toUpperCase()} ${tokenWeight},`;
             value.tokens[i] = token.symbol;
         });

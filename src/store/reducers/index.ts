@@ -2,7 +2,7 @@ import * as actionTypes from '@actionTypes';
 import { types } from '@config';
 
 interface InitialStateInterface {
-    allPools: { [key: string]: types.PoolItemInterface } | {};
+    allPools: types.AllPoolsGlobal | {};
     selectedPoolId: string;
     exchangeToPoolMapping: { [key: string]: Array<string> } | {};
     userAddress: string;

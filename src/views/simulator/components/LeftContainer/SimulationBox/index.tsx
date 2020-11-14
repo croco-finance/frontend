@@ -1,5 +1,5 @@
 import { FiatValue, TokenLogo } from '@components/ui';
-import { colors, variables } from '@config';
+import { colors, variables, types } from '@config';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -60,7 +60,7 @@ interface Props {
     simulatedCoefficients: any;
 }
 const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) => {
-    const allPools = useSelector(state => state.allPools);
+    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
     if (!allPools[selectedPoolId]) {
@@ -68,7 +68,8 @@ const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) =
     }
 
     const pool = allPools[selectedPoolId];
-    const { endTokenPricesUsd, tokens, poolId } = pool;
+    const { tokens, poolId } = pool;
+    const { tokenPricesEnd } = pool.cumulativeStats;
 
     return (
         <Wrapper>
@@ -93,9 +94,7 @@ const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) =
                                 </TokenWrapper>
                             }
                             fourthColumn={
-                                <FiatValue
-                                    value={endTokenPricesUsd[i] * simulatedCoefficients[i]}
-                                />
+                                <FiatValue value={tokenPricesEnd[i] * simulatedCoefficients[i]} />
                             }
                             color="dark"
                         />

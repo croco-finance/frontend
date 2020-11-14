@@ -1,5 +1,9 @@
 import { mathUtils } from '.';
 
+export const getRelativeImpLoss = (poolValue: number, hodlValue: number) => {
+    return poolValue / hodlValue - 1;
+};
+
 const getNewBalancesBalancer = (
     initialTokenBalances: Array<number>,
     newTokenPrices: Array<number>,

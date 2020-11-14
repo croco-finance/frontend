@@ -102,11 +102,12 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const PoolItem = ({ poolId }: Props) => {
     const dispatch = useDispatch();
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
+    const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
     const { tokens, exchange } = allPools[poolId];
 
+    if (allPools[poolId].cumulativeStats === null) return <p> No stats </p>;
     const { feesUsd, poolValueUsd, yieldUsd } = allPools[poolId].cumulativeStats;
 
     let isSelected = selectedPoolId === poolId;

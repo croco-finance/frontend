@@ -185,8 +185,6 @@ const TotalLossRow = styled(GridWrapper)`
 `;
 
 const CardOverview = () => {
-    const [showEth, setShowEth] = useState(false);
-
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     let pool = allPools[selectedPoolId];

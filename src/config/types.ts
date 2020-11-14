@@ -1,39 +1,45 @@
 export type PoolId = string;
 
-export type UniswapName = 'UNI_V2' | 'UNI_V1' | 'Uniswap' | 'uniswap';
-export type BalancerName = 'BALANCER';
-
-export type Exchange = 'UNI_V2' | 'UNI_V1' | 'BALANCER';
-
-export interface InputInterface {
-    address: string; // '0x2bb665722a122dd8a80c9d8625430fa1bcc6c3fc'
-    exchange: string;
+export enum Exchange {
+    UNI_V2 = 'UNI_V2',
+    BALANCER = 'BALANCER',
 }
 
-export interface PoolItemInterface {
-    exchange: string;
-    hodlReturnUsd: number; // difference in HODL value now and at the beginning
-    netReturnUsd: number; // difference in pool value now and at the beginning
-    dexReturnUsd: number; // fees - impermanent_loss - tx_cost
-    feesUsd: number; // total user's fee gains
-    impLossRel: number | undefined; //  None in case of changes in lp balance
-    impLossUsd: number; // impermanent loss
-    txCostEth: number | undefined; // v ETH
-    endBalanceUsd: number;
-    userAddr: string;
-    poolId: string; // pool smart contract address
-    tokens: Array<{ [key: string]: {} }>;
-    tokenWeights: Array<number>;
-    endTokenBalances: Array<number>; // User token balances
-    endTokenPricesUsd: Array<number>;
-    start: number;
-    end: number;
-    tokenPriceUsd: Array<number>;
-    tokenBalanceDiffNoFees: Array<number>;
-    hodlReturnEth: number;
-    netReturnEth: number;
-    feesEth: number;
-    endBalanceEth: number;
+export interface Token {
+    symbol: string;
+    name: string;
+    contractAddress: string;
+    platform: string;
+}
+
+export interface PoolToken {
+    priceUsd: number;
+    reserve: number;
+    weight: number;
+    token: Token;
+}
+
+export interface YieldReward {
+    token: Token;
+    amount: number;
+    price: number;
+}
+
+export interface Snap {
+    block: number;
+    ethPrice: number;
+    exchange: Exchange;
+    liquidityTokenBalance: number;
+    liquidityTokenTotalSupply: number;
+    timestamp: number;
+    txCostEth: number;
+    tokens: PoolToken[];
+    txHash: string | null;
+    yieldReward: YieldReward | null;
+}
+
+export interface SnapStructure {
+    [key: string]: Snap[];
 }
 
 export interface IntervalStats {
@@ -69,7 +75,7 @@ export interface CumulativeStats {
     feesTokenAmounts: any;
     feesUsd: number;
     yieldTokenAmount: number | null;
-    yieldUsd: number | null;
+    yieldUsd: number;
     tokenPricesEnd: any;
     yieldTokenPriceEnd: number | null;
     txCostEth: number;
@@ -77,7 +83,7 @@ export interface CumulativeStats {
     ethPriceEnd: number;
     rewardsMinusExpensesUsd: number;
     timestampEnd: number;
-    // rewardsSumUsd: number;
+    // average rewards since last deposit -> average rewards in last snapshot
 }
 
 export interface Pool {
@@ -87,22 +93,8 @@ export interface Pool {
     isActive: boolean;
 }
 
-// snap of pool which I get from server
-export interface PoolSnapshot {
-    ethPrice: number;
-    exchange: string; // todo add supported exchange names
-    liquidityTokenBalance: string;
-    liquidityTokenTotalSupply: boolean;
-    poolId: string;
-    timestamp: number;
-    tokens: Array<PooledTokenInfo>;
-    txCostEth: number;
-    userAddr: string;
-    yieldReward: null | YieldTokenInfo;
-}
-
 export interface PoolItem {
-    exchange: string;
+    exchange: Exchange;
     poolId: string;
     userAddr: string;
     isActive: boolean;
@@ -110,23 +102,10 @@ export interface PoolItem {
     yieldToken: Token | null;
     hasYieldReward: boolean;
     timestampEnd: number;
-    snapshots: Array<PoolSnapshot>;
+    snapshots: Array<Snap>;
     intervalStats: Array<IntervalStats>;
     cumulativeStats: CumulativeStats;
-}
-
-export interface Token {
-    contract_address: string;
-    name: string;
-    platform: string;
-    symbol: string;
-}
-
-export interface PooledTokenInfo {
-    price: number;
-    reserve: number;
-    weight: number;
-    token: Token;
+    tokenWeights: Array<number>;
 }
 
 export interface YieldTokenInfo {

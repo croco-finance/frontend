@@ -1,5 +1,10 @@
 const countDecimals = value => {
-    if (Math.floor(value) !== value) return value.toString().split('.')[1].length || 0;
+    try {
+        if (Math.floor(value) !== value) return value.toString().split('.')[1].length || 0;
+    } catch (e) {
+        return '-';
+    }
+
     return 0;
 };
 
@@ -148,11 +153,21 @@ const subtractArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => 
 };
 
 const divideEachArrayElementByValue = (arr: Array<number>, value: number) => {
+    const modifiedArr = new Array(arr.length);
     for (let i = 0, length = arr.length; i < length; i++) {
-        arr[i] = arr[i] / value;
+        modifiedArr[i] = arr[i] / value;
     }
 
-    return arr;
+    return modifiedArr;
+};
+
+const multiplyEachArrayElementByValue = (arr: Array<number>, value: number) => {
+    const modifiedArr = new Array(arr.length);
+    for (let i = 0, length = arr.length; i < length; i++) {
+        modifiedArr[i] = arr[i] * value;
+    }
+
+    return modifiedArr;
 };
 
 export {
@@ -167,5 +182,6 @@ export {
     sumArraysElementWise,
     sumArr,
     divideEachArrayElementByValue,
+    multiplyEachArrayElementByValue,
     getFormattedCryptoValue,
 };

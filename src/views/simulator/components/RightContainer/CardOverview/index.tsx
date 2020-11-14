@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FiatValue, GrayBox, ToggleSwitch, MultipleTokenLogo } from '@components/ui';
-import { colors, variables } from '@config';
-import { mathUtils, lossUtils, getTokenSymbolArr } from '@utils';
+import { colors, variables, types } from '@config';
+import { mathUtils, lossUtils, getTokenSymbolArr, simulatorUtils } from '@utils';
 import CardRow from '../CardRow';
 
 const GRID_GAP = 5;
@@ -141,107 +141,59 @@ interface Props {
 }
 
 const CardOverview = ({ simulatedCoefficients }: Props) => {
-    const [showEth, setShowEth] = useState(false);
-
-    const allPools = useSelector(state => state.allPools);
+    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
     const pool = allPools[selectedPoolId];
 
+    let { tokens, hasYieldReward, isActive, exchange, tokenWeights } = pool;
+
     let {
-        tokens,
-        endTokenBalances,
-        tokenBalanceDiffNoFees,
-        tokenWeights,
-        endTokenPricesUsd,
-        endBalanceUsd,
-        netReturnUsd,
+        // TODO make sure you use current token balances, not cumulative values
+        tokenBalances,
+        feesTokenAmounts,
         feesUsd,
+        yieldTokenAmount,
+        yieldUsd,
         txCostEth,
         txCostUsd,
-        impLossUsd,
-        dexReturnUsd,
-        start,
-        end,
-        exchange,
-        yieldRewardUsd,
-        hodlReturnUsd,
-        startTokenBalances,
-    } = pool;
-
-    const averageRewardsUsd = mathUtils.getDailyAverageFeeGains(
-        start,
-        end,
-        feesUsd + yieldRewardUsd,
-    );
-    const daysLeftStaking = Math.abs(Math.ceil(dexReturnUsd / averageRewardsUsd));
+        rewardsMinusExpensesUsd,
+        timestampEnd,
+        tokenPricesEnd,
+        poolValueUsd,
+    } = pool.cumulativeStats;
 
     // ----- GET SIMULATION VALUES -----
     // Array of new prices, not coefficients
     const newTokenPrices = mathUtils.multiplyArraysElementWise(
-        endTokenPricesUsd,
+        tokenPricesEnd,
         simulatedCoefficients,
     );
 
-    let simulatedValues;
-    if (exchange === 'UNI_V2' || exchange === 'UNI_V1') {
-        simulatedValues = lossUtils.getUniswapSimulationStats(
-            startTokenBalances,
-            endTokenBalances,
-            newTokenPrices,
-            tokenBalanceDiffNoFees,
-        );
-    } else if (exchange === 'BALANCER') {
-        simulatedValues = lossUtils.getBalancerSimulationStats(
-            startTokenBalances,
-            endTokenBalances,
-            newTokenPrices,
-            tokenBalanceDiffNoFees,
-            tokenWeights,
-        );
-    }
+    let simulatedValues = simulatorUtils.getSimulationStats(
+        tokenBalances,
+        feesTokenAmounts,
+        newTokenPrices,
+        tokenWeights,
+        exchange,
+    );
     const {
-        // simulatedFeesUsd,
-        simulatedPoolValue,
-        impLossCompToInitialUsd,
-        impLossCompToInitialRel,
-        newBalances,
+        newTokenBalances,
+        newPoolValueUsd,
+        newFeesUsd,
+        newHodlValueUsd,
+        impLossRel,
+        impLossUsd,
     } = simulatedValues;
 
-    const poolValueChangeRatio = simulatedPoolValue / endBalanceUsd;
-    const simulatedFeesUsd = poolValueChangeRatio * feesUsd;
-
     // TODO check if yield token is also part of pool (if yes, change its price accordingly)
-    if (!txCostUsd) txCostUsd = 0;
-    const simulatedTotalHodlComparison =
-        simulatedFeesUsd + yieldRewardUsd + impLossCompToInitialUsd - txCostUsd;
-
-    const averageFeeGainsSim = mathUtils.getDailyAverageFeeGains(
-        start,
-        end,
-        simulatedFeesUsd + yieldRewardUsd,
-    );
-    const daysLeftStakingSim = Math.abs(
-        Math.ceil(simulatedTotalHodlComparison / averageFeeGainsSim),
-    );
-
-    let showDaysLeftStaking = true;
-
-    if (simulatedTotalHodlComparison >= 0 && dexReturnUsd >= 0) {
-        showDaysLeftStaking = false;
-    } else if (!simulatedTotalHodlComparison && dexReturnUsd >= 0) {
-        showDaysLeftStaking = false;
-    } else if (simulatedTotalHodlComparison >= 0 && !dexReturnUsd) {
-        showDaysLeftStaking = false;
-    }
-
-    const tokenSymbols = getTokenSymbolArr(tokens);
+    const newRewardsMinusExpensesUsd = newFeesUsd + yieldUsd - txCostUsd;
 
     return (
         <Wrapper>
             <Header>
                 <Headline>
-                    <MultipleTokenLogo size={18} tokens={tokenSymbols} />
+                    <MultipleTokenLogo size={18} tokens={getTokenSymbolArr(tokens)} />
                     <HeadlineText>Liquidity pool</HeadlineText>
                 </Headline>
                 <ToggleWrapper>
@@ -261,13 +213,13 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                 <PoolValueGridWrapper>
                     <CardRow
                         firstColumn="Your pool share value"
-                        secondColumn={<FiatValue value={endBalanceUsd}></FiatValue>}
+                        secondColumn={<FiatValue value={poolValueUsd}></FiatValue>}
                         thirdColumn={
                             <DoubleValueWrapper>
-                                <FiatValue value={simulatedPoolValue}></FiatValue>
+                                <FiatValue value={newPoolValueUsd}></FiatValue>
                                 <ValueDifference>
                                     <FiatValue
-                                        value={simulatedPoolValue - endBalanceUsd}
+                                        value={newPoolValueUsd - poolValueUsd}
                                         usePlusSymbol
                                         colorized
                                     ></FiatValue>
@@ -278,7 +230,6 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                     />
                 </PoolValueGridWrapper>
             </GrayBox>
-
             <HodlHeaderWrapper>
                 <CardRow
                     firstColumn="Your balance compared to HODL strategy"
@@ -292,15 +243,15 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                     <CardRow
                         firstColumn="Fees earned"
                         secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
-                        thirdColumn={<FiatValue value={simulatedFeesUsd} usePlusSymbol />}
+                        thirdColumn={<FiatValue value={newFeesUsd} usePlusSymbol />}
                         color="dark"
                     />
 
-                    {yieldRewardUsd ? (
+                    {hasYieldReward ? (
                         <CardRow
-                            firstColumn="Yield farming gains"
-                            secondColumn={<FiatValue value={yieldRewardUsd} usePlusSymbol />}
-                            thirdColumn={<FiatValue value={yieldRewardUsd} usePlusSymbol />}
+                            firstColumn="Yield rewards"
+                            secondColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+                            thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
                             color="dark"
                         />
                     ) : null}
@@ -313,14 +264,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                     />
                     <CardRow
                         firstColumn="Impermanent loss"
-                        secondColumn={
-                            <ImpLossValueWrapper>
-                                {/* <SubValue>
-                                    {getFormattedPercentageValue(Math.abs(impLossRel))}
-                                </SubValue> */}
-                                <FiatValue value={-impLossUsd} usePlusSymbol />
-                            </ImpLossValueWrapper>
-                        }
+                        secondColumn=""
                         thirdColumn={
                             <ImpLossValueWrapper>
                                 {/* <SubValue>
@@ -329,7 +273,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                                             Math.abs(impLossCompToInitialRel),
                                         )}
                                 </SubValue> */}
-                                <FiatValue value={impLossCompToInitialUsd} usePlusSymbol />
+                                <FiatValue value={-impLossUsd} usePlusSymbol />
                             </ImpLossValueWrapper>
                         }
                         color="dark"
@@ -340,7 +284,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                         firstColumn="Total"
                         secondColumn={
                             <FiatValue
-                                value={netReturnUsd - hodlReturnUsd}
+                                value={rewardsMinusExpensesUsd}
                                 usePlusSymbol
                                 // colorized
                                 // useBadgeStyle
@@ -348,7 +292,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                         }
                         thirdColumn={
                             <FiatValue
-                                value={simulatedTotalHodlComparison}
+                                value={newRewardsMinusExpensesUsd}
                                 usePlusSymbol
                                 useBadgeStyle
                             ></FiatValue>
@@ -356,36 +300,6 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                         color="dark"
                     />
                 </TotalLossRowWrapper>
-                <DaysLeftWrapper>
-                    <DaysLeftGridWrapper>
-                        <CardRow
-                            firstColumn="Average daily rewards"
-                            secondColumn={
-                                <FiatValue value={averageRewardsUsd} usePlusSymbol></FiatValue>
-                            }
-                            thirdColumn={
-                                <FiatValue value={averageFeeGainsSim} usePlusSymbol></FiatValue>
-                            }
-                            color="dark"
-                        />
-                        {showDaysLeftStaking ? (
-                            <CardRow
-                                firstColumn="Days left to compensate loss*"
-                                secondColumn={dexReturnUsd < 0 ? daysLeftStaking : null}
-                                thirdColumn={
-                                    simulatedTotalHodlComparison < 0 ? daysLeftStakingSim : null
-                                }
-                                color="dark"
-                            />
-                        ) : null}
-                    </DaysLeftGridWrapper>
-
-                    {showDaysLeftStaking ? (
-                        <DaysLeftNote>
-                            <b>*</b> According to your average daily rewards (fees + yield).
-                        </DaysLeftNote>
-                    ) : null}
-                </DaysLeftWrapper>
             </GrayBox>
         </Wrapper>
     );

@@ -2,16 +2,19 @@ import { mathUtils } from '.';
 import * as loss from './loss-computations';
 import { types } from '@config';
 
-const getPoolStatsFromSnapshots = (poolSnapshots: Array<any>) => {
+const getPoolStatsFromSnapshots = (poolSnapshots: Array<types.Snap>) => {
     // get interval stats first
+    const snapshotsCount = poolSnapshots.length;
+
     let intervalStats = new Array();
 
     poolSnapshots.forEach((snapshot, i) => {
-        // console.log('poolSnapshots.forEach()');
         if (i > 0) {
             intervalStats.push(getIntervalStats(poolSnapshots[i - 1], poolSnapshots[i]));
         }
     });
+
+    // console.log('intervalStats', intervalStats);
 
     // get cumulative stats
     let cumulativeStats = getCumulativeStats(poolSnapshots, intervalStats);
@@ -19,7 +22,7 @@ const getPoolStatsFromSnapshots = (poolSnapshots: Array<any>) => {
     return { intervalStats, cumulativeStats };
 };
 
-const getIntervalStats = (snapshot1: any, snapshot2: any) => {
+const getIntervalStats = (snapshot1: types.Snap, snapshot2: types.Snap) => {
     // variables declaration
     const { exchange } = snapshot1;
 
@@ -39,8 +42,8 @@ const getIntervalStats = (snapshot1: any, snapshot2: any) => {
     const yieldTokenPriceStart = snapshot1.yieldReward ? snapshot1.yieldReward.price : null;
     const yieldTokenPriceEnd = snapshot2.yieldReward ? snapshot2.yieldReward.price : null;
 
-    const yieldRewardAmountStart = snapshot1.yieldReward ? snapshot1.yieldReward.amount : null;
-    const yieldRewardAmountEnd = snapshot2.yieldReward ? snapshot2.yieldReward.amount : null;
+    const yieldRewardAmountStart = snapshot1.yieldReward ? snapshot1.yieldReward.amount : 0;
+    const yieldRewardAmountEnd = snapshot2.yieldReward ? snapshot2.yieldReward.amount : 0;
 
     // liquidity pool tokens
     const lpTokenUserBalanceStart = snapshot1.liquidityTokenBalance;
@@ -62,21 +65,21 @@ const getIntervalStats = (snapshot1: any, snapshot2: any) => {
         userTokenBalancesStart[i] = userPoolShareStart * tokenData.reserve;
 
         tokenWeights[i] = tokenData.weight;
-        tokenPricesStart[i] = tokenData.price;
+        tokenPricesStart[i] = tokenData.priceUsd;
     });
 
     // Compute theoretical token balances if no fees were gained
     snapshot2.tokens.forEach((tokenData, i) => {
         totalTokenReservesEnd[i] = tokenData.reserve;
         userTokenBalancesEnd[i] = userPoolShareEnd * tokenData.reserve;
-        tokenPricesEnd[i] = tokenData.price;
+        tokenPricesEnd[i] = tokenData.priceUsd;
     });
 
     // *** Stats Computations ***
     // compute theoretical new token balances after price change without fees
     let newBalancesNoFees;
 
-    if (exchange === 'UNI_V2' || exchange === 'UNI_V1') {
+    if (exchange === 'UNI_V2') {
         newBalancesNoFees = loss.getNewBalancesUniswap(userTokenBalancesStart, tokenPricesEnd);
     } else if (exchange === 'BALANCER') {
         newBalancesNoFees = loss.getNewBalancesBalancer(
@@ -180,7 +183,7 @@ const getIntervalStats = (snapshot1: any, snapshot2: any) => {
 };
 
 const getCumulativeStats = (
-    poolSnapshots: Array<types.PoolSnapshot>,
+    poolSnapshots: Array<types.Snap>,
     intervalStats: Array<types.IntervalStats>,
 ) => {
     const pooledTokensCount = intervalStats[0].userTokenBalancesStart.length;
@@ -190,9 +193,20 @@ const getCumulativeStats = (
     const lastInterval = intervalStats[intervalsCount - 1];
     const lastSnapshot = poolSnapshots[snapshotsCount - 1];
 
+    const poolValueUsd = mathUtils.sumArr(
+        mathUtils.multiplyArraysElementWise(
+            lastInterval.userTokenBalancesEnd,
+            lastInterval.tokenPricesEnd,
+        ),
+    );
+
+    // Stats object initialization
     let cumulativeStats: types.CumulativeStats = {
         txCostEth: 0,
         txCostUsd: 0,
+        feesUsd: 0,
+        yieldUsd: 0,
+        rewardsMinusExpensesUsd: 0,
         // tokens: lastSnapshot.tokens;
         tokenBalances: lastInterval.userTokenBalancesEnd,
         feesTokenAmounts: new Array(pooledTokensCount).fill(0),
@@ -200,17 +214,7 @@ const getCumulativeStats = (
         ethPriceEnd: lastSnapshot.ethPrice,
         tokenPricesEnd: lastInterval.tokenPricesEnd,
         yieldTokenPriceEnd: lastSnapshot.yieldReward ? lastSnapshot.yieldReward.price : null,
-        feesUsd: 0,
-        yieldUsd: null,
-
-        // pool value
-        poolValueUsd: mathUtils.sumArr(
-            mathUtils.multiplyArraysElementWise(
-                lastInterval.userTokenBalancesEnd,
-                lastInterval.tokenPricesEnd,
-            ),
-        ),
-        rewardsMinusExpensesUsd: 0,
+        poolValueUsd: poolValueUsd,
         timestampEnd: lastSnapshot.timestamp,
     };
 
@@ -250,17 +254,8 @@ const getCumulativeStats = (
             cumulativeStats['yieldTokenAmount'] * cumulativeStats['yieldTokenPriceEnd'];
     }
 
-    // rewards minus expenses
-    if (cumulativeStats['yieldUsd']) {
-        // compute overall rewards
-        cumulativeStats['rewardsMinusExpensesUsd'] =
-            cumulativeStats['feesUsd'] + cumulativeStats['yieldUsd'] - cumulativeStats['txCostUsd'];
-    } else {
-        // omit yield reward if not present
-        cumulativeStats['rewardsMinusExpensesUsd'] =
-            cumulativeStats['feesUsd'] - cumulativeStats['txCostUsd'];
-    }
-
+    cumulativeStats['rewardsMinusExpensesUsd'] =
+        cumulativeStats['feesUsd'] + cumulativeStats['yieldUsd'] - cumulativeStats['txCostUsd'];
     return cumulativeStats;
 };
 

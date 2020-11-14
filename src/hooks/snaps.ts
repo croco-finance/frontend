@@ -2,26 +2,14 @@ import React, { useEffect, useState } from 'react';
 import exampleDataJson from '../config/example-data-snaps.json';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionTypes from '../store/actions/actionTypes';
-import axios from 'axios';
-import { constants, types } from '@config';
-import { validationUtils, lossUtils, statsComputations, parseSnapshotToNumberValues } from '@utils';
-import { Event } from '../config/analytics';
+import { constants, types, analytics } from '@config';
+import { validationUtils, statsComputations, getSnaps, getTokenWeightsArr } from '@utils';
 
 // if the "end" timestamp of pool is older than this, we will consider an inactive pool
 // (user withdrew all funds from that pool)
 const INACTIVE_POOL_THRESHOLD_SECONDS = 14400; // 14400 sec = 4 hours
 
-const compare = (a, b) => {
-    if (a.timestamp < b.timestamp) {
-        return -1;
-    }
-    if (a.timestamp > b.timestamp) {
-        return 1;
-    }
-    return 0;
-};
-
-const getTokensCustomObj = (tokens: Array<types.PooledTokenInfo>) => {
+const getTokensCustomObj = (tokens: Array<types.PoolToken>) => {
     const tokensCount = tokens.length;
     let tokensCustomObj = Array(tokensCount);
 
@@ -31,6 +19,11 @@ const getTokensCustomObj = (tokens: Array<types.PooledTokenInfo>) => {
     });
 
     return tokensCustomObj;
+};
+
+const getIfPoolActive = (poolEndTimestamp: number, thresholdSeconds: number) => {
+    const currentTimestampSeconds = Date.now() / 1000;
+    return currentTimestampSeconds - poolEndTimestamp < thresholdSeconds;
 };
 
 const FetchPoolSnapshotsHook = initialAddress => {
@@ -46,12 +39,88 @@ const FetchPoolSnapshotsHook = initialAddress => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const fetchData = async (queryAddress: string) => {
+        const fetchData = async (address: string) => {
             console.log('Running fetchData()...');
             setIsLoading(true);
             setNoPoolsFound(false);
             setIsFetchError(false);
-            const query = `${constants.SERVER_SNAPS_ENDPOINT}${queryAddress.trim().toLowerCase()}/`;
+
+            const queryAddress = address.trim().toLowerCase();
+            const testAddressFirebase = '0x65c084b69b7f21acefe2c68aa25c67efd2e10160';
+
+            // try {
+            const fetchedSnapshots = await getSnaps(testAddressFirebase);
+            console.log('fetchedSnapshots', fetchedSnapshots);
+
+            // check if some pools were founds
+            if (!fetchedSnapshots) {
+                setNoPoolsFound(true);
+                setIsLoading(false);
+                dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress });
+                dispatch({ type: actionTypes.SET_ALL_POOLS, pools: {} });
+                dispatch({ type: actionTypes.SET_ACTIVE_POOL_IDS, activePoolIds: [] });
+                dispatch({
+                    type: actionTypes.SET_INACTIVE_POOL_IDS,
+                    inactivePoolIds: [],
+                });
+                return;
+            }
+
+            // declare Redux variables
+            let exToPoolMap = {};
+            let activePoolIds: Array<string> = [];
+            let inactivePoolIds: Array<string> = [];
+            const customPoolsObject: types.AllPoolsGlobal = {};
+
+            for (const [poolId, snapshotsArr] of Object.entries(fetchedSnapshots)) {
+                const snapshotsCount = snapshotsArr.length;
+                if (snapshotsCount > 1) {
+                    // compute interval and cumulative stats
+                    const {
+                        intervalStats,
+                        cumulativeStats,
+                    } = statsComputations.getPoolStatsFromSnapshots(snapshotsArr);
+
+                    // Check if pool is active by comparison of last snapshot's timestamp with current timestamp
+                    const lastSnapshotTimestamp = snapshotsArr[snapshotsCount - 1].timestamp;
+                    const poolIsActive = getIfPoolActive(
+                        lastSnapshotTimestamp,
+                        INACTIVE_POOL_THRESHOLD_SECONDS,
+                    );
+
+                    if (poolIsActive) {
+                        activePoolIds.push(poolId);
+                    } else {
+                        inactivePoolIds.push(poolId);
+                    }
+
+                    // Push PoolId to <Exchange, PoolId> mapping
+                    const exchange = snapshotsArr[0].exchange;
+                    if (!exToPoolMap[exchange]) {
+                        exToPoolMap[exchange] = [];
+                    }
+                    exToPoolMap[exchange].push(poolId);
+
+                    // Create new pool object
+                    customPoolsObject[poolId] = {
+                        exchange: exchange,
+                        userAddr: queryAddress,
+                        poolId: poolId,
+                        isActive: poolIsActive,
+                        timestampEnd: lastSnapshotTimestamp,
+                        hasYieldReward: snapshotsArr[0].yieldReward !== null,
+                        yieldToken: null, // TODO
+                        tokens: getTokensCustomObj(snapshotsArr[0].tokens),
+                        snapshots: snapshotsArr,
+                        intervalStats: intervalStats,
+                        cumulativeStats: cumulativeStats,
+                        tokenWeights: getTokenWeightsArr(snapshotsArr[0].tokens),
+                    };
+                }
+            }
+
+            console.log('customPoolsObject', customPoolsObject);
+
             const queryCumulative = `http://127.0.0.1:5001/api/v1/cumulative/${queryAddress
                 .trim()
                 .toLowerCase()}/`;
@@ -60,7 +129,6 @@ const FetchPoolSnapshotsHook = initialAddress => {
                 constants.SERVER_STATS_ENDPOINT
             }${queryAddress.trim().toLowerCase()}/`;
 
-            // try {
             // // TODO error handling
             // const response = await axios.get(query, { timeout: 60000 });
             // const fetchedData = response.data;
@@ -71,101 +139,11 @@ const FetchPoolSnapshotsHook = initialAddress => {
             // const responseStats = await axios.get(queryStats, { timeout: 60000 });
             // const fetchedDataStats = responseStats.data;
 
-            const fetchedData = exampleDataJson;
-
-            console.log('fetchedData', fetchedData);
             // console.log('fetchedDataCumulative', fetchedDataCumulative);
             // console.log('fetchedDataStats', fetchedDataStats);
 
-            if (fetchedData.length === 0) {
-                setNoPoolsFound(true);
-                setIsLoading(false);
-                dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
-                dispatch({ type: actionTypes.SET_ALL_POOLS, pools: {} });
-                dispatch({ type: actionTypes.SET_ACTIVE_POOL_IDS, activePoolIds: [] });
-                dispatch({
-                    type: actionTypes.SET_INACTIVE_POOL_IDS,
-                    inactivePoolIds: [],
-                });
-                return;
-            }
-
-            // sort snapshots by timestamp
-            fetchedData.sort(compare);
-
-            let exToPoolMap = {};
-            let activePoolIds: Array<string> = [];
-            let inactivePoolIds: Array<string> = [];
-            let snapshotsGrouped = {};
-            const currentTimestampSeconds = Date.now() / 1000;
-
-            fetchedData.forEach((snapshot: any) => {
-                snapshot = parseSnapshotToNumberValues(snapshot);
-
-                const poolId: string = snapshot['poolId'];
-                const exchange: string = snapshot['exchange'];
-
-                // if this poolId is the first in group (no other pool with this id found yet)
-                if (!snapshotsGrouped[poolId]) {
-                    snapshotsGrouped[poolId] = {
-                        snapshots: [],
-                        intervalStats: [],
-                        cumulativeStats: {},
-                        exchange: exchange,
-                        poolId: poolId,
-                        userAddr: snapshot['userAddr'],
-                        yieldReward: snapshot['yieldReward'],
-                        tokens: getTokensCustomObj(snapshot['tokens']),
-                    };
-                }
-
-                if (!exToPoolMap[exchange]) {
-                    exToPoolMap[exchange] = [];
-                }
-
-                exToPoolMap[exchange].push(poolId);
-
-                // push numbers snapshot to custom object
-                snapshotsGrouped[poolId]['snapshots'].push(snapshot);
-            });
-
-            for (const [poolId, snapshotsGroup] of Object.entries(snapshotsGrouped)) {
-                // compute interval and cumulative stats
-                const {
-                    intervalStats,
-                    cumulativeStats,
-                } = statsComputations.getPoolStatsFromSnapshots(
-                    snapshotsGrouped[poolId]['snapshots'],
-                );
-
-                snapshotsGrouped[poolId]['intervalStats'] = intervalStats;
-                snapshotsGrouped[poolId]['cumulativeStats'] = cumulativeStats;
-
-                // Check if pool is active by comparison of last snapshot's timestamp with current timestamp
-                const snapshotsCount = snapshotsGrouped[poolId]['snapshots'].length;
-                const lastSnapshotTimestamp =
-                    snapshotsGrouped[poolId]['snapshots'][snapshotsCount - 1].timestamp;
-                const isActive =
-                    currentTimestampSeconds - lastSnapshotTimestamp <
-                    INACTIVE_POOL_THRESHOLD_SECONDS;
-                snapshotsGrouped[poolId]['isActive'] = isActive;
-
-                if (isActive) {
-                    activePoolIds.push(poolId);
-                } else {
-                    inactivePoolIds.push(poolId);
-                }
-
-                // check if has yield rewards
-                snapshotsGrouped[poolId]['hasYieldReward'] = cumulativeStats.yieldUsd
-                    ? true
-                    : false;
-            }
-
-            console.log('snapshotsGrouped', snapshotsGrouped);
-
-            // set new (redux) state variables
-            dispatch({ type: actionTypes.SET_ALL_POOLS, pools: snapshotsGrouped });
+            // set new Redux state variables
+            dispatch({ type: actionTypes.SET_ALL_POOLS, pools: customPoolsObject });
             dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
             dispatch({
                 type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
@@ -177,16 +155,12 @@ const FetchPoolSnapshotsHook = initialAddress => {
                 inactivePoolIds: inactivePoolIds,
             });
             dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
-            dispatch({
-                type: actionTypes.SET_POOL_SNAPSHOTS_GROUPED,
-                snapshotsGrouped: snapshotsGrouped,
-            });
 
             // save address to browser local storage
             localStorage.setItem('address', queryAddress);
 
             // fire Google Analytics event
-            Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
+            analytics.Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
             // } catch (e) {
             //     console.log('ERROR while fetching data about pools...');
             //     setIsFetchError(true);

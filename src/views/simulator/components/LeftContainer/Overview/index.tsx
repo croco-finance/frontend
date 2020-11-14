@@ -1,5 +1,5 @@
 import { FiatValue, TokenLogo } from '@components/ui';
-import { colors, variables } from '@config';
+import { colors, variables, types } from '@config';
 import { mathUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -54,16 +54,16 @@ interface Props {
 
 const Overview = ({ iconSize = 20 }: Props) => {
     // const numberOfTokens = Object.keys(balances).length;
-    const allPools = useSelector(state => state.allPools);
+    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
     if (!allPools[selectedPoolId]) {
         return null;
     }
 
-    const { tokens, tokenWeights, endTokenBalances, endTokenPricesUsd, isActive } = allPools[
-        selectedPoolId
-    ];
+    const { tokens, isActive } = allPools[selectedPoolId];
+
+    const { tokenBalances, tokenPricesEnd } = allPools[selectedPoolId].cumulativeStats;
     const numberOfTokens = tokens.length;
 
     return (
@@ -89,11 +89,11 @@ const Overview = ({ iconSize = 20 }: Props) => {
                                 </TokenWrapper>
                             }
                             secondColumn={mathUtils.getFormattedPercentageValue(
-                                tokenWeights[i],
+                                token.weight[i],
                                 true,
                             )}
-                            thirdColumn={endTokenBalances[i].toFixed(4)}
-                            fourthColumn={<FiatValue value={endTokenPricesUsd[i]} />}
+                            thirdColumn={tokenBalances[i].toFixed(4)}
+                            fourthColumn={<FiatValue value={tokenPricesEnd[i]} />}
                             color="dark"
                         />
                     );
