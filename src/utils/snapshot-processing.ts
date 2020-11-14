@@ -94,6 +94,7 @@ const getIntervalStats = (snapshot1: types.Snap, snapshot2: types.Snap) => {
         userTokenBalancesEnd,
         newBalancesNoFees,
     );
+
     const hodlValueUsd = mathUtils.multiplyArraysElementWise(
         userTokenBalancesStart,
         tokenPricesEnd,
@@ -210,7 +211,7 @@ const getCumulativeStats = (
         // tokens: lastSnapshot.tokens;
         tokenBalances: lastInterval.userTokenBalancesEnd,
         feesTokenAmounts: new Array(pooledTokensCount).fill(0),
-        yieldTokenAmount: lastSnapshot.yieldReward ? 0 : null, // initialization, not final value
+        yieldTokenAmount: 0, // initialization, not final value
         ethPriceEnd: lastSnapshot.ethPrice,
         tokenPricesEnd: lastInterval.tokenPricesEnd,
         yieldTokenPriceEnd: lastSnapshot.yieldReward ? lastSnapshot.yieldReward.price : null,
@@ -224,7 +225,7 @@ const getCumulativeStats = (
         if (snapshot['txCostEth']) {
             cumulativeStats['txCostEth'] += snapshot['txCostEth'];
         }
-        if (cumulativeStats['yieldTokenAmount'] !== null && snapshot['yieldReward'] !== null) {
+        if (snapshot['yieldReward'] !== null) {
             cumulativeStats['yieldTokenAmount'] += snapshot['yieldReward'].amount;
         }
     });
@@ -235,7 +236,10 @@ const getCumulativeStats = (
             cumulativeStats['feesTokenAmounts'],
             stat['feesTokenAmounts'],
         );
+        // console.log("stat['feesTokenAmounts']", stat['feesTokenAmounts']);
     });
+
+    // console.log(cumulativeStats['feesTokenAmounts']);
 
     // Tx. cost USD reward
     cumulativeStats['txCostUsd'] = cumulativeStats['txCostEth'] * cumulativeStats['ethPriceEnd'];
@@ -249,7 +253,7 @@ const getCumulativeStats = (
     );
 
     // yield reward USD
-    if (cumulativeStats['yieldTokenAmount'] && cumulativeStats['yieldTokenPriceEnd']) {
+    if (cumulativeStats['yieldTokenAmount'] > 0 && cumulativeStats['yieldTokenPriceEnd']) {
         cumulativeStats['yieldUsd'] =
             cumulativeStats['yieldTokenAmount'] * cumulativeStats['yieldTokenPriceEnd'];
     }

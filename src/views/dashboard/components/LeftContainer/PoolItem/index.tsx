@@ -12,7 +12,7 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
     background-color: inherit;
     border-radius: 5px;
     background-color: ${props => (props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND)};
-
+    color: ${props => (props.isSelected ? colors.BLUE : colors.FONT_DARK)};
     padding: 10px;
     flex: 0 0 10em 25em;
     min-height: 70px;

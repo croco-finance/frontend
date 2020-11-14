@@ -1,17 +1,9 @@
-import React, { useState } from 'react';
+import { FiatValue, GrayBox, MultipleTokenLogo } from '@components/ui';
+import { colors, types, variables } from '@config';
+import { getTokenSymbolArr } from '@utils';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import {
-    FiatValue,
-    CryptoValue,
-    GrayBox,
-    ToggleSwitch,
-    MultipleTokenLogo,
-    CryptoFiatValue,
-    Icon,
-} from '@components/ui';
-import { colors, variables, types } from '@config';
-import { mathUtils, lossUtils, getTokenSymbolArr } from '@utils';
 import CardRow from '../CardRow';
 import Graph from '../Graph';
 import VerticalCryptoAmounts from '../VerticalCryptoAmounts';
@@ -48,28 +40,13 @@ const Header = styled.div`
     /* border-bottom: 1px solid ${colors.BACKGROUND_DARK}; */
 `;
 
-const ToggleWrapper = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const ToggleLabel = styled.div`
-    font-size: ${variables.FONT_SIZE.TINY};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
-    margin-right: 6px;
-    min-width: 100px;
-    justify-self: flex-end;
-    text-align: right;
-`;
-
 const GridWrapper = styled.div`
     flex-grow: 1;
     display: grid;
-    grid-gap: ${GRID_GAP}px;
-
+    /* grid-gap: ${GRID_GAP}px; */
+    gap: 28px 10px;
     grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto);
-    /* grid-auto-rows: 40px; */
+    grid-auto-rows: auto;
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
@@ -84,7 +61,6 @@ const GridWrapper = styled.div`
 `;
 
 const HeaderWrapper = styled(GridWrapper)`
-    grid-template-columns: 190px minmax(100px, auto) minmax(140px, auto);
     grid-template-rows: repeat(1, 40px);
     padding: 0px 25px;
     margin-top: 20px;
@@ -92,11 +68,26 @@ const HeaderWrapper = styled(GridWrapper)`
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     /* color: ${colors.FONT_LIGHT}; */
-    color: red;
 `;
 
-const HodlHeaderWrapper = styled(HeaderWrapper)`
-    grid-template-columns: 280px 2px minmax(100px, auto);
+const PoolValueGrayBox = styled(GrayBox)`
+    padding: 24px 15px 15px 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+`;
+
+const RewardsExpensesHeaderWrapper = styled.div`
+    background-color: ${colors.BACKGROUND};
+    margin: 0;
+    padding: 0px 25px;
+`;
+
+const RewardsExpensesHeader = styled(GridWrapper)`
+    grid-template-rows: repeat(1, 30px);
+    font-size: ${variables.FONT_SIZE.TINY};
+
+    padding: 0;
+    border-bottom: 1px solid ${colors.STROKE_GREY};
 `;
 
 const DaysLeftWrapper = styled.div`
@@ -107,34 +98,6 @@ const DaysLeftWrapper = styled.div`
     margin-top: 10px;
 `;
 
-const DaysLeftGridWrapper = styled(GridWrapper)`
-    grid-template-columns: 190px minmax(100px, auto);
-    font-size: ${variables.FONT_SIZE.SMALL};
-    grid-auto-rows: 37px;
-`;
-
-const DaysLeftNote = styled.div`
-    border-top: 1px solid ${colors.STROKE_GREY};
-    color: ${colors.FONT_MEDIUM};
-    padding: 10px;
-`;
-
-const SubValue = styled.div`
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_MEDIUM};
-    font-size: ${variables.FONT_SIZE.SMALL};
-    background-color: ${colors.BACKGROUND_DARK};
-    padding: 3px;
-    border-radius: 3px;
-    margin-right: 8px;
-    /* border-right: 1px solid ${colors.STROKE_GREY}; */
-    padding: 2px 3px;
-`;
-
-const ImpLossValueWrapper = styled.div`
-    display: flex;
-    align-items: center;
-`;
 const PoolValueGridWrapper = styled(GridWrapper)`
     grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto);
     align-items: baseline;
@@ -168,8 +131,10 @@ const CollapseIconWrapper = styled.div`
 `;
 
 const RewardsExpensesWrapper = styled(GrayBox)`
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    /* border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px; */
+    padding-bottom: 24px;
+    border-radius: 0;
 `;
 
 const TotalLossRowWrapper = styled(GrayBox)`
@@ -182,6 +147,16 @@ const TotalLossRowWrapper = styled(GrayBox)`
 
 const TotalLossRow = styled(GridWrapper)`
     height: 40px;
+`;
+
+const TotalWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const TotalSubNote = styled.div`
+    font-size: ${variables.FONT_SIZE.TINY};
+    color: ${colors.FONT_LIGHT};
 `;
 
 const CardOverview = () => {
@@ -201,7 +176,7 @@ const CardOverview = () => {
         );
     }
 
-    let { tokens, isActive, hasYieldReward } = pool;
+    let { tokens, isActive, hasYieldReward, yieldToken } = pool;
 
     const {
         feesUsd,
@@ -215,27 +190,7 @@ const CardOverview = () => {
         yieldTokenAmount,
     } = pool.cumulativeStats;
 
-    // const startBalanceEth = endBalanceEth - netReturnEth;
-
-    const start = 100000;
-    const end = 120000;
-    const dexReturnUsd = 10000;
-    const impLossUsd = 10;
-    const netReturnUsd = 10000;
-    const hodlReturnUsd = 8000;
-
-    const averageRewardsUsd = yieldUsd
-        ? mathUtils.getDailyAverageFeeGains(start, end, feesUsd + yieldUsd)
-        : 999;
-    const daysLeftStaking = Math.abs(Math.floor(dexReturnUsd / averageRewardsUsd));
-
-    // if (!txCostEth) {
-    //     txCostEth = 0;
-    // }
-    // const dexReturnEth = feesEth + yieldRewardEth - txCostEth - impLossEth;
-
     const tokenSymbolsArr = getTokenSymbolArr(tokens);
-    const yieldTokenSymbol = 'UNI';
 
     const endTimeText = isActive ? 'Value today' : 'Withdrawal time';
     const poolShareValueText = isActive ? 'Your pool share value' : 'End pool share value';
@@ -248,7 +203,6 @@ const CardOverview = () => {
 
     const feesRow = (
         <CardRow
-            showThreeCols
             firstColumn="Fees earned"
             secondColumn={
                 <VerticalCryptoAmounts
@@ -257,36 +211,40 @@ const CardOverview = () => {
                 />
             }
             thirdColumn={<FiatValue value={feesUsd} usePlusSymbol />}
-            color="dark"
+            columnColors={['medium', 'light', 'dark']}
         />
     );
 
     const yieldRow =
-        yieldUsd && yieldTokenAmount ? (
+        hasYieldReward && yieldToken ? (
             <CardRow
-                showThreeCols
-                firstColumn="Yield farming gains"
+                firstColumn="Yield reward"
                 secondColumn={
                     <VerticalCryptoAmounts
-                        tokenSymbols={[yieldTokenSymbol]}
+                        tokenSymbols={[yieldToken.symbol]}
                         tokenAmounts={[yieldTokenAmount]}
                     />
                 }
                 thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
-                color="dark"
+                columnColors={['medium', 'light', 'dark']}
             />
         ) : null;
 
     const txCostRow = (
         <CardRow
-            showThreeCols
             firstColumn="Transactions expenses"
             secondColumn={
                 <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
             }
             thirdColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
-            color="dark"
+            columnColors={['medium', 'light', 'dark']}
         />
+    );
+
+    const totalText = (
+        <TotalWrapper>
+            Total <TotalSubNote>Rewards - Expenses</TotalSubNote>
+        </TotalWrapper>
     );
 
     return (
@@ -304,17 +262,15 @@ const CardOverview = () => {
 
             <HeaderWrapper>
                 <CardRow
-                    showThreeCols
                     firstColumn="Pool overview"
-                    secondColumn=""
+                    secondColumn="Crypto "
                     thirdColumn={endTimeText}
-                    color="light"
+                    columnColors={['light', 'light', 'light']}
                 />
             </HeaderWrapper>
-            <GrayBox padding={15}>
+            <PoolValueGrayBox>
                 <PoolValueGridWrapper>
                     <CardRow
-                        showThreeCols
                         firstColumn={poolShareValueText}
                         secondColumn={
                             <VerticalCryptoAmounts
@@ -323,20 +279,21 @@ const CardOverview = () => {
                             />
                         }
                         thirdColumn={<FiatValue value={poolValueUsd} />}
-                        color="dark"
+                        columnColors={['medium', 'light', 'dark']}
                     />
                 </PoolValueGridWrapper>
-            </GrayBox>
+            </PoolValueGrayBox>
 
-            <HeaderWrapper>
-                <CardRow
-                    showThreeCols
-                    firstColumn="Rewards & Expenses"
-                    secondColumn=""
-                    thirdColumn={endTimeText}
-                    color="light"
-                />
-            </HeaderWrapper>
+            <RewardsExpensesHeaderWrapper>
+                <RewardsExpensesHeader>
+                    <CardRow
+                        firstColumn="Rewards & Expenses"
+                        secondColumn=""
+                        thirdColumn=""
+                        columnColors={['light', 'light', 'light']}
+                    />
+                </RewardsExpensesHeader>
+            </RewardsExpensesHeaderWrapper>
             <RewardsExpensesWrapper padding={15}>
                 <GridWrapper>
                     {feesRow}
@@ -347,8 +304,7 @@ const CardOverview = () => {
             <TotalLossRowWrapper>
                 <TotalLossRow>
                     <CardRow
-                        showThreeCols
-                        firstColumn="Total"
+                        firstColumn={totalText}
                         secondColumn={<></>}
                         thirdColumn={
                             <FiatValue

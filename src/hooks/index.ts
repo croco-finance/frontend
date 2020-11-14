@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import exampleDataJson from '../config/example-data-json.json';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionTypes from '@actionTypes';
 import axios from 'axios';

@@ -65,14 +65,6 @@ const reducer = (state = initialState, action) => {
                 userAddress: action.address,
             };
         }
-        case actionTypes.SET_POOL_SNAPSHOTS_GROUPED: {
-            // todo make sure you do deep copy
-            return {
-                ...state,
-                // poolGroups: action.poolGroups,
-                poolGroups: JSON.parse(JSON.stringify(action.snapshotsGrouped)),
-            };
-        }
         default:
             return state;
     }

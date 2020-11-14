@@ -13,7 +13,7 @@ const leftAlignedStyles = css`
 `;
 
 interface RowContentProps {
-    color?: 'light' | 'dark' | 'lightest';
+    color?: 'light' | 'medium' | 'dark';
     textAlign?: 'left' | 'right';
 }
 
@@ -23,23 +23,39 @@ const Col = styled.div<RowContentProps>`
     align-items: center;
     /* height: 36px; */
     color: ${props => (props.color === 'light' ? `${colors.FONT_MEDIUM}` : `${colors.FONT_DARK}`)};
-    /* color: ${props =>
-        props.color === 'lightest' ? `${colors.FONT_LIGHT}` : `${colors.FONT_MEDIUM}`}; */
+
+    ${props => {
+        switch (props.color) {
+            case 'light':
+                return css`
+                    color: ${colors.FONT_LIGHT};
+                `;
+            case 'medium':
+                return css`
+                    color: ${colors.FONT_MEDIUM};
+                `;
+            case 'dark':
+                return css`
+                    color: ${colors.FONT_DARK};
+                `;
+        }
+    }}
 
     /* content alignment styles */
     ${props =>
         props.textAlign === 'left'
             ? leftAlignedStyles
-            : rightAlignedStyles}/* justify-content: center; */
+            : rightAlignedStyles} /* justify-content: center; */
 `;
 
 interface Props {
     firstColumn?: React.ReactNode;
     secondColumn?: React.ReactNode;
     thirdColumn?: React.ReactNode;
-    color?: 'light' | 'dark' | 'lightest';
+    color?: 'light' | 'medium' | 'dark';
     firstColColor?: 'light' | 'dark' | 'lightest';
     showThreeCols?: boolean;
+    columnColors?: Array<'light' | 'medium' | 'dark'>;
 }
 
 const CardRow = ({
@@ -49,18 +65,19 @@ const CardRow = ({
     thirdColumn,
     color = 'light',
     firstColColor = 'light',
-    showThreeCols = false,
+    showThreeCols = true,
+    columnColors = ['medium', 'medium', 'medium'],
 }: Props) => {
     return (
         <>
-            <Col textAlign="left" color={firstColColor}>
+            <Col textAlign="left" color={columnColors[0]}>
                 {firstColumn}
             </Col>
-            <Col textAlign="right" color={color}>
+            <Col textAlign="right" color={columnColors[1]}>
                 {secondColumn}
             </Col>
             {showThreeCols && (
-                <Col textAlign="right" color={color}>
+                <Col textAlign="right" color={columnColors[2]}>
                     {thirdColumn}
                 </Col>
             )}

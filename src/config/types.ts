@@ -1,5 +1,3 @@
-export type PoolId = string;
-
 export enum Exchange {
     UNI_V2 = 'UNI_V2',
     BALANCER = 'BALANCER',
@@ -67,6 +65,7 @@ export interface IntervalStats {
     hodlValueUsd: any;
     poolValueUsd: any;
     ethHodlValueUsd: any;
+    // TODO Deposits / Withdrawals
 }
 
 export interface CumulativeStats {
@@ -74,7 +73,7 @@ export interface CumulativeStats {
     tokenBalances: any;
     feesTokenAmounts: any;
     feesUsd: number;
-    yieldTokenAmount: number | null;
+    yieldTokenAmount: number;
     yieldUsd: number;
     tokenPricesEnd: any;
     yieldTokenPriceEnd: number | null;
@@ -87,7 +86,7 @@ export interface CumulativeStats {
 }
 
 export interface Pool {
-    exchange: string;
+    exchange: Exchange;
     userAddr: string;
     poolId: string;
     isActive: boolean;

@@ -6,8 +6,6 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { FetchPoolsHook } from '../../hooks';
-import { FetchPoolStatsHook } from '../../hooks/stats';
 import { FetchPoolSnapshotsHook } from '../../hooks/snaps';
 import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
