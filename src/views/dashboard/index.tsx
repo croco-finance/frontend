@@ -1,6 +1,6 @@
 import { DashboardContainer, NavBar } from '@components/layout';
 import { Input, LoadingBox } from '@components/ui';
-import { animations, colors, variables } from '@config';
+import { animations, colors, variables, styles } from '@config';
 import { validationUtils } from '@utils';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -72,8 +72,7 @@ const AddressLabel = styled.div`
 const LeftWrapper = styled.div`
     width: 46%;
     padding: 0px 40px 20px 0;
-    max-height: 99vh;
-    overflow-y: auto;
+    max-height: 100vh;
     /* animation: ${animations.SHOW_UP} 1.5s; */
     @media (max-width: 1100px) {
         width: 100%;
@@ -84,25 +83,9 @@ const LeftWrapper = styled.div`
         padding: 10px;
     }
 
-    ::-webkit-scrollbar {
-        background-color: #fff;
-        width: 10px;
-    }
-    /* background of the scrollbar except button or resizer */
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-    /* scrollbar itself */
-    ::-webkit-scrollbar-thumb {
-        /* 7F7F7F for mac-like color */
-        background-color: #babac0;
-        border-radius: 10px;
-        border: 2px solid #fff;
-    }
-    /* set button(top and bottom of the scrollbar) */
-    ::-webkit-scrollbar-button {
-        display: none;
-    }
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 `;
 
 const RightWrapper = styled.div`
@@ -119,9 +102,7 @@ const RightWrapper = styled.div`
     }
 `;
 
-const SummaryWrapper = styled.div`
-    margin-top: 40px;
-`;
+const SummaryWrapper = styled.div``;
 const CardInfoWrapper = styled.div`
     animation: ${animations.SHOW_UP} 1.5s;
 `;
@@ -131,6 +112,14 @@ const Headline = styled.div`
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     margin-bottom: 30px;
     padding-left: 8px;
+`;
+
+const PoolListWrapper = styled.div`
+    margin-top: 60px;
+    padding-right: 10px;
+    /* max-height: calc(100vh - 50px); */
+    overflow-y: auto;
+    ${styles.scrollBarStyles};
 `;
 
 const Dashboard = (props: RouteComponentProps<any>) => {
@@ -231,14 +220,14 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                 {exceptionContent
                     ? exceptionContent
                     : !noPoolsSavedInRedux && (
-                          <>
+                          <PoolListWrapper>
                               <SummaryWrapper>
                                   <SummaryList />
                               </SummaryWrapper>
 
                               <Headline>Your liquidity pools</Headline>
                               <PoolList />
-                          </>
+                          </PoolListWrapper>
                       )}
             </LeftWrapper>
             <RightWrapper>
