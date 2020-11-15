@@ -40,14 +40,14 @@ const CustomTooltipWrapper = styled.div`
 `;
 
 const DateValuesWrapper = styled.div`
-    background-color: #24364bbb;
+    background-color: #24364bcc;
     padding: 8px 10px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 `;
 
 const IntervalValuesWrapper = styled.div`
-    background-color: #0a131dbb;
+    background-color: #0a131dcc;
     padding: 8px 10px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -61,19 +61,24 @@ interface Props extends TooltipProps {
     // inherited from TooltipProps
     payload?: any;
     active?: boolean;
+    setHighlightedAreaId?: any;
 }
 
 const CustomTooltip = (props: Props) => {
     if (props.active && props.payload) {
-        // console.log('payload', props.payload);
-        const {
-            poolValue,
-            poolValue2,
-            poolValue3,
-            feesUsd,
-            yieldUsd,
-            txCostUsd,
-        } = props.payload[0].payload;
+        const { dataKey, name } = props.payload[0];
+
+        // do not highlight any are if the first timestamp is selected
+        if (props.payload.length === 1 && name == 0) {
+            props.setHighlightedAreaId(null);
+        } else {
+            props.setHighlightedAreaId(dataKey);
+        }
+
+        const { poolValues, feesUsd, yieldUsd, txCostUsd } = props.payload[0].payload;
+
+        // get the correct pool value by index (I pass "name" property in Graph/index.ts file)
+        const poolValue = poolValues[name];
 
         const totalPoolBalance = feesUsd + yieldUsd - txCostUsd;
 
@@ -114,6 +119,7 @@ const CustomTooltip = (props: Props) => {
         );
     }
 
+    props.setHighlightedAreaId(null);
     return null;
 };
 

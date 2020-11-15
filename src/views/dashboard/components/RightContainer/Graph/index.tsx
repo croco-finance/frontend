@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { colors, variables } from '@config';
 import { formatUtils } from '@utils';
 import React, { PureComponent } from 'react';
-import { exampleData, exampleData2, exampleDataA, exampleDataB, exampleData3 } from './data';
+import { exampleGraphData } from './data';
 import {
     AreaChart,
     Area,
@@ -12,33 +12,41 @@ import {
     Tooltip,
     Label,
     ResponsiveContainer,
-    Line,
-    LineChart,
     ReferenceDot,
     ReferenceLine,
 } from 'recharts';
 
 import CustomTooltip from './CustomTooltip';
-
 interface Props {
     height?: number;
     referenceX?: number;
     referenceY?: number;
     data?: Array<any>;
 }
-class Graph extends PureComponent<Props> {
+
+interface State {
+    highlightedAreaId: string | null;
+}
+
+class Graph extends PureComponent<Props, State> {
     constructor(props) {
         super(props);
-        this.state = { counter: 0 };
+        this.state = { highlightedAreaId: null };
     }
 
+    setHighlightedAreaId = (dataKey: string) => {
+        this.setState({ highlightedAreaId: dataKey });
+    };
+
     render() {
+        const { highlightedAreaId } = this.state;
+
         return (
             <ResponsiveContainer width="100%" height={270}>
                 <AreaChart
                     width={730}
                     height={260}
-                    data={exampleData3}
+                    data={exampleGraphData}
                     margin={{
                         top: 20,
                         right: 20,
@@ -47,6 +55,30 @@ class Graph extends PureComponent<Props> {
                     }}
                 >
                     <CartesianGrid strokeDasharray="2 2" />
+
+                    <Tooltip
+                        cursor={{ stroke: '#4366b1ff', strokeWidth: 1 }}
+                        content={<CustomTooltip setHighlightedAreaId={this.setHighlightedAreaId} />}
+                    />
+
+                    {exampleGraphData.map((data, i) => {
+                        const dataKeyName = `poolValues[${i}]`;
+                        return (
+                            <Area
+                                isAnimationActive={false}
+                                dataKey={dataKeyName}
+                                name={`${i}`}
+                                fill={highlightedAreaId === dataKeyName ? '#7697deff' : '#dbe7ffff'}
+                                stroke={
+                                    highlightedAreaId === dataKeyName ? '#7697deff' : '#bccbeaff'
+                                }
+                                strokeWidth={1.5}
+                                fillOpacity={0.7}
+                                activeDot={highlightedAreaId === dataKeyName ? { r: 5 } : { r: 0 }}
+                            />
+                        );
+                    })}
+
                     <XAxis
                         dataKey="timestamp"
                         tick={{
@@ -55,6 +87,7 @@ class Graph extends PureComponent<Props> {
                         }}
                         tickFormatter={formatUtils.getFormattedDateFromTimestamp}
                         stroke={colors.FONT_MEDIUM}
+                        // padding={{ left: 2 }}
                     >
                         {/* <Label
                             value="Date"
@@ -84,28 +117,6 @@ class Graph extends PureComponent<Props> {
                             },
                         }}
                     ></YAxis>
-                    <Area
-                        isAnimationActive={false}
-                        dataKey="poolValue"
-                        stroke={colors.PASTEL_PURPLE_DARK}
-                        fill={colors.PASTEL_PURPLE_LIGHT}
-                    />
-                    <Area
-                        isAnimationActive={false}
-                        dataKey="poolValue2"
-                        stroke={colors.PASTEL_PURPLE_DARK}
-                        fill={colors.PASTEL_PURPLE_LIGHT}
-                    />
-                    <Area
-                        isAnimationActive={false}
-                        dataKey="poolValue3"
-                        stroke={colors.PASTEL_PURPLE_DARK}
-                        fill={colors.PASTEL_PURPLE_LIGHT}
-                    />
-                    <Tooltip
-                        cursor={{ stroke: '#2b2c4f', strokeWidth: 1 }}
-                        content={<CustomTooltip feesUsd={123} yieldUsd={90} />}
-                    />
                 </AreaChart>
             </ResponsiveContainer>
         );
