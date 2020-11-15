@@ -3,67 +3,54 @@ import styled from 'styled-components';
 import { TooltipProps } from 'recharts';
 import { colors, variables } from '../../../../../../config';
 import { FiatValue } from '../../../../../../components/ui';
+import TooltipRow from './TooltipRow.ts';
 
+const GridWrapper = styled.div`
+    flex-grow: 1;
+    display: grid;
+    gap: 4px;
+    grid-template-columns: minmax(60px, auto) minmax(75px, auto);
+    grid-auto-rows: auto;
+    font-size: ${variables.FONT_SIZE.TINY};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    align-items: center;
+    overflow-x: auto; /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
+    word-break: break-all;
+    /* padding: 0px 10px; */
+`;
+
+const DateHeader = styled.div`
+    color: #b1bac5;
+    margin-bottom: 5px;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    font-size: 10px;
+`;
 const CustomTooltipWrapper = styled.div`
     display: flex;
     flex-direction: column;
     color: white;
-    background: #001826;
+    /* background: #001826; */
+    /* background-color: ${colors.FONT_DARK}; */
     font-weight: ${variables.FONT_WEIGHT.REGULAR};
-    font-size: ${variables.FONT_SIZE.SMALL};
-    padding: 8px 6px;
-    border-radius: 4px;
+    font-size: ${variables.FONT_SIZE.TINY};
+    /* border-radius: 4px; */
     box-shadow: 0 3px 14px 0 rgba(0, 0, 0, 0.15);
     font-variant-numeric: tabular-nums;
     line-height: 1.5;
-    opacity: 0.8;
 `;
 
-const Col = styled.div`
-    display: flex;
-    flex-direction: column;
+const DateValuesWrapper = styled.div`
+    background-color: #24364bbb;
+    padding: 8px 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 `;
 
-const Row = styled.div<{ noBottomMargin?: boolean }>`
-    display: flex;
-    white-space: nowrap;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0px 8px;
-    margin-bottom: ${props => (props.noBottomMargin ? '0px' : '4px')};
-    margin: 0;
-`;
-
-const Title = styled.span`
-    font-weight: 500;
-    margin-right: 20px;
-`;
-const Value = styled.span`
-    font-weight: ${variables.FONT_WEIGHT.REGULAR};
-    display: flex;
-`;
-
-const ColsWrapper = styled.div`
-    display: flex;
-`;
-
-const Sign = styled.span<{ color: string }>`
-    color: ${props => props.color};
-    width: 1ch;
-    margin-right: 4px;
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-`;
-
-const TotalValueRow = styled(Row)`
-    border-top: 1px solid white;
-    margin-top: 5px;
-    padding-top: 5px;
-`;
-
-const TotalTitleRow = styled(Row)`
-    /* border-top: 1px solid white; */
-    margin-top: 5px;
-    padding-top: 5px;
+const IntervalValuesWrapper = styled.div`
+    background-color: #0a131dbb;
+    padding: 8px 10px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 `;
 
 interface Props extends TooltipProps {
@@ -92,70 +79,37 @@ const CustomTooltip = (props: Props) => {
 
         return (
             <CustomTooltipWrapper>
-                <ColsWrapper>
-                    <Col>
-                        <Row>
-                            <Title>Value</Title>
-                        </Row>
-                        {feesUsd && (
-                            <Row>
-                                <Title>Fees</Title>
-                            </Row>
-                        )}
-                        {yieldUsd && (
-                            <Row>
-                                <Title>Yield</Title>
-                            </Row>
-                        )}
+                <DateValuesWrapper>
+                    <DateHeader>Nov 5</DateHeader>
+                    <GridWrapper>
+                        <TooltipRow
+                            firstColumn="Pool value"
+                            secondColumn={<FiatValue value={poolValue} />}
+                        />
+                        <TooltipRow
+                            firstColumn="Tx. cost"
+                            secondColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
+                        />
+                    </GridWrapper>
+                </DateValuesWrapper>
 
-                        {txCostUsd && (
-                            <Row noBottomMargin>
-                                <Title>Tx. cost</Title>
-                            </Row>
-                        )}
-                        <TotalTitleRow noBottomMargin>
-                            <Title>Total</Title>
-                        </TotalTitleRow>
-                    </Col>
-                    <Col>
-                        <Row>
-                            <Value>
-                                <FiatValue value={poolValue} />
-                            </Value>
-                        </Row>
-                        {feesUsd && (
-                            <Row>
-                                <Value>
-                                    <Sign color={colors.GREEN}>+</Sign>
-                                    <FiatValue value={feesUsd} />
-                                </Value>
-                            </Row>
-                        )}
-
-                        {yieldUsd && (
-                            <Row>
-                                <Value>
-                                    <Sign color={colors.GREEN}>+</Sign>
-                                    <FiatValue value={yieldUsd} />
-                                </Value>
-                            </Row>
-                        )}
-
-                        {txCostUsd && (
-                            <Row noBottomMargin>
-                                <Value>
-                                    <Sign color={colors.RED}>-</Sign>
-                                    <FiatValue value={txCostUsd} />
-                                </Value>
-                            </Row>
-                        )}
-                        <Row noBottomMargin>
-                            <TotalValueRow>
-                                <FiatValue value={totalPoolBalance} colorized usePlusSymbol />
-                            </TotalValueRow>
-                        </Row>
-                    </Col>
-                </ColsWrapper>
+                <IntervalValuesWrapper>
+                    <DateHeader>20 Aug - Nov 5</DateHeader>
+                    <GridWrapper>
+                        <TooltipRow
+                            firstColumn="Fees"
+                            secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
+                        />
+                        <TooltipRow
+                            firstColumn="Yield"
+                            secondColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+                        />
+                        <TooltipRow
+                            firstColumn="Imp. loss"
+                            secondColumn={<FiatValue value={-yieldUsd} usePlusSymbol />}
+                        />
+                    </GridWrapper>
+                </IntervalValuesWrapper>
             </CustomTooltipWrapper>
         );
     }

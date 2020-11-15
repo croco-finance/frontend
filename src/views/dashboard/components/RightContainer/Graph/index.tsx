@@ -34,10 +34,10 @@ class Graph extends PureComponent<Props> {
 
     render() {
         return (
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer width="100%" height={270}>
                 <AreaChart
                     width={730}
-                    height={250}
+                    height={260}
                     data={exampleData3}
                     margin={{
                         top: 20,
@@ -47,13 +47,14 @@ class Graph extends PureComponent<Props> {
                     }}
                 >
                     <CartesianGrid strokeDasharray="2 2" />
-
                     <XAxis
                         dataKey="timestamp"
-                        stroke={colors.FONT_MEDIUM}
-                        tick={{ fontSize: variables.FONT_SIZE.SMALL }}
-                        // ticks={['a', 'b', 'c', 'd']}
+                        tick={{
+                            fontSize: variables.FONT_SIZE.SMALL,
+                            transform: 'translate(0, 12)',
+                        }}
                         tickFormatter={formatUtils.getFormattedDateFromTimestamp}
+                        stroke={colors.FONT_MEDIUM}
                     >
                         {/* <Label
                             value="Date"
@@ -83,10 +84,6 @@ class Graph extends PureComponent<Props> {
                             },
                         }}
                     ></YAxis>
-                    <Tooltip
-                        cursor={{ stroke: '#2b2c4f', strokeWidth: 1 }}
-                        content={<CustomTooltip feesUsd={123} yieldUsd={90} />}
-                    />
                     <Area
                         isAnimationActive={false}
                         dataKey="poolValue"
@@ -105,9 +102,10 @@ class Graph extends PureComponent<Props> {
                         stroke={colors.PASTEL_PURPLE_DARK}
                         fill={colors.PASTEL_PURPLE_LIGHT}
                     />
-                    <ReferenceLine x="1" isFront stroke={colors.STROKE_GREY} />
-                    <ReferenceLine x="2" isFront stroke={colors.STROKE_GREY} />
-                    <Tooltip />
+                    <Tooltip
+                        cursor={{ stroke: '#2b2c4f', strokeWidth: 1 }}
+                        content={<CustomTooltip feesUsd={123} yieldUsd={90} />}
+                    />
                 </AreaChart>
             </ResponsiveContainer>
         );
