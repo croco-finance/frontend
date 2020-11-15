@@ -50,8 +50,8 @@ const FetchPoolSnapshotsHook = initialAddress => {
             const testAddressFirebase = '0x65c084b69b7f21acefe2c68aa25c67efd2e10160';
 
             // try {
-            const fetchedSnapshots = await getSnaps(testAddressFirebase);
-            // let fetchedSnapshots = exampleFirebaseData;
+            // const fetchedSnapshots = await getSnaps(testAddressFirebase);
+            let fetchedSnapshots = exampleFirebaseData;
 
             // check if some pools were founds
             if (!fetchedSnapshots) {

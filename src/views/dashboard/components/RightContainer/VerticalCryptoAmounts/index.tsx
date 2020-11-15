@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { colors, variables } from '@config';
-import { mathUtils } from '@utils';
+import { formatUtils } from '@utils';
 
 const Wrapper = styled.div`
     display: flex;
@@ -26,7 +26,7 @@ const VerticalCryptoAmounts = (props: Props) => {
         <Wrapper>
             {props.tokenSymbols.map((symbol, i) => (
                 <Row>
-                    {mathUtils.getFormattedCryptoValue(props.tokenAmounts[i])} {symbol}
+                    {formatUtils.getFormattedCryptoValue(props.tokenAmounts[i])} {symbol}
                 </Row>
             ))}
         </Wrapper>

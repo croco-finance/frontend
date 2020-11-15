@@ -2,7 +2,7 @@ import * as actionTypes from '@actionTypes';
 import { NavBar, SimulatorContainer } from '@components/layout';
 import { GrayBox, Input, LoadingBox, MultipleTokenSelect } from '@components/ui';
 import { animations, colors, variables, types } from '@config';
-import { mathUtils, validationUtils } from '@utils';
+import { formatUtils, validationUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -128,7 +128,7 @@ const buildPoolOption = (pool: types.PoolItem) => {
         let label = '';
 
         tokens.forEach((token, i) => {
-            let tokenWeight = mathUtils.getFormattedPercentageValue(pool.tokens[i].weight, true);
+            let tokenWeight = formatUtils.getFormattedPercentageValue(pool.tokens[i].weight, true);
             label = label + ` ${token.symbol.toUpperCase()} ${tokenWeight},`;
             value.tokens[i] = token.symbol;
         });

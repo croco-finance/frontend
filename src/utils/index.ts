@@ -4,7 +4,7 @@ import * as mathUtils from './math';
 import * as lossUtils from './loss-computations';
 import * as statsComputations from './snapshot-processing';
 import * as simulatorUtils from './simulator';
-import parseSnapshotToNumberValues from './parse-snapshot';
+import * as formatUtils from './format';
 import { getSnaps } from './firebase-loader';
 
 const getTokenSymbolArr = (tokensArr: Array<any>) => {
@@ -32,7 +32,7 @@ export {
     getTokenSymbolArr,
     getTokenWeightsArr,
     statsComputations,
-    parseSnapshotToNumberValues,
     getSnaps,
     simulatorUtils,
+    formatUtils,
 };

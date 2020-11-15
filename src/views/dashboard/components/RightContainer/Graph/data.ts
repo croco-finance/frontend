@@ -24,7 +24,7 @@ export const exampleData2 = [
 
 export const exampleData3 = [
     {
-        timestamp: 0,
+        timestamp: 1595087838000,
         poolValue: 10000,
         poolValue2: undefined,
         poolValue3: undefined,
@@ -33,7 +33,7 @@ export const exampleData3 = [
         txCostUsd: 12,
     },
     {
-        timestamp: 1,
+        timestamp: 1595087838000,
         poolValue: 20000,
         poolValue2: 15000,
         poolValue3: undefined,
@@ -42,7 +42,7 @@ export const exampleData3 = [
         txCostUsd: 3,
     },
     {
-        timestamp: 2,
+        timestamp: 1595160904000,
         poolValue: undefined,
         poolValue2: 20000,
         poolValue3: 10000,
@@ -51,7 +51,7 @@ export const exampleData3 = [
         txCostUsd: 150,
     },
     {
-        timestamp: 3,
+        timestamp: 1595388461000,
         poolValue: undefined,
         poolValue2: undefined,
         poolValue3: 5000,

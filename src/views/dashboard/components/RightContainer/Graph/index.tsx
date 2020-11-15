@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { colors, variables } from '@config';
+import { formatUtils } from '@utils';
 import React, { PureComponent } from 'react';
 import { exampleData, exampleData2, exampleDataA, exampleDataB, exampleData3 } from './data';
 import {
@@ -51,6 +52,8 @@ class Graph extends PureComponent<Props> {
                         dataKey="timestamp"
                         stroke={colors.FONT_MEDIUM}
                         tick={{ fontSize: variables.FONT_SIZE.SMALL }}
+                        // ticks={['a', 'b', 'c', 'd']}
+                        tickFormatter={formatUtils.getFormattedDateFromTimestamp}
                     >
                         {/* <Label
                             value="Date"

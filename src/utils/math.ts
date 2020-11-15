@@ -29,32 +29,6 @@ const getFiatValueFromCryptoAmounts = (
     return fiatSum;
 };
 
-const getFormattedPercentageValue = (value: number, hideDecimals = false) => {
-    let percentageFormat = 100 * value;
-    const numOfDecimals = countDecimals(percentageFormat);
-
-    if (numOfDecimals === 0 && hideDecimals) {
-        return `${percentageFormat.toFixed(0)}%`;
-    }
-
-    return `${percentageFormat.toFixed(2)}%`;
-};
-
-const getFormattedCryptoValue = (value: number) => {
-    if (value === 0) {
-        return 0;
-    }
-    const firstTwoAfterDecimals = toTwoDecimals(value);
-
-    // compute how many decimals are there before first non-zero value after decimal
-    const decimalsCount = countDecimals(firstTwoAfterDecimals);
-    if (decimalsCount > 5) {
-        return '0.000...';
-    }
-
-    return value.toFixed(5);
-};
-
 const getDailyAverageFeeGains = (timeStampStartSeconds, timeStampEndSeconds, totalFeesUsd) => {
     const differenceMilliseconds = timeStampEndSeconds - timeStampStartSeconds;
     const differenceDays = differenceMilliseconds / (3600 * 24);
@@ -173,7 +147,6 @@ const multiplyEachArrayElementByValue = (arr: Array<number>, value: number) => {
 export {
     countDecimals,
     getFiatValueFromCryptoAmounts,
-    getFormattedPercentageValue,
     getPoolsSummaryObject,
     arrangeArray,
     getDailyAverageFeeGains,
@@ -183,5 +156,5 @@ export {
     sumArr,
     divideEachArrayElementByValue,
     multiplyEachArrayElementByValue,
-    getFormattedCryptoValue,
+    toTwoDecimals,
 };

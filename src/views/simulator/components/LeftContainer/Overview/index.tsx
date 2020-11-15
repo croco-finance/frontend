@@ -1,6 +1,6 @@
 import { FiatValue, TokenLogo } from '@components/ui';
 import { colors, variables, types } from '@config';
-import { mathUtils } from '@utils';
+import { formatUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -88,7 +88,7 @@ const Overview = ({ iconSize = 20 }: Props) => {
                                     <TokenSymbol>{token.symbol}</TokenSymbol>
                                 </TokenWrapper>
                             }
-                            secondColumn={mathUtils.getFormattedPercentageValue(
+                            secondColumn={formatUtils.getFormattedPercentageValue(
                                 token.weight[i],
                                 true,
                             )}
