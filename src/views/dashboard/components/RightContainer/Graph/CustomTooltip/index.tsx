@@ -65,17 +65,17 @@ interface Props extends TooltipProps {
 }
 
 const CustomTooltip = (props: Props) => {
-    if (props.active && props.payload) {
+    if (props.active && props.payload && props.payload[0]) {
         const { dataKey, name } = props.payload[0];
+        const {
+            poolValues,
+            feesUsd,
+            yieldUsd,
+            txCostUsd,
+            timestampMillis,
+        } = props.payload[0].payload;
 
-        // do not highlight any are if the first timestamp is selected
-        if (props.payload.length === 1 && name == 0) {
-            props.setHighlightedAreaId(null);
-        } else {
-            props.setHighlightedAreaId(dataKey);
-        }
-
-        const { poolValues, feesUsd, yieldUsd, txCostUsd } = props.payload[0].payload;
+        props.setHighlightedAreaId(dataKey, timestampMillis);
 
         // get the correct pool value by index (I pass "name" property in Graph/index.ts file)
         const poolValue = poolValues[name];
@@ -101,14 +101,20 @@ const CustomTooltip = (props: Props) => {
                 <IntervalValuesWrapper>
                     <DateHeader>20 Aug - Nov 5</DateHeader>
                     <GridWrapper>
-                        <TooltipRow
-                            firstColumn="Fees"
-                            secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
-                        />
-                        <TooltipRow
-                            firstColumn="Yield"
-                            secondColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
-                        />
+                        {feesUsd ? (
+                            <TooltipRow
+                                firstColumn="Fees"
+                                secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
+                            />
+                        ) : null}
+
+                        {yieldUsd ? (
+                            <TooltipRow
+                                firstColumn="Yield"
+                                secondColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+                            />
+                        ) : null}
+
                         <TooltipRow
                             firstColumn="Imp. loss"
                             secondColumn={<FiatValue value={-yieldUsd} usePlusSymbol />}

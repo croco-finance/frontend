@@ -21,7 +21,7 @@ interface Props {
     height?: number;
     referenceX?: number;
     referenceY?: number;
-    data?: Array<any>;
+    data?: any;
 }
 
 interface State {
@@ -34,19 +34,25 @@ class Graph extends PureComponent<Props, State> {
         this.state = { highlightedAreaId: null };
     }
 
-    setHighlightedAreaId = (dataKey: string) => {
-        this.setState({ highlightedAreaId: dataKey });
+    setHighlightedAreaId = (dataKey: string, timestampMillis: number) => {
+        // do not highlight any Area if this is the first deposit transaction to pool
+        if (timestampMillis === this.props.data[0].timestampMillis) {
+            this.setState({ highlightedAreaId: null });
+        } else {
+            this.setState({ highlightedAreaId: dataKey });
+        }
     };
 
     render() {
         const { highlightedAreaId } = this.state;
+        console.log('highlightedAreaId', highlightedAreaId);
 
         return (
             <ResponsiveContainer width="100%" height={270}>
                 <AreaChart
                     width={730}
                     height={260}
-                    data={exampleGraphData}
+                    data={this.props.data}
                     margin={{
                         top: 20,
                         right: 20,
@@ -61,7 +67,7 @@ class Graph extends PureComponent<Props, State> {
                         content={<CustomTooltip setHighlightedAreaId={this.setHighlightedAreaId} />}
                     />
 
-                    {exampleGraphData.map((data, i) => {
+                    {this.props.data.map((data, i) => {
                         const dataKeyName = `poolValues[${i}]`;
                         return (
                             <Area
@@ -80,13 +86,13 @@ class Graph extends PureComponent<Props, State> {
                     })}
 
                     <XAxis
-                        dataKey="timestamp"
+                        dataKey="timestampMillis"
                         tick={{
                             fontSize: variables.FONT_SIZE.SMALL,
                             transform: 'translate(0, 12)',
                         }}
                         tickFormatter={formatUtils.getFormattedDateFromTimestamp}
-                        stroke={colors.FONT_MEDIUM}
+                        stroke={colors.FONT_LIGHT}
                         // padding={{ left: 2 }}
                     >
                         {/* <Label
@@ -103,7 +109,7 @@ class Graph extends PureComponent<Props, State> {
                     <YAxis
                         tick={{ fontSize: variables.FONT_SIZE.SMALL }}
                         domain={[0, 'dataMax + 4000']}
-                        stroke={colors.FONT_MEDIUM}
+                        stroke={colors.FONT_LIGHT}
                         label={{
                             value: 'Pool value [$]',
                             angle: -90,

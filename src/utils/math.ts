@@ -1,3 +1,5 @@
+import { mathUtils } from '@utils';
+
 const countDecimals = value => {
     try {
         if (Math.floor(value) !== value) return value.toString().split('.')[1].length || 0;
@@ -15,24 +17,18 @@ const toTwoDecimals = n => {
     return Math.round(n * div) / div;
 };
 
-const getFiatValueFromCryptoAmounts = (
-    cryptoAmounts: { [key: string]: number },
-    fiatRates: any,
-    fiat: string,
-) => {
-    let fiatSum = 0;
-
-    for (const [token, amount] of Object.entries(cryptoAmounts)) {
-        fiatSum = fiatSum + amount * fiatRates[fiat][token];
-    }
-
-    return fiatSum;
-};
-
 const getDailyAverageFeeGains = (timeStampStartSeconds, timeStampEndSeconds, totalFeesUsd) => {
     const differenceMilliseconds = timeStampEndSeconds - timeStampStartSeconds;
     const differenceDays = differenceMilliseconds / (3600 * 24);
     return totalFeesUsd / differenceDays;
+};
+
+const getTokenArrayValue = (tokenBalances: Array<number>, tokenPrices: Array<number>) => {
+    if (tokenBalances.length !== tokenPrices.length) {
+        throw 'Arrays have to have the same length';
+    }
+
+    return mathUtils.sumArr(mathUtils.multiplyArraysElementWise(tokenBalances, tokenPrices));
 };
 
 const getPoolsSummaryObject = (allPools: any, filteredPoolIds: Array<string> | 'all') => {
@@ -146,7 +142,6 @@ const multiplyEachArrayElementByValue = (arr: Array<number>, value: number) => {
 
 export {
     countDecimals,
-    getFiatValueFromCryptoAmounts,
     getPoolsSummaryObject,
     arrangeArray,
     getDailyAverageFeeGains,
@@ -157,4 +152,5 @@ export {
     divideEachArrayElementByValue,
     multiplyEachArrayElementByValue,
     toTwoDecimals,
+    getTokenArrayValue,
 };

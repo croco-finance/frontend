@@ -1,6 +1,6 @@
 import { FiatValue, GrayBox, MultipleTokenLogo } from '@components/ui';
 import { colors, types, variables } from '@config';
-import { getTokenSymbolArr } from '@utils';
+import { getTokenSymbolArr, graphUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -201,6 +201,8 @@ const CardOverview = () => {
     });
     tokenSymbolsString = tokenSymbolsString.substring(1); //delete first char (comma)
 
+    const graphData = graphUtils.getGraphData(pool.intervalStats);
+
     const feesRow = (
         <CardRow
             firstColumn="Fees earned"
@@ -345,7 +347,7 @@ const CardOverview = () => {
             </StrategyItem> */}
 
             <GraphWrapper>
-                <Graph />
+                <Graph data={graphData} />
             </GraphWrapper>
         </Wrapper>
     );

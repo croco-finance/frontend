@@ -5,6 +5,7 @@ import * as lossUtils from './loss-computations';
 import * as statsComputations from './snapshot-processing';
 import * as simulatorUtils from './simulator';
 import * as formatUtils from './format';
+import * as graphUtils from './graph';
 import { getSnaps } from './firebase-loader';
 
 const getTokenSymbolArr = (tokensArr: Array<any>) => {
@@ -35,4 +36,5 @@ export {
     getSnaps,
     simulatorUtils,
     formatUtils,
+    graphUtils,
 };

@@ -1,5 +1,5 @@
 import { Card } from '@components/ui';
-import { analytics, animations, colors, variables } from '@config';
+import { analytics, animations, colors, variables, styles } from '@config';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -9,27 +9,8 @@ import CardPoolsSummary from './CardPoolsSummary';
 
 const Wrapper = styled.div`
     /* animation: ${animations.SHOW_UP} 1s; */
-    max-height: calc(100vh - 60px);
-    overflow-y: auto;
-    ::-webkit-scrollbar {
-        background-color: #fff;
-        width: 10px;
-    }
-    /* background of the scrollbar except button or resizer */
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-    /* scrollbar itself */
-    ::-webkit-scrollbar-thumb {
-        /* 7F7F7F for mac-like color */
-        background-color: #babac0;
-        border-radius: 10px;
-        border: 2px solid #fff;
-    }
-    /* set button(top and bottom of the scrollbar) */
-    ::-webkit-scrollbar-button {
-        display: none;
-    }
+    max-height: calc(100vh - 40px);
+    ${styles.scrollBarStyles};
 `;
 
 const SimulatorButtonWrapper = styled.div`
