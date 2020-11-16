@@ -1,5 +1,4 @@
 import { types } from '@config';
-
 const data: types.SnapStructure = {
     '0x003a70265a3662342010823bea15dc84c6f7ed54': [
         {
@@ -1047,7 +1046,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xf737d63395d47f5a356a136e2613bc6a2b93e16894cfb94cd0afe07038447acc',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 10.781189802427484,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x1df8f3aad2353e087ec0296ed5c504f6d622ca18': [
@@ -1172,7 +1180,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xe1445b86eafdca94bff66e3360b55d4b7b1ab162b1ad957397a33f57be868540',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 22.27843257018609,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x330416c863f2acce7af9c9314b422d24c672534a': [
@@ -1209,7 +1226,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x6a3d8ba2cd9f65cb3329f7f7f7604be1b3ea449609944903aa2660aed0a3c42e',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 22.407564768611852,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x4b0b0bf60abbf79a2fd028e4d52ac393982488ce': [
@@ -1290,7 +1316,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x1d7442cb46c073d8e7b3fdf9079ff714cfb19bc9b155b628e11677167013a8eb',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 19.8852825814248,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x60626db611a9957c1ae4ac5b7ede69e24a3b76c5': [
@@ -1459,7 +1494,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xe1193e13bb22a44ed389c13656a4a5cb74ea02ec38f6c0becc4ee055d9abffb6',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 11.07164992676452,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x72cd8f4504941bf8c5a21d1fd83a96499fd71d2c': [
@@ -1672,7 +1716,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x7c43fae15d05631c453e05f9571e3423da89a92d9b020b4c972005dbcee5a9a8',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 8.381946685492649,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x742569fd5266486fd2a50171dbdc88b8ee893ee9': [
@@ -1709,7 +1762,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xecabf4b67dc9b43998b7e94c198497ff10e7aae29683608f3505dcfde88e2cb5',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 25.173332564927502,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10712482,
@@ -1744,7 +1806,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x0deb33f238526423da47a8aee0319a2037a392994faafbd6c23351597e81e80d',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 25.17860166705177,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10712528,
@@ -1779,7 +1850,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xf117fe6863deb6f2e6f570a837cacff517e3d1bf827277593e6cf8b1d9f2c8ce',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 25.187480657963533,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10713938,
@@ -1814,7 +1894,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xc91cce75e70da923d3f58e7de0c524464eedca1d6e90a6c68a28d3575b9ae4b5',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 24.3744599933363,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10714108,
@@ -1849,7 +1938,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xe1c16ce5507496e5a40b2bfc93f84a3c027d42d1b52f04859a7454c915ea8147',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 23.73357550650872,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10716750,
@@ -1884,7 +1982,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x3c04bce26e95068f3333ff81873fbc6c7b09d7c3a9964402728a48d0ba59a3b1',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 24.40263705458876,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10724289,
@@ -1919,7 +2026,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xa6bcacee57abea847a685156dd23ef1d7f21823022c40bd94d2a7f2e922be6d3',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 24.77751377708282,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10725010,
@@ -1954,7 +2070,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x379fa5907b946848c378c48d5b43435a6ae63498004f067b87f3b0c965530d37',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 23.989112802967142,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10725656,
@@ -1989,7 +2114,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x45986045ed321f366e36ec485934c84fb75cba3c8dfb9032612e55994941ef6e',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 24.28957168705575,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10769279,
@@ -2376,7 +2510,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xfdc286479b9b0133a102fb50aacfd5c002317e34a41a9fa949c6557c2f389357',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 19.62965635763523,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x7fc95945eaa14e7a2954052a4c9bfbaa79d170ae': [
@@ -2633,7 +2776,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x0b79040a083e100fbf859ac45c07fc21d447f4809896ccc09ec2a394c428ca95',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 13.251610428458424,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x826f313076afae1b86ad211ef79d0616451a9045': [
@@ -2802,7 +2954,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x0cc7d5b3228794c500f75a2c89c25a78fa75aa078bf2b768f5686b92b2ced782',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 10.510949058784,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x83297cdfd415301bd27fa2c68c7b639c717b1a3a': [
@@ -2839,7 +3000,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x2752616a0265a1a6db70a5c81b6e0f2d16b98d4d267d7429f32cc970819894b5',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 10.986140908664188,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x95c4b6c7cff608c0ca048df8b81a484aa377172b': [
@@ -2964,7 +3134,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xc92e6478f775b18864ffd3e3b4b9977f9ff6f920557eac411a09b05f97e6464a',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 9.303771003493274,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0xa74485e5f668bba37b5c044c386b363f4cbd7c8c': [
@@ -3045,7 +3224,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x33217a605db23b06d2e7c71ce603624c3a673eb82d043a9fd62ea54589834959',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 10.775483744077901,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0xa7d7d09484fa6e5f497b6b687f979509373c6530': [
@@ -3258,7 +3446,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xe6478c877decdd95b140fb700cf5cafa6f491b6fad9a3518dd323f4b87e3521a',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 10.387752613618684,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0xdc7d39628855b6013000c9af957e6cd484beda6c': [
@@ -3306,7 +3503,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xe07e868e83a9ee919b1073fba6afafe80fb25134ddfb268e0b3bc982bfc7410e',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 25.63209304779752,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10724295,
@@ -3352,7 +3558,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xa113bc4adb7ff1515b48e11ab95aef04ebd16f5b1449a78a1dadcb3d7aee5826',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 24.782101950201938,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10769642,
@@ -3398,7 +3613,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xf6612bdb6b5dd40fb3d6c16c05da0cf1a36502c5a5d7047d0b973244e0d4bd49',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 34.725660828388804,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10769725,
@@ -3499,7 +3723,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xf380f0b7709cb8f0b989c2f4b960c1f835154521a6f7bc3956b269109b7ce2f6',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 19.8852825814248,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0xe036cce08cf4e23d33bc6b18e53caf532afa8513': [
@@ -3944,17 +4177,17 @@ const data: types.SnapStructure = {
             },
         },
         {
-            block: 11247202,
-            ethPrice: 464.2328326503425,
+            block: 11269341,
+            ethPrice: 454.339561336535,
             exchange: types.Exchange.BALANCER,
             liquidityTokenBalance: 1104.8327975187126,
-            liquidityTokenTotalSupply: 30386.07000268781,
-            timestamp: 1605383458,
+            liquidityTokenTotalSupply: 30382.435977274705,
+            timestamp: 1605544423,
             txCostEth: 0,
             tokens: [
                 {
-                    priceUsd: 464.2328326503425,
-                    reserve: 9538.017296198313,
+                    priceUsd: 452.5533120691217,
+                    reserve: 9598.451300297356,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -3964,8 +4197,8 @@ const data: types.SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 1.000761220548452,
-                    reserve: 4424492.772467225,
+                    priceUsd: 0.9879156011341889,
+                    reserve: 4396945.368305522,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xe2f2a5c287993345a840db3b0845fbc70f5935a5',
@@ -3976,7 +4209,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: null,
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 12.904476667752583,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0xe26a220a341eaca116bda64cf9d5638a935ae629': [
@@ -4057,7 +4299,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x58672a02d6667ed94be263f653f2f5d3da5923c62cd92d2bd76a9182516d250c',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 10.786185552503683,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a': [
@@ -4094,7 +4345,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x61c88295a6c14d9e6f75e59d30bb9d943aaf8f27cd97970b975a31f8d17573d1',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 16.588559822566268,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10985158,
@@ -4129,7 +4389,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x3963848d11475a52d79e3df2b24e66321437a50f11757595dd100140797e2b59',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 16.547782890665044,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10990302,
@@ -4164,7 +4433,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0xe8dcdeff798886b35a43b45e74ed0b6166af58d842d996580292bcbdd21d57f6',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 16.106626563178867,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
             block: 10990318,
@@ -4199,20 +4477,29 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x6b762d1a8964e93ec10e7e3a13e984034684f8749d36c7c8ed468f268c53082d',
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 16.148368661052213,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
         {
-            block: 11247202,
-            ethPrice: 464.2328326503425,
+            block: 11269341,
+            ethPrice: 454.339561336535,
             exchange: types.Exchange.BALANCER,
             liquidityTokenBalance: 2.296113565722983,
-            liquidityTokenTotalSupply: 313.1196462471672,
-            timestamp: 1605383458,
+            liquidityTokenTotalSupply: 321.6388970340472,
+            timestamp: 1605544423,
             txCostEth: 0,
             tokens: [
                 {
-                    priceUsd: 0.7130206603969771,
-                    reserve: 4692229.584577445,
+                    priceUsd: 0.6665693468788803,
+                    reserve: 4864452.145668335,
                     weight: 0.8,
                     token: {
                         contractAddress: '0xad32a8e6220741182940c5abf610bde99e737b2d',
@@ -4222,8 +4509,8 @@ const data: types.SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 464.2328326503425,
-                    reserve: 1801.7126330924405,
+                    priceUsd: 454.339561336535,
+                    reserve: 1784.180250627544,
                     weight: 0.2,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -4234,7 +4521,16 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: null,
-            yieldReward: null,
+            yieldReward: {
+                amount: 0,
+                price: 12.904476667752583,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
         },
     ],
     '0x2c7a51a357d5739c5c74bf3c96816849d2c9f726': [
@@ -8405,6 +8701,111 @@ const data: types.SnapStructure = {
             txHash: '0xd5a4285b169d0b949d7c3bd3cbee7e90b80c4fee46e2af3a77179ea3245d54ba',
             yieldReward: null,
         },
+        {
+            block: 10836265,
+            ethPrice: 362.4364880372401,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 5753.897049745305,
+            timestamp: 1599770165,
+            txCostEth: 0.03152875,
+            tokens: [
+                {
+                    priceUsd: 33965.28551515475,
+                    reserve: 899.6045252091111,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 362.38609888657396,
+                    reserve: 84317.04373686927,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xd59f437f16269ab56d4d03dc095907db7dddd953ea74b8ae9f3102e6b9ae991f',
+            yieldReward: null,
+        },
+        {
+            block: 10836340,
+            ethPrice: 362.721343187529,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 445.8882370029837,
+            liquidityTokenTotalSupply: 5741.952571982883,
+            timestamp: 1599771274,
+            txCostEth: 0.0868608,
+            tokens: [
+                {
+                    priceUsd: 33360.312264377506,
+                    reserve: 906.3535797770448,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 362.7225475964681,
+                    reserve: 83359.13673868623,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x4d1fdb4427a559883e1a0b45066cf5ae32bfbc3d10d1d492fcca8710c6f2e483',
+            yieldReward: null,
+        },
+        {
+            block: 10836351,
+            ethPrice: 362.7186879738265,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 5296.544362283051,
+            timestamp: 1599771411,
+            txCostEth: 0.0671676,
+            tokens: [
+                {
+                    priceUsd: 33871.540807772086,
+                    reserve: 830.0161627648803,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 362.9752996416506,
+                    reserve: 77454.10322949433,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xad393a122a14200c703f6a2e1efd3099e89cb4dcd4c28f899a0b1dfc9342365b',
+            yieldReward: null,
+        },
     ],
     '0x43ae24960e5534731fc831386c07755a2dc33d47': [
         {
@@ -9702,6 +10103,463 @@ const data: types.SnapStructure = {
                 },
             ],
             txHash: '0x79a4bae4b0e311f10c379f4c10f85c38a701b1e7239fe445207d5935fb0e5823',
+            yieldReward: null,
+        },
+    ],
+    '0x8927616110cf23c4e87dc98614eb9fbaae95216c': [
+        {
+            block: 10844834,
+            ethPrice: 365.523134286171,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 3413.829050619443,
+            liquidityTokenTotalSupply: 45381.41190924897,
+            timestamp: 1599883693,
+            txCostEth: 0.02844015,
+            tokens: [
+                {
+                    priceUsd: 8.42359464403195,
+                    reserve: 309767.2088004811,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 365.529458287902,
+                    reserve: 7138.5584438812975,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x4ea1c8842497c0c49d3a9e7d46579a40ff08eadcb5d175e283353388f61fa4ab',
+            yieldReward: null,
+        },
+        {
+            block: 10844843,
+            ethPrice: 365.5331645296516,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 45710.32684388915,
+            timestamp: 1599883845,
+            txCostEth: 0.0493776,
+            tokens: [
+                {
+                    priceUsd: 8.238923394890639,
+                    reserve: 315572.97174209816,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 365.7068208110311,
+                    reserve: 7109.469639956766,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xc76a57aafebd3cab10140663e2ed4a43a65e6037c60a56d559e71d1092e8cb26',
+            yieldReward: null,
+        },
+        {
+            block: 10844905,
+            ethPrice: 366.07553240395765,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 1221.4123433644638,
+            liquidityTokenTotalSupply: 48349.0409799259,
+            timestamp: 1599884458,
+            txCostEth: 0.0405638,
+            tokens: [
+                {
+                    priceUsd: 9.12098047571438,
+                    reserve: 317467.7593279797,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 366.07010887220883,
+                    reserve: 7910.007302754466,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xd2ebe088bd8791d98a03d82877b947418ba661f3da4449a3f9971a5ceabc40db',
+            yieldReward: null,
+        },
+        {
+            block: 10844907,
+            ethPrice: 366.00148339272226,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 48349.0409799259,
+            timestamp: 1599884466,
+            txCostEth: 0.046809,
+            tokens: [
+                {
+                    priceUsd: 9.12098047571438,
+                    reserve: 317467.7593279797,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 366.07010887220883,
+                    reserve: 7910.007302754466,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xfe0bef19bea9ea021ebdc29a80f59fecfa090a7af5ce8e0c1d4c11b97066a2e8',
+            yieldReward: null,
+        },
+        {
+            block: 10849553,
+            ethPrice: 381.0551194680175,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 89420.74380631691,
+            timestamp: 1599945791,
+            txCostEth: 0.0429966,
+            tokens: [
+                {
+                    priceUsd: 8.67203099594113,
+                    reserve: 616999.8038993194,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 381.1907934250879,
+                    reserve: 14036.649143143619,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xb047adb6cc104add0b58cec30b1deb56da7888c2825eb8dcb5991a969b31cf51',
+            yieldReward: null,
+        },
+        {
+            block: 10849567,
+            ethPrice: 380.3055301930614,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 4635.241393983907,
+            liquidityTokenTotalSupply: 86254.00847880774,
+            timestamp: 1599945982,
+            txCostEth: 0.06910675,
+            tokens: [
+                {
+                    priceUsd: 8.392045868476618,
+                    reserve: 604438.8122481885,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 380.4713411729817,
+                    reserve: 13332.090194851542,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x2d32c490c490c57bef630f662de4d2bb3c9afef076a56223340cc618bf42b980',
+            yieldReward: null,
+        },
+        {
+            block: 10849574,
+            ethPrice: 380.82569131284504,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 81618.76708482383,
+            timestamp: 1599946126,
+            txCostEth: 0.048232,
+            tokens: [
+                {
+                    priceUsd: 7.760047244766122,
+                    reserve: 594838.7920475182,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 380.4877700154076,
+                    reserve: 12131.735874510317,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x13a3d20383bfdb0859f1c0aa12e46b29a4558bbaa3521c3d00dec3a029b74164',
+            yieldReward: null,
+        },
+        {
+            block: 10850004,
+            ethPrice: 380.9948454125232,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 4125.833122573538,
+            liquidityTokenTotalSupply: 91108.38710290093,
+            timestamp: 1599952219,
+            txCostEth: 0.04536825,
+            tokens: [
+                {
+                    priceUsd: 9.14594850155505,
+                    reserve: 612562.6395820505,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 381.10752372387884,
+                    reserve: 14700.487413240304,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x857e1631eabb2b5742dc0f1f8d16d26031013fc2fd8efd7dc40a1037082c2f2b',
+            yieldReward: null,
+        },
+        {
+            block: 10850007,
+            ethPrice: 380.6533120772334,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 91108.38710290093,
+            timestamp: 1599952279,
+            txCostEth: 0.0617265,
+            tokens: [
+                {
+                    priceUsd: 9.413695377766965,
+                    reserve: 603484.4717454329,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 380.69507812997927,
+                    reserve: 14922.753953452668,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xb4cdfd369977c5b6cfb2eec6756e569001a7083d53c42f6a973622f7c2012489',
+            yieldReward: null,
+        },
+        {
+            block: 10850026,
+            ethPrice: 380.093957322635,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 2975.3310475358826,
+            liquidityTokenTotalSupply: 96089.54202442818,
+            timestamp: 1599952553,
+            txCostEth: 0.04536825,
+            tokens: [
+                {
+                    priceUsd: 10.702522091924013,
+                    reserve: 596529.0460102551,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 380.08525626105126,
+                    reserve: 16797.19270408685,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xe8b58cb57298d5202ecdcb92363182b955066db6f5969ae561d4c0cadfbe81d8',
+            yieldReward: null,
+        },
+        {
+            block: 10850036,
+            ethPrice: 380.76885083862226,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 96161.00759492777,
+            timestamp: 1599952649,
+            txCostEth: 0.05851125,
+            tokens: [
+                {
+                    priceUsd: 10.71627091198722,
+                    reserve: 596982.391110037,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 380.5836527336673,
+                    reserve: 16809.510831244213,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xbd9e9b40b4af837d9bc69a204e7f69a2399936c658ac9ea0ca03e1851fe7813c',
+            yieldReward: null,
+        },
+        {
+            block: 10850960,
+            ethPrice: 382.1251408259909,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 7101.164170109421,
+            liquidityTokenTotalSupply: 102035.71228586668,
+            timestamp: 1599964835,
+            txCostEth: 0.03809175,
+            tokens: [
+                {
+                    priceUsd: 7.820337867650656,
+                    reserve: 744156.471086335,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 382.49655857063016,
+                    reserve: 15214.659844368593,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x8179960e107f80a2440943ad9792df07e67ddb3df72831aa5473cf418dd3e0fe',
+            yieldReward: null,
+        },
+        {
+            block: 10850965,
+            ethPrice: 381.35073373225646,
+            exchange: types.Exchange.UNI_V2,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 94998.01397817874,
+            timestamp: 1599964924,
+            txCostEth: 0.0683868,
+            tokens: [
+                {
+                    priceUsd: 7.787933098547497,
+                    reserve: 693227.0396016808,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x68a3637ba6e75c0f66b61a42639c4e9fcd3d4824',
+                        name: 'MoonToken',
+                        platform: 'ethereum',
+                        symbol: 'MOON',
+                    },
+                },
+                {
+                    priceUsd: 381.3478418146785,
+                    reserve: 14157.168900789677,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xe38874740e576ac73d1b7f75302eecf53c6777239de7e03f792f2b153f2227c5',
             yieldReward: null,
         },
     ],

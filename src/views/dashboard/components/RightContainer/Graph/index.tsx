@@ -17,6 +17,22 @@ import {
 } from 'recharts';
 
 import CustomTooltip from './CustomTooltip';
+
+const getYAxisMaxValue = data => {
+    let maxValue = 0;
+    data.forEach(item => {
+        item.poolValues.forEach(value => {
+            if (value > maxValue) maxValue = value;
+        });
+    });
+
+    // Increase the max value by 5% and round value to thousands
+    maxValue = maxValue + 0.05 * maxValue;
+    maxValue = Math.round(maxValue / 1000) * 1000;
+
+    return maxValue;
+};
+
 interface Props {
     height?: number;
     referenceX?: number;
@@ -45,19 +61,25 @@ class Graph extends PureComponent<Props, State> {
 
     render() {
         const { highlightedAreaId } = this.state;
-        console.log('highlightedAreaId', highlightedAreaId);
+        const { data } = this.props;
+
+        let maxValue = 0;
+
+        if (data) {
+            maxValue = getYAxisMaxValue(data);
+        }
 
         return (
             <ResponsiveContainer width="100%" height={270}>
                 <AreaChart
-                    width={730}
+                    width={800}
                     height={260}
-                    data={this.props.data}
+                    data={data}
                     margin={{
-                        top: 20,
-                        right: 20,
-                        bottom: 20,
-                        left: 60,
+                        top: 0,
+                        right: 48,
+                        bottom: 0,
+                        left: 48,
                     }}
                 >
                     <CartesianGrid strokeDasharray="2 2" />
@@ -67,7 +89,7 @@ class Graph extends PureComponent<Props, State> {
                         content={<CustomTooltip setHighlightedAreaId={this.setHighlightedAreaId} />}
                     />
 
-                    {this.props.data.map((data, i) => {
+                    {data.map((data, i) => {
                         const dataKeyName = `poolValues[${i}]`;
                         return (
                             <Area
@@ -108,7 +130,7 @@ class Graph extends PureComponent<Props, State> {
                     </XAxis>
                     <YAxis
                         tick={{ fontSize: variables.FONT_SIZE.SMALL }}
-                        domain={[0, 'dataMax + 4000']}
+                        domain={[0, maxValue]}
                         stroke={colors.FONT_LIGHT}
                         label={{
                             value: 'Pool value [$]',

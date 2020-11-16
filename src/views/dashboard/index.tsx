@@ -1,4 +1,9 @@
-import { DashboardContainer, NavBar } from '@components/layout';
+import {
+    DashboardContainer,
+    LeftLayoutContainer,
+    RightLayoutContainer,
+    NavBar,
+} from '@components/layout';
 import { Input, LoadingBox } from '@components/ui';
 import { animations, colors, variables, styles } from '@config';
 import { validationUtils } from '@utils';
@@ -10,6 +15,28 @@ import { FetchPoolSnapshotsHook } from '../../hooks/snaps';
 import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
+
+const RightContentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 40px 10px 0 120px;
+    max-width: 800px;
+    align-items: center;
+`;
+
+const Header = styled.div`
+    width: 100%;
+    padding-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    background-color: ${colors.BACKGROUND_LIGHT};
+    border-bottom: 1px solid ${colors.STROKE_GREY};
+`;
+
+const HeaderContent = styled.div`
+    width: 100%;
+    max-width: 80%;
+`;
 
 const ExceptionWrapper = styled.div`
     display: flex;
@@ -69,57 +96,39 @@ const AddressLabel = styled.div`
     padding-left: 5px;
 `;
 
-const LeftWrapper = styled.div`
-    width: 46%;
-    padding: 0px 40px 20px 0;
-    max-height: 100vh;
-    /* animation: ${animations.SHOW_UP} 1.5s; */
-    @media (max-width: 1100px) {
-        width: 100%;
-        padding: 20px;
-    }
-
-    @media (max-width: 520px) {
-        padding: 10px;
-    }
-
+const LeftSubHeaderContent = styled.div`
+    /* padding: 40px 100px 20px 160px; */
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    align-items: center;
+    /* padding-top: 40px; */
+    overflow-y: auto;
+    overflow-x: hidden;
+    ${styles.scrollBarStyles};
 `;
 
-const RightWrapper = styled.div`
-    padding: 40px 0px 20px 50px;
-    width: 54%;
-    background-color: ${colors.BACKGROUND};
-    @media (max-width: 1100px) {
-        width: 100%;
-        padding: 20px;
-    }
-
-    @media (max-width: 520px) {
-        padding: 10px;
-    }
-`;
-
-const SummaryWrapper = styled.div``;
 const CardInfoWrapper = styled.div`
     animation: ${animations.SHOW_UP} 1.5s;
+    width: 100%;
 `;
 
 const Headline = styled.div`
-    font-size: ${variables.FONT_SIZE.H2};
+    /* align-self: baseline; */
+    padding-top: 24px;
+    margin-bottom: 38px;
+    padding-left: 20px;
+    color: ${colors.FONT_MEDIUM};
+    font-size: ${variables.FONT_SIZE.H3};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    margin-bottom: 30px;
-    padding-left: 8px;
 `;
 
 const PoolListWrapper = styled.div`
-    margin-top: 60px;
-    padding-right: 10px;
-    /* max-height: calc(100vh - 50px); */
-    overflow-y: auto;
-    ${styles.scrollBarStyles};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 10px 10px 0;
+    width: 100%;
+    max-width: 540px;
 `;
 
 const Dashboard = (props: RouteComponentProps<any>) => {
@@ -128,15 +137,6 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     );
     const allPoolsGlobal = useSelector(state => state.allPools);
     const [invalidAddressInput, setInvalidAddressInput] = useState(false);
-
-    // on component startup fetch pools
-    // const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
-    //     props.match.params.address ? props.match.params.address : '',
-    // );
-
-    // const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolStatsHook(
-    //     props.match.params.address ? props.match.params.address : '',
-    // );
 
     const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolSnapshotsHook(
         props.match.params.address ? props.match.params.address : '',
@@ -199,45 +199,51 @@ const Dashboard = (props: RouteComponentProps<any>) => {
 
     return (
         <DashboardContainer>
-            <LeftWrapper>
-                <NavBar></NavBar>
-                <AddressWrapper>
-                    <Input
-                        textIndent={[70, 0]}
-                        innerAddon={<AddressLabel>Address:</AddressLabel>}
-                        addonAlign="left"
-                        placeholder="Enter valid Ethereum address"
-                        value={inputAddress}
-                        onChange={event => {
-                            handleAddressChange(event.target.value);
-                        }}
-                    />
-                    {invalidAddressInput ? (
-                        <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>
-                    ) : null}
-                </AddressWrapper>
-
-                {exceptionContent
-                    ? exceptionContent
-                    : !noPoolsSavedInRedux && (
-                          <PoolListWrapper>
-                              <SummaryWrapper>
+            <LeftLayoutContainer>
+                <Header>
+                    <HeaderContent>
+                        <NavBar />
+                        <AddressWrapper>
+                            <Input
+                                textIndent={[70, 0]}
+                                innerAddon={<AddressLabel>Address:</AddressLabel>}
+                                addonAlign="left"
+                                placeholder="Enter valid Ethereum address"
+                                value={inputAddress}
+                                onChange={event => {
+                                    handleAddressChange(event.target.value);
+                                }}
+                                useWhiteBackground
+                                useDarkBorder
+                            />
+                            {invalidAddressInput ? (
+                                <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>
+                            ) : null}
+                        </AddressWrapper>
+                    </HeaderContent>
+                </Header>
+                <LeftSubHeaderContent>
+                    {exceptionContent
+                        ? exceptionContent
+                        : !noPoolsSavedInRedux && (
+                              <PoolListWrapper>
+                                  <Headline>Your liquidity pools</Headline>
                                   <SummaryList />
-                              </SummaryWrapper>
-
-                              <Headline>Your liquidity pools</Headline>
-                              <PoolList />
-                          </PoolListWrapper>
-                      )}
-            </LeftWrapper>
-            <RightWrapper>
-                {rightWrapperContent}
-                {!exceptionContent && !noPoolsSavedInRedux && (
-                    <CardInfoWrapper>
-                        <RightContainer />
-                    </CardInfoWrapper>
-                )}
-            </RightWrapper>
+                                  <PoolList />
+                              </PoolListWrapper>
+                          )}
+                </LeftSubHeaderContent>
+            </LeftLayoutContainer>
+            <RightLayoutContainer>
+                <RightContentWrapper>
+                    {rightWrapperContent}
+                    {!exceptionContent && !noPoolsSavedInRedux && (
+                        <CardInfoWrapper>
+                            <RightContainer />
+                        </CardInfoWrapper>
+                    )}
+                </RightContentWrapper>
+            </RightLayoutContainer>
         </DashboardContainer>
     );
 };

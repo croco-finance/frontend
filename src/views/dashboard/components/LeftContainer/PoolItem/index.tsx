@@ -4,32 +4,7 @@ import { colors, variables, types } from '@config';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-
-const Wrapper = styled.div<{ isSelected: boolean }>`
-    position: relative;
-    display: flex;
-    align-items: center;
-    background-color: inherit;
-    border-radius: 5px;
-    background-color: ${props => (props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND)};
-    color: ${props => (props.isSelected ? colors.BLUE : colors.FONT_DARK)};
-    padding: 10px;
-    flex: 0 0 10em 25em;
-    min-height: 70px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: 0s;
-
-    &:hover {
-        /* background-color: ${props => (props.isSelected ? '#c5e3ff' : colors.BACKGROUND)}; */
-        background-color: ${props =>
-            props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND_DARK};
-    }
-
-    @media (max-width: 520px) {
-        padding: 4px;
-    }
-`;
+import PoolItemCard from '../PoolItemCard';
 
 const Item = styled.div`
     display: flex;
@@ -58,7 +33,17 @@ const TokenItem = styled.div`
     padding: 5px 0;
 `;
 
-const TokenWeight = styled.div``;
+const TokenWeight = styled.div<{ isSelected: boolean }>`
+    font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    color: ${props => (props.isSelected ? colors.BLUE : colors.FONT_MEDIUM)};
+    border-left: 1px solid ${colors.STROKE_GREY};
+    border-color: ${props => (props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.STROKE_GREY)};
+    padding-left: 10px;
+    margin-left: 10px;
+    font-size: ${variables.FONT_SIZE.TINY};
+    display: flex;
+    align-items: center;
+`;
 
 const TokenSymbol = styled.div`
     margin-left: 10px;
@@ -117,33 +102,36 @@ const PoolItem = ({ poolId }: Props) => {
     };
 
     return (
-        <Wrapper onClick={event => handleOnClick(event, poolId)} isSelected={isSelected}>
-            <ExchangeLogoWrapper>
-                <TokenLogo symbol={exchange} size={17} />
-            </ExchangeLogoWrapper>
-            <PoolWrapper>
-                {tokens.map((token, i) => {
-                    return (
-                        <TokenItem key={token.symbol}>
-                            <TokenLogo symbol={token.symbol} size={18} />
-                            <TokenSymbol>{token.symbol}</TokenSymbol>
-                            <Circle>&bull;</Circle>
-                            <TokenWeight>{token.weight.toFixed(2)}%</TokenWeight>
-                        </TokenItem>
-                    );
-                })}
-            </PoolWrapper>
+        <div onClick={event => handleOnClick(event, poolId)}>
+            <PoolItemCard isSelected={isSelected}>
+                <ExchangeLogoWrapper>
+                    <TokenLogo symbol={exchange} size={17} />
+                </ExchangeLogoWrapper>
+                <PoolWrapper>
+                    {tokens.map((token, i) => {
+                        return (
+                            <TokenItem key={token.symbol}>
+                                <TokenLogo symbol={token.symbol} size={18} />
+                                <TokenSymbol>{token.symbol}</TokenSymbol>
+                                <TokenWeight isSelected={isSelected}>
+                                    {token.weight.toFixed(2)}%
+                                </TokenWeight>
+                            </TokenItem>
+                        );
+                    })}
+                </PoolWrapper>
 
-            <Value>
-                <FiatValue value={poolValueUsd}></FiatValue>
-            </Value>
-            <Gains>
-                <FiatValue
-                    value={yieldUsd ? feesUsd + yieldUsd : feesUsd}
-                    usePlusSymbol
-                ></FiatValue>
-            </Gains>
-        </Wrapper>
+                <Value>
+                    <FiatValue value={poolValueUsd}></FiatValue>
+                </Value>
+                <Gains>
+                    <FiatValue
+                        value={yieldUsd ? feesUsd + yieldUsd : feesUsd}
+                        usePlusSymbol
+                    ></FiatValue>
+                </Gains>
+            </PoolItemCard>
+        </div>
     );
 };
 

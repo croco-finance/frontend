@@ -8,7 +8,7 @@ import { getSnaps } from '@utils';
 
 // if the "end" timestamp of pool is older than this, we will consider an inactive pool
 // (user withdrew all funds from that pool)
-const INACTIVE_POOL_THRESHOLD_SECONDS = 14400; // 14400 sec = 4 hours
+const INACTIVE_POOL_THRESHOLD_SECONDS = 3600 * 10; // 4 hours
 
 const getTokensCustomObj = (tokens: Array<types.PoolToken>) => {
     const tokensCount = tokens.length;
@@ -52,6 +52,8 @@ const FetchPoolSnapshotsHook = initialAddress => {
             // try {
             // const fetchedSnapshots = await getSnaps(testAddressFirebase);
             let fetchedSnapshots = exampleFirebaseData;
+
+            console.log('fetchedSnapshots', fetchedSnapshots);
 
             // check if some pools were founds
             if (!fetchedSnapshots) {

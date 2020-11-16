@@ -1,5 +1,10 @@
 import * as actionTypes from '@actionTypes';
-import { NavBar, SimulatorContainer } from '@components/layout';
+import {
+    NavBar,
+    SimulatorContainer,
+    LeftLayoutContainer,
+    RightLayoutContainer,
+} from '@components/layout';
 import { GrayBox, Input, LoadingBox, MultipleTokenSelect } from '@components/ui';
 import { animations, colors, variables, types } from '@config';
 import { formatUtils, validationUtils } from '@utils';
@@ -58,25 +63,6 @@ const AddressLabel = styled.div`
     padding-left: 5px;
 `;
 
-const LeftWrapper = styled.div`
-    width: 46%;
-    padding: 0px 40px 20px 0;
-    @media (max-width: 1100px) {
-        width: 100%;
-        padding: 20px;
-    }
-`;
-
-const RightWrapper = styled.div`
-    padding: 40px 0px 20px 40px;
-    width: 54%;
-    background-color: ${colors.BACKGROUND};
-    @media (max-width: 1100px) {
-        width: 100%;
-        padding: 20px;
-    }
-`;
-
 const CardInfoWrapper = styled.div`
     /* animation: ${animations.SHOW_UP} 1.5s; */
 `;
@@ -119,6 +105,10 @@ const InactivePoolWarning = styled.div`
     background-color: #f7f4ff;
     border: 1px solid #baa6f9;
     color: #673df1;
+`;
+
+const SimulationBoxWrapper = styled(GrayBox)`
+    background-color: ${colors.WHITE};
 `;
 
 const buildPoolOption = (pool: types.PoolItem) => {
@@ -238,7 +228,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
 
     return (
         <SimulatorContainer>
-            <LeftWrapper>
+            <LeftLayoutContainer backgroundColor={colors.BACKGROUND_LIGHT}>
                 <NavBar></NavBar>
                 <AddressWrapper>
                     <Input
@@ -250,6 +240,8 @@ const Simulator = (props: RouteComponentProps<any>) => {
                         onChange={event => {
                             handleAddressChange(event.target.value);
                         }}
+                        useWhiteBackground
+                        useDarkBorder
                     />
                 </AddressWrapper>
 
@@ -288,20 +280,20 @@ const Simulator = (props: RouteComponentProps<any>) => {
                         <OverviewWrapper>
                             <Overview />
                         </OverviewWrapper>
-                        <GrayBox>
+                        <SimulationBoxWrapper>
                             <SimulationBox
                                 onChange={setNewPrices}
                                 simulatedCoefficients={simulatedPriceCoefficients}
                             />
-                        </GrayBox>
+                        </SimulationBoxWrapper>
                     </>
                 )}
-            </LeftWrapper>
-            <RightWrapper>
+            </LeftLayoutContainer>
+            <RightLayoutContainer>
                 <CardInfoWrapper>
                     <RightContainer simulatedCoefficients={simulatedPriceCoefficients} />
                 </CardInfoWrapper>
-            </RightWrapper>
+            </RightLayoutContainer>
         </SimulatorContainer>
     );
 };

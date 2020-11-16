@@ -1,6 +1,8 @@
 export default {
+    BACKGROUND_LIGHT: '#fafafc',
     BACKGROUND: '#f6f6f9',
-    BACKGROUND_DARK: '#eaeaf0',
+    BACKGROUND_DARK: '#ebebf0',
+    BACKGROUND_BLUE: '#eef5ff',
 
     PASTEL_GREEN_LIGHT: '#c3f8e5',
     PASTEL_GREEN_MEDIUM: '#64e4b6',
@@ -17,6 +19,7 @@ export default {
     PASTEL_YELLOW: '#fff9aa',
 
     STROKE_GREY: '#d6dbe4',
+    STROKE_BLUE: '#b4cfff',
 
     FONT_LIGHT: '#94a2bb',
     FONT_MEDIUM: '#657795',

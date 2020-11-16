@@ -1,16 +1,76 @@
-import { Card } from '@components/ui';
-import { analytics, animations, colors, variables, styles } from '@config';
-import React from 'react';
+import { analytics, animations, colors, variables, styles, types } from '@config';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import CardOverview from './CardOverview';
-import CardPoolsSummary from './CardPoolsSummary';
+import PoolOverview from './PoolOverview';
+import PoolsSummary from './PoolsSummary';
+import Graph from './Graph';
+import { graphUtils, getTokenSymbolArr } from '@utils';
+import { MultipleTokenLogo, InlineCircle } from '@components/ui';
 
 const Wrapper = styled.div`
     /* animation: ${animations.SHOW_UP} 1s; */
-    max-height: calc(100vh - 40px);
-    ${styles.scrollBarStyles};
+    /* max-height: calc(100vh - 40px);
+    ${styles.scrollBarStyles}; */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const Headline = styled.div`
+    padding: 0 10px;
+    font-size: ${variables.FONT_SIZE.SMALL};
+    margin-top: 0;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-self: flex-start;
+    align-items: center;
+`;
+
+const HeadlineText = styled.div<{ isLarge: boolean }>`
+    margin-left: 6px;
+    color: ${colors.FONT_LIGHT};
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* font-size: ${props => (props.isLarge ? '13px' : variables.FONT_SIZE.SMALL)}; */
+`;
+
+const Header = styled.div`
+    display: flex;
+    width: 100%;
+    align-items: center;
+    /* padding: 0 10px 10px 10px; */
+    align-items: center;
+    border-bottom: 1px solid ${colors.BACKGROUND_DARK};
+    margin-bottom: 40px;
+    color: ${colors.FONT_LIGHT};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+`;
+
+const ButtonsWrapper = styled.div`
+    display: flex;
+`;
+
+const Button = styled.div<{ selected: boolean }>`
+    flex-grow: 1;
+    color: ${props => (props.selected ? colors.GREEN : colors.FONT_LIGHT)};
+    border-bottom: 2px solid;
+    border-color: ${props => (props.selected ? colors.GREEN : 'transparent')};
+    cursor: pointer;
+    padding: 14px;
+    box-sizing: border-box;
+    margin-bottom: -1px;
+    font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    font-size: ${variables.FONT_SIZE.NORMAL};
+`;
+
+const GraphWrapper = styled.div`
+    padding: 50px 10px 20px 10px;
 `;
 
 const SimulatorButtonWrapper = styled.div`
@@ -22,6 +82,7 @@ const SimulatorButtonWrapper = styled.div`
     padding: 4px 20px;
     flex-direction: column;
     color: ${colors.FONT_MEDIUM};
+    font-size: ${variables.FONT_SIZE.NORMAL};
 `;
 
 const StyledLink = styled(Link)`
@@ -32,7 +93,7 @@ const StyledLink = styled(Link)`
     background-color: ${colors.PASTEL_BLUE_LIGHT};
     border-radius: 4px;
     margin-top: 16px;
-    padding: 10px;
+    padding: 8px 10px;
     transition: 0.12s;
 
     &:hover {
@@ -42,46 +103,101 @@ const StyledLink = styled(Link)`
     }
 `;
 
+type TabOptions = 'overview' | 'strategies';
+
 const RightContainer = () => {
+    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const userAddress = useSelector(state => state.userAddress);
     const activePoolIds = useSelector(state => state.activePoolIds);
+    const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
 
     if (activePoolIds.length <= 0 && selectedPoolId === 'all') {
         return null;
     }
 
+    let graphData =
+        selectedPoolId === 'all'
+            ? []
+            : graphUtils.getGraphData(allPools[selectedPoolId].intervalStats);
+
+    let tokenSymbolsArr;
+    let headlineText = '';
+    let isLargeHeadline = true;
+
+    if (selectedPoolId !== 'all') {
+        isLargeHeadline = false;
+        tokenSymbolsArr = getTokenSymbolArr(allPools[selectedPoolId].tokens);
+        tokenSymbolsArr?.forEach((symbol, i) => {
+            headlineText = headlineText + ', ' + symbol;
+        });
+        headlineText = headlineText.substring(1); //delete first char (comma)
+    } else {
+        headlineText = 'Summary of active positions';
+    }
+
     return (
-        <Card>
-            <Wrapper>
-                {selectedPoolId === 'all' ? (
-                    <CardPoolsSummary />
-                ) : (
-                    <>
-                        <CardOverview />
-                        {activePoolIds.includes(selectedPoolId) ? (
-                            <SimulatorButtonWrapper>
-                                See how changes in assets' prices affect your funds
-                                <StyledLink
-                                    onClick={e => {
-                                        analytics.Event(
-                                            'SIMULATOR',
-                                            'Went to simulator from pool card',
-                                            userAddress,
-                                        );
-                                    }}
-                                    to={{
-                                        pathname: `/simulator/${userAddress}`,
-                                    }}
-                                >
-                                    Open in simulator
-                                </StyledLink>
-                            </SimulatorButtonWrapper>
-                        ) : null}
-                    </>
-                )}
-            </Wrapper>
-        </Card>
+        <Wrapper>
+            <Header>
+                <Headline>
+                    {selectedPoolId === 'all' ? (
+                        <InlineCircle size={32} color={colors.GREEN} />
+                    ) : (
+                        <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />
+                    )}
+
+                    <HeadlineText isLarge={isLargeHeadline}>{headlineText}</HeadlineText>
+                </Headline>
+                <ButtonsWrapper>
+                    <Button
+                        onClick={() => {
+                            setSelectedTab('overview');
+                        }}
+                        selected={selectedTab === 'overview'}
+                    >
+                        Overview
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setSelectedTab('strategies');
+                        }}
+                        selected={selectedTab === 'strategies'}
+                    >
+                        Compare strategies
+                    </Button>
+                </ButtonsWrapper>
+            </Header>
+
+            {selectedPoolId === 'all' ? (
+                <PoolsSummary />
+            ) : (
+                <>
+                    <PoolOverview />
+                    <GraphWrapper>
+                        <Graph data={graphData} />
+                    </GraphWrapper>
+                    {activePoolIds.includes(selectedPoolId) ? (
+                        <SimulatorButtonWrapper>
+                            {/* See how changes in assets' prices affect your funds */}
+                            <StyledLink
+                                onClick={e => {
+                                    analytics.Event(
+                                        'SIMULATOR',
+                                        'Went to simulator from pool card',
+                                        userAddress,
+                                    );
+                                }}
+                                to={{
+                                    pathname: `/simulator/${userAddress}`,
+                                }}
+                            >
+                                Open in simulator
+                            </StyledLink>
+                        </SimulatorButtonWrapper>
+                    ) : null}
+                </>
+            )}
+        </Wrapper>
     );
 };
 export default RightContainer;

@@ -13,9 +13,7 @@ const Wrapper = styled.div`
     /* position: absolute; */
     display: flex;
     flex-direction: row;
-    background-color: white;
     border-radius: 3px;
-    padding: 20px 0px;
     /* border-bottom: 1px solid ${colors.STROKE_GREY}; */
     width: 100%;
     height: 80px;

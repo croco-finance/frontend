@@ -8,6 +8,7 @@ import SummaryItem from '../SummaryItem';
 const Wrapper = styled.div`
     padding-left: 0;
     margin-bottom: 65px;
+    width: 100%;
 `;
 
 const Header = styled.div`
@@ -45,7 +46,7 @@ const SummaryList = () => {
     return (
         <Wrapper>
             <Header>
-                <Exchange>&ensp;</Exchange>
+                <Exchange>Pools summary</Exchange>
                 <Value>Value</Value>
                 <Gains>Rewards</Gains>
             </Header>

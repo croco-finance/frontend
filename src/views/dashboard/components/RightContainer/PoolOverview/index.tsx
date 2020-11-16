@@ -10,34 +10,9 @@ import VerticalCryptoAmounts from '../VerticalCryptoAmounts';
 
 const GRID_GAP = 5;
 
-const Wrapper = styled.div``;
-
-const Headline = styled.div`
-    padding: 0 10px;
-    /* font-weight: ${variables.FONT_WEIGHT.MEDIUM}; */
-    font-size: ${variables.FONT_SIZE.SMALL};
-    margin-top: 0;
-    display: flex;
-    flex-direction: row;
-    height: 44px;
-    width: 100%;
-    justify-self: flex-start;
-    align-items: center;
-`;
-
-const HeadlineText = styled.div`
-    margin-left: 6px;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
-`;
-
-const Header = styled.div`
-    display: flex;
-    width: 100%;
-    align-items: center;
-    padding: 0 10px 10px 10px;
-    align-items: center;
-    /* border-bottom: 1px solid ${colors.BACKGROUND_DARK}; */
+const Wrapper = styled.div`
+    max-width: 650px;
+    margin: 0 auto;
 `;
 
 const GridWrapper = styled.div`
@@ -105,10 +80,6 @@ const PoolValueGridWrapper = styled(GridWrapper)`
     min-height: 40px;
 `;
 
-const GraphWrapper = styled.div`
-    padding: 40px 10px 0 10px;
-`;
-
 const StrategyItem = styled(GrayBox)`
     margin-bottom: 6px;
 `;
@@ -159,7 +130,7 @@ const TotalSubNote = styled.div`
     color: ${colors.FONT_LIGHT};
 `;
 
-const CardOverview = () => {
+const PoolOverview = () => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     let pool = allPools[selectedPoolId];
@@ -190,18 +161,16 @@ const CardOverview = () => {
         yieldTokenAmount,
     } = pool.cumulativeStats;
 
-    const tokenSymbolsArr = getTokenSymbolArr(tokens);
-
     const endTimeText = isActive ? 'Value today' : 'Withdrawal time';
     const poolShareValueText = isActive ? 'Your pool share value' : 'End pool share value';
+
+    const tokenSymbolsArr = getTokenSymbolArr(tokens);
 
     let tokenSymbolsString = '';
     tokenSymbolsArr.forEach(symbol => {
         tokenSymbolsString = tokenSymbolsString + ', ' + symbol;
     });
     tokenSymbolsString = tokenSymbolsString.substring(1); //delete first char (comma)
-
-    const graphData = graphUtils.getGraphData(pool.intervalStats);
 
     const feesRow = (
         <CardRow
@@ -251,16 +220,12 @@ const CardOverview = () => {
 
     return (
         <Wrapper>
-            <Header>
+            {/* <Header>
                 <Headline>
                     <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />
                     <HeadlineText>{tokenSymbolsString}</HeadlineText>
                 </Headline>
-                {/* <ToggleWrapper>
-                    <ToggleLabel>Show ETH</ToggleLabel>
-                    <ToggleSwitch checked={false} onChange={() => setShowEth(!showEth)} isSmall />
-                </ToggleWrapper> */}
-            </Header>
+            </Header> */}
 
             <HeaderWrapper>
                 <CardRow
@@ -345,12 +310,8 @@ const CardOverview = () => {
                     />
                 </StrategyHeaderGridWrapper>
             </StrategyItem> */}
-
-            <GraphWrapper>
-                <Graph data={graphData} />
-            </GraphWrapper>
         </Wrapper>
     );
 };
 
-export default CardOverview;
+export default PoolOverview;

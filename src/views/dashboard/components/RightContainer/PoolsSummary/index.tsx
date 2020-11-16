@@ -10,50 +10,6 @@ const GRID_GAP = 5;
 
 const Wrapper = styled.div``;
 
-const Headline = styled.div`
-    padding: 0 6px;
-    /* font-weight: ${variables.FONT_WEIGHT.MEDIUM}; */
-    font-size: ${variables.FONT_SIZE.NORMAL};
-    margin-top: 0;
-    display: flex;
-    flex-direction: row;
-    height: 44px;
-    width: 100%;
-    justify-self: flex-start;
-    align-items: center;
-`;
-
-const HeadlineText = styled.div`
-    margin-left: 6px;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_DARK};
-`;
-
-const Header = styled.div`
-    display: flex;
-    width: 100%;
-    align-items: center;
-    padding: 0 10px 10px 10px;
-    align-items: center;
-    /* margin-bottom: 14px; */
-    /* border-bottom: 1px solid ${colors.BACKGROUND_DARK}; */
-`;
-
-const ToggleWrapper = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const ToggleLabel = styled.div`
-    font-size: ${variables.FONT_SIZE.TINY};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
-    margin-right: 6px;
-    min-width: 100px;
-    justify-self: flex-end;
-    text-align: right;
-`;
-
 const GridWrapper = styled.div`
     flex-grow: 1;
     display: grid;
@@ -90,7 +46,7 @@ const TotalLossRowWrapper = styled(GridWrapper)`
     padding-top: 6px;
 `;
 
-const CardPoolsSummary = () => {
+const PoolsSummary = () => {
     const allPools = useSelector(state => state.allPools);
     const activePoolIds = useSelector(state => state.activePoolIds);
 
@@ -106,17 +62,6 @@ const CardPoolsSummary = () => {
 
     return (
         <Wrapper>
-            <Header>
-                <Headline>
-                    <InlineCircle size={30} color={colors.GREEN} />
-                    <HeadlineText>Summary of your active liquidity pool positions</HeadlineText>
-                </Headline>
-                {/* <ToggleWrapper>
-                    <ToggleLabel>Show ETH</ToggleLabel>
-                    <ToggleSwitch checked={false} onChange={() => setShowEth(!showEth)} isSmall />
-                </ToggleWrapper> */}
-            </Header>
-
             <GrayBox padding={15}>
                 <GridWrapper>
                     <CardRow
@@ -181,4 +126,4 @@ const CardPoolsSummary = () => {
     );
 };
 
-export default CardPoolsSummary;
+export default PoolsSummary;

@@ -1,22 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
-import colors from '../../../config/colors';
+import { colors } from '@config';
 
-const Wrapper = styled.div`
-    width: 50%;
-    background-color: white;
+const Wrapper = styled.div<Props>`
+    width: 42%;
     padding: 0;
-    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: ${props => props.backgroundColor};
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1200px) {
         width: 100%;
     }
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
+    backgroundColor?: string;
 }
 
-const LeftContainer = ({ children }: Props) => <Wrapper>{children}</Wrapper>;
+const LeftContainer = ({ children, backgroundColor = colors.BACKGROUND_DARK }: Props) => (
+    <Wrapper backgroundColor={backgroundColor}>{children}</Wrapper>
+);
 
 export default LeftContainer;

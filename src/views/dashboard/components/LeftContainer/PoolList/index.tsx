@@ -8,6 +8,7 @@ import PoolItem from '../PoolItem';
 const Wrapper = styled.div`
     padding-left: 0;
     margin-bottom: 65px;
+    width: 100%;
 `;
 
 const ActiveExchange = styled.div`
