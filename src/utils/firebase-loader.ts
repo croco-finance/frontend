@@ -40,15 +40,11 @@ async function getSnaps(address: string): Promise<types.SnapStructure | null> {
                 }
             }
         }
-        distributeBalYields(userData['BALANCER']['yields'], snaps);
-        distributeUniYields(userData['UNI_V2']['yields'], snaps);
-        // Set yieldReward objects to null for snaps with 0 yieldReward
-        for (const [_, poolSnaps] of Object.entries(snaps)) {
-            for (const snap of poolSnaps) {
-                if (snap.yieldReward !== null && snap.yieldReward.amount === 0) {
-                    snap.yieldReward = null;
-                }
-            }
+        if (userData.hasOwnProperty('BALANCER') && userData['BALANCER'].hasOwnProperty('yields')) {
+            distributeBalYields(userData['BALANCER']['yields'], snaps);
+        }
+        if (userData.hasOwnProperty('UNI_V2') && userData['UNI_V2'].hasOwnProperty('yields')) {
+            distributeUniYields(userData['UNI_V2']['yields'], snaps);
         }
     }
     // The following is necessary so that the process ends
