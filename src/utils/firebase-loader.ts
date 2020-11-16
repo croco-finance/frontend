@@ -36,7 +36,7 @@ async function getSnaps(address: string): Promise<types.SnapStructure | null> {
             if (lastSnap.liquidityTokenBalance !== 0) {
                 let currentSnap = await getCurrentSnap(poolId, lastSnap.liquidityTokenBalance);
                 if (currentSnap !== null) {
-                    poolSnaps.push(parseSnap(currentSnap));
+                    poolSnaps.push(currentSnap);
                 }
             }
         }
