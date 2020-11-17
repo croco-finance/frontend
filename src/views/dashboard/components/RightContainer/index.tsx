@@ -82,6 +82,7 @@ const GraphTitle = styled.div`
     color: ${colors.FONT_MEDIUM};
     text-align: center;
     padding-bottom: 15px;
+    /* padding-left: 60px; */
 `;
 
 const SimulatorButtonWrapper = styled.div`

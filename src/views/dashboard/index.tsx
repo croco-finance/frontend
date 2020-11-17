@@ -219,7 +219,6 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                                     handleAddressChange(event.target.value);
                                 }}
                                 useWhiteBackground
-                                useDarkBorder
                             />
                             {invalidAddressInput ? (
                                 <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>

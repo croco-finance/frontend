@@ -130,7 +130,7 @@ const PoolOverview = () => {
     } = pool.cumulativeStats;
 
     const endTimeText = isActive ? 'Value today' : 'Withdrawal time';
-    const poolShareValueText = isActive ? 'Your pool share value' : 'End pool share value';
+    const poolShareValueText = isActive ? 'Your pool share' : 'End pool share';
 
     const tokenSymbolsArr = getTokenSymbolArr(tokens);
 
@@ -171,7 +171,7 @@ const PoolOverview = () => {
 
     const txCostRow = (
         <CardRow
-            firstColumn="Transactions expenses"
+            firstColumn="Transaction expenses"
             secondColumn={
                 <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
             }

@@ -26,8 +26,8 @@ const StyledInput = styled.input<InputProps>`
         ${props => (props.textIndent ? `${props.textIndent[0] + 20}px` : '16px')};
 
     border-radius: 4px;
-    border: 1px solid;
-    border-color: ${props => (props.useDarkBorder ? colors.STROKE_GREY : colors.BACKGROUND)};
+    border: 2px solid;
+    border-color: ${props => (props.useDarkBorder ? colors.STROKE_GREY : colors.BACKGROUND_DARK)};
     outline: none;
     box-sizing: border-box;
     width: 100%;
