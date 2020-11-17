@@ -85,9 +85,30 @@ const FiatValue = ({
         minimumFractionDigits: minimumFractionDigits,
     });
 
+    // save the original value
+    const originalValue = value;
+
     // specify the sign
     let sign = '+ ';
-    const originalValue = value;
+    let displayedValue = 0;
+
+    // if passed value is not a number
+    if (isNaN(originalValue)) {
+        return (
+            <Wrapper value={originalValue} colorized={colorized} useBadgeStyle={useBadgeStyle}>
+                <Nan>-</Nan>
+            </Wrapper>
+        );
+    }
+
+    // if passed value is equal to 0
+    if (originalValue === 0) {
+        return (
+            <Wrapper value={originalValue} colorized={colorized} useBadgeStyle={useBadgeStyle}>
+                {formatter.format(0)}
+            </Wrapper>
+        );
+    }
 
     // if the value rounded to two (=displayed format) decimals is less than 0, change symbol
     const roundedValueTwoDec = Math.round((value + Number.EPSILON) * 100) / 100;
