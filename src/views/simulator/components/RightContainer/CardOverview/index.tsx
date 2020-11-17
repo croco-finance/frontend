@@ -209,7 +209,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                     color="light"
                 />
             </HeaderWrapper>
-            <GrayBox padding={15}>
+            <GrayBox>
                 <PoolValueGridWrapper>
                     <CardRow
                         firstColumn="Your pool share value"
@@ -238,7 +238,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                     color="light"
                 />
             </HodlHeaderWrapper>
-            <GrayBox padding={15}>
+            <GrayBox>
                 <GridWrapper>
                     <CardRow
                         firstColumn="Fees earned"

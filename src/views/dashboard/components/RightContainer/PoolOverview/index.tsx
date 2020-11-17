@@ -1,4 +1,4 @@
-import { FiatValue, GrayBox, MultipleTokenLogo } from '@components/ui';
+import { FiatValue, GrayBox, MultipleTokenLogo, VerticalCryptoAmounts } from '@components/ui';
 import { colors, types, variables } from '@config';
 import { getTokenSymbolArr, graphUtils } from '@utils';
 import React from 'react';
@@ -6,11 +6,11 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CardRow from '../CardRow';
 import Graph from '../Graph';
-import VerticalCryptoAmounts from '../VerticalCryptoAmounts';
 
 const GRID_GAP = 5;
 
 const Wrapper = styled.div`
+    width: 100%;
     max-width: 650px;
     margin: 0 auto;
 `;
@@ -20,18 +20,21 @@ const GridWrapper = styled.div`
     display: grid;
     /* grid-gap: ${GRID_GAP}px; */
     gap: 28px 10px;
-    grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto);
+    grid-template-columns: 180px minmax(100px, auto) minmax(100px, auto);
     grid-auto-rows: auto;
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
-    overflow-x: auto; /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
+    /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
+    /* overflow-x: auto; */
     word-break: break-all;
-    padding: 0px 10px;
     font-size: ${variables.FONT_SIZE.NORMAL};
+    align-items: baseline;
 
-    @media (max-width: 520px) {
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.SMALL};
+        gap: 18px 5px;
+        grid-template-columns: 140px minmax(90px, auto) minmax(90px, auto);
     }
 `;
 
@@ -45,39 +48,18 @@ const HeaderWrapper = styled(GridWrapper)`
     /* color: ${colors.FONT_LIGHT}; */
 `;
 
-const PoolValueGrayBox = styled(GrayBox)`
-    padding: 24px 15px 15px 15px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-`;
-
-const RewardsExpensesHeaderWrapper = styled.div`
-    background-color: ${colors.BACKGROUND};
-    margin: 0;
-    padding: 0px 25px;
-`;
-
 const RewardsExpensesHeader = styled(GridWrapper)`
-    grid-template-rows: repeat(1, 30px);
-    font-size: ${variables.FONT_SIZE.TINY};
-
+    grid-template-rows: repeat(1, 20px);
+    margin-bottom: 18px;
+    margin-top: 8px;
     padding: 0;
+    font-size: ${variables.FONT_SIZE.TINY};
     border-bottom: 1px solid ${colors.STROKE_GREY};
 `;
 
-const DaysLeftWrapper = styled.div`
-    background-color: ${colors.BACKGROUND_DARK};
-    padding: 10px;
-    font-size: ${variables.FONT_SIZE.SMALL};
-    border-radius: 5px;
-    margin-top: 10px;
-`;
-
 const PoolValueGridWrapper = styled(GridWrapper)`
-    grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto);
-    align-items: baseline;
-    padding-top: 0;
-    min-height: 40px;
+    padding-top: 4px;
+    min-height: 48px;
 `;
 
 const StrategyItem = styled(GrayBox)`
@@ -101,23 +83,9 @@ const CollapseIconWrapper = styled.div`
     }
 `;
 
-const RewardsExpensesWrapper = styled(GrayBox)`
-    /* border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px; */
-    padding-bottom: 24px;
-    border-radius: 0;
-`;
-
-const TotalLossRowWrapper = styled(GrayBox)`
-    background-color: ${colors.BACKGROUND_DARK};
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-`;
-
 const TotalLossRow = styled(GridWrapper)`
     height: 40px;
+    align-items: center;
 `;
 
 const TotalWrapper = styled.div`
@@ -220,13 +188,6 @@ const PoolOverview = () => {
 
     return (
         <Wrapper>
-            {/* <Header>
-                <Headline>
-                    <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />
-                    <HeadlineText>{tokenSymbolsString}</HeadlineText>
-                </Headline>
-            </Header> */}
-
             <HeaderWrapper>
                 <CardRow
                     firstColumn="Pool overview"
@@ -235,7 +196,26 @@ const PoolOverview = () => {
                     columnColors={['light', 'light', 'light']}
                 />
             </HeaderWrapper>
-            <PoolValueGrayBox>
+            <GrayBox
+                padding={[15, 20, 15, 20]}
+                bottomBar={
+                    <TotalLossRow>
+                        <CardRow
+                            firstColumn={totalText}
+                            secondColumn={<></>}
+                            thirdColumn={
+                                <FiatValue
+                                    value={rewardsMinusExpensesUsd}
+                                    usePlusSymbol
+                                    useBadgeStyle
+                                    colorized
+                                />
+                            }
+                            color="dark"
+                        />
+                    </TotalLossRow>
+                }
+            >
                 <PoolValueGridWrapper>
                     <CardRow
                         firstColumn={poolShareValueText}
@@ -249,9 +229,7 @@ const PoolOverview = () => {
                         columnColors={['medium', 'light', 'dark']}
                     />
                 </PoolValueGridWrapper>
-            </PoolValueGrayBox>
 
-            <RewardsExpensesHeaderWrapper>
                 <RewardsExpensesHeader>
                     <CardRow
                         firstColumn="Rewards & Expenses"
@@ -260,32 +238,13 @@ const PoolOverview = () => {
                         columnColors={['light', 'light', 'light']}
                     />
                 </RewardsExpensesHeader>
-            </RewardsExpensesHeaderWrapper>
-            <RewardsExpensesWrapper padding={15}>
+
                 <GridWrapper>
                     {feesRow}
                     {yieldRow}
                     {txCostRow}
                 </GridWrapper>
-            </RewardsExpensesWrapper>
-            <TotalLossRowWrapper>
-                <TotalLossRow>
-                    <CardRow
-                        firstColumn={totalText}
-                        secondColumn={<></>}
-                        thirdColumn={
-                            <FiatValue
-                                value={rewardsMinusExpensesUsd}
-                                usePlusSymbol
-                                useBadgeStyle
-                                colorized
-                            />
-                        }
-                        color="dark"
-                    />
-                </TotalLossRow>
-            </TotalLossRowWrapper>
-
+            </GrayBox>
             {/* <HeaderWrapper>
                 <CardRow
                     firstColumn="Comparison to other strategies"

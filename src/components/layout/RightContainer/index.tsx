@@ -1,4 +1,4 @@
-import { colors } from '@config';
+import { colors, variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -11,12 +11,14 @@ const Wrapper = styled.div<Props>`
     flex-grow: 1;
     background-color: ${props => props.backgroundColor};
 
-    @media (max-width: 1100px) {
+    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
         width: 100%;
-        padding: 20px;
+        padding: 10px 20px;
+        min-height: 0vh;
+        height: auto;
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         padding: 10px;
     }
 `;

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { LeftFillContainer, MainContainer, RightFillContainer } from '..';
+import { variables } from '@config';
 
 const Wrapper = styled.div`
     display: flex;
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
     overflow-y: auto;
     min-height: 100%;
 
-    @media (max-width: 1200px) {
+    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
         flex-direction: column;
     }
 `;

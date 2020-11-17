@@ -1,18 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors } from '@config';
+import { colors, variables } from '@config';
 
 const Wrapper = styled.div<Props>`
     width: 42%;
     padding: 0;
+    max-height: 100vh;
     height: 100vh;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     background-color: ${props => props.backgroundColor};
 
-    @media (max-width: 1200px) {
+    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
         width: 100%;
+        max-height: 85vh;
+        height: auto;
+        /* padding-bottom: 20px; */
+        border-bottom: 10px solid ${colors.STROKE_GREY};
     }
 `;
 

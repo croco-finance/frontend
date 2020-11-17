@@ -10,10 +10,6 @@ import { graphUtils, getTokenSymbolArr } from '@utils';
 import { MultipleTokenLogo, InlineCircle } from '@components/ui';
 
 const Wrapper = styled.div`
-    /* animation: ${animations.SHOW_UP} 1s; */
-    /* max-height: calc(100vh - 40px);
-    ${styles.scrollBarStyles}; */
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,11 +29,15 @@ const Headline = styled.div`
 const HeadlineText = styled.div<{ isLarge: boolean }>`
     margin-left: 6px;
     color: ${colors.FONT_LIGHT};
-    width: 250px;
+    max-width: 250px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    /* font-size: ${props => (props.isLarge ? '13px' : variables.FONT_SIZE.SMALL)}; */
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        max-width: 120px;
+        font-size: ${variables.FONT_SIZE.TINY};
+    }
 `;
 
 const Header = styled.div`
@@ -54,6 +54,11 @@ const Header = styled.div`
 
 const ButtonsWrapper = styled.div`
     display: flex;
+    font-size: ${variables.FONT_SIZE.NORMAL};
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        font-size: ${variables.FONT_SIZE.SMALL};
+    }
 `;
 
 const Button = styled.div<{ selected: boolean }>`
@@ -62,15 +67,21 @@ const Button = styled.div<{ selected: boolean }>`
     border-bottom: 2px solid;
     border-color: ${props => (props.selected ? colors.GREEN : 'transparent')};
     cursor: pointer;
-    padding: 14px;
+    padding: 14px 20px;
     box-sizing: border-box;
     margin-bottom: -1px;
     font-weight: ${variables.FONT_WEIGHT.REGULAR};
-    font-size: ${variables.FONT_SIZE.NORMAL};
 `;
 
 const GraphWrapper = styled.div`
     padding: 50px 10px 20px 10px;
+    width: 100%;
+`;
+
+const GraphTitle = styled.div`
+    color: ${colors.FONT_MEDIUM};
+    text-align: center;
+    padding-bottom: 15px;
 `;
 
 const SimulatorButtonWrapper = styled.div`
@@ -174,6 +185,7 @@ const RightContainer = () => {
                 <>
                     <PoolOverview />
                     <GraphWrapper>
+                        <GraphTitle>Pool history</GraphTitle>
                         <Graph data={graphData} />
                     </GraphWrapper>
                     {activePoolIds.includes(selectedPoolId) ? (

@@ -16,6 +16,7 @@ import MultipleTokenSelect from './MultipleTokenSelect';
 import LoadingBox from './LoadingBox';
 import CryptoValue from './CryptoValue';
 import CryptoFiatValue from './CryptoFiatValue';
+import VerticalCryptoAmounts from './VerticalCryptoAmounts';
 
 export {
     TokenLogo,
@@ -36,4 +37,5 @@ export {
     LoadingBox,
     CryptoValue,
     CryptoFiatValue,
+    VerticalCryptoAmounts,
 };

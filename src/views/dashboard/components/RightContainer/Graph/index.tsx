@@ -76,13 +76,14 @@ class Graph extends PureComponent<Props, State> {
                     height={260}
                     data={data}
                     margin={{
-                        top: 0,
+                        top: 10,
                         right: 48,
-                        bottom: 0,
+                        bottom: 10,
                         left: 48,
                     }}
                 >
                     <CartesianGrid strokeDasharray="2 2" />
+                    <Label value="Pool history" offset={0} position="top" />
 
                     <Tooltip
                         cursor={{ stroke: '#4366b1ff', strokeWidth: 1 }}

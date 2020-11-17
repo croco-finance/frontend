@@ -22,15 +22,22 @@ const RightContentWrapper = styled.div`
     padding: 40px 10px 0 120px;
     max-width: 800px;
     align-items: center;
+
+    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
+        padding: 20px 10px;
+    }
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        padding: 0px;
+    }
 `;
 
 const Header = styled.div`
     width: 100%;
-    padding-bottom: 40px;
+    padding-bottom: 44px;
     display: flex;
     justify-content: center;
     background-color: ${colors.BACKGROUND_LIGHT};
-    border-bottom: 1px solid ${colors.STROKE_GREY};
 `;
 
 const HeaderContent = styled.div`
@@ -97,11 +104,9 @@ const AddressLabel = styled.div`
 `;
 
 const LeftSubHeaderContent = styled.div`
-    /* padding: 40px 100px 20px 160px; */
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* padding-top: 40px; */
     overflow-y: auto;
     overflow-x: hidden;
     ${styles.scrollBarStyles};
@@ -126,7 +131,7 @@ const PoolListWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px 10px 10px 0;
+    padding: 10px;
     width: 100%;
     max-width: 540px;
 `;

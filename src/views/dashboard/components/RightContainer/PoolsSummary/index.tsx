@@ -62,7 +62,7 @@ const PoolsSummary = () => {
 
     return (
         <Wrapper>
-            <GrayBox padding={15}>
+            <GrayBox>
                 <GridWrapper>
                     <CardRow
                         firstColumn="Value locked in pools"
@@ -77,7 +77,7 @@ const PoolsSummary = () => {
             <HodlHeaderWrapper>
                 <CardRow firstColumn="Rewards and expenses" secondColumn="" color="light" />
             </HodlHeaderWrapper>
-            <GrayBox padding={15}>
+            <GrayBox>
                 <GridWrapper>
                     <CardRow
                         firstColumn="Fees earned"
