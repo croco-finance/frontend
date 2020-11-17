@@ -17,6 +17,11 @@ const toTwoDecimals = n => {
     return Math.round(n * div) / div;
 };
 
+const roundToNDecimals = (value: number, nDecimals: number) => {
+    const coeff = Math.pow(10, nDecimals);
+    return Math.round(value * coeff) / coeff;
+};
+
 const getDailyAverageFeeGains = (timeStampStartSeconds, timeStampEndSeconds, totalFeesUsd) => {
     const differenceMilliseconds = timeStampEndSeconds - timeStampStartSeconds;
     const differenceDays = differenceMilliseconds / (3600 * 24);
@@ -153,4 +158,5 @@ export {
     multiplyEachArrayElementByValue,
     toTwoDecimals,
     getTokenArrayValue,
+    roundToNDecimals,
 };

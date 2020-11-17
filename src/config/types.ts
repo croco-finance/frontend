@@ -48,23 +48,25 @@ export interface IntervalStats {
     feesTokenAmounts: any;
     feesUsdEndPrice: number;
     tokenDiffNoFees: any;
-    userPoolShareStart: any;
-    userPoolShareEnd: any;
+    userPoolShareStart: number;
+    userPoolShareEnd: number;
     tokenPricesStart: any;
     tokenPricesEnd: any;
-    ethPriceStart: any;
-    ethPriceEnd: any;
-    txCostEthStart: any;
-    txCostEthEnd: any;
+    ethPriceStart: number;
+    ethPriceEnd: number;
+    txCostEthStart: number;
+    txCostEthEnd: number;
     yieldTokenAmount: number;
-    yieldTokenAmountStart: any;
-    yieldTokenAmountEnd: any;
-    yieldTokenPriceStart: any;
-    yieldTokenPriceEnd: any;
+    yieldTokenAmountStart: number;
+    yieldTokenAmountEnd: number;
+    yieldTokenPriceStart: number | null;
+    yieldTokenPriceEnd: number | null;
+    impLossUsd: number;
     // strategies
-    hodlValueUsd: any;
-    poolValueUsd: any;
-    ethHodlValueUsd: any;
+    hodlValueUsd: number;
+    poolValueUsdStart: number;
+    poolValueUsdEnd: number;
+    ethHodlValueUsd: number;
     // TODO Deposits / Withdrawals
 }
 
@@ -118,3 +120,15 @@ export interface TokenItemGeneric extends Token {
 }
 
 export type AllPoolsGlobal = { [key: string]: PoolItem };
+
+export interface GraphData {
+    lastTimestampMillis: number;
+    timestampMillisPrev: number | null;
+    timestampMillis: number;
+    poolValues: Array<number | undefined>; // undefined has to be here because of recharts library
+    poolValuePrev: number | undefined;
+    feesUsd: number;
+    yieldUsd: number;
+    txCostUsd: number;
+    impLossUsd: number;
+}

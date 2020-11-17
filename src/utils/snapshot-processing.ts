@@ -1,4 +1,4 @@
-import { mathUtils } from '.';
+import { lossUtils, mathUtils } from '.';
 import * as loss from './loss-computations';
 import { types } from '@config';
 
@@ -95,11 +95,9 @@ const getIntervalStats = (snapshot1: types.Snap, snapshot2: types.Snap) => {
         newBalancesNoFees,
     );
 
-    const hodlValueUsd = mathUtils.multiplyArraysElementWise(
-        userTokenBalancesStart,
-        tokenPricesEnd,
-    );
-    const poolValueUsd = mathUtils.multiplyArraysElementWise(userTokenBalancesEnd, tokenPricesEnd);
+    const hodlValueUsd = mathUtils.getTokenArrayValue(userTokenBalancesStart, tokenPricesEnd);
+
+    const poolValueUsdEnd = mathUtils.getTokenArrayValue(userTokenBalancesEnd, tokenPricesEnd);
 
     // the difference of you token holdings compared to the start amount
     const tokenDiffNoFees = mathUtils.subtractArraysElementWise(
@@ -129,8 +127,18 @@ const getIntervalStats = (snapshot1: types.Snap, snapshot2: types.Snap) => {
         mathUtils.divideEachArrayElementByValue(endTokenValues, ethPriceEnd),
     );
 
+    // initial pool value
+    const poolValueUsdStart = mathUtils.getTokenArrayValue(
+        userTokenBalancesStart,
+        tokenPricesStart,
+    );
+
     // this is how much would your assets be worth if you put everything to ETH instead of pooled tokens
     const ethHodlValueUsd = startEthAmount * ethPriceEnd;
+
+    // imp loss
+    const impLossUsd =
+        hodlValueUsd - mathUtils.getTokenArrayValue(newBalancesNoFees, tokenPricesEnd);
 
     let statsReturnObject: types.IntervalStats = {
         // Timestamp
@@ -170,9 +178,13 @@ const getIntervalStats = (snapshot1: types.Snap, snapshot2: types.Snap) => {
         yieldTokenPriceStart: yieldTokenPriceStart,
         yieldTokenPriceEnd: yieldTokenPriceEnd,
 
+        // Imp. loss
+        impLossUsd: impLossUsd ? mathUtils.roundToNDecimals(impLossUsd, 4) : 0,
+
         // Strategy values (for interval start/end prices, not current prices)
+        poolValueUsdStart: poolValueUsdStart,
+        poolValueUsdEnd: poolValueUsdEnd,
         hodlValueUsd: hodlValueUsd,
-        poolValueUsd: poolValueUsd,
         ethHodlValueUsd: ethHodlValueUsd,
     };
 

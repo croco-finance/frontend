@@ -1,12 +1,34 @@
 import { mathUtils } from '.';
 
+type DateFormats = 'MONTH_DAY_YEAR' | 'MONTH_DAY';
+
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const getFormattedDateFromTimestamp = (timestampMillis: number) => {
+const getFormattedDateFromTimestamp = (
+    timestampMillis: number,
+    type: DateFormats = 'MONTH_DAY_YEAR',
+    useTodayFormat: boolean = false,
+) => {
     const dateObj = new Date(timestampMillis);
     const year = dateObj.getFullYear(); // 2019
     const day = dateObj.getDate(); // 23
     const monthName = months[dateObj.getMonth()]; // getMonth() return month index
+
+    if (useTodayFormat) {
+        // check if this current timestamp is today
+        const today = new Date();
+        const todayYear = today.getFullYear();
+        const todayDay = today.getDate();
+        const todayMonthName = months[today.getMonth()];
+
+        if (year === todayYear && monthName === todayMonthName && day === todayDay) {
+            return 'Today';
+        }
+    }
+
+    if (type === 'MONTH_DAY') {
+        return `${monthName} ${day}`;
+    }
 
     return `${monthName} ${day}/${year}`;
 };

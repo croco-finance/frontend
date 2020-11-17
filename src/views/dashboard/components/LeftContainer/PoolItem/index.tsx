@@ -12,6 +12,7 @@ const Item = styled.div`
     justify-content: center;
     align-items: center;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    font-size: ${variables.FONT_SIZE.SMALL};
 
     @media (max-width: 520px) {
         font-size: ${variables.FONT_SIZE.SMALL};
@@ -49,7 +50,7 @@ const TokenSymbol = styled.div`
     margin-left: 10px;
     text-transform: uppercase;
     min-width: 48px;
-    max-width: 100px;
+    max-width: 68px;
     overflow: hidden;
     text-overflow: ellipsis;
 `;
@@ -87,13 +88,15 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const PoolItem = ({ poolId }: Props) => {
     const dispatch = useDispatch();
-    const allPools = useSelector(state => state.allPools);
+    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
     const { tokens, exchange } = allPools[poolId];
 
     if (allPools[poolId].cumulativeStats === null) return <p> No stats </p>;
-    const { feesUsd, poolValueUsd, yieldUsd } = allPools[poolId].cumulativeStats;
+    const { feesUsd, poolValueUsd, yieldUsd, rewardsMinusExpensesUsd } = allPools[
+        poolId
+    ].cumulativeStats;
 
     let isSelected = selectedPoolId === poolId;
 
@@ -126,8 +129,9 @@ const PoolItem = ({ poolId }: Props) => {
                 </Value>
                 <Gains>
                     <FiatValue
-                        value={yieldUsd ? feesUsd + yieldUsd : feesUsd}
+                        value={rewardsMinusExpensesUsd}
                         usePlusSymbol
+                        // colorized={!isSelected}
                     ></FiatValue>
                 </Gains>
             </PoolItemCard>

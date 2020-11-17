@@ -1,30 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { TooltipProps } from 'recharts';
-import { colors, variables } from '../../../../../../config';
-import { FiatValue } from '../../../../../../components/ui';
+import { colors, variables, types } from '@config';
+import { FiatValue } from '@components/ui';
 import TooltipRow from './TooltipRow.ts';
+import { formatUtils } from '@utils';
 
-const GridWrapper = styled.div`
-    flex-grow: 1;
-    display: grid;
-    gap: 4px;
-    grid-template-columns: minmax(60px, auto) minmax(75px, auto);
-    grid-auto-rows: auto;
-    font-size: ${variables.FONT_SIZE.TINY};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    align-items: center;
-    overflow-x: auto; /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
-    word-break: break-all;
-    /* padding: 0px 10px; */
-`;
-
-const DateHeader = styled.div`
-    color: #b1bac5;
-    margin-bottom: 5px;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    font-size: 10px;
-`;
 const CustomTooltipWrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -39,19 +20,55 @@ const CustomTooltipWrapper = styled.div`
     line-height: 1.5;
 `;
 
-const DateValuesWrapper = styled.div`
-    background-color: #24364bcc;
+const GridWrapper = styled.div`
+    flex-grow: 1;
+    display: grid;
+    gap: 4px;
+    grid-template-columns: minmax(64px, auto) minmax(75px, auto);
+    grid-auto-rows: auto;
+    font-size: ${variables.FONT_SIZE.TINY};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    align-items: center;
+    overflow-x: auto; /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
+    word-break: break-all;
+    /* padding: 0px 10px; */
+`;
+
+const DateValuesWrapper = styled.div<{ roundedBorderAll?: boolean }>`
+    /* background-color: #24364bcc; */
+    background-color: #0a131dcc;
     padding: 8px 10px;
+    border-radius: ${props => (props.roundedBorderAll ? '5px' : '0 0 5px 5px')};
+`;
+
+const DateHeader = styled.div`
+    color: #b1bac5;
+    margin-bottom: 5px;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    font-size: 10px;
+`;
+
+const IntervalValuesWrapper = styled.div<{ roundedBottom: boolean }>`
+    background-color: #0a131ddd;
+    padding: 8px 10px;
+    border-radius: ${props => (props.roundedBottom ? '0 0 5px 5px' : '0px')};
+`;
+
+const IntervalsDateHeader = styled(DateHeader)`
+    background-color: #0a131ddd;
+    margin: 0;
+    padding: 8px 10px 0px 10px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 `;
 
-const IntervalValuesWrapper = styled.div`
-    background-color: #0a131dcc;
-    padding: 8px 10px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+const PoolValuesWrapper = styled.div`
+    border-bottom: 1px solid #4b5c79;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
 `;
+
+const RewardsExpensesWrapper = styled.div``;
 
 interface Props extends TooltipProps {
     onShow?: (index: number) => void;
@@ -67,13 +84,18 @@ interface Props extends TooltipProps {
 const CustomTooltip = (props: Props) => {
     if (props.active && props.payload && props.payload[0]) {
         const { dataKey, name } = props.payload[0];
+        const graphData: types.GraphData = props.payload[0].payload;
         const {
+            lastTimestampMillis,
+            timestampMillisPrev,
+            timestampMillis,
             poolValues,
+            poolValuePrev,
             feesUsd,
             yieldUsd,
             txCostUsd,
-            timestampMillis,
-        } = props.payload[0].payload;
+            impLossUsd,
+        } = graphData;
 
         props.setHighlightedAreaId(dataKey, timestampMillis);
 
@@ -81,46 +103,117 @@ const CustomTooltip = (props: Props) => {
         const poolValue = poolValues[name];
 
         const totalPoolBalance = feesUsd + yieldUsd - txCostUsd;
+        let poolValueDiff;
+
+        if (poolValue !== undefined && poolValuePrev !== undefined) {
+            poolValueDiff = poolValue - poolValuePrev;
+        }
+
+        const ifHoveredFirst = timestampMillisPrev === null;
+        console.log('poolValues', poolValues);
+        const isHoveredLast = lastTimestampMillis === timestampMillis;
 
         return (
             <CustomTooltipWrapper>
-                <DateValuesWrapper>
-                    <DateHeader>Nov 5</DateHeader>
-                    <GridWrapper>
-                        <TooltipRow
-                            firstColumn="Pool value"
-                            secondColumn={<FiatValue value={poolValue} />}
-                        />
-                        <TooltipRow
-                            firstColumn="Tx. cost"
-                            secondColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
-                        />
-                    </GridWrapper>
-                </DateValuesWrapper>
+                {timestampMillisPrev && (
+                    <>
+                        <IntervalsDateHeader>
+                            {formatUtils.getFormattedDateFromTimestamp(
+                                timestampMillisPrev,
+                                'MONTH_DAY',
+                            )}
+                            &nbsp;-&nbsp;
+                            {formatUtils.getFormattedDateFromTimestamp(
+                                timestampMillis,
+                                'MONTH_DAY',
+                            )}
+                        </IntervalsDateHeader>
+                        <IntervalValuesWrapper roundedBottom={isHoveredLast}>
+                            <PoolValuesWrapper>
+                                <GridWrapper>
+                                    <TooltipRow
+                                        firstColumn="Value start"
+                                        secondColumn={
+                                            <FiatValue value={poolValuePrev ? poolValuePrev : 0} />
+                                        }
+                                    />
 
-                <IntervalValuesWrapper>
-                    <DateHeader>20 Aug - Nov 5</DateHeader>
-                    <GridWrapper>
-                        {feesUsd ? (
+                                    <TooltipRow
+                                        firstColumn="Value end"
+                                        secondColumn={
+                                            <FiatValue value={poolValue ? poolValue : 0} />
+                                        }
+                                    />
+
+                                    {poolValueDiff ? (
+                                        <TooltipRow
+                                            firstColumn=""
+                                            secondColumn={
+                                                <FiatValue
+                                                    value={poolValueDiff ? poolValueDiff : 0}
+                                                    colorized
+                                                    usePlusSymbol
+                                                />
+                                            }
+                                        />
+                                    ) : null}
+                                </GridWrapper>
+                            </PoolValuesWrapper>
+                            <RewardsExpensesWrapper>
+                                <GridWrapper>
+                                    {feesUsd ? (
+                                        <TooltipRow
+                                            firstColumn="Fees"
+                                            secondColumn={
+                                                <FiatValue value={feesUsd} usePlusSymbol />
+                                            }
+                                        />
+                                    ) : null}
+
+                                    {yieldUsd ? (
+                                        <TooltipRow
+                                            firstColumn="Yield"
+                                            secondColumn={
+                                                <FiatValue value={yieldUsd} usePlusSymbol />
+                                            }
+                                        />
+                                    ) : null}
+
+                                    <TooltipRow
+                                        firstColumn="Imp. loss"
+                                        secondColumn={
+                                            <FiatValue value={-impLossUsd} usePlusSymbol />
+                                        }
+                                    />
+                                </GridWrapper>
+                            </RewardsExpensesWrapper>
+                        </IntervalValuesWrapper>
+                    </>
+                )}
+
+                {txCostUsd ? (
+                    <DateValuesWrapper roundedBorderAll={ifHoveredFirst}>
+                        <DateHeader>
+                            {formatUtils.getFormattedDateFromTimestamp(
+                                timestampMillis,
+                                'MONTH_DAY',
+                            )}
+                        </DateHeader>
+                        <GridWrapper>
+                            {!timestampMillisPrev ? (
+                                <TooltipRow
+                                    firstColumn="Value"
+                                    secondColumn={<FiatValue value={poolValue ? poolValue : 0} />}
+                                />
+                            ) : null}
+
                             <TooltipRow
-                                firstColumn="Fees"
-                                secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
+                                firstColumn="Tx. cost"
+                                secondColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
                             />
-                        ) : null}
-
-                        {yieldUsd ? (
-                            <TooltipRow
-                                firstColumn="Yield"
-                                secondColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
-                            />
-                        ) : null}
-
-                        <TooltipRow
-                            firstColumn="Imp. loss"
-                            secondColumn={<FiatValue value={-yieldUsd} usePlusSymbol />}
-                        />
-                    </GridWrapper>
-                </IntervalValuesWrapper>
+                        </GridWrapper>
+                    </DateValuesWrapper>
+                ) : null}
             </CustomTooltipWrapper>
         );
     }

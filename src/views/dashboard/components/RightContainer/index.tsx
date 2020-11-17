@@ -74,7 +74,7 @@ const Button = styled.div<{ selected: boolean }>`
 `;
 
 const GraphWrapper = styled.div`
-    padding: 50px 10px 20px 10px;
+    padding: 45px 10px 10px 10px;
     width: 100%;
 `;
 
@@ -90,7 +90,7 @@ const SimulatorButtonWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 24px auto 0 auto;
+    margin: 16px auto 0 auto;
     padding: 4px 20px;
     flex-direction: column;
     color: ${colors.FONT_MEDIUM};

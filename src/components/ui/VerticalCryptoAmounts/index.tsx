@@ -54,7 +54,7 @@ const VerticalCryptoAmounts = (props: Props) => {
     return (
         <Wrapper>
             {tokenSymbolsRendered.map((symbol, i) => (
-                <Row>
+                <Row key={symbol}>
                     <Amount>{formatUtils.getFormattedCryptoValue(props.tokenAmounts[i])}</Amount>{' '}
                     <Symbol>{symbol}</Symbol>
                 </Row>

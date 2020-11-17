@@ -46,7 +46,7 @@ const SummaryList = () => {
     return (
         <Wrapper>
             <Header>
-                <Exchange>Pools summary</Exchange>
+                <Exchange>Pools</Exchange>
                 <Value>Value</Value>
                 <Gains>Rewards</Gains>
             </Header>

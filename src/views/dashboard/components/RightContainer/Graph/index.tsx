@@ -84,16 +84,15 @@ class Graph extends PureComponent<Props, State> {
                 >
                     <CartesianGrid strokeDasharray="2 2" />
                     <Label value="Pool history" offset={0} position="top" />
-
                     <Tooltip
                         cursor={{ stroke: '#4366b1ff', strokeWidth: 1 }}
                         content={<CustomTooltip setHighlightedAreaId={this.setHighlightedAreaId} />}
                     />
-
                     {data.map((data, i) => {
                         const dataKeyName = `poolValues[${i}]`;
                         return (
                             <Area
+                                key={dataKeyName}
                                 isAnimationActive={false}
                                 dataKey={dataKeyName}
                                 name={`${i}`}
@@ -114,7 +113,9 @@ class Graph extends PureComponent<Props, State> {
                             fontSize: variables.FONT_SIZE.SMALL,
                             transform: 'translate(0, 12)',
                         }}
-                        tickFormatter={formatUtils.getFormattedDateFromTimestamp}
+                        tickFormatter={value =>
+                            formatUtils.getFormattedDateFromTimestamp(value, 'MONTH_DAY_YEAR', true)
+                        }
                         stroke={colors.FONT_LIGHT}
                         // padding={{ left: 2 }}
                     >

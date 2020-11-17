@@ -63,7 +63,7 @@ const Nan = styled.div`
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-    value: number;
+    value: number | typeof NaN;
     currency?: string;
     colorized?: boolean; // change color is the amount is positive or negative
     minimumFractionDigits?: number;
@@ -90,12 +90,11 @@ const FiatValue = ({
 
     // specify the sign
     let sign = '+ ';
-    let displayedValue = 0;
 
     // if passed value is not a number
     if (isNaN(originalValue)) {
         return (
-            <Wrapper value={originalValue} colorized={colorized} useBadgeStyle={useBadgeStyle}>
+            <Wrapper value={0} colorized={colorized} useBadgeStyle={useBadgeStyle}>
                 <Nan>-</Nan>
             </Wrapper>
         );

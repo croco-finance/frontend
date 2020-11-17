@@ -1,63 +1,61 @@
 import { mathUtils, lossUtils } from '.';
 import { types } from '@config';
 
-interface GraphData {
-    timestampMillis: number;
-    poolValues: Array<number | undefined>;
-    feesUsd: number | null;
-    yieldUsd: number | null;
-    txCostUsd: number | null;
-}
-
 const getGraphData = (intervalStats: types.IntervalStats[]) => {
     const statsCount = intervalStats.length;
-    let graphData: GraphData[] = new Array(statsCount + 1);
+    const lastTimestampMillis = intervalStats[intervalStats.length - 1].timestampEnd * 1000;
+    let graphData: types.GraphData[] = new Array(statsCount + 1);
 
     // Get first element of graph data. The rest will be computed using loop
     const initialPoolValues = new Array(statsCount).fill(undefined);
+
     // initialPoolValues[0] = intervalStats[0].poolValueUsd;
-    initialPoolValues[0] = mathUtils.getTokenArrayValue(
-        intervalStats[0].userTokenBalancesStart,
-        intervalStats[0].tokenPricesStart,
-    );
+    initialPoolValues[0] = intervalStats[0].poolValueUsdStart;
 
     graphData[0] = {
+        lastTimestampMillis: lastTimestampMillis,
+        timestampMillisPrev: null,
         timestampMillis: intervalStats[0].timestampStart * 1000,
         poolValues: initialPoolValues,
-        feesUsd: null,
-        yieldUsd: null,
-        txCostUsd: null,
+        poolValuePrev: undefined,
+        feesUsd: 0,
+        yieldUsd: 0,
+        txCostUsd: intervalStats[0].txCostEthStart * intervalStats[0].ethPriceStart,
+        impLossUsd: 0,
     };
 
     intervalStats.forEach((stat, i) => {
         // ship the first stat (is already included)
         const poolValues = new Array(statsCount).fill(undefined);
 
-        // for (let index = 0; index < statsCount; index++) {
-        //     if
-        //     poolValues[index]
-        // }
+        // get end value of pool
+        poolValues[i] = stat.poolValueUsdEnd;
 
-        poolValues[i] = mathUtils.getTokenArrayValue(
-            stat.userTokenBalancesEnd,
-            stat.tokenPricesEnd,
-        );
-
-        // if not last stat
+        // if not last stat.
         if (i !== statsCount - 1) {
+            // get next interval stat.
             const nextStat = intervalStats[i + 1];
-            poolValues[i + 1] = mathUtils.getTokenArrayValue(
-                nextStat.userTokenBalancesStart,
-                nextStat.tokenPricesEnd,
-            );
+
+            // compute the start value of the next interval
+            poolValues[i + 1] = nextStat.poolValueUsdStart;
         }
 
+        // previous pool Value
+        // const poolValuePrev = graphData[i].poolValues[i];
+
         graphData[i + 1] = {
+            lastTimestampMillis: lastTimestampMillis,
+            timestampMillisPrev: stat.timestampStart * 1000,
             timestampMillis: stat.timestampEnd * 1000,
             poolValues: poolValues,
             feesUsd: mathUtils.getTokenArrayValue(stat.feesTokenAmounts, stat.tokenPricesEnd),
-            yieldUsd: stat.yieldTokenAmountEnd * stat.tokenPricesEnd,
+            yieldUsd: stat.yieldTokenPriceEnd
+                ? stat.yieldTokenAmountEnd * stat.yieldTokenPriceEnd
+                : 0,
             txCostUsd: stat.txCostEthEnd * stat.ethPriceEnd,
+            impLossUsd: stat.impLossUsd,
+            poolValuePrev: stat.poolValueUsdStart,
+            // poolValuePrev: poolValuePrev,
         };
     });
 
@@ -70,29 +68,37 @@ const exampleGraphData = [
     {
         timestamp: 1595087838000,
         poolValues: [10000, undefined, undefined],
+        poolValues_new: ['intervalStat1_start', undefined, undefined],
         feesUsd: null,
         yieldUsd: null,
         txCostUsd: 12,
+        poolValuesPrev: undefined,
     },
     {
         timestamp: 1595087838000,
         poolValues: [24000, 15000, undefined],
+        poolValues_new: ['intervalStat1_end', 'intervalStat2_start', undefined],
         feesUsd: 120,
         yieldUsd: 4,
         txCostUsd: 3,
+        poolValuesPrev: 10000, // 'intervalStat0_start'
     },
     {
         timestamp: 1595160904000,
         poolValues: [undefined, 20000, 10000],
+        poolValues_new: [undefined, 'intervalStat2_end', 'intervalStat3_start'],
         feesUsd: 80,
         yieldUsd: 12,
         txCostUsd: 150,
+        poolValuesPrev: 15000, // 'intervalStat1_start'
     },
     {
         timestamp: 1595388461000,
         poolValues: [undefined, undefined, 5000],
+        poolValues_new: [undefined, undefined, 'intervalStat3_end'],
         feesUsd: 333,
         yieldUsd: 111,
         txCostUsd: 99,
+        poolValuesPrev: 10000,
     },
 ];
