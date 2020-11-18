@@ -32,4 +32,10 @@ export default {
 
     BLACK0: '#000000',
     WHITE: '#ffffff',
+
+    GRAPH_1_LIGHT: '#a5c5ffff',
+    GRAPH_1_DARK: '#a5c5ffff',
+
+    GRAPH_2_LIGHT: '#7697deff',
+    GRAPH_2_DARK: '#7697deff',
 } as const;

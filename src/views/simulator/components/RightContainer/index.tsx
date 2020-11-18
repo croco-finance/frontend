@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Overview from './Overview';
 import { MultipleTokenLogo, TabSelectHeader } from '@components/ui';
-import { formatUtils } from '@utils';
+import { formatUtils, graphUtils } from '@utils';
+import ILGraph from './ILGraph';
 
 const Wrapper = styled.div`
     display: flex;
@@ -13,29 +14,13 @@ const Wrapper = styled.div`
     width: 100%;
 `;
 
-const SelectPoolWrapper = styled.div`
-    display: flex;
-    height: 88vh;
-    align-items: center;
-    justify-content: center;
-    color: ${colors.FONT_LIGHT};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    font-size: ${variables.FONT_SIZE.H2};
-    text-align: center;
-`;
-
-const GraphWrapper = styled.div`
-    display: flex;
-    margin-top: 35px;
-    padding: 0 30px;
-`;
-
 type TabOptions = 'overview' | 'strategies';
 
 interface Props {
     simulatedCoefficients: Array<number>;
+    sliderDefaultCoeffs: Array<number>;
 }
-const RightContainer = ({ simulatedCoefficients }: Props) => {
+const RightContainer = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
@@ -64,19 +49,10 @@ const RightContainer = ({ simulatedCoefficients }: Props) => {
                 headlineText={headlineText}
                 onSelectTab={tabName => setSelectedTab(tabName)}
             />
-            <Overview simulatedCoefficients={simulatedCoefficients} />
-            {/* {tokenCount === 2 && (
-                    <>
-                        <GraphWrapper>
-                            <ILGraph
-                                height={240}
-                                referenceX={currentPriceChangeRatio}
-                                referenceY={currentImpLoss}
-                                data={graphData}
-                            ></ILGraph>
-                        </GraphWrapper>
-                    </>
-                )} */}
+            <Overview
+                simulatedCoefficients={simulatedCoefficients}
+                sliderDefaultCoeffs={sliderDefaultCoeffs}
+            />
         </Wrapper>
     );
 };

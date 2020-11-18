@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow } from '@components/ui';
 import { colors, variables, types } from '@config';
-import { mathUtils, lossUtils, formatUtils, simulatorUtils } from '@utils';
+import { mathUtils, lossUtils, formatUtils, simulatorUtils, graphUtils } from '@utils';
+import ILGraph from '../ILGraph';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -47,60 +48,10 @@ const ImpLossGridWrapper = styled(GridWrapper)`
     grid-template-columns: minmax(200px, auto) minmax(110px, auto) 120px;
 `;
 
-const HodlHeaderWrapper = styled(HeaderWrapper)`
-    /* grid-template-columns: 280px 2px minmax(100px, auto); */
-`;
-
-const TotalLossRowWrapper = styled(GridWrapper)`
-    grid-template-rows: repeat(1, 50px);
-    border-top: 1px solid ${colors.STROKE_GREY};
-    margin-top: 3px;
-    padding-top: 3px;
-`;
-
-const DaysLeftWrapper = styled.div`
-    background-color: ${colors.BACKGROUND_DARK};
-    padding: 10px;
-    font-size: ${variables.FONT_SIZE.SMALL};
-    border-radius: 5px;
-    margin-top: 10px;
-`;
-
-const DaysLeftGridWrapper = styled(GridWrapper)`
-    font-size: ${variables.FONT_SIZE.SMALL};
-    grid-auto-rows: 37px;
-`;
-
-const DaysLeftNote = styled.div`
-    border-top: 1px solid ${colors.STROKE_GREY};
-    color: ${colors.FONT_MEDIUM};
-    padding: 10px;
-`;
-
-const SubValue = styled.div`
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_MEDIUM};
-    font-size: ${variables.FONT_SIZE.SMALL};
-    background-color: ${colors.BACKGROUND_DARK};
-    padding: 3px;
-    border-radius: 3px;
-    margin-right: 8px;
-    /* border-right: 1px solid ${colors.STROKE_GREY}; */
-    padding: 2px 3px;
-`;
-
-const ImpLossValueWrapper = styled.div`
-    display: flex;
-    align-items: center;
-`;
 const PoolValueGridWrapper = styled(GridWrapper)`
     /* grid-auto-rows: 46px; */
     align-items: baseline;
     padding-top: 0;
-`;
-const DoubleValueWrapper = styled.div``;
-const ValueDifference = styled.div`
-    font-size: ${variables.FONT_SIZE.SMALL};
 `;
 
 const PoolValueCryptoFiatWrapper = styled.div`
@@ -128,11 +79,25 @@ const ImpLossRel = styled.div`
 const RightPaddingWrapper = styled.div`
     padding-right: 10px;
 `;
+
+const GraphWrapper = styled.div`
+    padding: 60px 10px 10px 10px;
+    width: 100%;
+`;
+
+const GraphTitle = styled.div`
+    color: ${colors.FONT_MEDIUM};
+    text-align: center;
+    padding-bottom: 15px;
+    padding-left: 50px;
+`;
+
 interface Props {
     simulatedCoefficients: Array<number>;
+    sliderDefaultCoeffs: Array<number>;
 }
 
-const CardOverview = ({ simulatedCoefficients }: Props) => {
+const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
@@ -169,7 +134,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
         tokenWeights,
         exchange,
     );
-    const {
+    let {
         newTokenBalances,
         newPoolValueUsd,
         newFeesUsd,
@@ -178,6 +143,8 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
         impLossUsd,
     } = simulatedValues;
 
+    if (Math.abs(impLossRel) < 0.00001) impLossRel = 0;
+
     // TODO check if yield token is also part of pool (if yes, change its price accordingly)
     const newRewardsMinusExpensesUsd = newFeesUsd + yieldUsd - txCostUsd;
 
@@ -185,6 +152,13 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
 
     const tokenBalancesDiff = mathUtils.subtractArraysElementWise(newTokenBalances, tokenBalances);
 
+    const graphData = graphUtils.getILGraphData(poolValueUsd, newPoolValueUsd, newHodlValueUsd);
+    const maxPossibleSimulationValue = graphUtils.getMaxPossiblePoolValue(
+        tokenBalances,
+        tokenPricesEnd,
+        sliderDefaultCoeffs,
+        2,
+    );
     return (
         <Wrapper>
             <HeaderWrapper>
@@ -242,9 +216,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                     />
                 </PoolValueGridWrapper>
             </GrayBox>
-
             <ImpLossHeader>Impermanent loss compared to HODLing tokens</ImpLossHeader>
-
             <GrayBox
                 padding={[15, 20, 15, 20]}
                 bottomBar={
@@ -252,7 +224,7 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                         <BoxRow
                             columnAlignment={['left', 'right', 'left']}
                             firstColumn="Est. days left to compensate loss*"
-                            secondColumn={<RightPaddingWrapper>36</RightPaddingWrapper>}
+                            secondColumn={<RightPaddingWrapper>TODO</RightPaddingWrapper>}
                             thirdColumn={<></>}
                         />
                     </ImpLossGridWrapper>
@@ -275,6 +247,10 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                     />
                 </ImpLossGridWrapper>
             </GrayBox>
+            <GraphWrapper>
+                <GraphTitle>Pool / HODL value comparison</GraphTitle>
+                <ILGraph data={graphData} maxPossibleValue={maxPossibleSimulationValue} />
+            </GraphWrapper>
         </Wrapper>
     );
 };

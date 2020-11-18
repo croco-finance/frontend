@@ -71,12 +71,14 @@ interface Props {
     color?: 'light' | 'dark';
     onSliderChange?: any;
     defaultSliderValue?: number;
+    onDefaultSliderValueChange?: any;
 }
 
 const PriceChangeRow = ({
     firstColumn,
     fourthColumn,
     onSliderChange,
+    onDefaultSliderValueChange,
     defaultSliderValue = 1,
     color = 'light',
 }: Props) => {
@@ -98,6 +100,7 @@ const PriceChangeRow = ({
         // }
         handleSliderChange(typedValueFloat);
         setSliderMidValue(typedValueFloat);
+        onDefaultSliderValueChange(typedValueFloat);
     };
 
     return (

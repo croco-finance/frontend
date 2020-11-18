@@ -62,7 +62,47 @@ const getGraphData = (intervalStats: types.IntervalStats[]) => {
     return graphData;
 };
 
-export { getGraphData };
+const getILGraphData = (currentPoolValue: number, newPoolValue: number, newHodlValue: number) => {
+    const data = new Array(2);
+
+    data[0] = {
+        name: 'Today',
+        poolValue: currentPoolValue,
+        hodlValue: currentPoolValue,
+    };
+
+    data[1] = {
+        name: 'Simulated',
+        poolValue: newPoolValue,
+        hodlValue: newHodlValue,
+    };
+
+    return data;
+};
+
+const getMaxPossiblePoolValue = (
+    currentTokenBalances: Array<number>,
+    currentTokenPrices: Array<number>,
+    defaultPriceChangeCoeffs: Array<number>,
+    maxCoeffIncreaseRate: number = 2,
+) => {
+    const maxPossibleCoeffs = mathUtils.multiplyEachArrayElementByValue(
+        defaultPriceChangeCoeffs,
+        maxCoeffIncreaseRate,
+    );
+    const maxPossiblePrices = mathUtils.multiplyArraysElementWise(
+        currentTokenPrices,
+        maxPossibleCoeffs,
+    );
+    const maxPossiblePoolValue = mathUtils.getTokenArrayValue(
+        currentTokenBalances,
+        maxPossiblePrices,
+    );
+
+    return maxPossiblePoolValue;
+};
+
+export { getGraphData, getILGraphData, getMaxPossiblePoolValue };
 
 const exampleGraphData = [
     {

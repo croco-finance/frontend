@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 import { colors, variables } from '@config';
 import { formatUtils } from '@utils';
 import React, { PureComponent } from 'react';
-import { exampleGraphData } from './data';
 import {
     AreaChart,
     Area,
@@ -12,8 +11,6 @@ import {
     Tooltip,
     Label,
     ResponsiveContainer,
-    ReferenceDot,
-    ReferenceLine,
 } from 'recharts';
 
 import CustomTooltip from './CustomTooltip';

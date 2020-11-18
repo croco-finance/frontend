@@ -63,8 +63,14 @@ interface Props {
     tokensPool?: any;
     onChange: any;
     simulatedCoefficients: any;
+    onNewDefaultValue: any;
 }
-const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) => {
+const SimulationBox = ({
+    tokensPool,
+    onChange,
+    simulatedCoefficients,
+    onNewDefaultValue,
+}: Props) => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
@@ -95,6 +101,7 @@ const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) =
                             onSliderChange={newValue => {
                                 onChange(newValue, i);
                             }}
+                            onDefaultSliderValueChange={newValue => onNewDefaultValue(newValue, i)}
                             firstColumn={
                                 <TokenWrapper>
                                     <TokenLogo symbol={tokenSymbol} size={22} />

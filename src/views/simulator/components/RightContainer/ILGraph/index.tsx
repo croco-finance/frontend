@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { colors, variables } from '@config';
+import { formatUtils } from '@utils';
 import React, { PureComponent } from 'react';
 import {
     AreaChart,
@@ -10,44 +11,107 @@ import {
     Tooltip,
     Label,
     ResponsiveContainer,
-    Line,
-    LineChart,
     ReferenceDot,
+    ReferenceLine,
+    Legend,
 } from 'recharts';
+
+import CustomTooltip from './CustomTooltip';
+
+const getYAxisMaxValue = value => {
+    return Math.round(value / 1000) * 1000 + 1000;
+};
+
+const LegendItem = styled.span`
+    font-size: ${variables.FONT_SIZE.SMALL};
+`;
 
 interface Props {
     height?: number;
     referenceX?: number;
     referenceY?: number;
-    data?: Array<any>;
+    data?: any;
+    maxPossibleValue: number;
 }
-class ILGraph extends PureComponent<Props> {
+
+interface State {
+    highlightedAreaId: string | null;
+}
+
+class Graph extends PureComponent<Props, State> {
     constructor(props) {
         super(props);
-        this.state = { counter: 0 };
+    }
+
+    renderColorfulLegendText(value, entry) {
+        const legendText = value === 'poolValue' ? 'Pool value' : 'HODL value';
+
+        return <LegendItem style={{ color: colors.FONT_LIGHT }}>{legendText}</LegendItem>;
     }
 
     render() {
+        const { data, maxPossibleValue } = this.props;
+
         return (
-            <ResponsiveContainer
-                width="100%"
-                height={this.props.height ? this.props.height : '300'}
-            >
-                <LineChart
-                    // <AreaChart
-                    // type={'linearClosed'}
-                    data={this.props.data}
+            <ResponsiveContainer width="100%" height={270}>
+                <AreaChart
+                    width={800}
+                    height={260}
+                    data={data}
                     margin={{
                         top: 10,
-                        right: 0,
-                        left: 0,
-                        bottom: 30,
+                        right: 48,
+                        bottom: 10,
+                        left: 48,
                     }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="priceChangeRel" stroke={colors.FONT_MEDIUM}>
-                        <Label
-                            value="ETH/DAI price change [%]"
+                    <CartesianGrid strokeDasharray="2 2" />
+
+                    <Tooltip
+                        cursor={{ stroke: '#4366b1ff', strokeWidth: 1 }}
+                        content={<CustomTooltip />}
+                    />
+                    <Legend
+                        iconType="plainline"
+                        wrapperStyle={{
+                            paddingLeft: '50px',
+                            paddingTop: '10px',
+                        }}
+                        formatter={this.renderColorfulLegendText}
+                    />
+
+                    <Area
+                        key={'poolValue'}
+                        isAnimationActive={false}
+                        dataKey={'poolValue'}
+                        strokeWidth={1}
+                        fillOpacity={0.8}
+                        fill={colors.GRAPH_1_DARK}
+                        stroke={colors.GRAPH_1_DARK}
+                    />
+                    <Area
+                        key={'hodlValue'}
+                        isAnimationActive={false}
+                        dataKey={'hodlValue'}
+                        strokeWidth={2}
+                        fillOpacity={0}
+                        fill={colors.BLUE}
+                        stroke={'#a600ffff'}
+                        // stroke={colors.BLUE}
+                        strokeDasharray="4 4"
+                    />
+
+                    <XAxis
+                        dataKey="name"
+                        tick={{
+                            fontSize: variables.FONT_SIZE.NORMAL,
+                            transform: 'translate(0, 12)',
+                        }}
+                        stroke={colors.FONT_MEDIUM}
+                        // padding={{ left: 2 }}
+                    >
+                        {/* <Label
+                            value="Date"
                             position="bottom"
                             offset={15}
                             style={{
@@ -55,59 +119,29 @@ class ILGraph extends PureComponent<Props> {
                                 fontSize: variables.FONT_SIZE.NORMAL,
                                 fill: colors.FONT_MEDIUM,
                             }}
-                        />
+                        /> */}
                     </XAxis>
                     <YAxis
-                        stroke={colors.FONT_MEDIUM}
+                        tick={{ fontSize: variables.FONT_SIZE.SMALL }}
+                        domain={[0, getYAxisMaxValue(maxPossibleValue)]}
+                        stroke={colors.FONT_LIGHT}
                         label={{
-                            value: 'Impermanent loss [%]',
+                            value: 'Pool value [$]',
                             angle: -90,
-                            offset: 40,
+                            offset: 460,
                             position: 'center',
-                            dx: -20,
+                            dx: -60,
                             style: {
                                 textAnchor: 'middle',
-                                fontSize: variables.FONT_SIZE.NORMAL,
+                                fontSize: variables.FONT_SIZE.SMALL,
                                 fill: colors.FONT_MEDIUM,
                             },
                         }}
                     ></YAxis>
-                    {/* https://github.com/recharts/recharts/issues/1231 */}
-                    <Tooltip />
-
-                    {/* <Area
-                        type="monotone"
-                        dataKey="loss"
-                        stroke={colors.PASTEL_PURPLE_DARK}
-                        fill={colors.PASTEL_PURPLE_MEDIUM}
-                        // dot={<CustomizedDot current={3908} />}
-                    /> */}
-                    {/* <Area
-                        type="monotone"
-                        dataKey="ilRel"
-                        stroke={colors.PASTEL_GREEN_DARK}
-                        fill={colors.PASTEL_GREEN_MEDIUM}
-                    /> */}
-                    <Line
-                        type="monotone"
-                        dataKey="loss"
-                        stroke={colors.PASTEL_PURPLE_DARK}
-                        fill={colors.PASTEL_PURPLE_MEDIUM}
-                    />
-                    <ReferenceDot
-                        x={this.props.referenceX}
-                        y={this.props.referenceY}
-                        r={8}
-                        isFront={true}
-                        ifOverflow="extendDomain"
-                        fill={colors.PASTEL_BLUE_DARK}
-                        stroke={colors.BLUE}
-                    />
-                    {/* </AreaChart> */}
-                </LineChart>
+                </AreaChart>
             </ResponsiveContainer>
         );
     }
 }
 
-export default ILGraph;
+export default Graph;

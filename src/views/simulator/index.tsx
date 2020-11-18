@@ -213,6 +213,10 @@ const Simulator = (props: RouteComponentProps<any>) => {
         allPools[selectedPoolId] ? getInitialPriceCoeffs(allPools[selectedPoolId].tokens) : [],
     );
 
+    const [sliderDefaultCoeffs, setSliderDefaultCoeffs]: any = useState(
+        allPools[selectedPoolId] ? getInitialPriceCoeffs(allPools[selectedPoolId].tokens) : [],
+    );
+
     const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
         props.match.params.address ? props.match.params.address : '',
     );
@@ -221,6 +225,12 @@ const Simulator = (props: RouteComponentProps<any>) => {
         const coefficientsArrCopy = [...simulatedPriceCoefficients];
         coefficientsArrCopy[index] = newValue;
         setSimulatedPriceCoefficients(coefficientsArrCopy);
+    };
+
+    const setNewDefaultCoeffs = (newValue, index) => {
+        const coefficientsArrCopy = [...simulatedPriceCoefficients];
+        coefficientsArrCopy[index] = newValue;
+        setSliderDefaultCoeffs(coefficientsArrCopy);
     };
 
     const handleAddressChange = inputAddr => {
@@ -240,6 +250,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
         if (allPools[selectedPoolId]) {
             const newPool = allPools[selectedPoolId];
             setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.tokens));
+            setSliderDefaultCoeffs(getInitialPriceCoeffs(newPool.tokens));
         }
     }, [selectedPoolId]);
 
@@ -344,6 +355,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                             <SimulationBoxWrapper>
                                 <SimulationBox
                                     onChange={setNewPrices}
+                                    onNewDefaultValue={setNewDefaultCoeffs}
                                     simulatedCoefficients={simulatedPriceCoefficients}
                                 />
                             </SimulationBoxWrapper>
@@ -353,7 +365,10 @@ const Simulator = (props: RouteComponentProps<any>) => {
             </LeftLayoutContainer>
             <RightLayoutContainer>
                 <RightContentWrapper>
-                    <RightContainer simulatedCoefficients={simulatedPriceCoefficients} />
+                    <RightContainer
+                        simulatedCoefficients={simulatedPriceCoefficients}
+                        sliderDefaultCoeffs={sliderDefaultCoeffs}
+                    />
                 </RightContentWrapper>
             </RightLayoutContainer>
         </SimulatorContainer>
