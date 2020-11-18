@@ -33,8 +33,8 @@ export default {
     BLACK0: '#000000',
     WHITE: '#ffffff',
 
-    GRAPH_1_LIGHT: '#a5c5ffff',
-    GRAPH_1_DARK: '#a5c5ffff',
+    GRAPH_1_LIGHT: '#cfe0ffff',
+    GRAPH_1_DARK: '#6fa3ffff',
 
     GRAPH_2_LIGHT: '#7697deff',
     GRAPH_2_DARK: '#7697deff',

@@ -93,12 +93,18 @@ class Graph extends PureComponent<Props, State> {
                                 isAnimationActive={false}
                                 dataKey={dataKeyName}
                                 name={`${i}`}
-                                fill={highlightedAreaId === dataKeyName ? '#7697deff' : '#dbe7ffff'}
+                                fill={
+                                    highlightedAreaId === dataKeyName
+                                        ? colors.GRAPH_1_DARK
+                                        : colors.GRAPH_1_LIGHT
+                                }
                                 stroke={
-                                    highlightedAreaId === dataKeyName ? '#7697deff' : '#bccbeaff'
+                                    highlightedAreaId === dataKeyName
+                                        ? colors.GRAPH_1_DARK
+                                        : colors.GRAPH_1_LIGHT
                                 }
                                 strokeWidth={1.5}
-                                fillOpacity={0.7}
+                                fillOpacity={0.8}
                                 activeDot={highlightedAreaId === dataKeyName ? { r: 5 } : { r: 0 }}
                             />
                         );

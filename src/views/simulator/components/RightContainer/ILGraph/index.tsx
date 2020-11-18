@@ -85,7 +85,7 @@ class Graph extends PureComponent<Props, State> {
                         isAnimationActive={false}
                         dataKey={'poolValue'}
                         strokeWidth={1}
-                        fillOpacity={0.8}
+                        fillOpacity={0.65}
                         fill={colors.GRAPH_1_DARK}
                         stroke={colors.GRAPH_1_DARK}
                     />
@@ -98,7 +98,7 @@ class Graph extends PureComponent<Props, State> {
                         fill={colors.BLUE}
                         stroke={'#a600ffff'}
                         // stroke={colors.BLUE}
-                        strokeDasharray="4 4"
+                        strokeDasharray="4 3"
                     />
 
                     <XAxis
