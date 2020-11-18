@@ -19,13 +19,11 @@ const GridWrapper = styled.div`
     gap: 28px 10px;
     grid-template-columns: 180px minmax(100px, auto) minmax(100px, auto);
     grid-auto-rows: auto;
-    font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
     /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
     /* overflow-x: auto; */
     word-break: break-all;
-    font-size: ${variables.FONT_SIZE.NORMAL};
     align-items: baseline;
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
@@ -35,14 +33,12 @@ const GridWrapper = styled.div`
     }
 `;
 
-const HeaderWrapper = styled(GridWrapper)`
-    grid-template-rows: repeat(1, 40px);
-    padding: 0px 25px;
+const HeaderWrapper = styled.div`
+    padding: 0 20px 12px 20px;
     margin-top: 20px;
-    margin-bottom: -5px;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    /* color: ${colors.FONT_LIGHT}; */
+    color: ${colors.FONT_LIGHT};
 `;
 
 const RewardsExpensesHeader = styled(GridWrapper)`
@@ -131,12 +127,6 @@ const PoolOverview = () => {
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(tokens);
 
-    let tokenSymbolsString = '';
-    tokenSymbolsArr.forEach(symbol => {
-        tokenSymbolsString = tokenSymbolsString + ', ' + symbol;
-    });
-    tokenSymbolsString = tokenSymbolsString.substring(1); //delete first char (comma)
-
     const feesRow = (
         <CardRow
             firstColumn="Fees earned"
@@ -186,12 +176,14 @@ const PoolOverview = () => {
     return (
         <Wrapper>
             <HeaderWrapper>
-                <CardRow
-                    firstColumn="Pool overview"
-                    secondColumn="Crypto "
-                    thirdColumn={endTimeText}
-                    columnColors={['light', 'light', 'light']}
-                />
+                <GridWrapper>
+                    <CardRow
+                        firstColumn="Pool overview"
+                        secondColumn="Crypto "
+                        thirdColumn={endTimeText}
+                        columnColors={['light', 'light', 'light']}
+                    />
+                </GridWrapper>
             </HeaderWrapper>
             <GrayBox
                 padding={[15, 20, 15, 20]}

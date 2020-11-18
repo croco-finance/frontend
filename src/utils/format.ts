@@ -34,7 +34,16 @@ const getFormattedDateFromTimestamp = (
     return `${monthName} ${day}/${year}`;
 };
 
-const getFormattedPercentageValue = (value: number, hideDecimals = false) => {
+const getFormattedPercentageValue = (
+    value: number,
+    hideDecimals = false,
+    usePlusSymbol: boolean = false,
+) => {
+    const sign = getValueSign(value);
+    if (usePlusSymbol) {
+        value = Math.abs(value);
+    }
+
     let percentageFormat = 100 * value;
     const numOfDecimals = mathUtils.countDecimals(percentageFormat);
 
@@ -42,27 +51,47 @@ const getFormattedPercentageValue = (value: number, hideDecimals = false) => {
         return `${percentageFormat.toFixed(0)}%`;
     }
 
+    if (usePlusSymbol) {
+        return `${sign} ${percentageFormat.toFixed(2)}%`;
+    }
     return `${percentageFormat.toFixed(2)}%`;
 };
 
-const getFormattedCryptoValue = (value: number) => {
-    if (value === 0) {
-        return 0;
+const getValueSign = (value: number) => {
+    if (isNaN(value) || value === 0) {
+        return ' ';
     }
 
+    if (value < 0) {
+        return '- ';
+    }
+
+    return '+ ';
+};
+
+const getFormattedCryptoValue = (value: number, roundDecimals: number = 4) => {
     if (isNaN(value)) {
         return '-';
     }
 
+    // TODO double check this code and make sure it does what you want
+    if (value === 0 || Math.abs(value) < 1 / Math.pow(10, roundDecimals + 1)) {
+        return 0;
+    }
+
+    // if (value === 0) {
+    //     return 0;
+    // }
+
     const firstTwoAfterDecimals = mathUtils.toTwoDecimals(value);
 
     // compute how many decimals are there before first non-zero value after decimal
-    const decimalsCount = mathUtils.countDecimals(firstTwoAfterDecimals);
-    if (decimalsCount > 5) {
+    const zeroDecimalsCount = mathUtils.countDecimals(firstTwoAfterDecimals);
+    if (zeroDecimalsCount > roundDecimals + 1) {
         return '0.000...';
     }
 
-    return value.toFixed(5);
+    return value.toFixed(roundDecimals);
 };
 
 const getTokenSymbolArr = (tokensArr: Array<any>) => {

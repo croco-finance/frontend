@@ -18,6 +18,8 @@ import CryptoValue from './CryptoValue';
 import CryptoFiatValue from './CryptoFiatValue';
 import VerticalCryptoAmounts from './VerticalCryptoAmounts';
 import TabSelectHeader from './TabSelectHeader';
+import BoxRow from './BoxRow';
+import SignedValue from './SignedValue';
 
 export {
     TokenLogo,
@@ -40,4 +42,6 @@ export {
     CryptoFiatValue,
     VerticalCryptoAmounts,
     TabSelectHeader,
+    BoxRow,
+    SignedValue,
 };

@@ -85,6 +85,7 @@ const FiatValue = ({
     minimumFractionDigits = 2,
     useBadgeStyle = false,
     useLightRed = false,
+    className,
 }: Props) => {
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -106,6 +107,7 @@ const FiatValue = ({
                 colorized={colorized}
                 useBadgeStyle={useBadgeStyle}
                 useLightRed={false}
+                className={className}
             >
                 <Nan>-</Nan>
             </Wrapper>
@@ -120,6 +122,7 @@ const FiatValue = ({
                 colorized={colorized}
                 useBadgeStyle={useBadgeStyle}
                 useLightRed={false}
+                className={className}
             >
                 {formatter.format(0)}
             </Wrapper>
@@ -141,6 +144,7 @@ const FiatValue = ({
             colorized={colorized}
             useBadgeStyle={useBadgeStyle}
             useLightRed={useLightRed}
+            className={className}
         >
             {roundedValueTwoDec ? (
                 <>

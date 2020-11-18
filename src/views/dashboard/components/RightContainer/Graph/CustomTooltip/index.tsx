@@ -128,7 +128,7 @@ const CustomTooltip = (props: Props) => {
                                 'MONTH_DAY',
                             )}
                         </IntervalsDateHeader>
-                        <IntervalValuesWrapper roundedBottom={isHoveredLast}>
+                        <IntervalValuesWrapper roundedBottom={isHoveredLast && !txCostUsd}>
                             <PoolValuesWrapper>
                                 <GridWrapper>
                                     <TooltipRow

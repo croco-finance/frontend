@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatValue, GrayBox, ToggleSwitch, MultipleTokenLogo } from '@components/ui';
+import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow } from '@components/ui';
 import { colors, variables, types } from '@config';
 import { mathUtils, lossUtils, formatUtils, simulatorUtils } from '@utils';
-import CardRow from '../CardRow';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -16,15 +15,13 @@ const GridWrapper = styled.div`
     flex-grow: 1;
     display: grid;
     gap: 28px 10px;
-    grid-template-columns: 180px minmax(100px, auto) minmax(100px, auto);
+    grid-template-columns: minmax(100px, auto) minmax(110px, auto) minmax(110px, auto) 125px;
     grid-auto-rows: auto;
-    font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
     /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
     /* overflow-x: auto; */
     word-break: break-all;
-    font-size: ${variables.FONT_SIZE.NORMAL};
     align-items: baseline;
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
@@ -34,14 +31,20 @@ const GridWrapper = styled.div`
     }
 `;
 
-const HeaderWrapper = styled(GridWrapper)`
-    grid-template-rows: repeat(1, 40px);
-    padding: 0px 25px;
+const HeaderWrapper = styled.div`
+    padding: 0 20px 12px 20px;
     margin-top: 20px;
-    margin-bottom: -5px;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    /* color: ${colors.FONT_LIGHT}; */
+    color: ${colors.FONT_LIGHT};
+`;
+
+const ImpLossHeader = styled(HeaderWrapper)`
+    margin-top: 40px;
+`;
+
+const ImpLossGridWrapper = styled(GridWrapper)`
+    grid-template-columns: minmax(200px, auto) minmax(110px, auto) 120px;
 `;
 
 const HodlHeaderWrapper = styled(HeaderWrapper)`
@@ -94,13 +97,37 @@ const PoolValueGridWrapper = styled(GridWrapper)`
     /* grid-auto-rows: 46px; */
     align-items: baseline;
     padding-top: 0;
-    height: 39px;
 `;
 const DoubleValueWrapper = styled.div``;
 const ValueDifference = styled.div`
     font-size: ${variables.FONT_SIZE.SMALL};
 `;
 
+const PoolValueCryptoFiatWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const PoolValueCryptoFiatWrapperBorder = styled(PoolValueCryptoFiatWrapper)`
+    border-right: 1px solid ${colors.STROKE_GREY};
+    padding-right: 10px;
+`;
+
+const StyledFiatValueWrapper = styled(FiatValue)`
+    margin-bottom: 8px;
+`;
+
+const ColorizedFiatValueWrapper = styled(StyledFiatValueWrapper)`
+    font-size: ${variables.FONT_SIZE.SMALL};
+`;
+
+const ImpLossRel = styled.div`
+    color: ${colors.FONT_LIGHT};
+`;
+
+const RightPaddingWrapper = styled.div`
+    padding-right: 10px;
+`;
 interface Props {
     simulatedCoefficients: Array<number>;
 }
@@ -154,107 +181,99 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
     // TODO check if yield token is also part of pool (if yes, change its price accordingly)
     const newRewardsMinusExpensesUsd = newFeesUsd + yieldUsd - txCostUsd;
 
+    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(tokens);
+
+    const tokenBalancesDiff = mathUtils.subtractArraysElementWise(newTokenBalances, tokenBalances);
+
     return (
         <Wrapper>
             <HeaderWrapper>
-                <CardRow
-                    firstColumn="Pool overview"
-                    secondColumn="Current"
-                    thirdColumn="Simulated"
-                    color="light"
-                />
+                <GridWrapper>
+                    <BoxRow
+                        firstColumn="Pool overview"
+                        secondColumn="Today"
+                        thirdColumn={<RightPaddingWrapper>Simulated</RightPaddingWrapper>}
+                        fourthColumn=""
+                        columnColors={['light', 'light', 'light', 'light']}
+                        columnAlignment={['left', 'right', 'right', 'left']}
+                    />
+                </GridWrapper>
             </HeaderWrapper>
-            <GrayBox>
+            <GrayBox padding={[15, 20, 18, 20]}>
                 <PoolValueGridWrapper>
-                    <CardRow
-                        firstColumn="Your pool share value"
-                        secondColumn={<FiatValue value={poolValueUsd}></FiatValue>}
-                        thirdColumn={
-                            <DoubleValueWrapper>
-                                <FiatValue value={newPoolValueUsd}></FiatValue>
-                                <ValueDifference>
-                                    <FiatValue
-                                        value={newPoolValueUsd - poolValueUsd}
-                                        usePlusSymbol
-                                        colorized
-                                    ></FiatValue>
-                                </ValueDifference>
-                            </DoubleValueWrapper>
+                    <BoxRow
+                        columnAlignment={['left', 'right', 'right', 'left']}
+                        firstColumn="Your pool size"
+                        secondColumn={
+                            <PoolValueCryptoFiatWrapper>
+                                <StyledFiatValueWrapper value={poolValueUsd} />
+                                <VerticalCryptoAmounts
+                                    tokenSymbols={tokenSymbolsArr}
+                                    tokenAmounts={tokenBalances}
+                                />
+                            </PoolValueCryptoFiatWrapper>
                         }
-                        color="dark"
+                        // simulation values
+                        thirdColumn={
+                            <PoolValueCryptoFiatWrapperBorder>
+                                <StyledFiatValueWrapper value={newPoolValueUsd} />
+                                <VerticalCryptoAmounts
+                                    tokenSymbols={tokenSymbolsArr}
+                                    tokenAmounts={newTokenBalances}
+                                />
+                            </PoolValueCryptoFiatWrapperBorder>
+                        }
+                        // difference values
+                        fourthColumn={
+                            <PoolValueCryptoFiatWrapper>
+                                <ColorizedFiatValueWrapper
+                                    value={newPoolValueUsd - poolValueUsd}
+                                    usePlusSymbol
+                                    colorized
+                                />
+                                <VerticalCryptoAmounts
+                                    tokenSymbols={tokenSymbolsArr}
+                                    tokenAmounts={tokenBalancesDiff}
+                                    textAlign="left"
+                                    usePlusSymbol
+                                />
+                            </PoolValueCryptoFiatWrapper>
+                        }
                     />
                 </PoolValueGridWrapper>
             </GrayBox>
-            <HodlHeaderWrapper>
-                <CardRow
-                    firstColumn="Your balance compared to HODL strategy"
-                    secondColumn="Current"
-                    thirdColumn="Simulated"
-                    color="light"
-                />
-            </HodlHeaderWrapper>
-            <GrayBox>
-                <GridWrapper>
-                    <CardRow
-                        firstColumn="Fees earned"
-                        secondColumn={<FiatValue value={feesUsd} usePlusSymbol />}
-                        thirdColumn={<FiatValue value={newFeesUsd} usePlusSymbol />}
-                        color="dark"
-                    />
 
-                    {hasYieldReward ? (
-                        <CardRow
-                            firstColumn="Yield rewards"
-                            secondColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
-                            thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
-                            color="dark"
+            <ImpLossHeader>Impermanent loss compared to HODLing tokens</ImpLossHeader>
+
+            <GrayBox
+                padding={[15, 20, 15, 20]}
+                bottomBar={
+                    <ImpLossGridWrapper>
+                        <BoxRow
+                            columnAlignment={['left', 'right', 'left']}
+                            firstColumn="Est. days left to compensate loss*"
+                            secondColumn={<RightPaddingWrapper>36</RightPaddingWrapper>}
+                            thirdColumn={<></>}
                         />
-                    ) : null}
-
-                    <CardRow
-                        firstColumn="Transactions expenses"
-                        secondColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
-                        thirdColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
-                        color="dark"
-                    />
-                    <CardRow
+                    </ImpLossGridWrapper>
+                }
+            >
+                <ImpLossGridWrapper>
+                    <BoxRow
+                        columnAlignment={['left', 'right', 'left']}
                         firstColumn="Impermanent loss"
-                        secondColumn=""
-                        thirdColumn={
-                            <ImpLossValueWrapper>
-                                {/* <SubValue>
-                                    {impLossCompToInitialRel &&
-                                        getFormattedPercentageValue(
-                                            Math.abs(impLossCompToInitialRel),
-                                        )}
-                                </SubValue> */}
-                                <FiatValue value={-impLossUsd} usePlusSymbol />
-                            </ImpLossValueWrapper>
-                        }
-                        color="dark"
-                    />
-                </GridWrapper>
-                <TotalLossRowWrapper>
-                    <CardRow
-                        firstColumn="Total"
                         secondColumn={
-                            <FiatValue
-                                value={rewardsMinusExpensesUsd}
-                                usePlusSymbol
-                                // colorized
-                                // useBadgeStyle
-                            ></FiatValue>
+                            <PoolValueCryptoFiatWrapperBorder>
+                                <FiatValue value={-impLossUsd} usePlusSymbol />
+                            </PoolValueCryptoFiatWrapperBorder>
                         }
                         thirdColumn={
-                            <FiatValue
-                                value={newRewardsMinusExpensesUsd}
-                                usePlusSymbol
-                                useBadgeStyle
-                            ></FiatValue>
+                            <ImpLossRel>
+                                {formatUtils.getFormattedPercentageValue(impLossRel, false)}
+                            </ImpLossRel>
                         }
-                        color="dark"
                     />
-                </TotalLossRowWrapper>
+                </ImpLossGridWrapper>
             </GrayBox>
         </Wrapper>
     );
