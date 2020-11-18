@@ -60,16 +60,29 @@ const ButtonsWrapper = styled.div`
     }
 `;
 
-const Button = styled.div<{ selected: boolean }>`
+const Button = styled.div<{ selected: boolean; disabled?: boolean }>`
     flex-grow: 1;
     color: ${props => (props.selected ? colors.GREEN : colors.FONT_LIGHT)};
     border-bottom: 2px solid;
     border-color: ${props => (props.selected ? colors.GREEN : 'transparent')};
-    cursor: pointer;
+    cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
     padding: 14px 20px;
     box-sizing: border-box;
     margin-bottom: -1px;
     font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    position: relative;
+`;
+
+const SoonBadge = styled.div`
+    color: ${colors.GREEN};
+    background-color: #e9ffeb;
+    font-size: ${variables.FONT_SIZE.TINY};
+    padding: 3px 5px;
+    border-radius: 3px;
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    position: absolute;
+    right: 0px;
+    top: -8px;
 `;
 
 type TabOptions = 'overview' | 'strategies';
@@ -100,13 +113,15 @@ const TabSelectHeader = ({ headlineIcon, headlineText, onSelectTab }: Props) => 
                     Overview
                 </Button>
                 <Button
+                    disabled
                     onClick={() => {
-                        onSelectTab('strategies');
-                        setSelectedTab('strategies');
+                        // onSelectTab('strategies');
+                        // setSelectedTab('strategies');
                     }}
                     selected={selectedTab === 'strategies'}
                 >
                     Compare strategies
+                    <SoonBadge>SOON</SoonBadge>
                 </Button>
             </ButtonsWrapper>
         </Header>
