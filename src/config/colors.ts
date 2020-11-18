@@ -35,6 +35,7 @@ export default {
 
     GRAPH_1_LIGHT: '#cfe0ffff',
     GRAPH_1_DARK: '#6fa3ffff',
+    GRAPH_1_STROKE_LIGHT: '#9cbeffff',
 
     GRAPH_2_LIGHT: '#7697deff',
     GRAPH_2_DARK: '#7697deff',

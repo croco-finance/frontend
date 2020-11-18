@@ -23,7 +23,7 @@ const getYAxisMaxValue = value => {
 };
 
 const LegendItem = styled.span`
-    font-size: ${variables.FONT_SIZE.SMALL};
+    font-size: ${variables.FONT_SIZE.NORMAL};
 `;
 
 interface Props {
@@ -49,20 +49,24 @@ class Graph extends PureComponent<Props, State> {
         return <LegendItem style={{ color: colors.FONT_LIGHT }}>{legendText}</LegendItem>;
     }
 
+    valueToUsd(value) {
+        return `$${value}`;
+    }
+
     render() {
         const { data, maxPossibleValue } = this.props;
 
         return (
-            <ResponsiveContainer width="100%" height={270}>
+            <ResponsiveContainer width="100%" height={300}>
                 <AreaChart
                     width={800}
-                    height={260}
+                    height={290}
                     data={data}
                     margin={{
                         top: 10,
-                        right: 48,
+                        right: 40,
                         bottom: 10,
-                        left: 48,
+                        left: 30,
                     }}
                 >
                     <CartesianGrid strokeDasharray="2 2" />
@@ -122,21 +126,13 @@ class Graph extends PureComponent<Props, State> {
                         /> */}
                     </XAxis>
                     <YAxis
-                        tick={{ fontSize: variables.FONT_SIZE.SMALL }}
+                        tick={{
+                            fontSize: variables.FONT_SIZE.SMALL,
+                            transform: 'translate(-8, 0)',
+                        }}
                         domain={[0, getYAxisMaxValue(maxPossibleValue)]}
                         stroke={colors.FONT_LIGHT}
-                        label={{
-                            value: 'Pool value [$]',
-                            angle: -90,
-                            offset: 460,
-                            position: 'center',
-                            dx: -60,
-                            style: {
-                                textAnchor: 'middle',
-                                fontSize: variables.FONT_SIZE.SMALL,
-                                fill: colors.FONT_MEDIUM,
-                            },
-                        }}
+                        tickFormatter={this.valueToUsd}
                     ></YAxis>
                 </AreaChart>
             </ResponsiveContainer>

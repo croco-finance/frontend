@@ -83,7 +83,7 @@ const RightContainer = () => {
         selectedPoolId === 'all' ? (
             <InlineCircle size={32} color={colors.GREEN} />
         ) : (
-            <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />
+            <MultipleTokenLogo size={19} tokens={tokenSymbolsArr} />
         );
     const headlineText =
         selectedPoolId === 'all'

@@ -101,7 +101,7 @@ class Graph extends PureComponent<Props, State> {
                                 stroke={
                                     highlightedAreaId === dataKeyName
                                         ? colors.GRAPH_1_DARK
-                                        : colors.GRAPH_1_LIGHT
+                                        : colors.GRAPH_1_STROKE_LIGHT
                                 }
                                 strokeWidth={1.5}
                                 fillOpacity={0.8}

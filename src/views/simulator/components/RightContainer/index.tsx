@@ -38,7 +38,7 @@ const RightContainer = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) =
     }
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(allPools[selectedPoolId].tokens);
-    const headlineIcon = <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />;
+    const headlineIcon = <MultipleTokenLogo size={19} tokens={tokenSymbolsArr} />;
     const headlineText = formatUtils.tokenArrToCommaSeparatedString(tokenSymbolsArr);
 
     return (

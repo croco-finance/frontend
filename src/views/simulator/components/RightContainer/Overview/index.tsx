@@ -216,7 +216,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                     />
                 </PoolValueGridWrapper>
             </GrayBox>
-            <ImpLossHeader>Impermanent loss compared to HODLing tokens</ImpLossHeader>
+            <ImpLossHeader>Impermanent loss compared to HODLing pooled tokens</ImpLossHeader>
             <GrayBox
                 padding={[15, 20, 15, 20]}
                 bottomBar={
