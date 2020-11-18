@@ -1,8 +1,10 @@
 import { animations, colors, variables } from '@config';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Overview from './Overview';
+import { MultipleTokenLogo, TabSelectHeader } from '@components/ui';
+import { formatUtils } from '@utils';
 
 const Wrapper = styled.div`
     display: flex;
@@ -28,12 +30,15 @@ const GraphWrapper = styled.div`
     padding: 0 30px;
 `;
 
+type TabOptions = 'overview' | 'strategies';
+
 interface Props {
     simulatedCoefficients: Array<number>;
 }
 const RightContainer = ({ simulatedCoefficients }: Props) => {
     const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
 
     // TODO make the following checks and computations cleaner
     if (!allPools) {
@@ -47,9 +52,18 @@ const RightContainer = ({ simulatedCoefficients }: Props) => {
         return null;
     }
 
+    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(allPools[selectedPoolId].tokens);
+    const headlineIcon = <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />;
+    const headlineText = formatUtils.tokenArrToCommaSeparatedString(tokenSymbolsArr);
+
     return (
         <Wrapper>
             {/* <SectionTitle>Pool overview</SectionTitle> */}
+            <TabSelectHeader
+                headlineIcon={headlineIcon}
+                headlineText={headlineText}
+                onSelectTab={tabName => setSelectedTab(tabName)}
+            />
             <Overview simulatedCoefficients={simulatedCoefficients} />
             {/* {tokenCount === 2 && (
                     <>

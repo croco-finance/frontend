@@ -8,30 +8,10 @@ import * as formatUtils from './format';
 import * as graphUtils from './graph';
 import { getSnaps } from './firebase-loader';
 
-const getTokenSymbolArr = (tokensArr: Array<any>) => {
-    const tokenSymbolsArr = new Array(tokensArr.length);
-    tokensArr.forEach((token, i) => {
-        tokenSymbolsArr[i] = token.symbol;
-    });
-
-    return tokenSymbolsArr;
-};
-
-const getTokenWeightsArr = (tokensArr: Array<types.PoolToken>) => {
-    const weightsArr = new Array(tokensArr.length);
-    tokensArr.forEach((token, i) => {
-        weightsArr[i] = token.weight;
-    });
-
-    return weightsArr;
-};
-
 export {
     validationUtils,
     mathUtils,
     lossUtils,
-    getTokenSymbolArr,
-    getTokenWeightsArr,
     statsComputations,
     getSnaps,
     simulatorUtils,

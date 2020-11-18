@@ -114,8 +114,8 @@ const LeftSubHeaderContent = styled.div`
     ${styles.scrollBarStyles};
 `;
 
-const CardInfoWrapper = styled.div`
-    animation: ${animations.SHOW_UP} 1.5s;
+const RightNonExceptionContentWrapper = styled.div`
+    /* animation: ${animations.SHOW_UP} 1.5s; */
     width: 100%;
 `;
 
@@ -244,9 +244,9 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                 <RightContentWrapper>
                     {rightWrapperContent}
                     {!exceptionContent && !noPoolsSavedInRedux && (
-                        <CardInfoWrapper>
+                        <RightNonExceptionContentWrapper>
                             <RightContainer />
-                        </CardInfoWrapper>
+                        </RightNonExceptionContentWrapper>
                     )}
                 </RightContentWrapper>
             </RightLayoutContainer>

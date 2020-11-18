@@ -1,6 +1,6 @@
 import { FiatValue, GrayBox, MultipleTokenLogo, VerticalCryptoAmounts } from '@components/ui';
 import { colors, types, variables } from '@config';
-import { getTokenSymbolArr, graphUtils } from '@utils';
+import { formatUtils, graphUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -129,7 +129,7 @@ const PoolOverview = () => {
     const endTimeText = isActive ? 'Value today' : 'Withdrawal time';
     const poolShareValueText = isActive ? 'Your pool share' : 'End pool share';
 
-    const tokenSymbolsArr = getTokenSymbolArr(tokens);
+    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(tokens);
 
     let tokenSymbolsString = '';
     tokenSymbolsArr.forEach(symbol => {

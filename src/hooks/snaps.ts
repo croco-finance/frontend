@@ -1,5 +1,5 @@
 import { analytics, types } from '@config';
-import { getTokenWeightsArr, statsComputations, validationUtils } from '@utils';
+import { formatUtils, statsComputations, validationUtils } from '@utils';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import exampleFirebaseData from '../config/example-data-firebase';
@@ -119,7 +119,7 @@ const FetchPoolSnapshotsHook = initialAddress => {
                         snapshots: snapshotsArr,
                         intervalStats: intervalStats,
                         cumulativeStats: cumulativeStats,
-                        tokenWeights: getTokenWeightsArr(snapshotsArr[0].tokens),
+                        tokenWeights: formatUtils.getTokenWeightsArr(snapshotsArr[0].tokens),
                     };
                 }
             }

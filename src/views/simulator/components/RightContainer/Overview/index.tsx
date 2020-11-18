@@ -3,36 +3,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FiatValue, GrayBox, ToggleSwitch, MultipleTokenLogo } from '@components/ui';
 import { colors, variables, types } from '@config';
-import { mathUtils, lossUtils, getTokenSymbolArr, simulatorUtils } from '@utils';
+import { mathUtils, lossUtils, formatUtils, simulatorUtils } from '@utils';
 import CardRow from '../CardRow';
-
-const Headline = styled.div`
-    padding: 0 10px;
-    /* font-weight: ${variables.FONT_WEIGHT.MEDIUM}; */
-    font-size: ${variables.FONT_SIZE.SMALL};
-    margin-top: 0;
-    display: flex;
-    flex-direction: row;
-    height: 36px;
-    width: 100%;
-    justify-self: flex-start;
-    align-items: center;
-`;
-
-const HeadlineText = styled.div`
-    margin-left: 6px;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
-`;
-
-const Header = styled.div`
-    display: flex;
-    width: 100%;
-    align-items: center;
-    padding: 0 10px 0px 10px;
-    align-items: center;
-    /* border-bottom: 1px solid ${colors.BACKGROUND_DARK}; */
-`;
 
 const Wrapper = styled.div`
     width: 100%;
@@ -184,12 +156,6 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
 
     return (
         <Wrapper>
-            <Header>
-                <Headline>
-                    <MultipleTokenLogo size={18} tokens={getTokenSymbolArr(tokens)} />
-                    <HeadlineText>Liquidity pool</HeadlineText>
-                </Headline>
-            </Header>
             <HeaderWrapper>
                 <CardRow
                     firstColumn="Pool overview"

@@ -6,71 +6,13 @@ import styled from 'styled-components';
 import PoolOverview from './PoolOverview';
 import PoolsSummary from './PoolsSummary';
 import Graph from './Graph';
-import { graphUtils, getTokenSymbolArr } from '@utils';
-import { MultipleTokenLogo, InlineCircle } from '@components/ui';
+import { graphUtils, formatUtils } from '@utils';
+import { MultipleTokenLogo, InlineCircle, TabSelectHeader } from '@components/ui';
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-`;
-
-const Headline = styled.div`
-    padding: 0 10px;
-    font-size: ${variables.FONT_SIZE.SMALL};
-    margin-top: 0;
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    justify-self: flex-start;
-    align-items: center;
-`;
-
-const HeadlineText = styled.div<{ isLarge: boolean }>`
-    margin-left: 6px;
-    color: ${colors.FONT_LIGHT};
-    max-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        max-width: 120px;
-        font-size: ${variables.FONT_SIZE.TINY};
-    }
-`;
-
-const Header = styled.div`
-    display: flex;
-    width: 100%;
-    align-items: center;
-    /* padding: 0 10px 10px 10px; */
-    align-items: center;
-    border-bottom: 1px solid ${colors.BACKGROUND_DARK};
-    margin-bottom: 40px;
-    color: ${colors.FONT_LIGHT};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-`;
-
-const ButtonsWrapper = styled.div`
-    display: flex;
-    font-size: ${variables.FONT_SIZE.NORMAL};
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        font-size: ${variables.FONT_SIZE.SMALL};
-    }
-`;
-
-const Button = styled.div<{ selected: boolean }>`
-    flex-grow: 1;
-    color: ${props => (props.selected ? colors.GREEN : colors.FONT_LIGHT)};
-    border-bottom: 2px solid;
-    border-color: ${props => (props.selected ? colors.GREEN : 'transparent')};
-    cursor: pointer;
-    padding: 14px 20px;
-    box-sizing: border-box;
-    margin-bottom: -1px;
-    font-weight: ${variables.FONT_WEIGHT.REGULAR};
 `;
 
 const GraphWrapper = styled.div`
@@ -133,52 +75,28 @@ const RightContainer = () => {
             ? []
             : graphUtils.getGraphData(allPools[selectedPoolId].intervalStats);
 
-    let tokenSymbolsArr;
-    let headlineText = '';
-    let isLargeHeadline = true;
-
-    if (selectedPoolId !== 'all') {
-        isLargeHeadline = false;
-        tokenSymbolsArr = getTokenSymbolArr(allPools[selectedPoolId].tokens);
-        tokenSymbolsArr?.forEach((symbol, i) => {
-            headlineText = headlineText + ', ' + symbol;
-        });
-        headlineText = headlineText.substring(1); //delete first char (comma)
-    } else {
-        headlineText = 'Summary of active positions';
-    }
+    const tokenSymbolsArr =
+        selectedPoolId !== 'all'
+            ? formatUtils.getTokenSymbolArr(allPools[selectedPoolId].tokens)
+            : [];
+    const headlineIcon =
+        selectedPoolId === 'all' ? (
+            <InlineCircle size={32} color={colors.GREEN} />
+        ) : (
+            <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />
+        );
+    const headlineText =
+        selectedPoolId === 'all'
+            ? 'Summary of active positions'
+            : formatUtils.tokenArrToCommaSeparatedString(tokenSymbolsArr);
 
     return (
         <Wrapper>
-            <Header>
-                <Headline>
-                    {selectedPoolId === 'all' ? (
-                        <InlineCircle size={32} color={colors.GREEN} />
-                    ) : (
-                        <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />
-                    )}
-
-                    <HeadlineText isLarge={isLargeHeadline}>{headlineText}</HeadlineText>
-                </Headline>
-                <ButtonsWrapper>
-                    <Button
-                        onClick={() => {
-                            setSelectedTab('overview');
-                        }}
-                        selected={selectedTab === 'overview'}
-                    >
-                        Overview
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            setSelectedTab('strategies');
-                        }}
-                        selected={selectedTab === 'strategies'}
-                    >
-                        Compare strategies
-                    </Button>
-                </ButtonsWrapper>
-            </Header>
+            <TabSelectHeader
+                headlineIcon={headlineIcon}
+                headlineText={headlineText}
+                onSelectTab={tabName => setSelectedTab(tabName)}
+            />
 
             {selectedPoolId === 'all' ? (
                 <PoolsSummary />

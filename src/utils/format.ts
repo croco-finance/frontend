@@ -1,4 +1,5 @@
 import { mathUtils } from '.';
+import { types } from '@config';
 
 type DateFormats = 'MONTH_DAY_YEAR' | 'MONTH_DAY';
 
@@ -64,4 +65,37 @@ const getFormattedCryptoValue = (value: number) => {
     return value.toFixed(5);
 };
 
-export { getFormattedDateFromTimestamp, getFormattedPercentageValue, getFormattedCryptoValue };
+const getTokenSymbolArr = (tokensArr: Array<any>) => {
+    const tokenSymbolsArr = new Array(tokensArr.length);
+    tokensArr.forEach((token, i) => {
+        tokenSymbolsArr[i] = token.symbol;
+    });
+
+    return tokenSymbolsArr;
+};
+
+const getTokenWeightsArr = (tokensArr: Array<types.PoolToken>) => {
+    const weightsArr = new Array(tokensArr.length);
+    tokensArr.forEach((token, i) => {
+        weightsArr[i] = token.weight;
+    });
+
+    return weightsArr;
+};
+
+const tokenArrToCommaSeparatedString = (tokenSymbols: Array<string>) => {
+    let text = '';
+    tokenSymbols.forEach((symbol, i) => {
+        text = text + ', ' + symbol;
+    });
+    return text.substring(1); //delete first char (comma)
+};
+
+export {
+    getFormattedDateFromTimestamp,
+    getFormattedPercentageValue,
+    getFormattedCryptoValue,
+    getTokenSymbolArr,
+    getTokenWeightsArr,
+    tokenArrToCommaSeparatedString,
+};
