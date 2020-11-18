@@ -34,15 +34,17 @@ const RightContentWrapper = styled.div`
 
 const Header = styled.div`
     width: 100%;
-    padding-bottom: 44px;
+    /* padding-bottom: 44px; */
     display: flex;
     justify-content: center;
-    background-color: ${colors.BACKGROUND_LIGHT};
+    background-color: ${colors.BACKGROUND};
 `;
 
 const HeaderContent = styled.div`
     width: 100%;
     max-width: 80%;
+    padding: 0 20px 40px 20px;
+    /* border-bottom: 2px solid ${colors.BACKGROUND_DARK}; */
 `;
 
 const ExceptionWrapper = styled.div`
@@ -204,7 +206,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
 
     return (
         <DashboardContainer>
-            <LeftLayoutContainer>
+            <LeftLayoutContainer backgroundColor={colors.BACKGROUND}>
                 <Header>
                     <HeaderContent>
                         <NavBar />

@@ -153,6 +153,7 @@ const CustomTooltip = (props: Props) => {
                                                     value={poolValueDiff ? poolValueDiff : 0}
                                                     colorized
                                                     usePlusSymbol
+                                                    useLightRed
                                                 />
                                             }
                                         />

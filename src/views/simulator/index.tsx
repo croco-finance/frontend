@@ -35,7 +35,7 @@ const RightContentWrapper = styled.div`
 
 const Header = styled.div`
     width: 100%;
-    padding-bottom: 34px;
+    padding-bottom: 20px;
     display: flex;
     justify-content: center;
     background-color: ${colors.BACKGROUND};
@@ -153,11 +153,11 @@ const InactivePoolWarning = styled.div`
 
 const SimulationBoxWrapper = styled.div`
     /* background-color: ${colors.WHITE}; */
-    background-color: #e9ebf1;
-    padding: 23px 34px;
+    background-color: ${colors.BACKGROUND_DARK};
+    padding: 28px;
     border-radius: 10px;
     width: 100%;
-    /* border: 1px solid ${colors.BACKGROUND_DARK}; */
+    /* border: 1px solid ${colors.STROKE_GREY}; */
 `;
 
 const buildPoolOption = (pool: types.PoolItem) => {
@@ -315,6 +315,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                                             }}
                                             selected={buildPoolOption(allPools[selectedPoolId])}
                                             useWhiteBackground
+                                            useDarkBorder
                                         ></MultipleTokenSelect>
                                     </MultipleSelectWrapper>
                                 </ChoosePoolWrapper>

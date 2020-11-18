@@ -38,6 +38,8 @@ const StyledInput = styled.input<InputProps>`
 
     &:focus {
         border-color: ${colors.PASTEL_BLUE_MEDIUM};
+        border-color: #96b7ff;
+        background-color: #f9faff;
     }
 
     &::placeholder {

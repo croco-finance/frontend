@@ -42,6 +42,7 @@ interface Props {
     onChange?: any;
     isSearchable?: boolean;
     useWhiteBackground?: boolean;
+    useDarkBorder?: boolean;
 }
 
 const MultipleTokenSelect = ({
@@ -50,6 +51,7 @@ const MultipleTokenSelect = ({
     onChange,
     isSearchable = false,
     useWhiteBackground = false,
+    useDarkBorder = false,
 }: Props) => {
     return (
         <Wrapper>
@@ -61,6 +63,7 @@ const MultipleTokenSelect = ({
                 formatOptionLabel={TokenOption}
                 value={selected}
                 useWhiteBackground={useWhiteBackground}
+                useDarkBorder={useDarkBorder}
             />
         </Wrapper>
     );

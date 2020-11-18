@@ -3,13 +3,18 @@ import styled, { css } from 'styled-components';
 import { variables } from '../../../config';
 import colors from '../../../config/colors';
 
-const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: boolean }>`
+const Wrapper = styled.div<{
+    value: number;
+    colorized: boolean;
+    useBadgeStyle: boolean;
+    useLightRed: boolean;
+}>`
     ${props =>
         props.colorized &&
         props.value < 0 &&
         !props.useBadgeStyle &&
         css`
-            color: ${colors.RED};
+            color: ${props.useLightRed ? colors.RED_LIGHT : colors.RED};
         `}
 
     ${props =>
@@ -69,6 +74,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     minimumFractionDigits?: number;
     usePlusSymbol?: boolean;
     useBadgeStyle?: boolean;
+    useLightRed?: boolean;
 }
 
 const FiatValue = ({
@@ -78,6 +84,7 @@ const FiatValue = ({
     usePlusSymbol = false,
     minimumFractionDigits = 2,
     useBadgeStyle = false,
+    useLightRed = false,
 }: Props) => {
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -94,7 +101,12 @@ const FiatValue = ({
     // if passed value is not a number
     if (isNaN(originalValue)) {
         return (
-            <Wrapper value={0} colorized={colorized} useBadgeStyle={useBadgeStyle}>
+            <Wrapper
+                value={0}
+                colorized={colorized}
+                useBadgeStyle={useBadgeStyle}
+                useLightRed={false}
+            >
                 <Nan>-</Nan>
             </Wrapper>
         );
@@ -103,7 +115,12 @@ const FiatValue = ({
     // if passed value is equal to 0
     if (originalValue === 0) {
         return (
-            <Wrapper value={originalValue} colorized={colorized} useBadgeStyle={useBadgeStyle}>
+            <Wrapper
+                value={originalValue}
+                colorized={colorized}
+                useBadgeStyle={useBadgeStyle}
+                useLightRed={false}
+            >
                 {formatter.format(0)}
             </Wrapper>
         );
@@ -119,7 +136,12 @@ const FiatValue = ({
     }
 
     return (
-        <Wrapper value={originalValue} colorized={colorized} useBadgeStyle={useBadgeStyle}>
+        <Wrapper
+            value={originalValue}
+            colorized={colorized}
+            useBadgeStyle={useBadgeStyle}
+            useLightRed={useLightRed}
+        >
             {roundedValueTwoDec ? (
                 <>
                     {usePlusSymbol && sign} {formatter.format(value)}{' '}

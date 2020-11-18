@@ -30,22 +30,25 @@ const GridWrapper = styled.div<{ rowsCount: number }>`
 const Title = styled.div`
     color: ${colors.FONT_DARK};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 `;
 
-const SubTitle = styled.div`
+const SubTitlesWrapper = styled.div`
+    display: flex;
+    margin-bottom: 12px;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_MEDIUM};
     font-size: ${variables.FONT_SIZE.NORMAL};
+    align-items: center;
 `;
 
-const GridHeader = styled.div`
-    display: flex;
+const SubTitleLeft = styled.div`
     flex-grow: 1;
-    align-items: center;
+`;
+
+const SubTitleRight = styled.div`
     justify-content: flex-end;
     color: ${colors.FONT_LIGHT};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
 const TokenWrapper = styled.div`
@@ -76,8 +79,11 @@ const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) =
     return (
         <Wrapper>
             <Title>Simulation Box</Title>
-            <SubTitle>Set relative token price change</SubTitle>
-            <GridHeader>Simulated price</GridHeader>
+            <SubTitlesWrapper>
+                <SubTitleLeft>Set tokens relative price change</SubTitleLeft>
+                <SubTitleRight>Simulated price</SubTitleRight>
+            </SubTitlesWrapper>
+
             <GridWrapper rowsCount={tokens.length}>
                 {tokens.map((token, i) => {
                     const tokenSymbol = token.symbol;

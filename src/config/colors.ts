@@ -26,6 +26,7 @@ export default {
     FONT_DARK: '#002237',
 
     RED: '#ed1b24',
+    RED_LIGHT: '#ff7179',
     GREEN: '#40bf4a',
     BLUE: '#0264f7',
 
