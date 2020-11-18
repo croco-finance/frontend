@@ -6,10 +6,6 @@ import { colors, variables, types } from '@config';
 import { mathUtils, lossUtils, getTokenSymbolArr, simulatorUtils } from '@utils';
 import CardRow from '../CardRow';
 
-const GRID_GAP = 5;
-
-const Wrapper = styled.div``;
-
 const Headline = styled.div`
     padding: 0 10px;
     /* font-weight: ${variables.FONT_WEIGHT.MEDIUM}; */
@@ -38,37 +34,32 @@ const Header = styled.div`
     /* border-bottom: 1px solid ${colors.BACKGROUND_DARK}; */
 `;
 
-const ToggleWrapper = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const ToggleLabel = styled.div`
-    font-size: ${variables.FONT_SIZE.TINY};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
-    margin-right: 6px;
-    min-width: 100px;
-    justify-self: flex-end;
-    text-align: right;
+const Wrapper = styled.div`
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
 `;
 
 const GridWrapper = styled.div`
     flex-grow: 1;
     display: grid;
-    grid-gap: ${GRID_GAP}px;
-
-    /* grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto); */
-    grid-template-columns: 265px minmax(100px, auto) minmax(100px, auto);
-
-    grid-auto-rows: 40px;
+    gap: 28px 10px;
+    grid-template-columns: 180px minmax(100px, auto) minmax(100px, auto);
+    grid-auto-rows: auto;
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
-    overflow-x: auto; /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
+    /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
+    /* overflow-x: auto; */
     word-break: break-all;
-    padding: 0px 10px;
     font-size: ${variables.FONT_SIZE.NORMAL};
+    align-items: baseline;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        font-size: ${variables.FONT_SIZE.SMALL};
+        gap: 18px 5px;
+        grid-template-columns: 140px minmax(90px, auto) minmax(90px, auto);
+    }
 `;
 
 const HeaderWrapper = styled(GridWrapper)`
@@ -77,6 +68,8 @@ const HeaderWrapper = styled(GridWrapper)`
     margin-top: 20px;
     margin-bottom: -5px;
     font-size: ${variables.FONT_SIZE.SMALL};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    /* color: ${colors.FONT_LIGHT}; */
 `;
 
 const HodlHeaderWrapper = styled(HeaderWrapper)`
@@ -196,10 +189,6 @@ const CardOverview = ({ simulatedCoefficients }: Props) => {
                     <MultipleTokenLogo size={18} tokens={getTokenSymbolArr(tokens)} />
                     <HeadlineText>Liquidity pool</HeadlineText>
                 </Headline>
-                <ToggleWrapper>
-                    {/* <ToggleLabel>Show ETH</ToggleLabel>
-                    <ToggleSwitch checked={false} onChange={() => setShowEth(!showEth)} isSmall /> */}
-                </ToggleWrapper>
             </Header>
             <HeaderWrapper>
                 <CardRow

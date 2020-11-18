@@ -1,34 +1,14 @@
-import { Card } from '@components/ui';
 import { animations, colors, variables } from '@config';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import CardOverview from './CardOverview';
+import Overview from './Overview';
 
 const Wrapper = styled.div`
-    padding-bottom: 20px;
-
-    /* animation: ${animations.SHOW_UP} 1s; */
-    overflow-y: auto;
-    ::-webkit-scrollbar {
-        background-color: #fff;
-        width: 10px;
-    }
-    /* background of the scrollbar except button or resizer */
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-    /* scrollbar itself */
-    ::-webkit-scrollbar-thumb {
-        /* 7F7F7F for mac-like color */
-        background-color: #babac0;
-        border-radius: 10px;
-        border: 2px solid #fff;
-    }
-    /* set button(top and bottom of the scrollbar) */
-    ::-webkit-scrollbar-button {
-        display: none;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 `;
 
 const SelectPoolWrapper = styled.div`
@@ -68,11 +48,10 @@ const RightContainer = ({ simulatedCoefficients }: Props) => {
     }
 
     return (
-        <Card>
-            <Wrapper>
-                {/* <SectionTitle>Pool overview</SectionTitle> */}
-                <CardOverview simulatedCoefficients={simulatedCoefficients}></CardOverview>
-                {/* {tokenCount === 2 && (
+        <Wrapper>
+            {/* <SectionTitle>Pool overview</SectionTitle> */}
+            <Overview simulatedCoefficients={simulatedCoefficients} />
+            {/* {tokenCount === 2 && (
                     <>
                         <GraphWrapper>
                             <ILGraph
@@ -84,8 +63,7 @@ const RightContainer = ({ simulatedCoefficients }: Props) => {
                         </GraphWrapper>
                     </>
                 )} */}
-            </Wrapper>
-        </Card>
+        </Wrapper>
     );
 };
 export default RightContainer;

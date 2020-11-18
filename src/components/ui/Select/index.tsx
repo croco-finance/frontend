@@ -10,6 +10,7 @@ const selectStyle = (
     usePointerCursor: boolean,
     fontFamily: string,
     noBorder: boolean,
+    useWhiteBackground: boolean,
 ) => ({
     singleValue: (base: Record<string, any>) => ({
         ...base,
@@ -40,7 +41,7 @@ const selectStyle = (
             borderWidth: noBorder ? 0 : '2px',
             borderColor: colors.BACKGROUND,
             boxShadow: 'none',
-            backgroundColor: colors.BACKGROUND,
+            backgroundColor: useWhiteBackground ? 'white' : colors.BACKGROUND,
             transition: 'border 500ms ease-out',
             '&:hover, &:focus': {
                 cursor: 'pointer',
@@ -119,6 +120,7 @@ interface Props extends Omit<SelectProps, 'components'> {
     usePointerCursor?: boolean;
     fontFamily?: string;
     noBorder?: boolean;
+    useWhiteBackground?: boolean;
 }
 
 const Select = ({
@@ -131,6 +133,7 @@ const Select = ({
     variant = 'large',
     fontFamily = variables.FONT_FAMILY.OPEN_SANS,
     noBorder = false,
+    useWhiteBackground = false,
     ...props
 }: Props) => {
     return (
@@ -143,6 +146,7 @@ const Select = ({
                     usePointerCursor,
                     fontFamily,
                     noBorder,
+                    useWhiteBackground,
                 )}
                 isSearchable={isSearchable}
                 {...props}

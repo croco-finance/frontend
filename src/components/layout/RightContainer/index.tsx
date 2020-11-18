@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div<Props>`
-    width: 58%;
+    width: 60%;
     padding: 0;
     min-height: 100vh;
     display: flex;

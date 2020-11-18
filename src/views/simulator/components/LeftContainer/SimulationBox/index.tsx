@@ -17,7 +17,7 @@ const GridWrapper = styled.div<{ rowsCount: number }>`
     flex-grow: 1;
     display: grid;
     grid-gap: ${GRID_GAP}px;
-    grid-template-columns: 100px minmax(100px, auto) minmax(120px, auto) minmax(110px, auto);
+    grid-template-columns: 110px minmax(100px, auto) minmax(120px, auto) minmax(110px, auto);
     grid-template-rows: ${props => `repeat(${props.rowsCount}, 55px)`};
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
@@ -28,13 +28,15 @@ const GridWrapper = styled.div<{ rowsCount: number }>`
 `;
 
 const Title = styled.div`
-    color: ${colors.FONT_MEDIUM};
+    color: ${colors.FONT_DARK};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 `;
 
 const SubTitle = styled.div`
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    color: ${colors.FONT_MEDIUM};
+    font-size: ${variables.FONT_SIZE.NORMAL};
 `;
 
 const GridHeader = styled.div`
@@ -74,7 +76,7 @@ const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) =
     return (
         <Wrapper>
             <Title>Simulation Box</Title>
-            <SubTitle>Relative token price change</SubTitle>
+            <SubTitle>Set relative token price change</SubTitle>
             <GridHeader>Simulated price</GridHeader>
             <GridWrapper rowsCount={tokens.length}>
                 {tokens.map((token, i) => {

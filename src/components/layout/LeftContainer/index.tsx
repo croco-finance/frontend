@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { colors, variables } from '@config';
 
 const Wrapper = styled.div<Props>`
-    width: 42%;
+    width: 40%;
     padding: 0;
     max-height: 100vh;
     height: 100vh;

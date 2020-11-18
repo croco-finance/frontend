@@ -14,6 +14,7 @@ const GridWrapper = styled.div`
     flex-grow: 1;
     display: grid;
     grid-gap: ${GRID_GAP}px;
+    color: ${colors.FONT_MEDIUM};
 
     grid-template-columns: 140px minmax(70px, auto) minmax(130px, auto) minmax(140px, auto);
 
@@ -31,6 +32,8 @@ const GridWrapper = styled.div`
 
 const HeaderWrapper = styled(GridWrapper)`
     grid-template-rows: repeat(1, 50px);
+    /* font-size: ${variables.FONT_SIZE.SMALL}; */
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
 const TokenInfoWrapper = styled(GridWrapper)<{ rowsCount: number }>`
@@ -52,7 +55,7 @@ interface Props {
     iconSize?: number;
 }
 
-const Overview = ({ iconSize = 20 }: Props) => {
+const BalanceOverview = ({ iconSize = 20 }: Props) => {
     // const numberOfTokens = Object.keys(balances).length;
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
@@ -89,12 +92,12 @@ const Overview = ({ iconSize = 20 }: Props) => {
                                 </TokenWrapper>
                             }
                             secondColumn={formatUtils.getFormattedPercentageValue(
-                                token.weight[i],
+                                token.weight,
                                 true,
                             )}
                             thirdColumn={tokenBalances[i].toFixed(4)}
                             fourthColumn={<FiatValue value={tokenPricesEnd[i]} />}
-                            color="dark"
+                            color="medium"
                         />
                     );
                 })}
@@ -103,4 +106,4 @@ const Overview = ({ iconSize = 20 }: Props) => {
     );
 };
 
-export default Overview;
+export default BalanceOverview;

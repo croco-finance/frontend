@@ -41,9 +41,16 @@ interface Props {
     options?: any; // ['usdt', 'wbtc', 'eth', 'dai', '...']
     onChange?: any;
     isSearchable?: boolean;
+    useWhiteBackground?: boolean;
 }
 
-const MultipleTokenSelect = ({ options, selected, onChange, isSearchable = false }: Props) => {
+const MultipleTokenSelect = ({
+    options,
+    selected,
+    onChange,
+    isSearchable = false,
+    useWhiteBackground = false,
+}: Props) => {
     return (
         <Wrapper>
             <Select
@@ -53,6 +60,7 @@ const MultipleTokenSelect = ({ options, selected, onChange, isSearchable = false
                 isSearchable={isSearchable}
                 formatOptionLabel={TokenOption}
                 value={selected}
+                useWhiteBackground={useWhiteBackground}
             />
         </Wrapper>
     );

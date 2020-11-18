@@ -57,6 +57,12 @@ const Col = styled.div<RowContentProps>`
     }
 `;
 
+const TokenNameCol = styled(Col)<RowContentProps>`
+    max-width: 90px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
 interface Props {
     firstColumn?: React.ReactNode;
     secondColumn?: React.ReactNode;
@@ -96,9 +102,9 @@ const PriceChangeRow = ({
 
     return (
         <>
-            <Col textAlign="left" color={color}>
+            <TokenNameCol textAlign="left" color={color}>
                 {firstColumn}
-            </Col>
+            </TokenNameCol>
             <Col textAlign="left" color={color}>
                 <InputWrapper>
                     <Input
@@ -131,7 +137,7 @@ const PriceChangeRow = ({
                     </SliderRightLabel>
                 </SliderWrapper>
             </Col>
-            <Col textAlign="right" color={'light'}>
+            <Col textAlign="right" color={'dark'}>
                 {fourthColumn}
             </Col>
         </>

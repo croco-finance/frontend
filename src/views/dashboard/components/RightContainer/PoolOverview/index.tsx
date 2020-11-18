@@ -7,8 +7,6 @@ import styled from 'styled-components';
 import CardRow from '../CardRow';
 import Graph from '../Graph';
 
-const GRID_GAP = 5;
-
 const Wrapper = styled.div`
     width: 100%;
     max-width: 650px;
@@ -18,7 +16,6 @@ const Wrapper = styled.div`
 const GridWrapper = styled.div`
     flex-grow: 1;
     display: grid;
-    /* grid-gap: ${GRID_GAP}px; */
     gap: 28px 10px;
     grid-template-columns: 180px minmax(100px, auto) minmax(100px, auto);
     grid-auto-rows: auto;
