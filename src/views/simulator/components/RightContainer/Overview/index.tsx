@@ -92,6 +92,21 @@ const GraphTitle = styled.div`
     padding-left: 50px;
 `;
 
+const DaysLeftGridWrapper = styled(ImpLossGridWrapper)`
+    gap: 5px 10px;
+    font-size: ${variables.FONT_SIZE.SMALL};
+    color: ${colors.FONT_LIGHT};
+`;
+
+const EstDaysLeftWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const SubNoteDaysLeft = styled.div`
+    margin-top: 5px;
+`;
+
 interface Props {
     simulatedCoefficients: Array<number>;
     sliderDefaultCoeffs: Array<number>;
@@ -109,10 +124,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
         // TODO make sure you use current token balances, not cumulative values
         tokenBalances,
         feesTokenAmounts,
-        feesUsd,
-        yieldTokenAmount,
         yieldUsd,
-        txCostEth,
         txCostUsd,
         rewardsMinusExpensesUsd,
         timestampEnd,
@@ -159,6 +171,28 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
         sliderDefaultCoeffs,
         2,
     );
+
+    // get estimated days left to compensate loss
+    const lastIntervalStat = pool.intervalStats[pool.intervalStats.length - 1];
+    const lastSnapTimestampStart = lastIntervalStat.timestampStart;
+    const lastSnapTimestampEnd = lastIntervalStat.timestampEnd;
+    const lastSnapFeesUsd = lastIntervalStat.feesUsdEndPrice;
+
+    const lastSnapYieldUsd = lastIntervalStat.yieldTokenPriceEnd
+        ? lastIntervalStat.yieldTokenAmountEnd * lastIntervalStat.yieldTokenPriceEnd
+        : 0;
+
+    const poolValueIncreaseCoeff = newPoolValueUsd / poolValueUsd;
+
+    const averageRewardsLastSnapshot = mathUtils.getDailyAverageFeeGains(
+        lastSnapTimestampStart,
+        lastSnapTimestampEnd,
+        // TODO is this correct way how to compute new fee value?
+        lastSnapFeesUsd * poolValueIncreaseCoeff + lastSnapYieldUsd,
+    );
+
+    const estDaysLeftStaking = Math.round(Math.abs(impLossUsd / averageRewardsLastSnapshot));
+
     return (
         <Wrapper>
             <HeaderWrapper>
@@ -167,7 +201,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                         firstColumn="Pool overview"
                         secondColumn="Today"
                         thirdColumn={<RightPaddingWrapper>Simulated</RightPaddingWrapper>}
-                        fourthColumn=""
+                        fourthColumn="Difference"
                         columnColors={['light', 'light', 'light', 'light']}
                         columnAlignment={['left', 'right', 'right', 'left']}
                     />
@@ -220,14 +254,42 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
             <GrayBox
                 padding={[15, 20, 15, 20]}
                 bottomBar={
-                    <ImpLossGridWrapper>
+                    <DaysLeftGridWrapper>
                         <BoxRow
                             columnAlignment={['left', 'right', 'left']}
-                            firstColumn="Est. days left to compensate loss*"
-                            secondColumn={<RightPaddingWrapper>TODO</RightPaddingWrapper>}
+                            firstColumn={
+                                <EstDaysLeftWrapper>
+                                    <div>Est. days left to compensate loss*</div>
+                                </EstDaysLeftWrapper>
+                            }
+                            secondColumn={
+                                <RightPaddingWrapper>{estDaysLeftStaking}</RightPaddingWrapper>
+                            }
                             thirdColumn={<></>}
                         />
-                    </ImpLossGridWrapper>
+                        <BoxRow
+                            columnAlignment={['left', 'right', 'left']}
+                            columnColors={['light', 'light', 'light']}
+                            firstColumn={
+                                <SubNoteDaysLeft>
+                                    *According to your average rewards since{' '}
+                                    {formatUtils.getFormattedDateFromTimestamp(
+                                        lastSnapTimestampStart * 1000,
+                                        'MONTH_DAY_YEAR',
+                                    )}
+                                </SubNoteDaysLeft>
+                            }
+                            secondColumn={
+                                // <RightPaddingWrapper>
+                                //     <SubNoteDaysLeft>
+                                //         <FiatValue value={averageRewardsLastSnapshot} />
+                                //     </SubNoteDaysLeft>
+                                // </RightPaddingWrapper>
+                                <></>
+                            }
+                            thirdColumn={<></>}
+                        />
+                    </DaysLeftGridWrapper>
                 }
             >
                 <ImpLossGridWrapper>

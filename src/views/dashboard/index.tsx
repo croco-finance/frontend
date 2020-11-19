@@ -90,15 +90,16 @@ const NoAddressNoPool = styled(ExceptionWrapper)`
 
 const AddressWrapper = styled.div`
     width: 100%;
-    max-width: 540px;
+    max-width: 610px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 8px;
     margin-top: 20px;
     margin-bottom: 30px;
-    padding: 8px;
-    background-color: ${colors.BACKGROUND_DARK};
+    padding: 0 5px;
+    /* padding: 6px;
+    border-radius: 8px;
+    background-color: ${colors.BACKGROUND_DARK}; */
 `;
 
 const InputErrorMessage = styled.div`
@@ -115,7 +116,7 @@ const AddressLabel = styled.div`
 `;
 
 const LeftSubHeaderContent = styled.div`
-    margin: 0 5px 5px 5px; // because of scrollbar - I don't want to have it all the way to the right
+    margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -235,7 +236,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                             }}
                             useWhiteBackground
                             // useDarkBorder
-                            noBorder
+                            // noBorder
                         />
                         {invalidAddressInput ? (
                             <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>

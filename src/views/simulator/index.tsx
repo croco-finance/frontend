@@ -48,11 +48,11 @@ const LeftSubHeaderContent = styled.div`
     align-items: center;
     overflow-y: auto;
     overflow-x: hidden;
-    ${styles.scrollBarStyles};
-    padding: 10px;
+    padding: 0 10px 10px 10px;
+    margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
     width: 100%;
     height: 100%;
-    max-width: 650px;
+    max-width: 620px;
     align-self: center;
     ${styles.scrollBarStyles};
 `;
@@ -96,17 +96,21 @@ const ErrorTextWrapper = styled(ExceptionWrapper)`
 `;
 
 const AddressWrapper = styled.div`
-    background-color: ${colors.BACKGROUND};
     width: 100%;
+    max-width: 620px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    border-radius: 5px;
     margin-top: 20px;
+    /* border-radius: 8px;
+    padding: 6px;
+    background-color: ${colors.BACKGROUND_DARK}; */
 `;
 
 const AddressLabel = styled.div`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     padding-left: 5px;
+    color: ${colors.FONT_MEDIUM};
 `;
 
 const CardInfoWrapper = styled.div`
@@ -305,6 +309,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                 <LeftSubHeaderContent>
                     <AddressWrapper>
                         <Input
+                            // noBorder
                             textIndent={[70, 0]}
                             innerAddon={<AddressLabel>Address:</AddressLabel>}
                             addonAlign="left"
