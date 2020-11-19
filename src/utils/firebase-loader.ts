@@ -83,19 +83,16 @@ function sortAndTransformSnaps(userData: any): SnapStructure {
 }
 
 function resortUniRewardedSnaps(snaps: Snap[]) {
-    // This functions makes sure that snaps with equal blocks get properly sorted depending on
-    // the sequence of values of staked attributes
     for (let i = 0; i < snaps.length - 1; i++) {
-        const prevSnap = snaps[i - 1],
-            currentSnap = snaps[i],
-            nextSnap = snaps[i + 1];
-        if (
-            currentSnap.block === nextSnap.block &&
-            currentSnap.staked !== nextSnap.staked &&
-            prevSnap.staked === nextSnap.staked
-        ) {
-            snaps[i] = nextSnap;
-            snaps[i + 1] = currentSnap;
+        if (snaps[i].block === snaps[i + 1].block && snaps[i].staked !== snaps[i + 1].staked) {
+            if (snaps[i].liquidityTokenBalance === 0) {
+                snaps.splice(i, 1);
+            } else if (snaps[i + 1].liquidityTokenBalance === 0) {
+                snaps.splice(i + 1, 1);
+            } else {
+                // TODO: send log to firebase along with address
+                console.log('WARNING: incomplete stake edge case occured');
+            }
         }
     }
 }
