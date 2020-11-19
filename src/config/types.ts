@@ -34,6 +34,7 @@ export interface Snap {
     tokens: PoolToken[];
     txHash: string | null;
     yieldReward: YieldReward | null;
+    staked: boolean;
 }
 
 export interface SnapStructure {
