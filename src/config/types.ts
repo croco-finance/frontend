@@ -3,6 +3,8 @@ export enum Exchange {
     BALANCER = 'BALANCER',
 }
 
+export type DexBaseUrls = { [key in keyof typeof Exchange]: string };
+
 export interface Token {
     symbol: string;
     name: string;

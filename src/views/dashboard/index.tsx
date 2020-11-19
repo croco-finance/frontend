@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { FetchPoolSnapshotsHook } from '../../hooks/snaps';
+import { FetchPoolSnapshotsHook } from '../../hooks';
 import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
@@ -121,8 +121,8 @@ const RightNonExceptionContentWrapper = styled.div`
 
 const Headline = styled.div`
     /* align-self: baseline; */
-    padding-top: 24px;
-    margin-bottom: 38px;
+    padding-top: 0px;
+    margin-bottom: 50px;
     padding-left: 20px;
     color: ${colors.FONT_MEDIUM};
     font-size: ${variables.FONT_SIZE.H3};
@@ -221,6 +221,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                                     handleAddressChange(event.target.value);
                                 }}
                                 useWhiteBackground
+                                useDarkBorder
                             />
                             {invalidAddressInput ? (
                                 <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>

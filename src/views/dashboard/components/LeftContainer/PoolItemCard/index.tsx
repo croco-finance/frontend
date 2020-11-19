@@ -1,4 +1,4 @@
-import { colors } from '@config';
+import { colors, variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -18,6 +18,7 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
     margin-bottom: 10px;
     cursor: pointer;
     transition: 0s;
+    font-size: ${variables.FONT_SIZE.NORMAL};
 
     &:hover {
         background-color: ${props =>
@@ -26,7 +27,11 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
         border-color: ${props => (props.isSelected ? colors.STROKE_BLUE : colors.STROKE_GREY)};
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
+        font-size: ${variables.FONT_SIZE.SMALL};
+    }
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         padding: 4px;
     }
 `;

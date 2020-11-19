@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { FetchPoolsHook } from '../../hooks';
+import { FetchPoolSnapshotsHook } from '../../hooks';
 import RightContainer from './components/RightContainer';
 import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
@@ -217,7 +217,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
         allPools[selectedPoolId] ? getInitialPriceCoeffs(allPools[selectedPoolId].tokens) : [],
     );
 
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolSnapshotsHook(
         props.match.params.address ? props.match.params.address : '',
     );
 
@@ -347,7 +347,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                     </HeaderContent>
                 </Header>
                 <LeftSubHeaderContent>
-                    {allPools[selectedPoolId] && (
+                    {allPools[selectedPoolId] && !exceptionContent && (
                         <>
                             <OverviewWrapper>
                                 <BalanceOverview />

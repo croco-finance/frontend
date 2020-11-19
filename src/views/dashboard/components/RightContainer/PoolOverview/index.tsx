@@ -1,11 +1,12 @@
 import { FiatValue, GrayBox, MultipleTokenLogo, VerticalCryptoAmounts } from '@components/ui';
-import { colors, types, variables } from '@config';
+import { colors, variables } from '@config';
 import { formatUtils, graphUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CardRow from '../CardRow';
 import Graph from '../Graph';
+import { AllPoolsGlobal } from '@types';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -34,8 +35,8 @@ const GridWrapper = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
-    padding: 0 20px 12px 20px;
-    margin-top: 20px;
+    padding: 0 20px 10px 20px;
+    margin-top: 10px;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_LIGHT};
@@ -55,27 +56,6 @@ const PoolValueGridWrapper = styled(GridWrapper)`
     min-height: 48px;
 `;
 
-const StrategyItem = styled(GrayBox)`
-    margin-bottom: 6px;
-`;
-
-const StrategyHeaderGridWrapper = styled(GridWrapper)`
-    grid-template-columns: minmax(100px, auto) minmax(100px, auto) 26px;
-`;
-
-const CollapseIconWrapper = styled.div`
-    cursor: pointer;
-    border-radius: 20px;
-    width: 22px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    &:hover {
-        background-color: #dcdce6; // used only here
-    }
-`;
-
 const TotalLossRow = styled(GridWrapper)`
     height: 40px;
     align-items: center;
@@ -92,7 +72,7 @@ const TotalSubNote = styled.div`
 `;
 
 const PoolOverview = () => {
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
+    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     let pool = allPools[selectedPoolId];
 
@@ -234,30 +214,6 @@ const PoolOverview = () => {
                     {txCostRow}
                 </GridWrapper>
             </GrayBox>
-            {/* <HeaderWrapper>
-                <CardRow
-                    firstColumn="Comparison to other strategies"
-                    secondColumn={endTimeText}
-                    color="light"
-                />
-            </HeaderWrapper>
-            <StrategyItem padding={15}>
-                <StrategyHeaderGridWrapper>
-                    <CardRow
-                        showThreeCols
-                        firstColumn="If you HODL'd deposited tokens"
-                        secondColumn={
-                            <FiatValue value={netReturnUsd - hodlReturnUsd} usePlusSymbol />
-                        }
-                        thirdColumn={
-                            <CollapseIconWrapper>
-                                <Icon icon="arrow_down" size={16} />
-                            </CollapseIconWrapper>
-                        }
-                        color="dark"
-                    />
-                </StrategyHeaderGridWrapper>
-            </StrategyItem> */}
         </Wrapper>
     );
 };

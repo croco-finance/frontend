@@ -20,6 +20,8 @@ import VerticalCryptoAmounts from './VerticalCryptoAmounts';
 import TabSelectHeader from './TabSelectHeader';
 import BoxRow from './BoxRow';
 import SignedValue from './SignedValue';
+import CustomLink from './CustomLink';
+import PoolHeader from './PoolHeader';
 
 export {
     TokenLogo,
@@ -44,4 +46,6 @@ export {
     TabSelectHeader,
     BoxRow,
     SignedValue,
+    CustomLink,
+    PoolHeader,
 };

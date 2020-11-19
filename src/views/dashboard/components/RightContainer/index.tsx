@@ -1,4 +1,4 @@
-import { analytics, animations, colors, variables, styles, types } from '@config';
+import { analytics, animations, colors, variables, types } from '@config';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -7,7 +7,7 @@ import PoolOverview from './PoolOverview';
 import PoolsSummary from './PoolsSummary';
 import Graph from './Graph';
 import { graphUtils, formatUtils } from '@utils';
-import { MultipleTokenLogo, InlineCircle, TabSelectHeader } from '@components/ui';
+import { InlineCircle, TabSelectHeader, PoolHeader } from '@components/ui';
 
 const Wrapper = styled.div`
     display: flex;
@@ -57,6 +57,16 @@ const StyledLink = styled(Link)`
     }
 `;
 
+const SummaryHeadline = styled.div`
+    display: flex;
+    align-items: center;
+    font-size: ${variables.FONT_SIZE.SMALL};
+`;
+
+const SummaryHeadlineText = styled.div`
+    margin-left: 5px;
+`;
+
 type TabOptions = 'overview' | 'strategies';
 
 const RightContainer = () => {
@@ -79,22 +89,25 @@ const RightContainer = () => {
         selectedPoolId !== 'all'
             ? formatUtils.getTokenSymbolArr(allPools[selectedPoolId].tokens)
             : [];
-    const headlineIcon =
+
+    const headerHeadline =
         selectedPoolId === 'all' ? (
-            <InlineCircle size={32} color={colors.GREEN} />
+            <SummaryHeadline>
+                <InlineCircle size={32} color={colors.GREEN} />
+                <SummaryHeadlineText>Summary of active positions</SummaryHeadlineText>
+            </SummaryHeadline>
         ) : (
-            <MultipleTokenLogo size={19} tokens={tokenSymbolsArr} />
+            <PoolHeader
+                tokenSymbolsArr={tokenSymbolsArr}
+                exchange={allPools[selectedPoolId].exchange}
+                poolId={allPools[selectedPoolId].poolId}
+            />
         );
-    const headlineText =
-        selectedPoolId === 'all'
-            ? 'Summary of active positions'
-            : formatUtils.tokenArrToCommaSeparatedString(tokenSymbolsArr);
 
     return (
         <Wrapper>
             <TabSelectHeader
-                headlineIcon={headlineIcon}
-                headlineText={headlineText}
+                headline={headerHeadline}
                 onSelectTab={tabName => setSelectedTab(tabName)}
             />
 

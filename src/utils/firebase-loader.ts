@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import { PoolToken, Snap, SnapStructure, Token, YieldReward } from '../config/types';
+import { PoolToken, Snap, SnapStructure, Token, YieldReward } from '@types';
 
 const balToken: Token = {
     symbol: 'BAL',
@@ -86,8 +86,14 @@ function resortUniRewardedSnaps(snaps: Snap[]) {
     // This functions makes sure that snaps with equal blocks get properly sorted depending on
     // the sequence of values of staked attributes
     for (let i = 0; i < snaps.length - 1; i++) {
-        const prevSnap = snaps[i - 1], currentSnap = snaps[i], nextSnap = snaps[i + 1];
-        if (currentSnap.block === nextSnap.block && currentSnap.staked !== nextSnap.staked && prevSnap.staked === nextSnap.staked) {
+        const prevSnap = snaps[i - 1],
+            currentSnap = snaps[i],
+            nextSnap = snaps[i + 1];
+        if (
+            currentSnap.block === nextSnap.block &&
+            currentSnap.staked !== nextSnap.staked &&
+            prevSnap.staked === nextSnap.staked
+        ) {
             snaps[i] = nextSnap;
             snaps[i + 1] = currentSnap;
         }
@@ -119,7 +125,7 @@ function parseSnap(snap: any): Snap {
         liquidityTokenBalance: parseFloat(snap['liquidityTokenBalance']),
         liquidityTokenTotalSupply: parseFloat(snap['liquidityTokenTotalSupply']),
         timestamp: snap['timestamp'],
-        txCostEth: snap.hasOwnProperty('txCostEth') ? parseFloat(snap['txCostEth']) : 0.,
+        txCostEth: snap.hasOwnProperty('txCostEth') ? parseFloat(snap['txCostEth']) : 0,
         tokens: poolTokens,
         txHash: snap.hasOwnProperty('txHash') ? snap['txHash'] : null,
         yieldReward: yieldReward,
@@ -151,7 +157,12 @@ function distributeBalYields(yields: object, snaps: SnapStructure) {
         Object.values(snaps).forEach(poolSnaps => {
             if (poolSnaps[0].exchange === 'BALANCER') {
                 for (let i = 0; i < poolSnaps.length - 1; i++) {
-                    if (!(poolSnaps[i].timestamp > periodEnd || poolSnaps[i + 1].timestamp < periodStart)) {
+                    if (
+                        !(
+                            poolSnaps[i].timestamp > periodEnd ||
+                            poolSnaps[i + 1].timestamp < periodStart
+                        )
+                    ) {
                         eligibleSnaps.push(poolSnaps[i]);
                     }
                 }
@@ -164,7 +175,9 @@ function distributeBalYields(yields: object, snaps: SnapStructure) {
                     snap.yieldReward.amount = yieldReward / eligibleSnaps.length;
                 } else {
                     // TODO: send log to firebase along with address
-                    console.log('ERROR: null reward object for snap eligible for Balancer yield reward');
+                    console.log(
+                        'ERROR: null reward object for snap eligible for Balancer yield reward',
+                    );
                 }
             }
         } else {

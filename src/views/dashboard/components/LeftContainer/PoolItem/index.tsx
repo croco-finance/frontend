@@ -12,10 +12,10 @@ const Item = styled.div`
     justify-content: center;
     align-items: center;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    font-size: ${variables.FONT_SIZE.SMALL};
 
-    @media (max-width: 520px) {
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.SMALL};
+        flex-shrink: 1; // allow to shrink if necessary
     }
 `;
 

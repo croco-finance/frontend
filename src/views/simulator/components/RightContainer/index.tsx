@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Overview from './Overview';
-import { MultipleTokenLogo, TabSelectHeader } from '@components/ui';
+import { MultipleTokenLogo, TabSelectHeader, PoolHeader } from '@components/ui';
 import { formatUtils, graphUtils } from '@utils';
 import ILGraph from './ILGraph';
 
@@ -37,16 +37,20 @@ const RightContainer = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) =
         return null;
     }
 
-    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(allPools[selectedPoolId].tokens);
-    const headlineIcon = <MultipleTokenLogo size={19} tokens={tokenSymbolsArr} />;
-    const headlineText = formatUtils.tokenArrToCommaSeparatedString(tokenSymbolsArr);
+    const { exchange, poolId, tokens } = allPools[selectedPoolId];
+    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(tokens);
 
     return (
         <Wrapper>
             {/* <SectionTitle>Pool overview</SectionTitle> */}
             <TabSelectHeader
-                headlineIcon={headlineIcon}
-                headlineText={headlineText}
+                headline={
+                    <PoolHeader
+                        tokenSymbolsArr={tokenSymbolsArr}
+                        exchange={exchange}
+                        poolId={poolId}
+                    />
+                }
                 onSelectTab={tabName => setSelectedTab(tabName)}
             />
             <Overview

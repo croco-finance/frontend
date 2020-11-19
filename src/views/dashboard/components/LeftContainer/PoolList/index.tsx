@@ -66,7 +66,7 @@ const PoolList = () => {
                             </ActiveExchange>
                         </Exchange>
                         <Value>Value</Value>
-                        <Gains>Rewards</Gains>
+                        <Gains>Gain/Loss</Gains>
                     </Header>
                     {activePoolIds.map(poolId => {
                         return <PoolItem key={poolId} poolId={poolId} />;

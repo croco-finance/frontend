@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { TooltipProps } from 'recharts';
-import { colors, variables, types } from '@config';
+import { colors, variables } from '@config';
 import { FiatValue } from '@components/ui';
 import TooltipRow from './TooltipRow.ts';
 import { formatUtils } from '@utils';
+import { GraphData } from '@types';
 
 const CustomTooltipWrapper = styled.div`
     display: flex;
@@ -84,7 +85,7 @@ interface Props extends TooltipProps {
 const CustomTooltip = (props: Props) => {
     if (props.active && props.payload && props.payload[0]) {
         const { dataKey, name } = props.payload[0];
-        const graphData: types.GraphData = props.payload[0].payload;
+        const graphData: GraphData = props.payload[0].payload;
         const {
             lastTimestampMillis,
             timestampMillisPrev,
@@ -110,7 +111,6 @@ const CustomTooltip = (props: Props) => {
         }
 
         const ifHoveredFirst = timestampMillisPrev === null;
-        console.log('poolValues', poolValues);
         const isHoveredLast = lastTimestampMillis === timestampMillis;
 
         return (

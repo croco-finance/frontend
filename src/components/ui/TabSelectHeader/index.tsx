@@ -13,30 +13,8 @@ const Wrapper = styled.div`
 `;
 
 const Headline = styled.div`
-    padding: 0 10px;
-    font-size: ${variables.FONT_SIZE.SMALL};
-    margin-top: 0;
     display: flex;
-    flex-direction: row;
     flex-grow: 1;
-    justify-self: flex-start;
-    align-items: center;
-`;
-
-const HeadlineIcon = styled.div``;
-
-const HeadlineText = styled.div<{ isLarge: boolean }>`
-    margin-left: 6px;
-    color: ${colors.FONT_LIGHT};
-    max-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        max-width: 120px;
-        font-size: ${variables.FONT_SIZE.TINY};
-    }
 `;
 
 const Header = styled.div`
@@ -88,20 +66,16 @@ const SoonBadge = styled.div`
 type TabOptions = 'overview' | 'strategies';
 
 interface Props {
-    headlineIcon?: React.ReactNode;
-    headlineText?: string;
+    headline?: React.ReactNode;
     onSelectTab: any;
 }
 
-const TabSelectHeader = ({ headlineIcon, headlineText, onSelectTab }: Props) => {
+const TabSelectHeader = ({ headline, onSelectTab }: Props) => {
     const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
 
     return (
         <Header>
-            <Headline>
-                {headlineIcon && <HeadlineIcon>{headlineIcon}</HeadlineIcon>}
-                {headlineText && <HeadlineText isLarge={false}>{headlineText}</HeadlineText>}
-            </Headline>
+            <Headline>{headline}</Headline>
             <ButtonsWrapper>
                 <Button
                     onClick={() => {

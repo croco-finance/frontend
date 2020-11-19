@@ -33,8 +33,8 @@ const GridWrapper = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
-    padding: 0 20px 12px 20px;
-    margin-top: 20px;
+    padding: 0 20px 10px 20px;
+    margin-top: 10px;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_LIGHT};
