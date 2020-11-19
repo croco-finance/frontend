@@ -38,8 +38,8 @@ const Row = styled.div`
 
 const Amount = styled.div``;
 
-const Symbol = styled.div`
-    max-width: 100px;
+const Symbol = styled.div<{ maxWidth: number }>`
+    max-width: ${props => props.maxWidth}px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -51,6 +51,7 @@ interface Props {
     tokenAmounts: Array<number>;
     textAlign?: 'left' | 'right';
     usePlusSymbol?: boolean;
+    maxWidth?: number;
 }
 
 const VerticalCryptoAmounts = ({
@@ -58,6 +59,7 @@ const VerticalCryptoAmounts = ({
     tokenAmounts,
     textAlign = 'right',
     usePlusSymbol = false,
+    maxWidth = 100,
 }: Props) => {
     let tokenSymbolsRendered = tokenSymbols;
     let tokenAmountsRendered = tokenAmounts;
@@ -87,7 +89,7 @@ const VerticalCryptoAmounts = ({
                             : null}
                         {formatUtils.getFormattedCryptoValue(tokenAmounts[i], roundToDecimals)}
                     </Amount>{' '}
-                    <Symbol>{symbol}</Symbol>
+                    <Symbol maxWidth={maxWidth}>{symbol}</Symbol>
                 </Row>
             ))}
         </Wrapper>

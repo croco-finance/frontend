@@ -216,6 +216,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                             <PoolValueCryptoFiatWrapper>
                                 <StyledFiatValueWrapper value={poolValueUsd} />
                                 <VerticalCryptoAmounts
+                                    maxWidth={70}
                                     tokenSymbols={tokenSymbolsArr}
                                     tokenAmounts={tokenBalances}
                                 />
@@ -226,6 +227,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                             <PoolValueCryptoFiatWrapperBorder>
                                 <StyledFiatValueWrapper value={newPoolValueUsd} />
                                 <VerticalCryptoAmounts
+                                    maxWidth={70}
                                     tokenSymbols={tokenSymbolsArr}
                                     tokenAmounts={newTokenBalances}
                                 />
@@ -240,6 +242,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                                     colorized
                                 />
                                 <VerticalCryptoAmounts
+                                    maxWidth={40}
                                     tokenSymbols={tokenSymbolsArr}
                                     tokenAmounts={tokenBalancesDiff}
                                     textAlign="left"

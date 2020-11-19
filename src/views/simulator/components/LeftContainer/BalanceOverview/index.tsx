@@ -49,6 +49,10 @@ const TokenWrapper = styled.div`
 const TokenSymbol = styled.div`
     text-transform: uppercase;
     margin-left: 10px;
+    max-width: 70px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 interface Props {

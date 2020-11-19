@@ -59,10 +59,8 @@ const Col = styled.div<RowContentProps>`
 
 const TokenNameCol = styled(Col)<RowContentProps>`
     max-width: 90px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 `;
+
 interface Props {
     firstColumn?: React.ReactNode;
     secondColumn?: React.ReactNode;
