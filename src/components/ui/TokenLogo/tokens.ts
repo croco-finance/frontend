@@ -17,6 +17,9 @@ export const TOKENS: any = {
     yfi: require('../../../data/images/tokens/yfi.svg'),
     snx: require('../../../data/images/tokens/snx.svg'),
     weth: require('../../../data/images/tokens/weth.svg'),
+    sushi: require('../../../data/images/tokens/sushi.svg'),
+    yfv: require('../../../data/images/tokens/yfv.svg'),
+
     // unknown token
     unknown: require('../../../data/images/tokens/unknown.svg'),
     // exchanges
