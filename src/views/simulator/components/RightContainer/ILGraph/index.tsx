@@ -18,6 +18,12 @@ import {
 
 import CustomTooltip from './CustomTooltip';
 
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'Usd',
+    minimumFractionDigits: 2,
+});
+
 const getYAxisMaxValue = value => {
     return Math.round(value / 1000) * 1000 + 1000;
 };
@@ -50,9 +56,8 @@ class Graph extends PureComponent<Props, State> {
     }
 
     valueToUsd(value) {
-        return `$${value}`;
+        return formatter.format(value);
     }
-
     render() {
         const { data, maxPossibleValue } = this.props;
 
@@ -64,9 +69,9 @@ class Graph extends PureComponent<Props, State> {
                     data={data}
                     margin={{
                         top: 10,
-                        right: 40,
+                        right: 55,
                         bottom: 10,
-                        left: 30,
+                        left: 55,
                     }}
                 >
                     <CartesianGrid strokeDasharray="2 2" />
@@ -131,7 +136,7 @@ class Graph extends PureComponent<Props, State> {
                             transform: 'translate(-8, 0)',
                         }}
                         domain={[0, getYAxisMaxValue(maxPossibleValue)]}
-                        stroke={colors.FONT_LIGHT}
+                        stroke={colors.FONT_MEDIUM}
                         tickFormatter={this.valueToUsd}
                     ></YAxis>
                 </AreaChart>

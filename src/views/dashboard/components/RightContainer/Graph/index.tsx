@@ -15,6 +15,12 @@ import {
 
 import CustomTooltip from './CustomTooltip';
 
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'Usd',
+    minimumFractionDigits: 2,
+});
+
 const getYAxisMaxValue = data => {
     let maxValue = 0;
     data.forEach(item => {
@@ -56,6 +62,10 @@ class Graph extends PureComponent<Props, State> {
         }
     };
 
+    valueToUsd(value) {
+        return formatter.format(value);
+    }
+
     render() {
         const { highlightedAreaId } = this.state;
         const { data } = this.props;
@@ -74,13 +84,12 @@ class Graph extends PureComponent<Props, State> {
                     data={data}
                     margin={{
                         top: 10,
-                        right: 48,
+                        right: 55,
                         bottom: 10,
-                        left: 48,
+                        left: 55,
                     }}
                 >
                     <CartesianGrid strokeDasharray="2 2" />
-                    <Label value="Pool history" offset={0} position="top" />
                     <Tooltip
                         cursor={{ stroke: '#4366b1ff', strokeWidth: 1 }}
                         content={<CustomTooltip setHighlightedAreaId={this.setHighlightedAreaId} />}
@@ -119,7 +128,7 @@ class Graph extends PureComponent<Props, State> {
                         tickFormatter={value =>
                             formatUtils.getFormattedDateFromTimestamp(value, 'MONTH_DAY_YEAR', true)
                         }
-                        stroke={colors.FONT_LIGHT}
+                        stroke={colors.FONT_MEDIUM}
                         // padding={{ left: 2 }}
                     >
                         {/* <Label
@@ -136,9 +145,10 @@ class Graph extends PureComponent<Props, State> {
                     <YAxis
                         tick={{ fontSize: variables.FONT_SIZE.SMALL }}
                         domain={[0, maxValue]}
-                        stroke={colors.FONT_LIGHT}
+                        stroke={colors.FONT_MEDIUM}
+                        tickFormatter={this.valueToUsd}
                         label={{
-                            value: 'Pool value [$]',
+                            // value: 'Pool value [$]',
                             angle: -90,
                             offset: 460,
                             position: 'center',
