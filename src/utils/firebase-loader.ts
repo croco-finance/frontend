@@ -73,7 +73,7 @@ function sortAndTransformSnaps(userData: any): SnapStructure {
                 }
                 poolSnaps.sort((a: any, b: any) => parseFloat(a.block) - parseFloat(b.block));
                 if (uniRewardedPoolIds.includes(poolId)) {
-                    resortUniRewardedSnaps(poolSnaps);
+                    filter0SameBlockSnaps(poolSnaps);
                 }
                 snaps[poolId] = poolSnaps;
             }
@@ -82,7 +82,7 @@ function sortAndTransformSnaps(userData: any): SnapStructure {
     return snaps;
 }
 
-function resortUniRewardedSnaps(snaps: Snap[]) {
+function filter0SameBlockSnaps(snaps: Snap[]) {
     for (let i = 0; i < snaps.length - 1; i++) {
         if (snaps[i].block === snaps[i + 1].block && snaps[i].staked !== snaps[i + 1].staked) {
             if (snaps[i].liquidityTokenBalance === 0) {
