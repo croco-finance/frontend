@@ -12,7 +12,7 @@ const Wrapper = styled.div<Props>`
     flex-grow: 1;
     background-color: ${props => props.backgroundColor};
 
-    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
+    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
         width: 100%;
         max-height: 85vh;
         height: auto;

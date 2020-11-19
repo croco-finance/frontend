@@ -10,7 +10,7 @@ const Wrapper = styled.div`
     overflow-y: auto;
     min-height: 100%;
 
-    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
+    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
         flex-direction: column;
     }
 `;

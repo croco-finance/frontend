@@ -20,8 +20,9 @@ import SimulationBox from './components/LeftContainer/SimulationBox';
 const RightContentWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 30px 10px 0 120px;
-    max-width: 800px;
+    padding: 30px 10px 0 10px;
+    width: 100%;
+    max-width: 650px;
     align-items: center;
 
     @media (max-width: ${variables.SCREEN_SIZE.MD}) {
@@ -380,12 +381,10 @@ const Simulator = (props: RouteComponentProps<any>) => {
                 </LeftSubHeaderContent>
             </LeftLayoutContainer>
             <RightLayoutContainer>
-                <RightContentWrapper>
-                    <RightContainer
-                        simulatedCoefficients={simulatedPriceCoefficients}
-                        sliderDefaultCoeffs={sliderDefaultCoeffs}
-                    />
-                </RightContentWrapper>
+                <RightContainer
+                    simulatedCoefficients={simulatedPriceCoefficients}
+                    sliderDefaultCoeffs={sliderDefaultCoeffs}
+                />
             </RightLayoutContainer>
         </SimulatorContainer>
     );

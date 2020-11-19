@@ -16,22 +16,6 @@ import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
 
-const RightContentWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 30px 10px 0 120px;
-    max-width: 800px;
-    align-items: center;
-
-    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
-        padding: 20px 10px;
-    }
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        padding: 0px;
-    }
-`;
-
 const Header = styled.div`
     width: 100%;
     /* padding-bottom: 44px; */
@@ -255,14 +239,12 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                 </LeftSubHeaderContent>
             </LeftLayoutContainer>
             <RightLayoutContainer>
-                <RightContentWrapper>
-                    {rightWrapperContent}
-                    {!exceptionContent && !noPoolsSavedInRedux && (
-                        <RightNonExceptionContentWrapper>
-                            <RightContainer />
-                        </RightNonExceptionContentWrapper>
-                    )}
-                </RightContentWrapper>
+                {rightWrapperContent}
+                {!exceptionContent && !noPoolsSavedInRedux && (
+                    <RightNonExceptionContentWrapper>
+                        <RightContainer />
+                    </RightNonExceptionContentWrapper>
+                )}
             </RightLayoutContainer>
         </DashboardContainer>
     );

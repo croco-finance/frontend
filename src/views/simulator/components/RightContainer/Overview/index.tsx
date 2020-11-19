@@ -94,7 +94,7 @@ const GraphTitle = styled.div`
 
 const DaysLeftGridWrapper = styled(ImpLossGridWrapper)`
     gap: 5px 10px;
-    font-size: ${variables.FONT_SIZE.SMALL};
+    font-size: ${variables.FONT_SIZE.NORMAL};
     color: ${colors.FONT_LIGHT};
 `;
 
@@ -104,7 +104,10 @@ const EstDaysLeftWrapper = styled.div`
 `;
 
 const SubNoteDaysLeft = styled.div`
-    margin-top: 5px;
+    margin-top: 15px;
+    font-size: ${variables.FONT_SIZE.SMALL};
+    color: ${colors.FONT_LIGHT};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
 interface Props {
@@ -257,42 +260,29 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
             <GrayBox
                 padding={[15, 20, 15, 20]}
                 bottomBar={
-                    <DaysLeftGridWrapper>
-                        <BoxRow
-                            columnAlignment={['left', 'right', 'left']}
-                            firstColumn={
-                                <EstDaysLeftWrapper>
-                                    <div>Est. days left to compensate loss*</div>
-                                </EstDaysLeftWrapper>
-                            }
-                            secondColumn={
-                                <RightPaddingWrapper>{estDaysLeftStaking}</RightPaddingWrapper>
-                            }
-                            thirdColumn={<></>}
-                        />
-                        <BoxRow
-                            columnAlignment={['left', 'right', 'left']}
-                            columnColors={['light', 'light', 'light']}
-                            firstColumn={
-                                <SubNoteDaysLeft>
-                                    *According to your average rewards since{' '}
-                                    {formatUtils.getFormattedDateFromTimestamp(
-                                        lastSnapTimestampStart * 1000,
-                                        'MONTH_DAY_YEAR',
-                                    )}
-                                </SubNoteDaysLeft>
-                            }
-                            secondColumn={
-                                // <RightPaddingWrapper>
-                                //     <SubNoteDaysLeft>
-                                //         <FiatValue value={averageRewardsLastSnapshot} />
-                                //     </SubNoteDaysLeft>
-                                // </RightPaddingWrapper>
-                                <></>
-                            }
-                            thirdColumn={<></>}
-                        />
-                    </DaysLeftGridWrapper>
+                    <>
+                        <DaysLeftGridWrapper>
+                            <BoxRow
+                                columnAlignment={['left', 'right', 'left']}
+                                firstColumn={
+                                    <EstDaysLeftWrapper>
+                                        <div>Est. days left to compensate loss*</div>
+                                    </EstDaysLeftWrapper>
+                                }
+                                secondColumn={
+                                    <RightPaddingWrapper>{estDaysLeftStaking}</RightPaddingWrapper>
+                                }
+                                thirdColumn={<></>}
+                            />
+                        </DaysLeftGridWrapper>
+                        <SubNoteDaysLeft>
+                            *According to your average rewards since{' '}
+                            {formatUtils.getFormattedDateFromTimestamp(
+                                lastSnapTimestampStart * 1000,
+                                'MONTH_DAY_YEAR',
+                            )}
+                        </SubNoteDaysLeft>
+                    </>
                 }
             >
                 <ImpLossGridWrapper>
