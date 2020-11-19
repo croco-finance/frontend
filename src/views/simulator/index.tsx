@@ -5,7 +5,7 @@ import {
     LeftLayoutContainer,
     RightLayoutContainer,
 } from '@components/layout';
-import { GrayBox, Input, LoadingBox, MultipleTokenSelect } from '@components/ui';
+import { GrayBox, Icon, Input, LoadingBox, MultipleTokenSelect } from '@components/ui';
 import { animations, colors, variables, types, styles } from '@config';
 import { formatUtils, validationUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ import SimulationBox from './components/LeftContainer/SimulationBox';
 const RightContentWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 40px 10px 0 120px;
+    padding: 30px 10px 0 120px;
     max-width: 800px;
     align-items: center;
 
@@ -34,8 +34,8 @@ const RightContentWrapper = styled.div`
 `;
 
 const Header = styled.div`
+    padding: 0 20px;
     width: 100%;
-    padding-bottom: 20px;
     display: flex;
     justify-content: center;
     background-color: ${colors.BACKGROUND};
@@ -51,13 +51,16 @@ const LeftSubHeaderContent = styled.div`
     ${styles.scrollBarStyles};
     padding: 10px;
     width: 100%;
+    height: 100%;
     max-width: 650px;
     align-self: center;
+    ${styles.scrollBarStyles};
 `;
 
 const HeaderContent = styled.div`
     width: 100%;
-    max-width: 80%;
+    max-width: 620px;
+    border-bottom: 1px solid ${colors.STROKE_GREY};
 `;
 
 const ExceptionWrapper = styled.div`
@@ -136,7 +139,7 @@ const MultipleSelectWrapper = styled.div`
 const PoolSelectLabel = styled(SectionLabel)``;
 
 const OverviewWrapper = styled.div`
-    margin: 0px 0 30px 0;
+    margin: 20px 0 30px 0;
     padding: 20px 20px;
     width: 100%;
 `;
@@ -149,6 +152,11 @@ const InactivePoolWarning = styled.div`
     background-color: #f7f4ff;
     border: 1px solid #baa6f9;
     color: #673df1;
+    display: flex;
+`;
+
+const WarningText = styled.div`
+    margin-left: 5px;
 `;
 
 const SimulationBoxWrapper = styled.div`
@@ -292,61 +300,64 @@ const Simulator = (props: RouteComponentProps<any>) => {
                 <Header>
                     <HeaderContent>
                         <NavBar></NavBar>
-                        <AddressWrapper>
-                            <Input
-                                textIndent={[70, 0]}
-                                innerAddon={<AddressLabel>Address:</AddressLabel>}
-                                addonAlign="left"
-                                placeholder="Enter valid Ethereum address"
-                                value={inputAddress}
-                                onChange={event => {
-                                    handleAddressChange(event.target.value);
-                                }}
-                                useWhiteBackground
-                            />
-                        </AddressWrapper>
-
-                        {exceptionContent ? (
-                            exceptionContent
-                        ) : allPools ? (
-                            <>
-                                <ChoosePoolWrapper>
-                                    {/* TODO add Exchange icon (Balancer/Uniswap) */}
-                                    <PoolSelectLabel>Choose pool:</PoolSelectLabel>
-                                    <MultipleSelectWrapper>
-                                        <MultipleTokenSelect
-                                            options={poolOptions}
-                                            onChange={(option: PoolOption) => {
-                                                // setIsFetchingPrices(true);
-                                                option &&
-                                                    dispatch({
-                                                        type: actionTypes.SET_SELECTED_POOL_ID,
-                                                        poolId: option.value.poolId,
-                                                    });
-                                            }}
-                                            selected={buildPoolOption(allPools[selectedPoolId])}
-                                            useWhiteBackground
-                                            useDarkBorder
-                                        ></MultipleTokenSelect>
-                                    </MultipleSelectWrapper>
-                                </ChoosePoolWrapper>
-                            </>
-                        ) : null}
-
-                        {allPools[selectedPoolId] && (
-                            <>
-                                {!allPools[selectedPoolId].isActive ? (
-                                    <InactivePoolWarning>
-                                        You have already withdrawn all funds from this pool. Below
-                                        you see prices and balances at the time of your final
-                                        withdrawal.
-                                    </InactivePoolWarning>
-                                ) : null}
-                            </>
-                        )}
                     </HeaderContent>
                 </Header>
                 <LeftSubHeaderContent>
+                    <AddressWrapper>
+                        <Input
+                            textIndent={[70, 0]}
+                            innerAddon={<AddressLabel>Address:</AddressLabel>}
+                            addonAlign="left"
+                            placeholder="Enter valid Ethereum address"
+                            value={inputAddress}
+                            onChange={event => {
+                                handleAddressChange(event.target.value);
+                            }}
+                            useWhiteBackground
+                        />
+                    </AddressWrapper>
+
+                    {exceptionContent ? (
+                        exceptionContent
+                    ) : allPools ? (
+                        <>
+                            <ChoosePoolWrapper>
+                                {/* TODO add Exchange icon (Balancer/Uniswap) */}
+                                <PoolSelectLabel>Choose pool:</PoolSelectLabel>
+                                <MultipleSelectWrapper>
+                                    <MultipleTokenSelect
+                                        options={poolOptions}
+                                        onChange={(option: PoolOption) => {
+                                            // setIsFetchingPrices(true);
+                                            option &&
+                                                dispatch({
+                                                    type: actionTypes.SET_SELECTED_POOL_ID,
+                                                    poolId: option.value.poolId,
+                                                });
+                                        }}
+                                        selected={buildPoolOption(allPools[selectedPoolId])}
+                                        useWhiteBackground
+                                        useDarkBorder
+                                    ></MultipleTokenSelect>
+                                </MultipleSelectWrapper>
+                            </ChoosePoolWrapper>
+                        </>
+                    ) : null}
+
+                    {allPools[selectedPoolId] && (
+                        <>
+                            {!allPools[selectedPoolId].isActive ? (
+                                <InactivePoolWarning>
+                                    <Icon icon="info" color={'#673df1'} size={18} />
+                                    <WarningText>
+                                        You have already withdrawn all funds from this pool. Below
+                                        you see prices and balances at the time of your withdrawal.
+                                    </WarningText>
+                                </InactivePoolWarning>
+                            ) : null}
+                        </>
+                    )}
+
                     {allPools[selectedPoolId] && !exceptionContent && (
                         <>
                             <OverviewWrapper>

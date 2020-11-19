@@ -47,8 +47,8 @@ const FetchPoolSnapshotsHook = initialAddress => {
             setIsFetchError(false);
 
             const queryAddress = address.trim().toLowerCase();
-            const testAddress = '0x65c084b69b7f21acefe2c68aa25c67efd2e10160'; // Firebase
-            // const testAddress = '0xa8eac1ec5054543ba627d0a06a96be024a6e924b'; // My WBTC-WETH
+            // const testAddress = '0x65c084b69b7f21acefe2c68aa25c67efd2e10160'; // Firebase
+            const testAddress = '0xa8eac1ec5054543ba627d0a06a96be024a6e924b'; // My WBTC-WETH
 
             // try {
             // const fetchedSnapshots = await getSnaps(testAddress);

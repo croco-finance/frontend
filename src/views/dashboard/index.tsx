@@ -19,7 +19,7 @@ import SummaryList from './components/LeftContainer/SummaryList';
 const RightContentWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 40px 10px 0 120px;
+    padding: 30px 10px 0 120px;
     max-width: 800px;
     align-items: center;
 
@@ -35,15 +35,19 @@ const RightContentWrapper = styled.div`
 const Header = styled.div`
     width: 100%;
     /* padding-bottom: 44px; */
+    /* max-width: 540px; */
     display: flex;
     justify-content: center;
     background-color: ${colors.BACKGROUND};
+    padding: 0 20px;
 `;
 
 const HeaderContent = styled.div`
     width: 100%;
-    max-width: 80%;
-    padding: 0 20px 40px 20px;
+    max-width: 620px;
+    border-bottom: 1px solid ${colors.STROKE_GREY};
+
+    /* padding: 0 20px 40px 20px; */
     /* border-bottom: 2px solid ${colors.BACKGROUND_DARK}; */
 `;
 
@@ -86,11 +90,15 @@ const NoAddressNoPool = styled(ExceptionWrapper)`
 
 const AddressWrapper = styled.div`
     width: 100%;
+    max-width: 540px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 5px;
+    border-radius: 8px;
     margin-top: 20px;
+    margin-bottom: 30px;
+    padding: 8px;
+    background-color: ${colors.BACKGROUND_DARK};
 `;
 
 const InputErrorMessage = styled.div`
@@ -103,9 +111,11 @@ const InputErrorMessage = styled.div`
 const AddressLabel = styled.div`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     padding-left: 5px;
+    color: ${colors.FONT_MEDIUM};
 `;
 
 const LeftSubHeaderContent = styled.div`
+    margin: 0 5px 5px 5px; // because of scrollbar - I don't want to have it all the way to the right
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -210,26 +220,28 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                 <Header>
                     <HeaderContent>
                         <NavBar />
-                        <AddressWrapper>
-                            <Input
-                                textIndent={[70, 0]}
-                                innerAddon={<AddressLabel>Address:</AddressLabel>}
-                                addonAlign="left"
-                                placeholder="Enter valid Ethereum address"
-                                value={inputAddress}
-                                onChange={event => {
-                                    handleAddressChange(event.target.value);
-                                }}
-                                useWhiteBackground
-                                useDarkBorder
-                            />
-                            {invalidAddressInput ? (
-                                <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>
-                            ) : null}
-                        </AddressWrapper>
                     </HeaderContent>
                 </Header>
                 <LeftSubHeaderContent>
+                    <AddressWrapper>
+                        <Input
+                            textIndent={[70, 0]}
+                            innerAddon={<AddressLabel>Address:</AddressLabel>}
+                            addonAlign="left"
+                            placeholder="Enter valid Ethereum address"
+                            value={inputAddress}
+                            onChange={event => {
+                                handleAddressChange(event.target.value);
+                            }}
+                            useWhiteBackground
+                            // useDarkBorder
+                            noBorder
+                        />
+                        {invalidAddressInput ? (
+                            <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>
+                        ) : null}
+                    </AddressWrapper>
+
                     {exceptionContent
                         ? exceptionContent
                         : !noPoolsSavedInRedux && (

@@ -19,6 +19,8 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
     cursor: pointer;
     transition: 0s;
     font-size: ${variables.FONT_SIZE.NORMAL};
+    /* box-shadow: ${props =>
+        props.isSelected ? '#00000000 0px 1px 2px 0px;' : '#00000030 0px 1px 2px 0px;'}; */
 
     &:hover {
         background-color: ${props =>

@@ -111,7 +111,6 @@ const PriceChangeRow = ({
             <Col textAlign="left" color={color}>
                 <InputWrapper>
                     <Input
-                        noBorder
                         useWhiteBackground
                         useDarkBorder
                         variant="small"
