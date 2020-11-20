@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { FetchPoolSnapshotsHook } from '../../hooks';
+import { FetchSnapsForAddress } from '../../hooks';
 import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
@@ -42,7 +42,6 @@ const ExceptionWrapper = styled.div`
     justify-content: center;
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     flex-direction: column;
-    background-color: ${colors.BACKGROUND};
     margin-top: 24px;
     text-align: center;
     padding: 20px;
@@ -140,7 +139,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     const allPoolsGlobal = useSelector(state => state.allPools);
     const [invalidAddressInput, setInvalidAddressInput] = useState(false);
 
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolSnapshotsHook(
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchSnapsForAddress(
         props.match.params.address ? props.match.params.address : '',
     );
 

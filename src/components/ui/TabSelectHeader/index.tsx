@@ -44,7 +44,7 @@ const Button = styled.div<{ selected: boolean; disabled?: boolean }>`
     border-bottom: 2px solid;
     border-color: ${props => (props.selected ? colors.GREEN : 'transparent')};
     cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-    padding: 14px 20px;
+    padding: 16px 20px;
     box-sizing: border-box;
     margin-bottom: -1px;
     font-weight: ${variables.FONT_WEIGHT.REGULAR};

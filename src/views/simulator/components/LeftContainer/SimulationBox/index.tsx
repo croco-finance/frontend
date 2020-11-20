@@ -83,7 +83,7 @@ const SimulationBox = ({
     }
 
     const pool = allPools[selectedPoolId];
-    const { tokens, poolId } = pool;
+    const { pooledTokens, poolId } = pool;
     const { tokenPricesEnd } = pool.cumulativeStats;
 
     return (
@@ -94,8 +94,8 @@ const SimulationBox = ({
                 <SubTitleRight>Simulated price</SubTitleRight>
             </SubTitlesWrapper>
 
-            <GridWrapper rowsCount={tokens.length}>
-                {tokens.map((token, i) => {
+            <GridWrapper rowsCount={pooledTokens.length}>
+                {pooledTokens.map((token, i) => {
                     const tokenSymbol = token.symbol;
                     return (
                         <PriceChangeRow

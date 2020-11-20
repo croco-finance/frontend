@@ -2,7 +2,7 @@ import { Icon, PageLogo, Spinner } from '@components/ui';
 import { analytics, colors, constants, variables } from '@config';
 import Portis from '@portis/web3';
 import { validationUtils } from '@utils';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -220,7 +220,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         }
 
         // check if valid ENS name
-        if (input.includes('.eth')) {
+        if (input.substring(input.length - 4) === '.eth') {
             try {
                 setLoadingEnsDomain(true);
                 const ensAddress = await web3.eth.ens.getAddress(input);
@@ -262,6 +262,24 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         // fire custom Google Analytics event
         analytics.Event('ADDRESS INPUT', "Landing Page let's go button pressed", inputAddress);
     };
+
+    // useEffect(() => {
+    // TODO run this function only
+    //     // check if there is any address stored in browser local storage
+    //     // local storage is not accessible in discreet mode
+    //     try {
+    //         const addressLocalStorage = localStorage.getItem('address');
+
+    //         // if there is some valid address, go directly to dashboard so that the user doesn't have to paste his address again
+    //         if (addressLocalStorage) {
+    //             props.history.push({
+    //                 pathname: `/dashboard/${addressLocalStorage}`,
+    //             });
+    //         }
+    //     } catch (e) {
+    //         console.log('Error while trying to access local storage');
+    //     }
+    // }, []);
 
     return (
         <MainWrapper>

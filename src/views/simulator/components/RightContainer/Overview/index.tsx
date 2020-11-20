@@ -118,19 +118,14 @@ interface Props {
 const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
-
     const pool = allPools[selectedPoolId];
 
-    let { tokens, hasYieldReward, isActive, exchange, tokenWeights } = pool;
+    let { pooledTokens, exchange, tokenWeights } = pool;
 
     let {
         // TODO make sure you use current token balances, not cumulative values
         tokenBalances,
         feesTokenAmounts,
-        yieldUsd,
-        txCostUsd,
-        rewardsMinusExpensesUsd,
-        timestampEnd,
         tokenPricesEnd,
         poolValueUsd,
     } = pool.cumulativeStats;
@@ -152,18 +147,13 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
     let {
         newTokenBalances,
         newPoolValueUsd,
-        newFeesUsd,
         newHodlValueUsd,
         impLossRel,
         impLossUsd,
     } = simulatedValues;
 
-    if (Math.abs(impLossRel) < 0.00001) impLossRel = 0;
-
     // TODO check if yield token is also part of pool (if yes, change its price accordingly)
-    const newRewardsMinusExpensesUsd = newFeesUsd + yieldUsd - txCostUsd;
-
-    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(tokens);
+    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
 
     const tokenBalancesDiff = mathUtils.subtractArraysElementWise(newTokenBalances, tokenBalances);
 
@@ -182,7 +172,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
     const lastSnapFeesUsd = lastIntervalStat.feesUsdEndPrice;
 
     const lastSnapYieldUsd = lastIntervalStat.yieldTokenPriceEnd
-        ? lastIntervalStat.yieldTokenAmountEnd * lastIntervalStat.yieldTokenPriceEnd
+        ? lastIntervalStat.yieldTokenAmount * lastIntervalStat.yieldTokenPriceEnd
         : 0;
 
     const poolValueIncreaseCoeff = newPoolValueUsd / poolValueUsd;
@@ -190,7 +180,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
     const averageRewardsLastSnapshot = mathUtils.getDailyAverageFeeGains(
         lastSnapTimestampStart,
         lastSnapTimestampEnd,
-        // TODO is this correct way how to compute new fee value?
+        // TODO is this correct way how to compute new fee value after price change?
         lastSnapFeesUsd * poolValueIncreaseCoeff + lastSnapYieldUsd,
     );
 
@@ -278,7 +268,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                         <SubNoteDaysLeft>
                             *According to your average rewards since{' '}
                             {formatUtils.getFormattedDateFromTimestamp(
-                                lastSnapTimestampStart * 1000,
+                                lastSnapTimestampStart,
                                 'MONTH_DAY_YEAR',
                             )}
                         </SubNoteDaysLeft>
@@ -296,7 +286,10 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                         }
                         thirdColumn={
                             <ImpLossRel>
-                                {formatUtils.getFormattedPercentageValue(impLossRel, false)}
+                                {formatUtils.getFormattedPercentageValue(
+                                    Math.abs(impLossRel) < 0.00001 ? 0 : impLossRel,
+                                    false,
+                                )}
                             </ImpLossRel>
                         }
                     />

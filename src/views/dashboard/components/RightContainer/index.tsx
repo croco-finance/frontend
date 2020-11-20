@@ -87,7 +87,7 @@ const RightContainer = () => {
 
     const tokenSymbolsArr =
         selectedPoolId !== 'all'
-            ? formatUtils.getTokenSymbolArr(allPools[selectedPoolId].tokens)
+            ? formatUtils.getTokenSymbolArr(allPools[selectedPoolId].pooledTokens)
             : [];
 
     const headerHeadline =

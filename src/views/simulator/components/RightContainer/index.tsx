@@ -1,11 +1,10 @@
-import { animations, colors, variables } from '@config';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Overview from './Overview';
-import { MultipleTokenLogo, TabSelectHeader, PoolHeader } from '@components/ui';
+import { TabSelectHeader, PoolHeader } from '@components/ui';
 import { formatUtils, graphUtils } from '@utils';
-import ILGraph from './ILGraph';
+import { AllPoolsGlobal } from '@types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -21,7 +20,7 @@ interface Props {
     sliderDefaultCoeffs: Array<number>;
 }
 const RightContainer = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => {
-    const allPools = useSelector(state => state.allPools);
+    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
 
@@ -37,12 +36,11 @@ const RightContainer = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) =
         return null;
     }
 
-    const { exchange, poolId, tokens } = allPools[selectedPoolId];
-    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(tokens);
+    const { exchange, poolId, pooledTokens } = allPools[selectedPoolId];
+    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
 
     return (
         <Wrapper>
-            {/* <SectionTitle>Pool overview</SectionTitle> */}
             <TabSelectHeader
                 headline={
                     <PoolHeader

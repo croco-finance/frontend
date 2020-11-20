@@ -29,12 +29,12 @@ const RightLayout = styled.div`
 `;
 
 const LeftFillContainer = styled.div`
-    width: 100px;
+    width: 120px;
     flex-shrink: 1;
 `;
 
 const RightFillContainer = styled.div`
-    width: 100px;
+    width: 120px;
     flex-shrink: 1;
 `;
 

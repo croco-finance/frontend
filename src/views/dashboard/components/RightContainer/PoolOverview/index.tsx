@@ -88,14 +88,13 @@ const PoolOverview = () => {
         );
     }
 
-    let { tokens, isActive, hasYieldReward, yieldToken } = pool;
+    let { pooledTokens, isActive, hasYieldReward, yieldToken } = pool;
 
     const {
         feesUsd,
         yieldUsd,
         txCostEth,
         txCostUsd,
-        rewardsMinusExpensesUsd,
         poolValueUsd,
         tokenBalances,
         feesTokenAmounts,
@@ -105,7 +104,7 @@ const PoolOverview = () => {
     const endTimeText = isActive ? 'Value today' : 'Withdrawal time';
     const poolShareValueText = isActive ? 'Your pool share' : 'End pool share';
 
-    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(tokens);
+    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
 
     const feesRow = (
         <CardRow
@@ -174,7 +173,7 @@ const PoolOverview = () => {
                             secondColumn={<></>}
                             thirdColumn={
                                 <FiatValue
-                                    value={rewardsMinusExpensesUsd}
+                                    value={feesUsd + yieldUsd - txCostUsd}
                                     usePlusSymbol
                                     useBadgeStyle
                                     colorized

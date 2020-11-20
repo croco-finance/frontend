@@ -22,9 +22,9 @@ const roundToNDecimals = (value: number, nDecimals: number) => {
     return Math.round(value * coeff) / coeff;
 };
 
-const getDailyAverageFeeGains = (timeStampStartSeconds, timeStampEndSeconds, totalFeesUsd) => {
-    const differenceMilliseconds = timeStampEndSeconds - timeStampStartSeconds;
-    const differenceDays = differenceMilliseconds / (3600 * 24);
+const getDailyAverageFeeGains = (timeStampStartMillis, timeStampEndMillis, totalFeesUsd) => {
+    const differenceMillis = timeStampEndMillis - timeStampStartMillis;
+    const differenceDays = differenceMillis / (3600 * 24 * 1000);
     return totalFeesUsd / differenceDays;
 };
 

@@ -1,8 +1,7 @@
-import { types } from '@config';
 import * as validationUtils from './validation';
 import * as mathUtils from './math';
 import * as lossUtils from './loss-computations';
-import * as statsComputations from './snapshot-processing';
+import * as statsComputations from './snaps-statistics-computations';
 import * as simulatorUtils from './simulator';
 import * as formatUtils from './format';
 import * as graphUtils from './graph';

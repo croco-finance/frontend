@@ -91,12 +91,10 @@ const PoolItem = ({ poolId }: Props) => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
-    const { tokens, exchange } = allPools[poolId];
+    const { pooledTokens, exchange } = allPools[poolId];
 
     if (allPools[poolId].cumulativeStats === null) return <p> No stats </p>;
-    const { feesUsd, poolValueUsd, yieldUsd, rewardsMinusExpensesUsd } = allPools[
-        poolId
-    ].cumulativeStats;
+    const { feesUsd, yieldUsd, txCostUsd, poolValueUsd } = allPools[poolId].cumulativeStats;
 
     let isSelected = selectedPoolId === poolId;
 
@@ -111,7 +109,7 @@ const PoolItem = ({ poolId }: Props) => {
                     <TokenLogo symbol={exchange} size={17} />
                 </ExchangeLogoWrapper>
                 <PoolWrapper>
-                    {tokens.map((token, i) => {
+                    {pooledTokens.map((token, i) => {
                         return (
                             <TokenItem key={token.symbol}>
                                 <TokenLogo symbol={token.symbol} size={18} />
@@ -129,7 +127,7 @@ const PoolItem = ({ poolId }: Props) => {
                 </Value>
                 <Gains>
                     <FiatValue
-                        value={rewardsMinusExpensesUsd}
+                        value={feesUsd + yieldUsd - txCostUsd}
                         usePlusSymbol
                         // colorized={!isSelected}
                     ></FiatValue>

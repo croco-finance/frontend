@@ -68,10 +68,10 @@ const BalanceOverview = ({ iconSize = 20 }: Props) => {
         return null;
     }
 
-    const { tokens, isActive } = allPools[selectedPoolId];
+    const { pooledTokens, isActive } = allPools[selectedPoolId];
 
     const { tokenBalances, tokenPricesEnd } = allPools[selectedPoolId].cumulativeStats;
-    const numberOfTokens = tokens.length;
+    const numberOfTokens = pooledTokens.length;
 
     return (
         <Wrapper>
@@ -85,7 +85,7 @@ const BalanceOverview = ({ iconSize = 20 }: Props) => {
                 />
             </HeaderWrapper>
             <TokenInfoWrapper rowsCount={numberOfTokens}>
-                {tokens.map((token, i) => {
+                {pooledTokens.map((token, i) => {
                     return (
                         <OverviewRow
                             key={i}

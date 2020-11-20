@@ -3,7 +3,7 @@ import { types } from '@config';
 
 const getGraphData = (intervalStats: types.IntervalStats[]) => {
     const statsCount = intervalStats.length;
-    const lastTimestampMillis = intervalStats[intervalStats.length - 1].timestampEnd * 1000;
+    const lastTimestamp = intervalStats[intervalStats.length - 1].timestampEnd;
     let graphData: types.GraphData[] = new Array(statsCount + 1);
 
     // Get first element of graph data. The rest will be computed using loop
@@ -13,9 +13,9 @@ const getGraphData = (intervalStats: types.IntervalStats[]) => {
     initialPoolValues[0] = intervalStats[0].poolValueUsdStart;
 
     graphData[0] = {
-        lastTimestampMillis: lastTimestampMillis,
-        timestampMillisPrev: null,
-        timestampMillis: intervalStats[0].timestampStart * 1000,
+        lastTimestamp: lastTimestamp,
+        timestampPrev: null,
+        timestamp: intervalStats[0].timestampStart,
         poolValues: initialPoolValues,
         poolValuePrev: undefined,
         feesUsd: 0,
@@ -44,14 +44,12 @@ const getGraphData = (intervalStats: types.IntervalStats[]) => {
         // const poolValuePrev = graphData[i].poolValues[i];
 
         graphData[i + 1] = {
-            lastTimestampMillis: lastTimestampMillis,
-            timestampMillisPrev: stat.timestampStart * 1000,
-            timestampMillis: stat.timestampEnd * 1000,
+            lastTimestamp: lastTimestamp,
+            timestampPrev: stat.timestampStart,
+            timestamp: stat.timestampEnd,
             poolValues: poolValues,
             feesUsd: mathUtils.getTokenArrayValue(stat.feesTokenAmounts, stat.tokenPricesEnd),
-            yieldUsd: stat.yieldTokenPriceEnd
-                ? stat.yieldTokenAmountEnd * stat.yieldTokenPriceEnd
-                : 0,
+            yieldUsd: stat.yieldTokenPriceEnd ? stat.yieldTokenAmount * stat.yieldTokenPriceEnd : 0,
             txCostUsd: stat.txCostEthEnd * stat.ethPriceEnd,
             impLossUsd: stat.impLossUsd,
             poolValuePrev: stat.poolValueUsdStart,

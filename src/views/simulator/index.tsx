@@ -12,27 +12,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { FetchPoolSnapshotsHook } from '../../hooks';
+import { FetchSnapsForAddress } from '../../hooks';
 import RightContainer from './components/RightContainer';
 import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
-
-const RightContentWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 30px 10px 0 10px;
-    width: 100%;
-    max-width: 650px;
-    align-items: center;
-
-    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
-        padding: 20px 10px;
-    }
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        padding: 0px;
-    }
-`;
+import { AllPoolsGlobal } from '@types';
 
 const Header = styled.div`
     padding: 0 20px;
@@ -175,12 +159,12 @@ const SimulationBoxWrapper = styled.div`
 
 const buildPoolOption = (pool: types.PoolItem) => {
     if (pool) {
-        const tokens: any = pool.tokens;
+        const tokens: any = pool.pooledTokens;
         let value = { poolId: pool.poolId, tokens: new Array(tokens.length) };
         let label = '';
 
         tokens.forEach((token, i) => {
-            let tokenWeight = formatUtils.getFormattedPercentageValue(pool.tokens[i].weight, true);
+            let tokenWeight = formatUtils.getFormattedPercentageValue(token.weight, true);
             label = label + ` ${token.symbol.toUpperCase()} ${tokenWeight},`;
             value.tokens[i] = token.symbol;
         });
@@ -214,7 +198,7 @@ const getInitialPriceCoeffs = (tokens: any) => {
 };
 
 const Simulator = (props: RouteComponentProps<any>) => {
-    const allPools = useSelector(state => state.allPools);
+    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const dispatch = useDispatch();
 
@@ -222,16 +206,36 @@ const Simulator = (props: RouteComponentProps<any>) => {
         props.match.params.address ? props.match.params.address : '',
     );
 
+    const handleAddressChange = inputAddr => {
+        // show in the input whatever user typed in, even if it's not a valid ETH address
+        setInputAddress(inputAddr);
+
+        // trim and lowercase the address
+        const formattedAddress = inputAddr.trim().toLowerCase();
+        if (validationUtils.isValidEthereumAddress(formattedAddress)) {
+            fetchData(formattedAddress);
+            // change the url so that the user fetches data for the same address when refreshing the page
+            props.history.push({
+                pathname: `/simulator/${formattedAddress}`,
+            });
+        }
+    };
+
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchSnapsForAddress(
+        props.match.params.address ? props.match.params.address : '',
+    );
+
+    // SIMULATOR FUNCTIONS
     const [simulatedPriceCoefficients, setSimulatedPriceCoefficients]: any = useState(
-        allPools[selectedPoolId] ? getInitialPriceCoeffs(allPools[selectedPoolId].tokens) : [],
+        allPools[selectedPoolId]
+            ? getInitialPriceCoeffs(allPools[selectedPoolId].pooledTokens)
+            : [],
     );
 
     const [sliderDefaultCoeffs, setSliderDefaultCoeffs]: any = useState(
-        allPools[selectedPoolId] ? getInitialPriceCoeffs(allPools[selectedPoolId].tokens) : [],
-    );
-
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolSnapshotsHook(
-        props.match.params.address ? props.match.params.address : '',
+        allPools[selectedPoolId]
+            ? getInitialPriceCoeffs(allPools[selectedPoolId].pooledTokens)
+            : [],
     );
 
     const setNewPrices = (newValue, index) => {
@@ -246,24 +250,11 @@ const Simulator = (props: RouteComponentProps<any>) => {
         setSliderDefaultCoeffs(coefficientsArrCopy);
     };
 
-    const handleAddressChange = inputAddr => {
-        // show in the input whatever user typed in, even if it's not a valid ETH address
-        setInputAddress(inputAddr);
-
-        if (validationUtils.isValidEthereumAddress(inputAddr)) {
-            fetchData(inputAddr);
-            // change the url so that the user fetches data for the same address when refreshing the page
-            props.history.push({
-                pathname: `/simulator/${inputAddr}`,
-            });
-        }
-    };
-
     useEffect(() => {
         if (allPools[selectedPoolId]) {
             const newPool = allPools[selectedPoolId];
-            setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.tokens));
-            setSliderDefaultCoeffs(getInitialPriceCoeffs(newPool.tokens));
+            setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.pooledTokens));
+            setSliderDefaultCoeffs(getInitialPriceCoeffs(newPool.pooledTokens));
         }
     }, [selectedPoolId]);
 
@@ -325,29 +316,27 @@ const Simulator = (props: RouteComponentProps<any>) => {
 
                     {exceptionContent ? (
                         exceptionContent
-                    ) : allPools ? (
-                        <>
-                            <ChoosePoolWrapper>
-                                {/* TODO add Exchange icon (Balancer/Uniswap) */}
-                                <PoolSelectLabel>Choose pool:</PoolSelectLabel>
-                                <MultipleSelectWrapper>
-                                    <MultipleTokenSelect
-                                        options={poolOptions}
-                                        onChange={(option: PoolOption) => {
-                                            // setIsFetchingPrices(true);
-                                            option &&
-                                                dispatch({
-                                                    type: actionTypes.SET_SELECTED_POOL_ID,
-                                                    poolId: option.value.poolId,
-                                                });
-                                        }}
-                                        selected={buildPoolOption(allPools[selectedPoolId])}
-                                        useWhiteBackground
-                                        useDarkBorder
-                                    ></MultipleTokenSelect>
-                                </MultipleSelectWrapper>
-                            </ChoosePoolWrapper>
-                        </>
+                    ) : Object.keys(allPools).length > 0 ? (
+                        <ChoosePoolWrapper>
+                            {/* TODO add Exchange icon (Balancer/Uniswap) */}
+                            <PoolSelectLabel>Choose pool:</PoolSelectLabel>
+                            <MultipleSelectWrapper>
+                                <MultipleTokenSelect
+                                    options={poolOptions}
+                                    onChange={(option: PoolOption) => {
+                                        // setIsFetchingPrices(true);
+                                        option &&
+                                            dispatch({
+                                                type: actionTypes.SET_SELECTED_POOL_ID,
+                                                poolId: option.value.poolId,
+                                            });
+                                    }}
+                                    selected={buildPoolOption(allPools[selectedPoolId])}
+                                    useWhiteBackground
+                                    useDarkBorder
+                                ></MultipleTokenSelect>
+                            </MultipleSelectWrapper>
+                        </ChoosePoolWrapper>
                     ) : null}
 
                     {allPools[selectedPoolId] && (

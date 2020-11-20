@@ -120,7 +120,7 @@ class Graph extends PureComponent<Props, State> {
                     })}
 
                     <XAxis
-                        dataKey="timestampMillis"
+                        dataKey="timestamp"
                         tick={{
                             fontSize: variables.FONT_SIZE.SMALL,
                             transform: 'translate(0, 12)',

@@ -4,6 +4,7 @@ export enum Exchange {
 }
 
 export type DexBaseUrls = { [key in keyof typeof Exchange]: string };
+export type DexToPoolIdMap = { [key in keyof typeof Exchange]: Array<string> };
 
 export interface Token {
     symbol: string;
@@ -46,8 +47,8 @@ export interface SnapStructure {
 export interface IntervalStats {
     timestampStart: number;
     timestampEnd: number;
-    userTokenBalancesStart: any;
-    userTokenBalancesEnd: any;
+    tokenBalancesStart: any;
+    tokenBalancesEnd: any;
     feesTokenAmounts: any;
     feesUsdEndPrice: number;
     tokenDiffNoFees: any;
@@ -60,8 +61,6 @@ export interface IntervalStats {
     txCostEthStart: number;
     txCostEthEnd: number;
     yieldTokenAmount: number;
-    yieldTokenAmountStart: number;
-    yieldTokenAmountEnd: number;
     yieldTokenPriceStart: number | null;
     yieldTokenPriceEnd: number | null;
     impLossUsd: number;
@@ -85,7 +84,6 @@ export interface CumulativeStats {
     txCostEth: number;
     txCostUsd: number;
     ethPriceEnd: number;
-    rewardsMinusExpensesUsd: number;
     timestampEnd: number;
     // average rewards since last deposit -> average rewards in last snapshot
 }
@@ -102,11 +100,10 @@ export interface PoolItem {
     poolId: string;
     userAddr: string;
     isActive: boolean;
-    tokens: Array<TokenItemGeneric>;
+    pooledTokens: Array<GenericPooledTokenInfo>;
     yieldToken: Token | null;
     hasYieldReward: boolean;
     timestampEnd: number;
-    snapshots: Array<Snap>;
     intervalStats: Array<IntervalStats>;
     cumulativeStats: CumulativeStats;
     tokenWeights: Array<number>;
@@ -118,16 +115,16 @@ export interface YieldTokenInfo {
     token: Token;
 }
 
-export interface TokenItemGeneric extends Token {
+export interface GenericPooledTokenInfo extends Token {
     weight: number;
 }
 
 export type AllPoolsGlobal = { [key: string]: PoolItem };
 
 export interface GraphData {
-    lastTimestampMillis: number;
-    timestampMillisPrev: number | null;
-    timestampMillis: number;
+    lastTimestamp: number;
+    timestampPrev: number | null;
+    timestamp: number;
     poolValues: Array<number | undefined>; // undefined has to be here because of recharts library
     poolValuePrev: number | undefined;
     feesUsd: number;

@@ -15,28 +15,13 @@ const App = (props: RouteComponentProps<any>) => {
     useEffect(() => {
         // enable Google Analytics
         ReactGA.pageview(window.location.pathname + window.location.search);
-
-        // check if there is any address stored in browser local storage
-        // local storage is not accessible in discreet mode
-        try {
-            const addressLocalStorage = localStorage.getItem('address');
-
-            // if there is some valid address, go directly to dashboard so that the user doesn't have to paste his address again
-            if (addressLocalStorage) {
-                props.history.push({
-                    pathname: `/dashboard/${addressLocalStorage}`,
-                });
-            }
-        } catch (e) {
-            console.log('Error while trying to access local storage');
-        }
     }, []);
 
     return (
         <Switch>
             {/* address is an optional parameter */}
             <Route path="/dashboard/:address?" component={Dashboard} />
-            <Route path="/simulator/:address?/:poolId?" component={Simulator} />
+            <Route path="/simulator/:address?" component={Simulator} />
             <Route path="/" component={LandingPage} />
         </Switch>
     );

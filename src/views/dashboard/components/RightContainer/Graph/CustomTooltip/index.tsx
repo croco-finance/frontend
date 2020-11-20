@@ -87,9 +87,9 @@ const CustomTooltip = (props: Props) => {
         const { dataKey, name } = props.payload[0];
         const graphData: GraphData = props.payload[0].payload;
         const {
-            lastTimestampMillis,
-            timestampMillisPrev,
-            timestampMillis,
+            lastTimestamp,
+            timestampPrev,
+            timestamp,
             poolValues,
             poolValuePrev,
             feesUsd,
@@ -98,35 +98,28 @@ const CustomTooltip = (props: Props) => {
             impLossUsd,
         } = graphData;
 
-        props.setHighlightedAreaId(dataKey, timestampMillis);
+        props.setHighlightedAreaId(dataKey, timestamp);
 
         // get the correct pool value by index (I pass "name" property in Graph/index.ts file)
         const poolValue = poolValues[name];
 
-        const totalPoolBalance = feesUsd + yieldUsd - txCostUsd;
         let poolValueDiff;
 
         if (poolValue !== undefined && poolValuePrev !== undefined) {
             poolValueDiff = poolValue - poolValuePrev;
         }
 
-        const ifHoveredFirst = timestampMillisPrev === null;
-        const isHoveredLast = lastTimestampMillis === timestampMillis;
+        const ifHoveredFirst = timestampPrev === null;
+        const isHoveredLast = lastTimestamp === timestamp;
 
         return (
             <CustomTooltipWrapper>
-                {timestampMillisPrev && (
+                {timestampPrev && (
                     <>
                         <IntervalsDateHeader>
-                            {formatUtils.getFormattedDateFromTimestamp(
-                                timestampMillisPrev,
-                                'MONTH_DAY',
-                            )}
+                            {formatUtils.getFormattedDateFromTimestamp(timestampPrev, 'MONTH_DAY')}
                             &nbsp;-&nbsp;
-                            {formatUtils.getFormattedDateFromTimestamp(
-                                timestampMillis,
-                                'MONTH_DAY',
-                            )}
+                            {formatUtils.getFormattedDateFromTimestamp(timestamp, 'MONTH_DAY')}
                         </IntervalsDateHeader>
                         <IntervalValuesWrapper roundedBottom={isHoveredLast && !txCostUsd}>
                             <PoolValuesWrapper>
@@ -195,13 +188,10 @@ const CustomTooltip = (props: Props) => {
                 {txCostUsd ? (
                     <DateValuesWrapper roundedBorderAll={ifHoveredFirst}>
                         <DateHeader>
-                            {formatUtils.getFormattedDateFromTimestamp(
-                                timestampMillis,
-                                'MONTH_DAY',
-                            )}
+                            {formatUtils.getFormattedDateFromTimestamp(timestamp, 'MONTH_DAY')}
                         </DateHeader>
                         <GridWrapper>
-                            {!timestampMillisPrev ? (
+                            {!timestampPrev ? (
                                 <TooltipRow
                                     firstColumn="Value"
                                     secondColumn={<FiatValue value={poolValue ? poolValue : 0} />}
