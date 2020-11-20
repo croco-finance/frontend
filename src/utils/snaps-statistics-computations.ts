@@ -227,4 +227,45 @@ const getCumulativeStats = (intervalStats: Array<IntervalStats>) => {
     return cumulativeStats;
 };
 
-export { getPoolStatsFromSnapshots, getCumulativeStats };
+// TODO this works with the old croco version
+const getPoolsSummaryObject = (allPools: any, filteredPoolIds: Array<string> | 'all') => {
+    // TODO compute separately for Balancer and for Uniswap
+    let summaryObject = {};
+    let endBalanceUsdSum = 0;
+    let endBalanceEthSum = 0;
+    let feesUsdSum = 0;
+    let feesEthSum = 0;
+    let txCostUsdSum = 0;
+    let txCostEthSum = 0;
+    let yieldRewardUsdSum = 0;
+    let yieldRewardEthSum = 0;
+
+    for (const poolId of Object.keys(allPools)) {
+        if (filteredPoolIds.includes(poolId) || filteredPoolIds === 'all') {
+            const pool = allPools[poolId];
+            endBalanceUsdSum += pool.endBalanceUsd;
+            endBalanceEthSum += pool.endBalanceEth;
+            if (pool.feesUsd) feesUsdSum += pool.feesUsd;
+            if (pool.feesEth) feesEthSum += pool.feesEth;
+            if (pool.txCostEth) txCostEthSum += pool.txCostEth;
+            if (pool.txCostUsd) txCostUsdSum += pool.txCostUsd;
+            if (pool.yieldRewardUsd) yieldRewardUsdSum += pool.yieldRewardUsd;
+            if (pool.yieldRewardEth) yieldRewardEthSum += pool.yieldRewardEth;
+        }
+    }
+
+    summaryObject['endBalanceUsd'] = endBalanceUsdSum;
+    summaryObject['endBalanceEth'] = endBalanceEthSum;
+    summaryObject['feesUsd'] = feesUsdSum;
+    summaryObject['feesEth'] = feesEthSum;
+    summaryObject['txCostUsd'] = txCostUsdSum;
+    summaryObject['txCostEth'] = txCostEthSum;
+    summaryObject['yieldRewardUsd'] = yieldRewardUsdSum;
+    summaryObject['yieldRewardEth'] = yieldRewardEthSum;
+    summaryObject['rewardFeesBalanceUSD'] = feesUsdSum + yieldRewardUsdSum - txCostUsdSum;
+    summaryObject['rewardFeesBalanceETH'] = feesEthSum + yieldRewardEthSum - txCostEthSum;
+
+    return summaryObject;
+};
+
+export { getPoolStatsFromSnapshots, getCumulativeStats, getPoolsSummaryObject };

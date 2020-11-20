@@ -1,6 +1,6 @@
 import { FiatValue, GrayBox, InlineCircle } from '@components/ui';
 import { colors, variables } from '@config';
-import { mathUtils } from '@utils';
+import { mathUtils, statsComputations } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -58,7 +58,10 @@ const PoolsSummary = () => {
         );
     }
 
-    let activePoolsSummaryObject: any = mathUtils.getPoolsSummaryObject(allPools, activePoolIds);
+    let activePoolsSummaryObject: any = statsComputations.getPoolsSummaryObject(
+        allPools,
+        activePoolIds,
+    );
 
     return (
         <Wrapper>

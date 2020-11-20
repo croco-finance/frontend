@@ -79,11 +79,7 @@ const getFormattedCryptoValue = (value: number, roundDecimals: number = 4) => {
         return 0;
     }
 
-    // if (value === 0) {
-    //     return 0;
-    // }
-
-    const firstTwoAfterDecimals = mathUtils.toTwoDecimals(value);
+    const firstTwoAfterDecimals = mathUtils.getFirstTwoNonZeroDecimals(value);
 
     // compute how many decimals are there before first non-zero value after decimal
     const zeroDecimalsCount = mathUtils.countDecimals(firstTwoAfterDecimals);

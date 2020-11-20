@@ -47,7 +47,7 @@ const FetchSnapsForAddress = initialAddress => {
             setNoPoolsFound(false);
             setIsFetchError(false);
 
-            // double check the address is in the right format
+            // double-check the address is in the right format
             const queryAddress = address.trim().toLowerCase();
 
             // try {

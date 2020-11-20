@@ -1,7 +1,7 @@
 import * as actionTypes from '@actionTypes';
 import { FiatValue } from '@components/ui';
 import { colors, variables } from '@config';
-import { mathUtils } from '@utils';
+import { mathUtils, statsComputations } from '@utils';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -47,7 +47,7 @@ const SummaryItem = ({ headline }: Props) => {
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const activePoolIds = useSelector(state => state.activePoolIds);
 
-    const poolsSummaryInfo: any = mathUtils.getPoolsSummaryObject(allPools, activePoolIds);
+    const poolsSummaryInfo: any = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
 
     const { feesUsd, endBalanceUsd, yieldRewardUsd } = poolsSummaryInfo;
 
