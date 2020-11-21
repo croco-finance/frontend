@@ -53,9 +53,9 @@ class Graph extends PureComponent<Props, State> {
         this.state = { highlightedAreaId: null };
     }
 
-    setHighlightedAreaId = (dataKey: string, timestampMillis: number) => {
+    setHighlightedAreaId = (dataKey: string, timestamp: number) => {
         // do not highlight any Area if this is the first deposit transaction to pool
-        if (timestampMillis === this.props.data[0].timestampMillis) {
+        if (timestamp === this.props.data[0].timestamp) {
             this.setState({ highlightedAreaId: null });
         } else {
             this.setState({ highlightedAreaId: dataKey });
