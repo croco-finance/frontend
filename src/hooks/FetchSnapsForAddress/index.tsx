@@ -7,10 +7,6 @@ import * as actionTypes from '@actionTypes';
 import { getSnaps } from '@utils';
 import { AllPoolsGlobal, PoolToken, DexToPoolIdMap, Exchange } from '@types';
 
-// if the "end" timestamp of pool is older than this, we will consider an inactive pool
-// (user withdrew all funds from that pool)
-const INACTIVE_POOL_THRESHOLD_SECONDS = 3600 * 4; // 4 hours
-
 const getPooledTokensInfo = (tokens: Array<PoolToken>) => {
     const tokensCount = tokens.length;
     let pooledTokensInfo = Array(tokensCount);
@@ -21,11 +17,6 @@ const getPooledTokensInfo = (tokens: Array<PoolToken>) => {
     });
 
     return pooledTokensInfo;
-};
-
-const getIfPoolIsActive = (poolEndTimestamp: number, thresholdSeconds: number) => {
-    const currentTimestampSeconds = Date.now() / 1000;
-    return currentTimestampSeconds - poolEndTimestamp < thresholdSeconds;
 };
 
 const FetchSnapsForAddress = initialAddress => {
