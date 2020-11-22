@@ -1,6 +1,6 @@
 import { FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
 import { colors, variables } from '@config';
-import { mathUtils, statsComputations } from '@utils';
+import { statsComputations } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';

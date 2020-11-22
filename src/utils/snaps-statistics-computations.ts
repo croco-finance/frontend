@@ -162,6 +162,9 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
         poolValueUsdEnd: poolValueUsdEnd,
         hodlValueUsd: hodlValueUsd,
         ethHodlValueUsd: ethHodlValueUsd,
+
+        // If staked LP tokens (for Uniswap)
+        staked: snapshotT0.staked,
     };
 };
 

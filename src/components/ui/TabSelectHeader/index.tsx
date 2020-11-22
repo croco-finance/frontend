@@ -1,10 +1,6 @@
-import { colors, variables, types } from '@config';
+import { colors, variables } from '@config';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { formatUtils } from '@utils';
-import { MultipleTokenLogo, InlineCircle } from '@components/ui';
 
 const Headline = styled.div`
     display: flex;
@@ -18,7 +14,7 @@ const Header = styled.div`
     /* padding: 0 10px 10px 10px; */
     align-items: center;
     border-bottom: 1px solid ${colors.BACKGROUND_DARK};
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     color: ${colors.FONT_LIGHT};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     height: 60px;
