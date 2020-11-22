@@ -60,8 +60,7 @@ async function getSnaps(address: string): Promise<SnapStructure | null> {
             distributeUniYields(userData['UNI_V2']['yields'], snaps);
         }
     }
-    // The following is necessary so that the process ends
-    firebase.database().goOffline();
+
     return snaps;
 }
 
