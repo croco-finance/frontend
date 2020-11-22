@@ -1,3 +1,4 @@
+import { variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
 import LandingPage from '../..';
@@ -12,8 +13,12 @@ const SvgWrapper = styled.img`
         line-height: ${props => props.height}px;
     }
 
-    @media (max-width: 900px) {
-        max-height: 80px;
+    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
+        max-height: 100px;
+    }
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        max-height: 70px;
     }
 `;
 

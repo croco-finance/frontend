@@ -6,7 +6,7 @@ const Wrapper = styled.div`
     display: flex;
     flex: 1 1 0px;
     -webkit-box-flex: 1;
-    background-color: ${colors.BACKGROUND};
+    background-color: ${colors.WHITE};
     padding-right: 15px;
 
     @media (max-width: 520px) {

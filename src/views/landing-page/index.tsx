@@ -2,7 +2,7 @@ import { Icon, PageLogo, Spinner } from '@components/ui';
 import { analytics, colors, constants, variables } from '@config';
 import Portis from '@portis/web3';
 import { validationUtils } from '@utils';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -14,14 +14,19 @@ const MainWrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
-    /* max-width: 800px; */
     text-align: center;
+    padding: 0 20px;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        padding: 0 10px;
+    }
 `;
 
 const AnimatedWrapper = styled.div`
     animation: showup 1.8s;
+    width: 100%;
+    max-width: 700px;
 
     @keyframes showup {
         0% {
@@ -34,16 +39,17 @@ const AnimatedWrapper = styled.div`
             transform: translateY(0%);
         }
     }
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        max-width: 600px;
+    }
 `;
 const ContentWrapper = styled.div`
-    max-width: 1100px;
+    max-width: 1000px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    @media (max-width: 900px) {
-        width: 90%;
-    }
 `;
 
 const TopBar = styled.div`
@@ -74,7 +80,7 @@ const IconLinkWrapper = styled.a`
     }
 `;
 const IllustrationWrapper = styled.h1`
-    margin-top: 130px;
+    margin-top: 125px;
     margin-bottom: 60px;
 
     @media (max-width: 900px) {
@@ -93,6 +99,11 @@ const AddressInputWrapper = styled.div`
 
     border-radius: 18px;
     box-shadow: rgb(12 22 53 / 11%) 0px 8px 40px;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        padding: 5px;
+        border-radius: 6px;
+    }
 `;
 
 const AddressInput = styled.input`
@@ -115,7 +126,7 @@ const AddressInput = styled.input`
         color: ${colors.FONT_LIGHT};
         /* color: #c4c4c8; */
     }
-    @media (max-width: 900px) {
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.SMALL};
         padding: 8px;
         margin-right: 5px;
@@ -153,12 +164,13 @@ const DashboardButton = styled(Link)<{ active: boolean }>`
                 background-color: ${colors.BACKGROUND_DARK};
             }
         `}
-    @media (max-width: 900px) {
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.NORMAL};
         font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
         padding: 5px;
         width: 85px;
         height: 40px;
+        border-radius: 5px;
     }
 `;
 
@@ -220,7 +232,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         }
 
         // check if valid ENS name
-        if (input.includes('.eth')) {
+        if (input.substring(input.length - 4) === '.eth') {
             try {
                 setLoadingEnsDomain(true);
                 const ensAddress = await web3.eth.ens.getAddress(input);
@@ -262,6 +274,24 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         // fire custom Google Analytics event
         analytics.Event('ADDRESS INPUT', "Landing Page let's go button pressed", inputAddress);
     };
+
+    // useEffect(() => {
+    // TODO run this function only
+    //     // check if there is any address stored in browser local storage
+    //     // local storage is not accessible in discreet mode
+    //     try {
+    //         const addressLocalStorage = localStorage.getItem('address');
+
+    //         // if there is some valid address, go directly to dashboard so that the user doesn't have to paste his address again
+    //         if (addressLocalStorage) {
+    //             props.history.push({
+    //                 pathname: `/dashboard/${addressLocalStorage}`,
+    //             });
+    //         }
+    //     } catch (e) {
+    //         console.log('Error while trying to access local storage');
+    //     }
+    // }, []);
 
     return (
         <MainWrapper>

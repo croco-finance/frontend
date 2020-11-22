@@ -8,14 +8,13 @@ import { useSelector } from 'react-redux';
 
 const linkActiveStyles = {
     color: colors.FONT_DARK,
+    backgroundColor: colors.BACKGROUND_DARK,
 };
 const Wrapper = styled.div`
     /* position: absolute; */
     display: flex;
     flex-direction: row;
-    background-color: white;
     border-radius: 3px;
-    padding: 20px 0px;
     /* border-bottom: 1px solid ${colors.STROKE_GREY}; */
     width: 100%;
     height: 80px;
@@ -38,9 +37,7 @@ const StyledLink = styled(NavLink)`
     padding: 10px 15px;
     text-decoration: none;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-
-    &:hover {
-    }
+    border-radius: 5px;
 `;
 
 const NavBar = () => {

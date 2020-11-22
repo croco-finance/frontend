@@ -1,11 +1,13 @@
 /* tsconfig.paths.json */
 {
     "compilerOptions": {
-      "paths": {
-        "@components/*": ["src/components/*"],
-        "@config": ["src/config"],
-        "@utils": ["src/utils"],
-        "@views/*": ["src/views/*"],
-        "@actionTypes": ["src/store/actions/actionTypes"]
-      }  
-}}
+        "paths": {
+            "@components/*": ["src/components/*"],
+            "@config": ["src/config"],
+            "@types": ["src/config/types.ts"],
+            "@utils": ["src/utils"],
+            "@views/*": ["src/views/*"],
+            "@actionTypes": ["src/store/actions/actionTypes"]
+        }
+    }
+}

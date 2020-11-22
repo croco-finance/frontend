@@ -1,13 +1,15 @@
 import { colors, variables } from '@config';
-import { mathUtils } from '@utils';
+import { mathUtils, statsComputations } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import SummaryItem from '../SummaryItem';
+import { AllPoolsGlobal } from '@types';
 
 const Wrapper = styled.div`
     padding-left: 0;
     margin-bottom: 65px;
+    width: 100%;
 `;
 
 const Header = styled.div`
@@ -34,26 +36,28 @@ const Gains = styled(HeaderChild)``;
 const ItemsWrapper = styled.div``;
 
 const SummaryList = () => {
-    const allPools = useSelector(state => state.allPools);
+    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const activePoolIds = useSelector(state => state.activePoolIds);
-    const poolsSummaryInfo: any = mathUtils.getPoolsSummaryObject(allPools, activePoolIds);
+    const poolsSummaryInfo = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
+    const { feesUsd, yieldUsd, txCostUsd, valueLockedUsd } = poolsSummaryInfo;
 
-    if (activePoolIds.length <= 0) {
+    // do not show if there are none or just one active pool
+    if (activePoolIds.length <= 1) {
         return null;
     }
 
     return (
         <Wrapper>
             <Header>
-                <Exchange>&ensp;</Exchange>
+                <Exchange>Pools</Exchange>
                 <Value>Value</Value>
-                <Gains>Rewards</Gains>
+                <Gains>Reward/Loss</Gains>
             </Header>
             <ItemsWrapper>
                 <SummaryItem
                     headline="All active pools"
-                    value={poolsSummaryInfo.endBalanceUsd}
-                    gainsAbsolute={poolsSummaryInfo.feesUsd}
+                    value={valueLockedUsd}
+                    gainsAbsolute={feesUsd + yieldUsd - txCostUsd}
                     roi={5}
                 />
             </ItemsWrapper>

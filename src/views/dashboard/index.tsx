@@ -1,15 +1,39 @@
-import { DashboardContainer, NavBar } from '@components/layout';
+import {
+    DashboardContainer,
+    LeftLayoutContainer,
+    RightLayoutContainer,
+    NavBar,
+} from '@components/layout';
 import { Input, LoadingBox } from '@components/ui';
-import { animations, colors, variables } from '@config';
+import { animations, colors, variables, styles } from '@config';
 import { validationUtils } from '@utils';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { FetchPoolsHook } from '../../hooks';
-import CardInfo from './components/CardInfo';
+import { FetchSnapsForAddress } from '../../hooks';
+import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
+
+const Header = styled.div`
+    width: 100%;
+    /* padding-bottom: 44px; */
+    /* max-width: 540px; */
+    display: flex;
+    justify-content: center;
+    background-color: ${colors.BACKGROUND};
+    padding: 0 20px;
+`;
+
+const HeaderContent = styled.div`
+    width: 100%;
+    max-width: 620px;
+    border-bottom: 1px solid ${colors.STROKE_GREY};
+
+    /* padding: 0 20px 40px 20px; */
+    /* border-bottom: 2px solid ${colors.BACKGROUND_DARK}; */
+`;
 
 const ExceptionWrapper = styled.div`
     display: flex;
@@ -18,7 +42,6 @@ const ExceptionWrapper = styled.div`
     justify-content: center;
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     flex-direction: column;
-    background-color: ${colors.BACKGROUND};
     margin-top: 24px;
     text-align: center;
     padding: 20px;
@@ -50,11 +73,16 @@ const NoAddressNoPool = styled(ExceptionWrapper)`
 
 const AddressWrapper = styled.div`
     width: 100%;
+    max-width: 610px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 5px;
     margin-top: 20px;
+    margin-bottom: 30px;
+    padding: 0 5px;
+    /* padding: 6px;
+    border-radius: 8px;
+    background-color: ${colors.BACKGROUND_DARK}; */
 `;
 
 const InputErrorMessage = styled.div`
@@ -67,70 +95,41 @@ const InputErrorMessage = styled.div`
 const AddressLabel = styled.div`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     padding-left: 5px;
+    color: ${colors.FONT_MEDIUM};
 `;
 
-const LeftWrapper = styled.div`
-    width: 48%;
-    padding: 0px 40px 20px 0;
-    max-height: 99vh;
+const LeftSubHeaderContent = styled.div`
+    margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     overflow-y: auto;
+    overflow-x: hidden;
+    ${styles.scrollBarStyles};
+`;
+
+const RightNonExceptionContentWrapper = styled.div`
     /* animation: ${animations.SHOW_UP} 1.5s; */
-    @media (max-width: 1100px) {
-        width: 100%;
-        padding: 20px;
-    }
-
-    @media (max-width: 520px) {
-        padding: 10px;
-    }
-
-    ::-webkit-scrollbar {
-        background-color: #fff;
-        width: 10px;
-    }
-    /* background of the scrollbar except button or resizer */
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-    /* scrollbar itself */
-    ::-webkit-scrollbar-thumb {
-        /* 7F7F7F for mac-like color */
-        background-color: #babac0;
-        border-radius: 10px;
-        border: 2px solid #fff;
-    }
-    /* set button(top and bottom of the scrollbar) */
-    ::-webkit-scrollbar-button {
-        display: none;
-    }
-`;
-
-const RightWrapper = styled.div`
-    padding: 40px 0px 20px 50px;
-    width: 52%;
-    background-color: ${colors.BACKGROUND};
-    @media (max-width: 1100px) {
-        width: 100%;
-        padding: 20px;
-    }
-
-    @media (max-width: 520px) {
-        padding: 10px;
-    }
-`;
-
-const SummaryWrapper = styled.div`
-    margin-top: 40px;
-`;
-const CardInfoWrapper = styled.div`
-    animation: ${animations.SHOW_UP} 1.5s;
+    width: 100%;
 `;
 
 const Headline = styled.div`
-    font-size: ${variables.FONT_SIZE.H2};
+    /* align-self: baseline; */
+    padding-top: 0px;
+    margin-bottom: 50px;
+    padding-left: 20px;
+    color: ${colors.FONT_MEDIUM};
+    font-size: ${variables.FONT_SIZE.H3};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    margin-bottom: 30px;
-    padding-left: 8px;
+`;
+
+const PoolListWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    max-width: 540px;
 `;
 
 const Dashboard = (props: RouteComponentProps<any>) => {
@@ -140,14 +139,9 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     const allPoolsGlobal = useSelector(state => state.allPools);
     const [invalidAddressInput, setInvalidAddressInput] = useState(false);
 
-    // on component startup fetch pools
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchSnapsForAddress(
         props.match.params.address ? props.match.params.address : '',
     );
-
-    // const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolStatsHook(
-    //     props.match.params.address ? props.match.params.address : '',
-    // );
 
     const handleAddressChange = inputAddr => {
         setInvalidAddressInput(false);
@@ -206,45 +200,51 @@ const Dashboard = (props: RouteComponentProps<any>) => {
 
     return (
         <DashboardContainer>
-            <LeftWrapper>
-                <NavBar></NavBar>
-                <AddressWrapper>
-                    <Input
-                        textIndent={[70, 0]}
-                        innerAddon={<AddressLabel>Address:</AddressLabel>}
-                        addonAlign="left"
-                        placeholder="Enter valid Ethereum address"
-                        value={inputAddress}
-                        onChange={event => {
-                            handleAddressChange(event.target.value);
-                        }}
-                    />
-                    {invalidAddressInput ? (
-                        <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>
-                    ) : null}
-                </AddressWrapper>
+            <LeftLayoutContainer backgroundColor={colors.BACKGROUND}>
+                <Header>
+                    <HeaderContent>
+                        <NavBar />
+                    </HeaderContent>
+                </Header>
+                <LeftSubHeaderContent>
+                    <AddressWrapper>
+                        <Input
+                            textIndent={[70, 0]}
+                            innerAddon={<AddressLabel>Address:</AddressLabel>}
+                            addonAlign="left"
+                            placeholder="Enter valid Ethereum address"
+                            value={inputAddress}
+                            onChange={event => {
+                                handleAddressChange(event.target.value);
+                            }}
+                            useWhiteBackground
+                            // useDarkBorder
+                            // noBorder
+                        />
+                        {invalidAddressInput ? (
+                            <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>
+                        ) : null}
+                    </AddressWrapper>
 
-                {exceptionContent
-                    ? exceptionContent
-                    : !noPoolsSavedInRedux && (
-                          <>
-                              <SummaryWrapper>
+                    {exceptionContent
+                        ? exceptionContent
+                        : !noPoolsSavedInRedux && (
+                              <PoolListWrapper>
+                                  <Headline>Your liquidity pools</Headline>
                                   <SummaryList />
-                              </SummaryWrapper>
-
-                              <Headline>Your liquidity pools</Headline>
-                              <PoolList />
-                          </>
-                      )}
-            </LeftWrapper>
-            <RightWrapper>
+                                  <PoolList />
+                              </PoolListWrapper>
+                          )}
+                </LeftSubHeaderContent>
+            </LeftLayoutContainer>
+            <RightLayoutContainer>
                 {rightWrapperContent}
                 {!exceptionContent && !noPoolsSavedInRedux && (
-                    <CardInfoWrapper>
-                        <CardInfo />
-                    </CardInfoWrapper>
+                    <RightNonExceptionContentWrapper>
+                        <RightContainer />
+                    </RightNonExceptionContentWrapper>
                 )}
-            </RightWrapper>
+            </RightLayoutContainer>
         </DashboardContainer>
     );
 };

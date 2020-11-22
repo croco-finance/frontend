@@ -12,6 +12,7 @@ export const FONT_SIZE = {
     NORMAL: '16px',
     H1: '24px',
     H2: '20px',
+    H3: '18px',
 } as const;
 
 export const FONT_WEIGHT = {

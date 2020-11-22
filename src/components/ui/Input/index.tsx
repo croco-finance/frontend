@@ -25,9 +25,9 @@ const StyledInput = styled.input<InputProps>`
     padding: 1px ${props => (props.textIndent ? `${props.textIndent[1] + 16}px` : '16px')} 0
         ${props => (props.textIndent ? `${props.textIndent[0] + 20}px` : '16px')};
 
-    border-radius: 4px;
-    border: 2px solid;
-    border-color: ${props => (props.useDarkBorder ? colors.STROKE_GREY : colors.BACKGROUND)};
+    border-radius: 5px;
+    border: ${props => (props.noBorder ? 'none' : '2px solid')};
+    border-color: ${props => (props.useDarkBorder ? colors.STROKE_GREY : colors.BACKGROUND_DARK)};
     outline: none;
     box-sizing: border-box;
     width: 100%;
@@ -38,6 +38,8 @@ const StyledInput = styled.input<InputProps>`
 
     &:focus {
         border-color: ${colors.PASTEL_BLUE_MEDIUM};
+        border-color: #96b7ff;
+        background-color: #f9faff;
     }
 
     &::placeholder {

@@ -1,8 +1,8 @@
-import * as actionTypes from '../actions/actionTypes';
-import * as types from '../../config/types';
+import * as actionTypes from '@actionTypes';
+import { types } from '@config';
 
 interface InitialStateInterface {
-    allPools: { [key: string]: types.PoolItemInterface } | {};
+    allPools: types.AllPoolsGlobal | {};
     selectedPoolId: string;
     exchangeToPoolMapping: { [key: string]: Array<string> } | {};
     userAddress: string;
@@ -63,14 +63,6 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 userAddress: action.address,
-            };
-        }
-        case actionTypes.SET_POOL_SNAPSHOTS_GROUPED: {
-            // todo make sure you do deep copy
-            return {
-                ...state,
-                // poolGroups: action.poolGroups,
-                poolGroups: JSON.parse(JSON.stringify(action.snapshotsGrouped)),
             };
         }
         default:

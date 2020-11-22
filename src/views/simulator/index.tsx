@@ -1,17 +1,52 @@
 import * as actionTypes from '@actionTypes';
-import { NavBar, SimulatorContainer } from '@components/layout';
-import { GrayBox, Input, LoadingBox, MultipleTokenSelect } from '@components/ui';
-import { animations, colors, variables } from '@config';
-import { mathUtils, validationUtils } from '@utils';
+import {
+    NavBar,
+    SimulatorContainer,
+    LeftLayoutContainer,
+    RightLayoutContainer,
+} from '@components/layout';
+import { GrayBox, Icon, Input, LoadingBox, MultipleTokenSelect } from '@components/ui';
+import { animations, colors, variables, types, styles } from '@config';
+import { formatUtils, validationUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { PoolItemInterface } from '../../config/types';
-import { FetchPoolsHook } from '../../hooks';
-import CardInfo from './components/CardInfo';
-import Overview from './components/LeftContainer/Overview';
+import { FetchSnapsForAddress } from '../../hooks';
+import RightContainer from './components/RightContainer';
+import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
+import { AllPoolsGlobal } from '@types';
+
+const Header = styled.div`
+    padding: 0 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: ${colors.BACKGROUND};
+    // border-bottom: 1px solid ${colors.STROKE_GREY};
+`;
+
+const LeftSubHeaderContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 10px 10px 10px;
+    margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
+    width: 100%;
+    height: 100%;
+    max-width: 620px;
+    align-self: center;
+    ${styles.scrollBarStyles};
+`;
+
+const HeaderContent = styled.div`
+    width: 100%;
+    max-width: 620px;
+    border-bottom: 1px solid ${colors.STROKE_GREY};
+`;
 
 const ExceptionWrapper = styled.div`
     display: flex;
@@ -46,36 +81,21 @@ const ErrorTextWrapper = styled(ExceptionWrapper)`
 `;
 
 const AddressWrapper = styled.div`
-    background-color: ${colors.BACKGROUND};
     width: 100%;
+    max-width: 620px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    border-radius: 5px;
     margin-top: 20px;
+    /* border-radius: 8px;
+    padding: 6px;
+    background-color: ${colors.BACKGROUND_DARK}; */
 `;
 
 const AddressLabel = styled.div`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     padding-left: 5px;
-`;
-
-const LeftWrapper = styled.div`
-    width: 48%;
-    padding: 0px 40px 20px 0;
-    @media (max-width: 1100px) {
-        width: 100%;
-        padding: 20px;
-    }
-`;
-
-const RightWrapper = styled.div`
-    padding: 40px 0px 20px 40px;
-    width: 52%;
-    background-color: ${colors.BACKGROUND};
-    @media (max-width: 1100px) {
-        width: 100%;
-        padding: 20px;
-    }
+    color: ${colors.FONT_MEDIUM};
 `;
 
 const CardInfoWrapper = styled.div`
@@ -108,8 +128,9 @@ const MultipleSelectWrapper = styled.div`
 const PoolSelectLabel = styled(SectionLabel)``;
 
 const OverviewWrapper = styled.div`
-    margin: 20px auto 25px auto;
-    padding: 20px 15px;
+    margin: 20px 0 30px 0;
+    padding: 20px 20px;
+    width: 100%;
 `;
 
 const InactivePoolWarning = styled.div`
@@ -120,16 +141,30 @@ const InactivePoolWarning = styled.div`
     background-color: #f7f4ff;
     border: 1px solid #baa6f9;
     color: #673df1;
+    display: flex;
 `;
 
-const buildPoolOption = (pool: PoolItemInterface) => {
+const WarningText = styled.div`
+    margin-left: 5px;
+`;
+
+const SimulationBoxWrapper = styled.div`
+    /* background-color: ${colors.WHITE}; */
+    background-color: ${colors.BACKGROUND_DARK};
+    padding: 28px;
+    border-radius: 10px;
+    width: 100%;
+    /* border: 1px solid ${colors.STROKE_GREY}; */
+`;
+
+const buildPoolOption = (pool: types.PoolItem) => {
     if (pool) {
-        const tokens: any = pool.tokens;
+        const tokens: any = pool.pooledTokens;
         let value = { poolId: pool.poolId, tokens: new Array(tokens.length) };
         let label = '';
 
         tokens.forEach((token, i) => {
-            let tokenWeight = mathUtils.getFormattedPercentageValue(pool.tokenWeights[i], true);
+            let tokenWeight = formatUtils.getFormattedPercentageValue(token.weight, true);
             label = label + ` ${token.symbol.toUpperCase()} ${tokenWeight},`;
             value.tokens[i] = token.symbol;
         });
@@ -163,7 +198,7 @@ const getInitialPriceCoeffs = (tokens: any) => {
 };
 
 const Simulator = (props: RouteComponentProps<any>) => {
-    const allPools = useSelector(state => state.allPools);
+    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const dispatch = useDispatch();
 
@@ -171,12 +206,36 @@ const Simulator = (props: RouteComponentProps<any>) => {
         props.match.params.address ? props.match.params.address : '',
     );
 
-    const [simulatedPriceCoefficients, setSimulatedPriceCoefficients]: any = useState(
-        allPools[selectedPoolId] ? getInitialPriceCoeffs(allPools[selectedPoolId].tokens) : [],
+    const handleAddressChange = inputAddr => {
+        // show in the input whatever user typed in, even if it's not a valid ETH address
+        setInputAddress(inputAddr);
+
+        // trim and lowercase the address
+        const formattedAddress = inputAddr.trim().toLowerCase();
+        if (validationUtils.isValidEthereumAddress(formattedAddress)) {
+            fetchData(formattedAddress);
+            // change the url so that the user fetches data for the same address when refreshing the page
+            props.history.push({
+                pathname: `/simulator/${formattedAddress}`,
+            });
+        }
+    };
+
+    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchSnapsForAddress(
+        props.match.params.address ? props.match.params.address : '',
     );
 
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchPoolsHook(
-        props.match.params.address ? props.match.params.address : '',
+    // SIMULATOR FUNCTIONS
+    const [simulatedPriceCoefficients, setSimulatedPriceCoefficients]: any = useState(
+        allPools[selectedPoolId]
+            ? getInitialPriceCoeffs(allPools[selectedPoolId].pooledTokens)
+            : [],
+    );
+
+    const [sliderDefaultCoeffs, setSliderDefaultCoeffs]: any = useState(
+        allPools[selectedPoolId]
+            ? getInitialPriceCoeffs(allPools[selectedPoolId].pooledTokens)
+            : [],
     );
 
     const setNewPrices = (newValue, index) => {
@@ -185,23 +244,17 @@ const Simulator = (props: RouteComponentProps<any>) => {
         setSimulatedPriceCoefficients(coefficientsArrCopy);
     };
 
-    const handleAddressChange = inputAddr => {
-        // show in the input whatever user typed in, even if it's not a valid ETH address
-        setInputAddress(inputAddr);
-
-        if (validationUtils.isValidEthereumAddress(inputAddr)) {
-            fetchData(inputAddr);
-            // change the url so that the user fetches data for the same address when refreshing the page
-            props.history.push({
-                pathname: `/simulator/${inputAddr}`,
-            });
-        }
+    const setNewDefaultCoeffs = (newValue, index) => {
+        const coefficientsArrCopy = [...simulatedPriceCoefficients];
+        coefficientsArrCopy[index] = newValue;
+        setSliderDefaultCoeffs(coefficientsArrCopy);
     };
 
     useEffect(() => {
         if (allPools[selectedPoolId]) {
             const newPool = allPools[selectedPoolId];
-            setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.tokens));
+            setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.pooledTokens));
+            setSliderDefaultCoeffs(getInitialPriceCoeffs(newPool.pooledTokens));
         }
     }, [selectedPoolId]);
 
@@ -239,25 +292,31 @@ const Simulator = (props: RouteComponentProps<any>) => {
 
     return (
         <SimulatorContainer>
-            <LeftWrapper>
-                <NavBar></NavBar>
-                <AddressWrapper>
-                    <Input
-                        textIndent={[70, 0]}
-                        innerAddon={<AddressLabel>Address:</AddressLabel>}
-                        addonAlign="left"
-                        placeholder="Enter valid Ethereum address"
-                        value={inputAddress}
-                        onChange={event => {
-                            handleAddressChange(event.target.value);
-                        }}
-                    />
-                </AddressWrapper>
+            <LeftLayoutContainer backgroundColor={colors.BACKGROUND}>
+                <Header>
+                    <HeaderContent>
+                        <NavBar></NavBar>
+                    </HeaderContent>
+                </Header>
+                <LeftSubHeaderContent>
+                    <AddressWrapper>
+                        <Input
+                            // noBorder
+                            textIndent={[70, 0]}
+                            innerAddon={<AddressLabel>Address:</AddressLabel>}
+                            addonAlign="left"
+                            placeholder="Enter valid Ethereum address"
+                            value={inputAddress}
+                            onChange={event => {
+                                handleAddressChange(event.target.value);
+                            }}
+                            useWhiteBackground
+                        />
+                    </AddressWrapper>
 
-                {exceptionContent ? (
-                    exceptionContent
-                ) : allPools ? (
-                    <>
+                    {exceptionContent ? (
+                        exceptionContent
+                    ) : Object.keys(allPools).length > 0 ? (
                         <ChoosePoolWrapper>
                             {/* TODO add Exchange icon (Balancer/Uniswap) */}
                             <PoolSelectLabel>Choose pool:</PoolSelectLabel>
@@ -273,36 +332,49 @@ const Simulator = (props: RouteComponentProps<any>) => {
                                             });
                                     }}
                                     selected={buildPoolOption(allPools[selectedPoolId])}
+                                    useWhiteBackground
+                                    useDarkBorder
                                 ></MultipleTokenSelect>
                             </MultipleSelectWrapper>
                         </ChoosePoolWrapper>
-                    </>
-                ) : null}
-                {allPools[selectedPoolId] && (
-                    <>
-                        {!allPools[selectedPoolId].isActive ? (
-                            <InactivePoolWarning>
-                                You have already withdrawn all funds from this pool. Below you see
-                                prices and balances at the time of your final withdrawal.
-                            </InactivePoolWarning>
-                        ) : null}
-                        <OverviewWrapper>
-                            <Overview />
-                        </OverviewWrapper>
-                        <GrayBox>
-                            <SimulationBox
-                                onChange={setNewPrices}
-                                simulatedCoefficients={simulatedPriceCoefficients}
-                            />
-                        </GrayBox>
-                    </>
-                )}
-            </LeftWrapper>
-            <RightWrapper>
-                <CardInfoWrapper>
-                    <CardInfo simulatedCoefficients={simulatedPriceCoefficients} />
-                </CardInfoWrapper>
-            </RightWrapper>
+                    ) : null}
+
+                    {allPools[selectedPoolId] && (
+                        <>
+                            {!allPools[selectedPoolId].isActive ? (
+                                <InactivePoolWarning>
+                                    <Icon icon="info" color={'#673df1'} size={18} />
+                                    <WarningText>
+                                        You have already withdrawn all funds from this pool. Below
+                                        you see prices and balances at the time of your withdrawal.
+                                    </WarningText>
+                                </InactivePoolWarning>
+                            ) : null}
+                        </>
+                    )}
+
+                    {allPools[selectedPoolId] && !exceptionContent && (
+                        <>
+                            <OverviewWrapper>
+                                <BalanceOverview />
+                            </OverviewWrapper>
+                            <SimulationBoxWrapper>
+                                <SimulationBox
+                                    onChange={setNewPrices}
+                                    onNewDefaultValue={setNewDefaultCoeffs}
+                                    simulatedCoefficients={simulatedPriceCoefficients}
+                                />
+                            </SimulationBoxWrapper>
+                        </>
+                    )}
+                </LeftSubHeaderContent>
+            </LeftLayoutContainer>
+            <RightLayoutContainer>
+                <RightContainer
+                    simulatedCoefficients={simulatedPriceCoefficients}
+                    sliderDefaultCoeffs={sliderDefaultCoeffs}
+                />
+            </RightLayoutContainer>
         </SimulatorContainer>
     );
 };

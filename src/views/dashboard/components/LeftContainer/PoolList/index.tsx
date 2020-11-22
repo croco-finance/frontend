@@ -8,6 +8,7 @@ import PoolItem from '../PoolItem';
 const Wrapper = styled.div`
     padding-left: 0;
     margin-bottom: 65px;
+    width: 100%;
 `;
 
 const ActiveExchange = styled.div`
@@ -65,7 +66,7 @@ const PoolList = () => {
                             </ActiveExchange>
                         </Exchange>
                         <Value>Value</Value>
-                        <Gains>Rewards</Gains>
+                        <Gains>Reward/Loss</Gains>
                     </Header>
                     {activePoolIds.map(poolId => {
                         return <PoolItem key={poolId} poolId={poolId} />;
@@ -81,8 +82,8 @@ const PoolList = () => {
                                 Past positions
                             </InactiveHeadline>
                         </Exchange>
-                        <Value> </Value>
-                        <Gains> </Gains>
+                        <Value>{activePoolIds.length === 0 ? 'Value' : ''}</Value>
+                        <Gains>{activePoolIds.length === 0 ? 'Reward/Loss' : ''}</Gains>
                     </Header>
 
                     {inactivePoolIds.map(poolId => {

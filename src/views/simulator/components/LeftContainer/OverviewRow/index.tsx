@@ -13,7 +13,7 @@ const leftAlignedStyles = css`
 `;
 
 interface RowContentProps {
-    color?: 'light' | 'dark';
+    color?: 'light' | 'medium' | 'dark';
     textAlign?: 'left' | 'right';
 }
 
@@ -21,13 +21,29 @@ interface RowContentProps {
 const Col = styled.div<RowContentProps>`
     display: flex;
     align-items: center;
-    color: ${props => (props.color === 'light' ? `${colors.FONT_MEDIUM}` : `${colors.FONT_DARK}`)};
+
+    ${props => {
+        switch (props.color) {
+            case 'light':
+                return css`
+                    color: ${colors.FONT_LIGHT};
+                `;
+            case 'medium':
+                return css`
+                    color: ${colors.FONT_MEDIUM};
+                `;
+            case 'dark':
+                return css`
+                    color: ${colors.FONT_DARK};
+                `;
+        }
+    }}
 
     /* content alignment styles */
     ${props =>
         props.textAlign === 'left'
             ? leftAlignedStyles
-            : rightAlignedStyles}/* justify-content: center; */
+            : rightAlignedStyles} /* justify-content: center; */
 `;
 
 interface Props {
@@ -35,7 +51,7 @@ interface Props {
     secondColumn?: React.ReactNode;
     thirdColumn?: React.ReactNode;
     fourthColumn?: React.ReactNode;
-    color?: 'light' | 'dark';
+    color?: 'light' | 'medium' | 'dark';
 }
 
 const OverviewRow = ({

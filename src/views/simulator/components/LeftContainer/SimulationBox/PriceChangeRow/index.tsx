@@ -57,6 +57,10 @@ const Col = styled.div<RowContentProps>`
     }
 `;
 
+const TokenNameCol = styled(Col)<RowContentProps>`
+    max-width: 90px;
+`;
+
 interface Props {
     firstColumn?: React.ReactNode;
     secondColumn?: React.ReactNode;
@@ -65,12 +69,14 @@ interface Props {
     color?: 'light' | 'dark';
     onSliderChange?: any;
     defaultSliderValue?: number;
+    onDefaultSliderValueChange?: any;
 }
 
 const PriceChangeRow = ({
     firstColumn,
     fourthColumn,
     onSliderChange,
+    onDefaultSliderValueChange,
     defaultSliderValue = 1,
     color = 'light',
 }: Props) => {
@@ -92,17 +98,17 @@ const PriceChangeRow = ({
         // }
         handleSliderChange(typedValueFloat);
         setSliderMidValue(typedValueFloat);
+        onDefaultSliderValueChange(typedValueFloat);
     };
 
     return (
         <>
-            <Col textAlign="left" color={color}>
+            <TokenNameCol textAlign="left" color={color}>
                 {firstColumn}
-            </Col>
+            </TokenNameCol>
             <Col textAlign="left" color={color}>
                 <InputWrapper>
                     <Input
-                        noBorder
                         useWhiteBackground
                         useDarkBorder
                         variant="small"
@@ -131,7 +137,7 @@ const PriceChangeRow = ({
                     </SliderRightLabel>
                 </SliderWrapper>
             </Col>
-            <Col textAlign="right" color={'light'}>
+            <Col textAlign="right" color={'dark'}>
                 {fourthColumn}
             </Col>
         </>

@@ -1,35 +1,149 @@
-export type PoolId = string;
-
-export type UniswapName = 'UNI_V2' | 'UNI_V1' | 'Uniswap' | 'uniswap';
-export type BalancerName = 'BALANCER';
-
-export interface InputInterface {
-    address: string; // '0x2bb665722a122dd8a80c9d8625430fa1bcc6c3fc'
-    exchange: string;
+export enum Exchange {
+    UNI_V2 = 'UNI_V2',
+    BALANCER = 'BALANCER',
 }
 
-export interface PoolItemInterface {
-    exchange: string;
-    hodlReturnUsd: number; // difference in HODL value now and at the beginning
-    netReturnUsd: number; // difference in pool value now and at the beginning
-    dexReturnUsd: number; // fees - impermanent_loss - tx_cost
-    feesUsd: number; // total user's fee gains
-    impLossRel: number | undefined; //  None in case of changes in lp balance
-    impLossUsd: number; // impermanent loss
-    txCostEth: number | undefined; // v ETH
-    endBalanceUsd: number;
+export type DexBaseUrls = { [key in keyof typeof Exchange]: string };
+export type DexToPoolIdMap = { [key in keyof typeof Exchange]: Array<string> };
+
+export interface Token {
+    symbol: string;
+    name: string;
+    contractAddress: string;
+    platform: string;
+}
+
+export interface PoolToken {
+    priceUsd: number;
+    reserve: number;
+    weight: number;
+    token: Token;
+}
+
+export interface YieldReward {
+    token: Token;
+    amount: number;
+    price: number;
+}
+
+export interface Snap {
+    block: number;
+    ethPrice: number;
+    exchange: Exchange;
+    liquidityTokenBalance: number;
+    liquidityTokenTotalSupply: number;
+    timestamp: number;
+    txCostEth: number;
+    tokens: PoolToken[];
+    txHash: string | null;
+    yieldReward: YieldReward | null;
+    staked: boolean;
+}
+
+export interface SnapStructure {
+    [key: string]: Snap[];
+}
+
+export interface IntervalStats {
+    timestampStart: number;
+    timestampEnd: number;
+    tokenBalancesStart: any;
+    tokenBalancesEnd: any;
+    feesTokenAmounts: any;
+    feesUsdEndPrice: number;
+    tokenDiffNoFees: any;
+    userPoolShareStart: number;
+    userPoolShareEnd: number;
+    tokenPricesStart: any;
+    tokenPricesEnd: any;
+    ethPriceStart: number;
+    ethPriceEnd: number;
+    txCostEthStart: number;
+    txCostEthEnd: number;
+    yieldTokenAmount: number;
+    yieldTokenPriceStart: number | null;
+    yieldTokenPriceEnd: number | null;
+    impLossUsd: number;
+    // strategies
+    hodlValueUsd: number;
+    poolValueUsdStart: number;
+    poolValueUsdEnd: number;
+    ethHodlValueUsd: number;
+    // TODO Deposits / Withdrawals
+}
+
+export interface CumulativeStats {
+    poolValueUsd: any;
+    tokenBalances: any;
+    feesTokenAmounts: any;
+    feesUsd: number;
+    yieldTokenAmount: number;
+    yieldUsd: number;
+    tokenPricesEnd: any;
+    yieldTokenPriceEnd: number | null;
+    txCostEth: number;
+    txCostUsd: number;
+    ethPriceEnd: number;
+    timestampEnd: number;
+    // average rewards since last deposit -> average rewards in last snapshot
+}
+
+export interface Pool {
+    exchange: Exchange;
     userAddr: string;
-    poolId: string; // pool smart contract address
-    tokens: Array<{ [key: string]: {} }>;
+    poolId: string;
+    isActive: boolean;
+}
+
+export interface PoolItem {
+    exchange: Exchange;
+    poolId: string;
+    userAddr: string;
+    isActive: boolean;
+    pooledTokens: Array<GenericPooledTokenInfo>;
+    yieldToken: Token | null;
+    hasYieldReward: boolean;
+    timestampEnd: number;
+    intervalStats: Array<IntervalStats>;
+    cumulativeStats: CumulativeStats;
     tokenWeights: Array<number>;
-    endTokenBalances: Array<number>; // User token balances
-    endTokenPricesUsd: Array<number>;
-    start: number;
-    end: number;
-    tokenPriceUsd: Array<number>;
-    tokenBalanceDiffNoFees: Array<number>;
-    hodlReturnEth: number;
-    netReturnEth: number;
-    feesEth: number;
-    endBalanceEth: number;
+}
+
+export interface YieldTokenInfo {
+    price: number;
+    amount: number;
+    token: Token;
+}
+
+export interface GenericPooledTokenInfo extends Token {
+    weight: number;
+}
+
+export type AllPoolsGlobal = { [key: string]: PoolItem };
+
+export interface GraphData {
+    lastTimestamp: number;
+    timestampPrev: number | null;
+    timestamp: number;
+    poolValues: Array<number | undefined>; // undefined has to be here because of recharts library
+    poolValuePrev: number | undefined;
+    feesUsd: number;
+    yieldUsd: number;
+    txCostUsd: number;
+    impLossUsd: number;
+}
+
+export interface SummaryStats {
+    valueLockedUsd: any;
+    pooledTokenSymbols: Array<string>;
+    pooledTokenAmounts: Array<number>;
+    yieldTokenSymbols: Array<string>;
+    yieldTokenAmounts: Array<number>;
+    feesTokenSymbols: Array<string>;
+    feesTokenAmounts: Array<number>;
+    feesUsd: number;
+    yieldUsd: number;
+    txCostEth: number;
+    txCostUsd: number;
+    // average rewards since last deposit -> average rewards in last snapshot
 }

@@ -1,61 +1,31 @@
-const firebase = require('firebase/app');
-require('firebase/auth');
-require('firebase/database');
-
-interface Snap {
-    block: number,
-    ethPrice: number,
-    exchange: Exchange,
-    liquidityTokenBalance: number,
-    liquidityTokenTotalSupply: number,
-    timestamp: number,
-    txCostEth: number,
-    tokens: PoolToken[],
-    txHash: string | null,
-    yieldReward: YieldReward | null,
-}
-
-enum Exchange {
-    UNI_V2 = 'UNI_V2',
-    BALANCER = 'BALANCER',
-}
-
-interface PoolToken {
-    priceUsd: number,
-    reserve: number,
-    weight: number,
-    token: Token,
-}
-
-interface Token {
-    symbol: string
-    name: string,
-    contractAddress: string,
-    platform: string,
-}
-
-interface YieldReward {
-    'token': Token,
-    'amount': number,
-    'price': number
-}
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
+import { PoolToken, Snap, SnapStructure, Token, YieldReward } from '@types';
 
 const balToken: Token = {
-    'symbol': 'BAL',
-    'name': 'Balancer',
-    'contractAddress': '0xba100000625a3754423978a60c9317c58a424e3d',
-    'platform': 'ethereum',
+    symbol: 'BAL',
+    name: 'Balancer',
+    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+    platform: 'ethereum',
 };
 
 const uniToken: Token = {
-    'symbol': 'UNI',
-    'name': 'Uniswap',
-    'contractAddress': '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
-    'platform': 'ethereum',
+    symbol: 'UNI',
+    name: 'Uniswap',
+    contractAddress: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+    platform: 'ethereum',
 };
 
-interface SnapStructure {
-    [key: string]: Snap[]
+const uniRewardedPoolIds: string[] = [
+    '0xbb2b8038a1640196fbe3e38816f3e67cba72d940',
+    '0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc',
+    '0x0d4a11d5eeaac28ec3f61d100daf4d40471f1852',
+    '0xa478c2975ab1ea89e8196811f51a7b7ade33eb11',
+];
+
+interface BalRewardSnapStructure {
+    [key: number]: Snap;
 }
 
 async function getSnaps(address: string): Promise<SnapStructure | null> {
@@ -65,7 +35,9 @@ async function getSnaps(address: string): Promise<SnapStructure | null> {
         projectId: 'croco-finance',
     };
 
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     let ref = firebase.database().ref(`users/${address}`);
     let snaps: SnapStructure | null = null;
     const payload = await ref.once('value');
@@ -77,23 +49,18 @@ async function getSnaps(address: string): Promise<SnapStructure | null> {
             if (lastSnap.liquidityTokenBalance !== 0) {
                 let currentSnap = await getCurrentSnap(poolId, lastSnap.liquidityTokenBalance);
                 if (currentSnap !== null) {
-                    poolSnaps.push(parseSnap(currentSnap));
+                    poolSnaps.push(currentSnap);
                 }
             }
         }
-        distributeBalYields(userData['BALANCER']['yields'], snaps);
-        distributeUniYields(userData['UNI_V2']['yields'], snaps);
-        // Set yieldReward objects to null for snaps with 0 yieldReward
-        for (const [_, poolSnaps] of Object.entries(snaps)) {
-            for (const snap of poolSnaps) {
-                if (snap.yieldReward !== null && snap.yieldReward.amount === 0) {
-                    snap.yieldReward = null;
-                }
-            }
+        if (userData.hasOwnProperty('BALANCER') && userData['BALANCER'].hasOwnProperty('yields')) {
+            distributeBalYields(userData['BALANCER']['yields'], snaps);
+        }
+        if (userData.hasOwnProperty('UNI_V2') && userData['UNI_V2'].hasOwnProperty('yields')) {
+            distributeUniYields(userData['UNI_V2']['yields'], snaps);
         }
     }
-    // The following is necessary so that the process ends
-    firebase.database().goOffline();
+
     return snaps;
 }
 
@@ -110,11 +77,29 @@ function sortAndTransformSnaps(userData: any): SnapStructure {
                     poolSnaps.push(parseSnap(snap));
                 }
                 poolSnaps.sort((a: any, b: any) => parseFloat(a.block) - parseFloat(b.block));
+                if (uniRewardedPoolIds.includes(poolId)) {
+                    filter0SameBlockSnaps(poolSnaps);
+                }
                 snaps[poolId] = poolSnaps;
             }
         }
     }
     return snaps;
+}
+
+function filter0SameBlockSnaps(snaps: Snap[]) {
+    for (let i = 0; i < snaps.length - 1; i++) {
+        if (snaps[i].block === snaps[i + 1].block && snaps[i].staked !== snaps[i + 1].staked) {
+            if (snaps[i].liquidityTokenBalance === 0) {
+                snaps.splice(i, 1);
+            } else if (snaps[i + 1].liquidityTokenBalance === 0) {
+                snaps.splice(i + 1, 1);
+            } else {
+                // TODO: send log to firebase along with address
+                console.log('WARNING: incomplete stake edge case occured');
+            }
+        }
+    }
 }
 
 function parseSnap(snap: any): Snap {
@@ -129,10 +114,10 @@ function parseSnap(snap: any): Snap {
     const poolTokens: PoolToken[] = [];
     for (const token of snap['tokens']) {
         poolTokens.push({
-            'priceUsd': parseFloat(token['priceUsd']),
-            'reserve': parseFloat(token['reserve']),
-            'weight': parseFloat(token['weight']),
-            'token': token['token'],
+            priceUsd: parseFloat(token['priceUsd']),
+            reserve: parseFloat(token['reserve']),
+            weight: parseFloat(token['weight']),
+            token: token['token'],
         });
     }
     return {
@@ -142,10 +127,11 @@ function parseSnap(snap: any): Snap {
         liquidityTokenBalance: parseFloat(snap['liquidityTokenBalance']),
         liquidityTokenTotalSupply: parseFloat(snap['liquidityTokenTotalSupply']),
         timestamp: snap['timestamp'],
-        txCostEth: snap.hasOwnProperty('txCostEth') ? parseFloat(snap['txCostEth']) : 0.,
+        txCostEth: snap.hasOwnProperty('txCostEth') ? parseFloat(snap['txCostEth']) : 0,
         tokens: poolTokens,
         txHash: snap.hasOwnProperty('txHash') ? snap['txHash'] : null,
         yieldReward: yieldReward,
+        staked: snap.hasOwnProperty('staked') ? snap['staked'] : false,
     };
 }
 
@@ -166,38 +152,100 @@ function distributeBalYields(yields: object, snaps: SnapStructure) {
     for (const yieldId of Object.keys(yields)) {
         // @ts-ignore
         const yield_ = yields[yieldId];
-        const eligibleSnaps: Snap[] = [];
+        const eligibleSnaps: BalRewardSnapStructure = {};
         const periodStart = yield_['timestamp'] - 691200; // 691200 = 8 * 24 * 60 * 60 -> 8 days
         const periodEnd = yield_['timestamp'];
         // Get all the Balancer snaps from the period
+        let eligibleSnapsUsdValue = 0;
         Object.values(snaps).forEach(poolSnaps => {
             if (poolSnaps[0].exchange === 'BALANCER') {
                 for (let i = 0; i < poolSnaps.length - 1; i++) {
-                    if (!(poolSnaps[i].timestamp > periodEnd || poolSnaps[i + 1].timestamp < periodStart)) {
-                        eligibleSnaps.push(poolSnaps[i]);
+                    if (
+                        !(
+                            poolSnaps[i].timestamp > periodEnd ||
+                            poolSnaps[i + 1].timestamp < periodStart
+                        )
+                    ) {
+                        const snapUsdValue = getSnapUsdValue(poolSnaps[i]);
+                        eligibleSnapsUsdValue += snapUsdValue;
+                        if (i + 1 < poolSnaps.length) {
+                            eligibleSnaps[snapUsdValue] = poolSnaps[i + 1];
+                        } else {
+                            eligibleSnaps[snapUsdValue] = poolSnaps[i];
+                            // TODO: send log to firebase along with address
+                            console.log('WARNING: BAL no i+1 snap');
+                        }
+                        break;
                     }
                 }
             }
         });
-        if (eligibleSnaps.length > 0) {
-            let yieldReward = parseFloat(yield_['amount']);
-            for (const snap of eligibleSnaps) {
+        if (eligibleSnapsUsdValue > 0) {
+            let yieldRewardPerUsd = parseFloat(yield_['amount']) / eligibleSnapsUsdValue;
+            for (const [snapUsdValue, snap] of Object.entries(eligibleSnaps)) {
                 if (snap.yieldReward !== null) {
-                    snap.yieldReward.amount = yieldReward / eligibleSnaps.length;
+                    // @ts-ignore
+                    snap.yieldReward.amount += snapUsdValue * yieldRewardPerUsd;
                 } else {
-                    // TODO: send log to firebase
-                    console.log('ERROR: null reward object for snap eligible for yield reward');
+                    // TODO: send log to firebase along with address
+                    console.log(
+                        'ERROR: null reward object for snap eligible for Balancer yield reward',
+                    );
                 }
             }
         } else {
-            // TODO: send log to firebase
-            console.log('WARNING: 0 length snaps');
+            // TODO: send log to firebase along with address
+            console.log('ERROR: zero eligible snaps USD value');
         }
     }
 }
 
+function getSnapUsdValue(snap: Snap): number {
+    let reservesUsd = 0;
+    for (const token of snap.tokens) {
+        reservesUsd += token.reserve * token.priceUsd;
+    }
+    return (reservesUsd * snap.liquidityTokenBalance) / snap.liquidityTokenTotalSupply;
+}
+
 function distributeUniYields(yields: object, snaps: SnapStructure) {
-    // TODO
+    for (const yieldId of Object.keys(yields)) {
+        // @ts-ignore
+        const yield_ = yields[yieldId];
+        // I allocate the reward to the snap whose block number is smaller and closest to the reward's
+        let poolSnaps = snaps[yield_['poolId']];
+        let eligibleSnapIndex: number | null = null;
+        for (let i = 0; i < poolSnaps.length; i++) {
+            let snap = poolSnaps[i];
+            if (snap.staked) {
+                if (eligibleSnapIndex === null) {
+                    if (snap.block < yield_['block']) {
+                        eligibleSnapIndex = i;
+                    }
+                } else if (
+                    snap.block < yield_['block'] &&
+                    poolSnaps[eligibleSnapIndex].block < snap.block
+                ) {
+                    eligibleSnapIndex = i;
+                }
+            }
+        }
+        if (eligibleSnapIndex !== null) {
+            let eligibleSnap =
+                eligibleSnapIndex + 1 < poolSnaps.length
+                    ? poolSnaps[eligibleSnapIndex + 1]
+                    : poolSnaps[eligibleSnapIndex];
+            if (eligibleSnap.yieldReward !== null) {
+                eligibleSnap.yieldReward.amount += parseFloat(yield_['amount']);
+            } else {
+                // TODO: send log to firebase along with address
+                console.log('ERROR: null reward object in snap eligible for Uni yield reward');
+            }
+        } else {
+            // TODO: send log to firebase along with address
+            console.log('ERROR: no eligible snap found for a given Uni yield reward');
+        }
+    }
 }
 
 export { getSnaps };

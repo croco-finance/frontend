@@ -1,47 +1,25 @@
 import * as actionTypes from '@actionTypes';
 import { FiatValue } from '@components/ui';
 import { colors, variables } from '@config';
-import { mathUtils } from '@utils';
+import { mathUtils, statsComputations } from '@utils';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-
-const Wrapper = styled.div<{ isSelected: boolean }>`
-    display: flex;
-    align-items: center;
-    background-color: inherit;
-    border-radius: 5px;
-    background-color: ${colors.BACKGROUND};
-    padding: 10px;
-    flex: 0 0 10em 25em;
-    min-height: 70px;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    cursor: pointer;
-    transition: 0.1s;
-    outline: 0;
-    /* border: 1px solid ${colors.BACKGROUND}; */
-    /* background-color: ${props => (props.isSelected ? '#c5e3ff' : colors.BACKGROUND)}; */
-    background-color: ${props => (props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND)};
-
-    &:hover {
-        /* background-color: ${props => (props.isSelected ? '#c5e3ff' : colors.BACKGROUND)}; */
-        background-color: ${props =>
-            props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.BACKGROUND};
-        border-color: ${colors.BACKGROUND_DARK};
-    }
-`;
+import PoolItemCard from '../PoolItemCard';
+import { AllPoolsGlobal } from '@types';
 
 const Item = styled.div`
     display: flex;
     flex: 0 0 33%;
     justify-content: center;
-    color: ${colors.FONT_DARK};
+    align-items: center;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 
-    @media (max-width: 520px) {
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.SMALL};
+        flex-shrink: 1; // allow to shrink if necessary
     }
 `;
-
 const Value = styled(Item)``;
 const Gains = styled(Item)``;
 
@@ -52,28 +30,43 @@ const ExchangeWrapper = styled(Item)`
     padding-right: 10px;
 `;
 
-const ExchangeTitle = styled.div`
+const ExchangeTitle = styled.div<{ isSelected: boolean }>`
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     margin-left: 5px;
+    color: ${props => (props.isSelected ? colors.BLUE : colors.FONT_DARK)};
+`;
+
+const StyledPoolItemCard = styled(PoolItemCard)<{ isSelected: boolean }>`
+    background-color: ${props =>
+        props.isSelected ? colors.BACKGROUND_BLUE : colors.BACKGROUND_DARK};
+    border: 1px solid;
+    border-color: ${props => (props.isSelected ? colors.STROKE_BLUE : colors.BACKGROUND_DARK)};
+
+    &:hover {
+        background-color: ${props =>
+            props.isSelected ? colors.BACKGROUND_BLUE : colors.STROKE_GREY};
+
+        border-color: ${props => (props.isSelected ? colors.STROKE_BLUE : colors.STROKE_GREY)};
+    }
 `;
 
 interface Props {
-    headline: string;
+    headline: React.ReactNode;
     value: number;
     gainsAbsolute: number;
     roi: number;
 }
 
-const SummaryItem = ({ headline, value, gainsAbsolute, roi }: Props) => {
+const SummaryItem = ({ headline }: Props) => {
     const dispatch = useDispatch();
-    const allPools = useSelector(state => state.allPools);
+    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const activePoolIds = useSelector(state => state.activePoolIds);
 
-    const poolsSummaryInfo: any = mathUtils.getPoolsSummaryObject(allPools, activePoolIds);
+    const poolsSummaryInfo = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
 
-    const { feesUsd, endBalanceUsd, yieldRewardUsd } = poolsSummaryInfo;
+    const { feesUsd, yieldUsd, txCostUsd, valueLockedUsd } = poolsSummaryInfo;
 
     let isSelected = selectedPoolId === 'all';
 
@@ -83,18 +76,20 @@ const SummaryItem = ({ headline, value, gainsAbsolute, roi }: Props) => {
     };
 
     return (
-        <Wrapper onClick={event => handleOnClick(event, 'all')} isSelected={isSelected}>
-            <ExchangeWrapper>
-                {/* <TokenLogo symbol={exchange} size={26} /> */}
-                <ExchangeTitle>{headline}</ExchangeTitle>
-            </ExchangeWrapper>
-            <Value>
-                <FiatValue value={endBalanceUsd} />
-            </Value>
-            <Gains>
-                <FiatValue value={feesUsd + yieldRewardUsd} usePlusSymbol />
-            </Gains>
-        </Wrapper>
+        <div onClick={event => handleOnClick(event, 'all')}>
+            <StyledPoolItemCard isSelected={isSelected}>
+                <ExchangeWrapper>
+                    {/* <TokenLogo symbol={exchange} size={26} /> */}
+                    <ExchangeTitle isSelected={isSelected}>{headline}</ExchangeTitle>
+                </ExchangeWrapper>
+                <Value>
+                    <FiatValue value={valueLockedUsd} />
+                </Value>
+                <Gains>
+                    <FiatValue value={feesUsd + yieldUsd - txCostUsd} usePlusSymbol />
+                </Gains>
+            </StyledPoolItemCard>
+        </div>
     );
 };
 

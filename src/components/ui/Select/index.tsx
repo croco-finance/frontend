@@ -10,6 +10,8 @@ const selectStyle = (
     usePointerCursor: boolean,
     fontFamily: string,
     noBorder: boolean,
+    useWhiteBackground: boolean,
+    useDarkBorder: boolean,
 ) => ({
     singleValue: (base: Record<string, any>) => ({
         ...base,
@@ -38,14 +40,16 @@ const selectStyle = (
             height: variant === 'small' ? '36px' : '48px',
             borderRadius: '4px',
             borderWidth: noBorder ? 0 : '2px',
-            borderColor: colors.BACKGROUND,
+            borderColor: useDarkBorder ? colors.BACKGROUND_DARK : colors.BACKGROUND,
             boxShadow: 'none',
-            backgroundColor: colors.BACKGROUND,
+            backgroundColor: useWhiteBackground ? 'white' : colors.BACKGROUND,
             transition: 'border 500ms ease-out',
             '&:hover, &:focus': {
                 cursor: 'pointer',
                 borderRadius: '4px',
-                borderColor: colors.PASTEL_BLUE_MEDIUM,
+                // borderColor: colors.PASTEL_BLUE_MEDIUM,
+                borderColor: '#96b7ff',
+                backgroundColor: ' #f7f9ff',
             },
         };
     },
@@ -56,10 +60,11 @@ const selectStyle = (
         ...base,
         display: !withDropdownIndicator || isDisabled ? 'none' : 'flex',
         alignItems: 'center',
-        color: colors.BACKGROUND,
+        color: colors.FONT_LIGHT,
         path: '',
         '&:hover': {
-            color: colors.FONT_DARK,
+            // color: colors.FONT_DARK,
+            color: '#96b7ff',
         },
     }),
     menu: (base: Record<string, any>) => ({
@@ -119,6 +124,8 @@ interface Props extends Omit<SelectProps, 'components'> {
     usePointerCursor?: boolean;
     fontFamily?: string;
     noBorder?: boolean;
+    useWhiteBackground?: boolean;
+    useDarkBorder?: boolean;
 }
 
 const Select = ({
@@ -131,6 +138,8 @@ const Select = ({
     variant = 'large',
     fontFamily = variables.FONT_FAMILY.OPEN_SANS,
     noBorder = false,
+    useWhiteBackground = false,
+    useDarkBorder = false,
     ...props
 }: Props) => {
     return (
@@ -143,6 +152,8 @@ const Select = ({
                     usePointerCursor,
                     fontFamily,
                     noBorder,
+                    useWhiteBackground,
+                    useDarkBorder,
                 )}
                 isSearchable={isSearchable}
                 {...props}

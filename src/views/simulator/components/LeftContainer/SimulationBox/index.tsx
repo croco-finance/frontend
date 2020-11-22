@@ -1,5 +1,5 @@
 import { FiatValue, TokenLogo } from '@components/ui';
-import { colors, variables } from '@config';
+import { colors, variables, types } from '@config';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -17,7 +17,7 @@ const GridWrapper = styled.div<{ rowsCount: number }>`
     flex-grow: 1;
     display: grid;
     grid-gap: ${GRID_GAP}px;
-    grid-template-columns: 100px minmax(100px, auto) minmax(120px, auto) minmax(110px, auto);
+    grid-template-columns: 110px minmax(100px, auto) minmax(120px, auto) minmax(110px, auto);
     grid-template-rows: ${props => `repeat(${props.rowsCount}, 55px)`};
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
@@ -28,22 +28,27 @@ const GridWrapper = styled.div<{ rowsCount: number }>`
 `;
 
 const Title = styled.div`
-    color: ${colors.FONT_MEDIUM};
+    color: ${colors.FONT_DARK};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 `;
 
-const SubTitle = styled.div`
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-`;
-
-const GridHeader = styled.div`
+const SubTitlesWrapper = styled.div`
     display: flex;
-    flex-grow: 1;
+    margin-bottom: 12px;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    color: ${colors.FONT_MEDIUM};
+    font-size: ${variables.FONT_SIZE.NORMAL};
     align-items: center;
+`;
+
+const SubTitleLeft = styled.div`
+    flex-grow: 1;
+`;
+
+const SubTitleRight = styled.div`
     justify-content: flex-end;
     color: ${colors.FONT_LIGHT};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
 const TokenWrapper = styled.div`
@@ -52,15 +57,25 @@ const TokenWrapper = styled.div`
 const TokenSymbol = styled.div`
     text-transform: uppercase;
     margin-left: 10px;
+    max-width: 70px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 interface Props {
     tokensPool?: any;
     onChange: any;
     simulatedCoefficients: any;
+    onNewDefaultValue: any;
 }
-const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) => {
-    const allPools = useSelector(state => state.allPools);
+const SimulationBox = ({
+    tokensPool,
+    onChange,
+    simulatedCoefficients,
+    onNewDefaultValue,
+}: Props) => {
+    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
     if (!allPools[selectedPoolId]) {
@@ -68,15 +83,19 @@ const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) =
     }
 
     const pool = allPools[selectedPoolId];
-    const { endTokenPricesUsd, tokens, poolId } = pool;
+    const { pooledTokens, poolId } = pool;
+    const { tokenPricesEnd } = pool.cumulativeStats;
 
     return (
         <Wrapper>
             <Title>Simulation Box</Title>
-            <SubTitle>Relative token price change</SubTitle>
-            <GridHeader>Simulated price</GridHeader>
-            <GridWrapper rowsCount={tokens.length}>
-                {tokens.map((token, i) => {
+            <SubTitlesWrapper>
+                <SubTitleLeft>Set tokens relative price change</SubTitleLeft>
+                <SubTitleRight>Simulated price</SubTitleRight>
+            </SubTitlesWrapper>
+
+            <GridWrapper rowsCount={pooledTokens.length}>
+                {pooledTokens.map((token, i) => {
                     const tokenSymbol = token.symbol;
                     return (
                         <PriceChangeRow
@@ -86,6 +105,7 @@ const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) =
                             onSliderChange={newValue => {
                                 onChange(newValue, i);
                             }}
+                            onDefaultSliderValueChange={newValue => onNewDefaultValue(newValue, i)}
                             firstColumn={
                                 <TokenWrapper>
                                     <TokenLogo symbol={tokenSymbol} size={22} />
@@ -93,9 +113,7 @@ const SimulationBox = ({ tokensPool, onChange, simulatedCoefficients }: Props) =
                                 </TokenWrapper>
                             }
                             fourthColumn={
-                                <FiatValue
-                                    value={endTokenPricesUsd[i] * simulatedCoefficients[i]}
-                                />
+                                <FiatValue value={tokenPricesEnd[i] * simulatedCoefficients[i]} />
                             }
                             color="dark"
                         />

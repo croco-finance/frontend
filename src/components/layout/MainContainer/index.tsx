@@ -5,7 +5,7 @@ import { colors } from '../../../config';
 const Wrapper = styled.div`
     position: relative;
     display: flex;
-    max-width: 1400px;
+    max-width: 1540px;
     min-height: 100vh;
     flex: 1000 1 0%;
     -webkit-box-flex: 1000;

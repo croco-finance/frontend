@@ -1,79 +1,42 @@
+import { mathUtils } from '@utils';
+
 const countDecimals = value => {
-    if (Math.floor(value) !== value) return value.toString().split('.')[1].length || 0;
+    try {
+        if (Math.floor(value) !== value) return value.toString().split('.')[1].length || 0;
+    } catch (e) {
+        return '-';
+    }
+
     return 0;
 };
 
-const getFiatValueFromCryptoAmounts = (
-    cryptoAmounts: { [key: string]: number },
-    fiatRates: any,
-    fiat: string,
-) => {
-    let fiatSum = 0;
+const getFirstTwoNonZeroDecimals = n => {
+    var log10 = n ? Math.floor(Math.log10(n)) : 0,
+        div = log10 < 0 ? Math.pow(10, 1 - log10) : 100;
 
-    for (const [token, amount] of Object.entries(cryptoAmounts)) {
-        fiatSum = fiatSum + amount * fiatRates[fiat][token];
-    }
-
-    return fiatSum;
+    return Math.round(n * div) / div;
 };
 
-const getFormattedPercentageValue = (value: number, hideDecimals = false) => {
-    let percentageFormat = 100 * value;
-    const numOfDecimals = countDecimals(percentageFormat);
-
-    if (numOfDecimals === 0 && hideDecimals) {
-        return `${percentageFormat.toFixed(0)}%`;
-    }
-
-    return `${percentageFormat.toFixed(2)}%`;
+const roundToNDecimals = (value: number, nDecimals: number) => {
+    const coeff = Math.pow(10, nDecimals);
+    return Math.round(value * coeff) / coeff;
 };
 
-const getDailyAverageFeeGains = (timeStampStartSeconds, timeStampEndSeconds, totalFeesUsd) => {
-    const differenceMilliseconds = timeStampEndSeconds - timeStampStartSeconds;
-    const differenceDays = differenceMilliseconds / (3600 * 24);
+const getDailyAverageFeeGains = (timeStampStartMillis, timeStampEndMillis, totalFeesUsd) => {
+    const differenceMillis = timeStampEndMillis - timeStampStartMillis;
+    const differenceDays = differenceMillis / (3600 * 24 * 1000);
     return totalFeesUsd / differenceDays;
 };
 
-const getPoolsSummaryObject = (allPools: any, filteredPoolIds: Array<string> | 'all') => {
-    // TODO compute separately for Balancer and for Uniswap
-    let summaryObject = {};
-    let endBalanceUsdSum = 0;
-    let endBalanceEthSum = 0;
-    let feesUsdSum = 0;
-    let feesEthSum = 0;
-    let txCostUsdSum = 0;
-    let txCostEthSum = 0;
-    let yieldRewardUsdSum = 0;
-    let yieldRewardEthSum = 0;
-
-    for (const poolId of Object.keys(allPools)) {
-        if (filteredPoolIds.includes(poolId) || filteredPoolIds === 'all') {
-            const pool = allPools[poolId];
-            endBalanceUsdSum += pool.endBalanceUsd;
-            endBalanceEthSum += pool.endBalanceEth;
-            if (pool.feesUsd) feesUsdSum += pool.feesUsd;
-            if (pool.feesEth) feesEthSum += pool.feesEth;
-            if (pool.txCostEth) txCostEthSum += pool.txCostEth;
-            if (pool.txCostUsd) txCostUsdSum += pool.txCostUsd;
-            if (pool.yieldRewardUsd) yieldRewardUsdSum += pool.yieldRewardUsd;
-            if (pool.yieldRewardEth) yieldRewardEthSum += pool.yieldRewardEth;
-        }
+const getTokenArrayValue = (tokenBalances: Array<number>, tokenPrices: Array<number>) => {
+    if (tokenBalances.length !== tokenPrices.length) {
+        throw 'Arrays have to have the same length';
     }
 
-    summaryObject['endBalanceUsd'] = endBalanceUsdSum;
-    summaryObject['endBalanceEth'] = endBalanceEthSum;
-    summaryObject['feesUsd'] = feesUsdSum;
-    summaryObject['feesEth'] = feesEthSum;
-    summaryObject['txCostUsd'] = txCostUsdSum;
-    summaryObject['txCostEth'] = txCostEthSum;
-    summaryObject['yieldRewardUsd'] = yieldRewardUsdSum;
-    summaryObject['yieldRewardEth'] = yieldRewardEthSum;
-    summaryObject['rewardFeesBalanceUSD'] = feesUsdSum + yieldRewardUsdSum - txCostUsdSum;
-    summaryObject['rewardFeesBalanceETH'] = feesEthSum + yieldRewardEthSum - txCostEthSum;
-
-    return summaryObject;
+    return mathUtils.sumArr(mathUtils.multiplyArraysElementWise(tokenBalances, tokenPrices));
 };
 
+// This is useful for generating data for imp.loss curve.
 const arrangeArray = (start, end, step) => {
     const stepDecimals = countDecimals(step);
     // TODO make sure start % step = 0 and start = -end;
@@ -87,8 +50,9 @@ const arrangeArray = (start, end, step) => {
     return arr;
 };
 
-const sumArr = (total, num) => {
-    return total + num;
+const sumArr = (arr: Array<number>) => {
+    // default value is 0
+    return arr.reduce((a, b) => a + b, 0);
 };
 
 const multiplyArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
@@ -124,15 +88,35 @@ const subtractArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => 
     return result;
 };
 
+const divideEachArrayElementByValue = (arr: Array<number>, value: number) => {
+    const modifiedArr = new Array(arr.length);
+    for (let i = 0, length = arr.length; i < length; i++) {
+        modifiedArr[i] = arr[i] / value;
+    }
+
+    return modifiedArr;
+};
+
+const multiplyEachArrayElementByValue = (arr: Array<number>, value: number) => {
+    const modifiedArr = new Array(arr.length);
+    for (let i = 0, length = arr.length; i < length; i++) {
+        modifiedArr[i] = arr[i] * value;
+    }
+
+    return modifiedArr;
+};
+
 export {
     countDecimals,
-    getFiatValueFromCryptoAmounts,
-    getFormattedPercentageValue,
-    getPoolsSummaryObject,
     arrangeArray,
     getDailyAverageFeeGains,
     multiplyArraysElementWise,
     subtractArraysElementWise,
     sumArraysElementWise,
     sumArr,
+    divideEachArrayElementByValue,
+    multiplyEachArrayElementByValue,
+    getFirstTwoNonZeroDecimals,
+    getTokenArrayValue,
+    roundToNDecimals,
 };
