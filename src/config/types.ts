@@ -132,3 +132,18 @@ export interface GraphData {
     txCostUsd: number;
     impLossUsd: number;
 }
+
+export interface SummaryStats {
+    valueLockedUsd: any;
+    pooledTokenSymbols: Array<string>;
+    pooledTokenAmounts: Array<number>;
+    yieldTokenSymbols: Array<string>;
+    yieldTokenAmounts: Array<number>;
+    feesTokenSymbols: Array<string>;
+    feesTokenAmounts: Array<number>;
+    feesUsd: number;
+    yieldUsd: number;
+    txCostEth: number;
+    txCostUsd: number;
+    // average rewards since last deposit -> average rewards in last snapshot
+}

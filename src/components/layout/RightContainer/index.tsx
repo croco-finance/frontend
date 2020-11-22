@@ -2,15 +2,18 @@ import { colors, variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
 import RightContentWrapper from '../RightContentWrapper';
+import { styles } from '@config';
 
 const Wrapper = styled.div<Props>`
     width: 60%;
     padding: 0;
-    min-height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     background-color: ${props => props.backgroundColor};
+    ${styles.scrollBarStyles};
 
     @media (max-width: ${variables.SCREEN_SIZE.LG}) {
         width: 100%;

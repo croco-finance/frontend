@@ -42,7 +42,6 @@ const FetchSnapsForAddress = initialAddress => {
 
     useEffect(() => {
         const fetchData = async (address: string) => {
-            console.log('Running fetchData()...');
             setIsLoading(true);
             setNoPoolsFound(false);
             setIsFetchError(false);
@@ -50,103 +49,95 @@ const FetchSnapsForAddress = initialAddress => {
             // double-check the address is in the right format
             const queryAddress = address.trim().toLowerCase();
 
-            // try {
-            const fetchedSnapshots = await getSnaps(queryAddress);
-            // let fetchedSnapshots = exampleFirebaseData;
+            try {
+                const fetchedSnapshots = await getSnaps(queryAddress);
 
-            console.log('fetchedSnapshots', fetchedSnapshots);
+                // check if some pools were founds. If not, set the following variables to global redux state
+                if (!fetchedSnapshots) {
+                    setNoPoolsFound(true);
+                    setIsLoading(false);
+                    dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress });
+                    dispatch({ type: actionTypes.SET_ALL_POOLS, pools: {} });
+                    dispatch({ type: actionTypes.SET_ACTIVE_POOL_IDS, activePoolIds: [] });
+                    dispatch({
+                        type: actionTypes.SET_INACTIVE_POOL_IDS,
+                        inactivePoolIds: [],
+                    });
+                    return;
+                }
 
-            // check if some pools were founds. If not, set the following variables to global redux state
-            if (!fetchedSnapshots) {
-                setNoPoolsFound(true);
-                setIsLoading(false);
-                dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress });
-                dispatch({ type: actionTypes.SET_ALL_POOLS, pools: {} });
-                dispatch({ type: actionTypes.SET_ACTIVE_POOL_IDS, activePoolIds: [] });
+                // declare Redux variables
+                let exToPoolMap: DexToPoolIdMap = { BALANCER: [], UNI_V2: [] };
+                let activePoolIds: Array<string> = [];
+                let inactivePoolIds: Array<string> = [];
+                const customPoolsObject: AllPoolsGlobal = {};
+
+                for (const [poolId, snapshotsArr] of Object.entries(fetchedSnapshots)) {
+                    const snapshotsCount = snapshotsArr.length;
+                    if (snapshotsCount > 1) {
+                        // compute interval and cumulative stats
+                        const {
+                            intervalStats,
+                            cumulativeStats,
+                        } = statsComputations.getPoolStatsFromSnapshots(snapshotsArr);
+
+                        // Check if pool is active by checking if user's liquidity token balance in last snapshot is > 0
+                        const poolIsActive =
+                            snapshotsArr[snapshotsCount - 1].liquidityTokenBalance > 0;
+
+                        if (poolIsActive) {
+                            activePoolIds.push(poolId);
+                        } else {
+                            inactivePoolIds.push(poolId);
+                        }
+
+                        // Push PoolId to <Exchange, PoolId> mapping
+                        const exchange: Exchange = snapshotsArr[0].exchange;
+                        exToPoolMap[exchange].push(poolId);
+
+                        // Create new pool object
+                        customPoolsObject[poolId] = {
+                            exchange: exchange,
+                            userAddr: queryAddress,
+                            poolId: poolId,
+                            isActive: poolIsActive,
+                            timestampEnd: snapshotsArr[snapshotsCount - 1].timestamp, // last sna
+                            hasYieldReward: snapshotsArr[0].yieldReward !== null,
+                            yieldToken: snapshotsArr[0].yieldReward
+                                ? snapshotsArr[0].yieldReward.token
+                                : null,
+                            pooledTokens: getPooledTokensInfo(snapshotsArr[0].tokens),
+                            intervalStats: intervalStats,
+                            cumulativeStats: cumulativeStats,
+                            tokenWeights: formatUtils.getTokenWeightsArr(snapshotsArr[0].tokens),
+                        };
+                    }
+                }
+
+                // set new Redux state variables
+                dispatch({ type: actionTypes.SET_ALL_POOLS, pools: customPoolsObject });
+                dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
+                dispatch({
+                    type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
+                    exchangeToPoolMapping: exToPoolMap,
+                });
+                dispatch({ type: actionTypes.SET_ACTIVE_POOL_IDS, activePoolIds: activePoolIds });
                 dispatch({
                     type: actionTypes.SET_INACTIVE_POOL_IDS,
-                    inactivePoolIds: [],
+                    inactivePoolIds: inactivePoolIds,
                 });
-                return;
+                dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
+
+                // save address to browser local storage
+                localStorage.setItem('address', queryAddress);
+
+                // fire Google Analytics event
+                analytics.Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
+            } catch (e) {
+                console.log('ERROR while fetching data about pools...');
+                setIsFetchError(true);
+                analytics.Event('ADDRESS INPUT', 'Data fetching hook fail', queryAddress);
             }
-
-            // declare Redux variables
-            let exToPoolMap: DexToPoolIdMap = { BALANCER: [], UNI_V2: [] };
-            let activePoolIds: Array<string> = [];
-            let inactivePoolIds: Array<string> = [];
-            const customPoolsObject: AllPoolsGlobal = {};
-
-            for (const [poolId, snapshotsArr] of Object.entries(fetchedSnapshots)) {
-                const snapshotsCount = snapshotsArr.length;
-                if (snapshotsCount > 1) {
-                    // compute interval and cumulative stats
-                    const {
-                        intervalStats,
-                        cumulativeStats,
-                    } = statsComputations.getPoolStatsFromSnapshots(snapshotsArr);
-
-                    // Check if pool is active by comparison of last snapshot's timestamp with current timestamp
-                    const lastSnapshotTimestamp = snapshotsArr[snapshotsCount - 1].timestamp;
-                    const poolIsActive = getIfPoolIsActive(
-                        lastSnapshotTimestamp,
-                        INACTIVE_POOL_THRESHOLD_SECONDS,
-                    );
-
-                    if (poolIsActive) {
-                        activePoolIds.push(poolId);
-                    } else {
-                        inactivePoolIds.push(poolId);
-                    }
-
-                    // Push PoolId to <Exchange, PoolId> mapping
-                    const exchange: Exchange = snapshotsArr[0].exchange;
-                    exToPoolMap[exchange].push(poolId);
-
-                    // Create new pool object
-                    customPoolsObject[poolId] = {
-                        exchange: exchange,
-                        userAddr: queryAddress,
-                        poolId: poolId,
-                        isActive: poolIsActive,
-                        timestampEnd: lastSnapshotTimestamp,
-                        hasYieldReward: snapshotsArr[0].yieldReward !== null,
-                        yieldToken: snapshotsArr[0].yieldReward
-                            ? snapshotsArr[0].yieldReward.token
-                            : null,
-                        pooledTokens: getPooledTokensInfo(snapshotsArr[0].tokens),
-                        intervalStats: intervalStats,
-                        cumulativeStats: cumulativeStats,
-                        tokenWeights: formatUtils.getTokenWeightsArr(snapshotsArr[0].tokens),
-                    };
-                }
-            }
-
-            console.log('customPoolsObject', customPoolsObject);
-
-            // set new Redux state variables
-            dispatch({ type: actionTypes.SET_ALL_POOLS, pools: customPoolsObject });
-            dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
-            dispatch({
-                type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
-                exchangeToPoolMapping: exToPoolMap,
-            });
-            dispatch({ type: actionTypes.SET_ACTIVE_POOL_IDS, activePoolIds: activePoolIds });
-            dispatch({
-                type: actionTypes.SET_INACTIVE_POOL_IDS,
-                inactivePoolIds: inactivePoolIds,
-            });
-            dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
-
-            // save address to browser local storage
-            localStorage.setItem('address', queryAddress);
-
-            // fire Google Analytics event
-            analytics.Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
-            // } catch (e) {
-            //     console.log('ERROR while fetching data about pools...');
-            //     setIsFetchError(true);
-            //     Event('ADDRESS INPUT', 'Data fetching hook fail', queryAddress);
-            // }
 
             setIsLoading(false);
         };

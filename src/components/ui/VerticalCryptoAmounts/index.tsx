@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { colors, variables } from '@config';
+import { colors, variables, styles } from '@config';
 import { formatUtils, mathUtils } from '@utils';
 import { SignedValue } from '@components/ui';
 
@@ -14,13 +14,16 @@ const leftAlignedStyles = css`
     align-items: baseline;
 `;
 
-const Wrapper = styled.div<{ textAlign: 'left' | 'right' }>`
+const Wrapper = styled.div<{ textAlign: 'left' | 'right'; maxHeight: number }>`
     display: flex;
     flex-direction: column;
     font-size: 12px;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_LIGHT};
     letter-spacing: 0.3px;
+    overflow-y: auto;
+    max-height: ${props => props.maxHeight}px;
+    ${styles.tinyScrollBarStyles};
 
     /* content alignment styles */
     ${props =>
@@ -52,6 +55,7 @@ interface Props {
     textAlign?: 'left' | 'right';
     usePlusSymbol?: boolean;
     maxWidth?: number;
+    maxHeight?: number;
 }
 
 const VerticalCryptoAmounts = ({
@@ -60,6 +64,7 @@ const VerticalCryptoAmounts = ({
     textAlign = 'right',
     usePlusSymbol = false,
     maxWidth = 100,
+    maxHeight = 160,
 }: Props) => {
     let tokenSymbolsRendered = tokenSymbols;
     let tokenAmountsRendered = tokenAmounts;
@@ -79,7 +84,7 @@ const VerticalCryptoAmounts = ({
 
     const roundToDecimals = 4;
     return (
-        <Wrapper textAlign={textAlign}>
+        <Wrapper textAlign={textAlign} maxHeight={maxHeight}>
             {tokenSymbolsRendered.map((symbol, i) => (
                 <Row key={symbol}>
                     <Amount>

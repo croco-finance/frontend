@@ -1,11 +1,10 @@
-import { FiatValue, GrayBox, MultipleTokenLogo, VerticalCryptoAmounts } from '@components/ui';
+import { FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
 import { colors, variables } from '@config';
-import { formatUtils, graphUtils } from '@utils';
+import { formatUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CardRow from '../CardRow';
-import Graph from '../Graph';
 import { AllPoolsGlobal } from '@types';
 
 const Wrapper = styled.div`
@@ -77,7 +76,6 @@ const PoolOverview = () => {
     let pool = allPools[selectedPoolId];
 
     // Compute imp loss, fees, hold, ETH hold, token hold fo each snapshot
-    // lossUtils.getPoolStats(poolSnapshots);
 
     // TODO make the following checks and computations cleaner
     if (!allPools || !pool) {

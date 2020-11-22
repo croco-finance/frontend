@@ -14,14 +14,19 @@ const MainWrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
-    /* max-width: 800px; */
     text-align: center;
+    padding: 0 20px;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        padding: 0 10px;
+    }
 `;
 
 const AnimatedWrapper = styled.div`
     animation: showup 1.8s;
+    width: 100%;
+    max-width: 700px;
 
     @keyframes showup {
         0% {
@@ -34,16 +39,17 @@ const AnimatedWrapper = styled.div`
             transform: translateY(0%);
         }
     }
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        max-width: 600px;
+    }
 `;
 const ContentWrapper = styled.div`
-    max-width: 1100px;
+    max-width: 1000px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    @media (max-width: 900px) {
-        width: 90%;
-    }
 `;
 
 const TopBar = styled.div`
@@ -74,7 +80,7 @@ const IconLinkWrapper = styled.a`
     }
 `;
 const IllustrationWrapper = styled.h1`
-    margin-top: 130px;
+    margin-top: 125px;
     margin-bottom: 60px;
 
     @media (max-width: 900px) {
@@ -93,6 +99,11 @@ const AddressInputWrapper = styled.div`
 
     border-radius: 18px;
     box-shadow: rgb(12 22 53 / 11%) 0px 8px 40px;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        padding: 5px;
+        border-radius: 6px;
+    }
 `;
 
 const AddressInput = styled.input`
@@ -115,7 +126,7 @@ const AddressInput = styled.input`
         color: ${colors.FONT_LIGHT};
         /* color: #c4c4c8; */
     }
-    @media (max-width: 900px) {
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.SMALL};
         padding: 8px;
         margin-right: 5px;
@@ -153,12 +164,13 @@ const DashboardButton = styled(Link)<{ active: boolean }>`
                 background-color: ${colors.BACKGROUND_DARK};
             }
         `}
-    @media (max-width: 900px) {
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.NORMAL};
         font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
         padding: 5px;
         width: 85px;
         height: 40px;
+        border-radius: 5px;
     }
 `;
 

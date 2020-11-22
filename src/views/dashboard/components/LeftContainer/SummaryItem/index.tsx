@@ -6,18 +6,20 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import PoolItemCard from '../PoolItemCard';
+import { AllPoolsGlobal } from '@types';
 
 const Item = styled.div`
     display: flex;
     flex: 0 0 33%;
     justify-content: center;
-    color: ${colors.FONT_DARK};
+    align-items: center;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 
-    @media (max-width: 520px) {
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.SMALL};
+        flex-shrink: 1; // allow to shrink if necessary
     }
 `;
-
 const Value = styled(Item)``;
 const Gains = styled(Item)``;
 
@@ -28,10 +30,25 @@ const ExchangeWrapper = styled(Item)`
     padding-right: 10px;
 `;
 
-const ExchangeTitle = styled.div`
+const ExchangeTitle = styled.div<{ isSelected: boolean }>`
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     margin-left: 5px;
+    color: ${props => (props.isSelected ? colors.BLUE : colors.FONT_DARK)};
+`;
+
+const StyledPoolItemCard = styled(PoolItemCard)<{ isSelected: boolean }>`
+    background-color: ${props =>
+        props.isSelected ? colors.BACKGROUND_BLUE : colors.BACKGROUND_DARK};
+    border: 1px solid;
+    border-color: ${props => (props.isSelected ? colors.STROKE_BLUE : colors.BACKGROUND_DARK)};
+
+    &:hover {
+        background-color: ${props =>
+            props.isSelected ? colors.BACKGROUND_BLUE : colors.STROKE_GREY};
+
+        border-color: ${props => (props.isSelected ? colors.STROKE_BLUE : colors.STROKE_GREY)};
+    }
 `;
 
 interface Props {
@@ -43,13 +60,13 @@ interface Props {
 
 const SummaryItem = ({ headline }: Props) => {
     const dispatch = useDispatch();
-    const allPools = useSelector(state => state.allPools);
+    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const activePoolIds = useSelector(state => state.activePoolIds);
 
-    const poolsSummaryInfo: any = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
+    const poolsSummaryInfo = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
 
-    const { feesUsd, endBalanceUsd, yieldRewardUsd } = poolsSummaryInfo;
+    const { feesUsd, yieldUsd, txCostUsd, valueLockedUsd } = poolsSummaryInfo;
 
     let isSelected = selectedPoolId === 'all';
 
@@ -60,18 +77,18 @@ const SummaryItem = ({ headline }: Props) => {
 
     return (
         <div onClick={event => handleOnClick(event, 'all')}>
-            <PoolItemCard isSelected={isSelected}>
+            <StyledPoolItemCard isSelected={isSelected}>
                 <ExchangeWrapper>
                     {/* <TokenLogo symbol={exchange} size={26} /> */}
-                    <ExchangeTitle>{headline}</ExchangeTitle>
+                    <ExchangeTitle isSelected={isSelected}>{headline}</ExchangeTitle>
                 </ExchangeWrapper>
                 <Value>
-                    <FiatValue value={endBalanceUsd} />
+                    <FiatValue value={valueLockedUsd} />
                 </Value>
                 <Gains>
-                    <FiatValue value={feesUsd + yieldRewardUsd} usePlusSymbol />
+                    <FiatValue value={feesUsd + yieldUsd - txCostUsd} usePlusSymbol />
                 </Gains>
-            </PoolItemCard>
+            </StyledPoolItemCard>
         </div>
     );
 };

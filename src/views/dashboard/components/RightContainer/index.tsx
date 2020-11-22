@@ -65,6 +65,7 @@ const SummaryHeadline = styled.div`
 
 const SummaryHeadlineText = styled.div`
     margin-left: 5px;
+    font-size: ${variables.FONT_SIZE.NORMAL};
 `;
 
 type TabOptions = 'overview' | 'strategies';
@@ -109,6 +110,7 @@ const RightContainer = () => {
             <TabSelectHeader
                 headline={headerHeadline}
                 onSelectTab={tabName => setSelectedTab(tabName)}
+                hideTabs={selectedPoolId === 'all'}
             />
 
             {selectedPoolId === 'all' ? (
@@ -122,7 +124,6 @@ const RightContainer = () => {
                     </GraphWrapper>
                     {activePoolIds.includes(selectedPoolId) ? (
                         <SimulatorButtonWrapper>
-                            {/* See how changes in assets' prices affect your funds */}
                             <StyledLink
                                 onClick={e => {
                                     analytics.Event(

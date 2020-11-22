@@ -1,4 +1,4 @@
-import { FiatValue, GrayBox, InlineCircle } from '@components/ui';
+import { FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
 import { colors, variables } from '@config';
 import { mathUtils, statsComputations } from '@utils';
 import React from 'react';
@@ -6,49 +6,73 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CardRow from '../CardRow';
 
-const GRID_GAP = 5;
-
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+`;
 
 const GridWrapper = styled.div`
     flex-grow: 1;
     display: grid;
-    grid-gap: ${GRID_GAP}px;
-
-    grid-template-columns: 190px minmax(100px, auto);
-    grid-auto-rows: 40px;
-    font-size: ${variables.FONT_SIZE.NORMAL};
+    gap: 28px 10px;
+    grid-template-columns: 180px minmax(100px, auto) minmax(100px, auto);
+    grid-auto-rows: auto;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
-    overflow-x: auto; /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
+    /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
+    /* overflow-x: auto; */
     word-break: break-all;
-    padding: 0px 10px;
-    font-size: ${variables.FONT_SIZE.NORMAL};
+    align-items: baseline;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        font-size: ${variables.FONT_SIZE.SMALL};
+        gap: 18px 5px;
+        grid-template-columns: 140px minmax(90px, auto) minmax(90px, auto);
+    }
 `;
 
-const HeaderWrapper = styled(GridWrapper)`
-    grid-template-columns: 190px minmax(100px, auto) minmax(100px, auto);
-    grid-template-rows: repeat(1, 40px);
-    padding: 0px 25px;
-    margin-top: 20px;
-    margin-bottom: -5px;
+const HeaderWrapper = styled.div`
+    padding: 0 20px 10px 20px;
+    margin-top: 10px;
     font-size: ${variables.FONT_SIZE.SMALL};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    color: ${colors.FONT_LIGHT};
 `;
 
-const HodlHeaderWrapper = styled(HeaderWrapper)`
-    grid-template-columns: 190px minmax(100px, auto);
+const RewardsExpensesHeader = styled(GridWrapper)`
+    grid-template-rows: repeat(1, 20px);
+    margin-bottom: 18px;
+    margin-top: 8px;
+    padding: 0;
+    font-size: ${variables.FONT_SIZE.TINY};
+    border-bottom: 1px solid ${colors.STROKE_GREY};
 `;
 
-const TotalLossRowWrapper = styled(GridWrapper)`
-    /* grid-template-rows: repeat(1, 50px); */
-    border-top: 1px solid ${colors.STROKE_GREY};
-    margin-top: 6px;
-    padding-top: 6px;
+const PoolValueGridWrapper = styled(GridWrapper)`
+    padding-top: 4px;
+    min-height: 48px;
+`;
+
+const TotalLossRow = styled(GridWrapper)`
+    height: 40px;
+    align-items: center;
+`;
+
+const TotalWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const TotalSubNote = styled.div`
+    font-size: ${variables.FONT_SIZE.TINY};
+    color: ${colors.FONT_LIGHT};
 `;
 
 const PoolsSummary = () => {
     const allPools = useSelector(state => state.allPools);
     const activePoolIds = useSelector(state => state.activePoolIds);
+    const inactivePoolIds = useSelector(state => state.inactivePoolIds);
 
     if (!allPools) {
         return (
@@ -63,67 +87,125 @@ const PoolsSummary = () => {
         activePoolIds,
     );
 
+    const {
+        valueLockedUsd,
+        pooledTokenSymbols,
+        pooledTokenAmounts,
+        yieldTokenSymbols,
+        yieldTokenAmounts,
+        yieldUsd,
+        txCostEth,
+        txCostUsd,
+        feesTokenSymbols,
+        feesTokenAmounts,
+        feesUsd,
+    } = activePoolsSummaryObject;
+
+    const feesRow = (
+        <CardRow
+            firstColumn="Fees earned"
+            secondColumn={
+                <VerticalCryptoAmounts
+                    tokenSymbols={feesTokenSymbols}
+                    tokenAmounts={feesTokenAmounts}
+                />
+            }
+            thirdColumn={<FiatValue value={feesUsd} usePlusSymbol />}
+            columnColors={['medium', 'light', 'dark']}
+        />
+    );
+
+    const yieldRow = (
+        <CardRow
+            firstColumn="Yield reward"
+            secondColumn={
+                <VerticalCryptoAmounts
+                    tokenSymbols={yieldTokenSymbols}
+                    tokenAmounts={yieldTokenAmounts}
+                />
+            }
+            thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+            columnColors={['medium', 'light', 'dark']}
+        />
+    );
+
+    const txCostRow = (
+        <CardRow
+            firstColumn="Transaction expenses"
+            secondColumn={
+                <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
+            }
+            thirdColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
+            columnColors={['medium', 'light', 'dark']}
+        />
+    );
+
+    const totalText = (
+        <TotalWrapper>
+            Total <TotalSubNote>Rewards - Expenses</TotalSubNote>
+        </TotalWrapper>
+    );
+
     return (
         <Wrapper>
-            <GrayBox>
+            <HeaderWrapper>
                 <GridWrapper>
                     <CardRow
-                        firstColumn="Value locked in pools"
-                        secondColumn={
-                            <FiatValue value={activePoolsSummaryObject.endBalanceUsd}></FiatValue>
-                        }
-                        color="dark"
+                        firstColumn="Overview"
+                        secondColumn="Crypto "
+                        thirdColumn="Value today"
+                        columnColors={['light', 'light', 'light']}
                     />
                 </GridWrapper>
-            </GrayBox>
-
-            <HodlHeaderWrapper>
-                <CardRow firstColumn="Rewards and expenses" secondColumn="" color="light" />
-            </HodlHeaderWrapper>
-            <GrayBox>
-                <GridWrapper>
-                    <CardRow
-                        firstColumn="Fees earned"
-                        secondColumn={
-                            <FiatValue value={activePoolsSummaryObject.feesUsd} usePlusSymbol />
-                        }
-                        color="dark"
-                    />
-                    {activePoolsSummaryObject.yieldRewardUsd ? (
+            </HeaderWrapper>
+            <GrayBox
+                padding={[15, 20, 15, 20]}
+                bottomBar={
+                    <TotalLossRow>
                         <CardRow
-                            firstColumn="Yield farming gains"
-                            secondColumn={
+                            firstColumn={totalText}
+                            secondColumn={<></>}
+                            thirdColumn={
                                 <FiatValue
-                                    value={activePoolsSummaryObject.yieldRewardUsd}
+                                    value={feesUsd + yieldUsd - txCostUsd}
                                     usePlusSymbol
+                                    useBadgeStyle
+                                    colorized
                                 />
                             }
                             color="dark"
                         />
-                    ) : null}
+                    </TotalLossRow>
+                }
+            >
+                <PoolValueGridWrapper>
+                    <CardRow
+                        firstColumn="Value locked in pools"
+                        secondColumn={
+                            <VerticalCryptoAmounts
+                                tokenSymbols={pooledTokenSymbols}
+                                tokenAmounts={pooledTokenAmounts}
+                            />
+                        }
+                        thirdColumn={<FiatValue value={valueLockedUsd} />}
+                        columnColors={['medium', 'light', 'dark']}
+                    />
+                </PoolValueGridWrapper>
 
+                <RewardsExpensesHeader>
                     <CardRow
-                        firstColumn="Transactions expenses"
-                        secondColumn={
-                            <FiatValue value={-activePoolsSummaryObject.txCostUsd} usePlusSymbol />
-                        }
-                        color="dark"
+                        firstColumn="Rewards & Expenses"
+                        secondColumn=""
+                        thirdColumn=""
+                        columnColors={['light', 'light', 'light']}
                     />
+                </RewardsExpensesHeader>
+
+                <GridWrapper>
+                    {feesRow}
+                    {yieldRow}
+                    {txCostRow}
                 </GridWrapper>
-                <TotalLossRowWrapper>
-                    <CardRow
-                        firstColumn="Total"
-                        secondColumn={
-                            <FiatValue
-                                value={activePoolsSummaryObject.rewardFeesBalanceUSD}
-                                usePlusSymbol
-                                colorized
-                                useBadgeStyle
-                            ></FiatValue>
-                        }
-                        color="dark"
-                    />
-                </TotalLossRowWrapper>
             </GrayBox>
         </Wrapper>
     );

@@ -31,6 +31,32 @@ export const scrollBarStyles = css`
     }
 `;
 
+export const tinyScrollBarStyles = css`
+    ::-webkit-scrollbar {
+        width: 14px;
+        height: 28px;
+        background-color: #e0e1e8;
+        border-left: 5px solid ${colors.BACKGROUND};
+        border-right: 5px solid ${colors.BACKGROUND};
+    }
+    ::-webkit-scrollbar-thumb {
+        height: 6px;
+        border-left: 5px solid rgba(0, 0, 0, 0);
+        border-right: 5px solid rgba(0, 0, 0, 0);
+        background-clip: padding-box;
+        -webkit-border-radius: 7px;
+        background-color: #bec8da;
+    }
+    ::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+        display: none;
+    }
+    ::-webkit-scrollbar-corner {
+        background-color: transparent;
+    }
+`;
+
 // export const scrollBarStyles = css`
 //     ::-webkit-scrollbar {
 //         background-color: #e0e1e8;
