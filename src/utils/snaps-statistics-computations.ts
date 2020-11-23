@@ -149,8 +149,8 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
         txCostEthStart: snapshotT0.txCostEth,
         txCostEthEnd: snapshotT1.txCostEth,
 
-        // Yield reward
-        yieldTokenAmount: snapshotT1.yieldReward ? snapshotT1.yieldReward.amount : 0,
+        // Yield reward (use snapshot T0 to get yield ina  given interval)
+        yieldTokenAmount: snapshotT0.yieldReward ? snapshotT0.yieldReward.amount : 0,
         yieldTokenPriceStart: snapshotT0.yieldReward ? snapshotT0.yieldReward.price : null,
         yieldTokenPriceEnd: snapshotT1.yieldReward ? snapshotT1.yieldReward.price : null,
 

@@ -60,7 +60,6 @@ async function getSnaps(address: string): Promise<SnapStructure | null> {
             distributeUniYields(userData['UNI_V2']['yields'], snaps);
         }
     }
-
     return snaps;
 }
 
@@ -168,13 +167,7 @@ function distributeBalYields(yields: object, snaps: SnapStructure) {
                     ) {
                         const snapUsdValue = getSnapUsdValue(poolSnaps[i]);
                         eligibleSnapsUsdValue += snapUsdValue;
-                        if (i + 1 < poolSnaps.length) {
-                            eligibleSnaps[snapUsdValue] = poolSnaps[i + 1];
-                        } else {
-                            eligibleSnaps[snapUsdValue] = poolSnaps[i];
-                            // TODO: send log to firebase along with address
-                            console.log('WARNING: BAL no i+1 snap');
-                        }
+                        eligibleSnaps[snapUsdValue] = poolSnaps[i];
                         break;
                     }
                 }
@@ -214,27 +207,19 @@ function distributeUniYields(yields: object, snaps: SnapStructure) {
         const yield_ = yields[yieldId];
         // I allocate the reward to the snap whose block number is smaller and closest to the reward's
         let poolSnaps = snaps[yield_['poolId']];
-        let eligibleSnapIndex: number | null = null;
-        for (let i = 0; i < poolSnaps.length; i++) {
-            let snap = poolSnaps[i];
+        let eligibleSnap: Snap | null = null;
+        for (const snap of poolSnaps) {
             if (snap.staked) {
-                if (eligibleSnapIndex === null) {
+                if (eligibleSnap === null) {
                     if (snap.block < yield_['block']) {
-                        eligibleSnapIndex = i;
+                        eligibleSnap = snap;
                     }
-                } else if (
-                    snap.block < yield_['block'] &&
-                    poolSnaps[eligibleSnapIndex].block < snap.block
-                ) {
-                    eligibleSnapIndex = i;
+                } else if (snap.block < yield_['block'] && eligibleSnap.block < snap.block) {
+                    eligibleSnap = snap;
                 }
             }
         }
-        if (eligibleSnapIndex !== null) {
-            let eligibleSnap =
-                eligibleSnapIndex + 1 < poolSnaps.length
-                    ? poolSnaps[eligibleSnapIndex + 1]
-                    : poolSnaps[eligibleSnapIndex];
+        if (eligibleSnap !== null) {
             if (eligibleSnap.yieldReward !== null) {
                 eligibleSnap.yieldReward.amount += parseFloat(yield_['amount']);
             } else {
