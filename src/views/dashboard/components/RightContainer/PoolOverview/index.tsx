@@ -1,4 +1,4 @@
-import { FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
+import { FiatValue, GrayBox, VerticalCryptoAmounts, Icon } from '@components/ui';
 import { colors, variables } from '@config';
 import { formatUtils } from '@utils';
 import React from 'react';
@@ -70,6 +70,31 @@ const TotalSubNote = styled.div`
     color: ${colors.FONT_LIGHT};
 `;
 
+const UnclaimedTokenWarning = styled.div`
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    background-color: #f7f4ff;
+    border: 1px solid #baa6f9;
+    color: #673df1;
+    display: flex;
+`;
+
+const WarningText = styled.div`
+    margin-left: 5px;
+`;
+
+const UniYieldLink = styled.a`
+    text-decoration: none;
+    color: #673df1;
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
 const PoolOverview = () => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
@@ -86,7 +111,7 @@ const PoolOverview = () => {
         );
     }
 
-    let { pooledTokens, isActive, hasYieldReward, yieldToken } = pool;
+    let { pooledTokens, isActive, hasYieldReward, yieldToken, intervalStats, exchange } = pool;
 
     const {
         feesUsd,
@@ -103,6 +128,17 @@ const PoolOverview = () => {
     const poolShareValueText = isActive ? 'Your pool share' : 'End pool share';
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
+
+    // Temporary check if to show unclaimed UNI yield rewards
+    let showUnclaimedUni = false;
+
+    if (exchange === 'UNI_V2' && yieldTokenAmount === 0) {
+        intervalStats.forEach(stat => {
+            if (stat.staked === true) {
+                showUnclaimedUni = true;
+            }
+        });
+    }
 
     const feesRow = (
         <CardRow
@@ -211,6 +247,19 @@ const PoolOverview = () => {
                     {txCostRow}
                 </GridWrapper>
             </GrayBox>
+
+            {showUnclaimedUni && (
+                <UnclaimedTokenWarning>
+                    <Icon icon="info" color={'#673df1'} size={18} />
+                    <WarningText>
+                        It looks like you might have some unclaimed yield rewards. Check it on{' '}
+                        <UniYieldLink href="https://app.uniswap.org/#/uni" target="__blank">
+                            Uniswap
+                        </UniYieldLink>
+                        .
+                    </WarningText>
+                </UnclaimedTokenWarning>
+            )}
         </Wrapper>
     );
 };

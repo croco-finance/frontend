@@ -69,6 +69,7 @@ export interface IntervalStats {
     poolValueUsdStart: number;
     poolValueUsdEnd: number;
     ethHodlValueUsd: number;
+    staked: boolean;
     // TODO Deposits / Withdrawals
 }
 
