@@ -62,6 +62,7 @@ const TopBar = styled.div`
 
 const PageLogoWrapper = styled.div`
     display: flex;
+    padding-bottom: 4px; // to align with social icons. TODO make the alignment better way
 `;
 
 const CommunityIconsWrapper = styled.div`
@@ -74,6 +75,8 @@ const IconLinkWrapper = styled.a`
     text-decoration: none;
     cursor: pointer;
     margin: 0 10px;
+    display: flex;
+    align-items: center;
 
     &:hover {
         text-decoration: none;

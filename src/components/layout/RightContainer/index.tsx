@@ -25,6 +25,7 @@ const Wrapper = styled.div<Props>`
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         padding: 10px;
         padding-bottom: 50px;
+        max-height: 100%;
     }
 `;
 

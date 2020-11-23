@@ -40,6 +40,11 @@ const LeftSubHeaderContent = styled.div`
     max-width: 620px;
     align-self: center;
     ${styles.scrollBarStyles};
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        // because choose pool options are not visible on mobile screen
+        min-height: 60vh;
+    }
 `;
 
 const HeaderContent = styled.div`
@@ -119,6 +124,10 @@ const ChoosePoolWrapper = styled(Section)`
     align-items: center;
     width: 100%;
     margin-top: 40px;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        margin-top: 20px;
+    }
 `;
 
 const MultipleSelectWrapper = styled.div`

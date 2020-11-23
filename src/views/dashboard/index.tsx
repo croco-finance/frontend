@@ -121,6 +121,10 @@ const Headline = styled.div`
     color: ${colors.FONT_MEDIUM};
     font-size: ${variables.FONT_SIZE.H3};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        margin-bottom: 30px;
+    }
 `;
 
 const PoolListWrapper = styled.div`

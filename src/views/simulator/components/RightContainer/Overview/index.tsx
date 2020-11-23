@@ -24,11 +24,12 @@ const GridWrapper = styled.div`
     /* overflow-x: auto; */
     word-break: break-all;
     align-items: baseline;
+    width: fit-content;
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.SMALL};
         gap: 18px 5px;
-        grid-template-columns: 140px minmax(90px, auto) minmax(90px, auto);
+        /* grid-template-columns: 140px minmax(90px, auto) minmax(90px, auto); */
     }
 `;
 
@@ -101,6 +102,7 @@ const DaysLeftGridWrapper = styled(ImpLossGridWrapper)`
 const EstDaysLeftWrapper = styled.div`
     display: flex;
     flex-direction: column;
+    word-break: break-word;
 `;
 
 const SubNoteDaysLeft = styled.div`
@@ -108,6 +110,10 @@ const SubNoteDaysLeft = styled.div`
     font-size: ${variables.FONT_SIZE.SMALL};
     color: ${colors.FONT_LIGHT};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+`;
+
+const XScrollWrapper = styled.div`
+    overflow-x: auto;
 `;
 
 interface Props {
@@ -188,113 +194,120 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
 
     return (
         <Wrapper>
-            <HeaderWrapper>
-                <GridWrapper>
-                    <BoxRow
-                        firstColumn="Pool overview"
-                        secondColumn="Today"
-                        thirdColumn={<RightPaddingWrapper>Simulated</RightPaddingWrapper>}
-                        fourthColumn="Difference"
-                        columnColors={['light', 'light', 'light', 'light']}
-                        columnAlignment={['left', 'right', 'right', 'left']}
-                    />
-                </GridWrapper>
-            </HeaderWrapper>
-            <GrayBox padding={[15, 20, 18, 20]}>
-                <PoolValueGridWrapper>
-                    <BoxRow
-                        columnAlignment={['left', 'right', 'right', 'left']}
-                        firstColumn="Your pool size"
-                        secondColumn={
-                            <PoolValueCryptoFiatWrapper>
-                                <StyledFiatValueWrapper value={poolValueUsd} />
-                                <VerticalCryptoAmounts
-                                    maxWidth={70}
-                                    tokenSymbols={tokenSymbolsArr}
-                                    tokenAmounts={tokenBalances}
+            <XScrollWrapper>
+                <HeaderWrapper>
+                    <GridWrapper>
+                        <BoxRow
+                            firstColumn="Pool overview"
+                            secondColumn="Today"
+                            thirdColumn={<RightPaddingWrapper>Simulated</RightPaddingWrapper>}
+                            fourthColumn="Difference"
+                            columnColors={['light', 'light', 'light', 'light']}
+                            columnAlignment={['left', 'right', 'right', 'left']}
+                        />
+                    </GridWrapper>
+                </HeaderWrapper>
+                <GrayBox padding={[15, 20, 18, 20]}>
+                    <PoolValueGridWrapper>
+                        <BoxRow
+                            columnAlignment={['left', 'right', 'right', 'left']}
+                            firstColumn="Your pool size"
+                            secondColumn={
+                                <PoolValueCryptoFiatWrapper>
+                                    <StyledFiatValueWrapper value={poolValueUsd} />
+                                    <VerticalCryptoAmounts
+                                        maxWidth={70}
+                                        tokenSymbols={tokenSymbolsArr}
+                                        tokenAmounts={tokenBalances}
+                                    />
+                                </PoolValueCryptoFiatWrapper>
+                            }
+                            // simulation values
+                            thirdColumn={
+                                <PoolValueCryptoFiatWrapperBorder>
+                                    <StyledFiatValueWrapper value={newPoolValueUsd} />
+                                    <VerticalCryptoAmounts
+                                        maxWidth={70}
+                                        tokenSymbols={tokenSymbolsArr}
+                                        tokenAmounts={newTokenBalances}
+                                    />
+                                </PoolValueCryptoFiatWrapperBorder>
+                            }
+                            // difference values
+                            fourthColumn={
+                                <PoolValueCryptoFiatWrapper>
+                                    <ColorizedFiatValueWrapper
+                                        value={newPoolValueUsd - poolValueUsd}
+                                        usePlusSymbol
+                                        colorized
+                                    />
+                                    <VerticalCryptoAmounts
+                                        maxWidth={40}
+                                        tokenSymbols={tokenSymbolsArr}
+                                        tokenAmounts={tokenBalancesDiff}
+                                        textAlign="left"
+                                        usePlusSymbol
+                                    />
+                                </PoolValueCryptoFiatWrapper>
+                            }
+                        />
+                    </PoolValueGridWrapper>
+                </GrayBox>
+            </XScrollWrapper>
+            <XScrollWrapper>
+                <ImpLossHeader>Impermanent loss compared to HODLing pooled tokens</ImpLossHeader>
+                <GrayBox
+                    padding={[15, 20, 15, 20]}
+                    bottomBar={
+                        <>
+                            <DaysLeftGridWrapper>
+                                <BoxRow
+                                    columnAlignment={['left', 'right', 'left']}
+                                    firstColumn={
+                                        <EstDaysLeftWrapper>
+                                            <div>Est. days left to compensate loss*</div>
+                                        </EstDaysLeftWrapper>
+                                    }
+                                    secondColumn={
+                                        <RightPaddingWrapper>
+                                            {estDaysLeftStaking}
+                                        </RightPaddingWrapper>
+                                    }
+                                    thirdColumn={<></>}
                                 />
-                            </PoolValueCryptoFiatWrapper>
-                        }
-                        // simulation values
-                        thirdColumn={
-                            <PoolValueCryptoFiatWrapperBorder>
-                                <StyledFiatValueWrapper value={newPoolValueUsd} />
-                                <VerticalCryptoAmounts
-                                    maxWidth={70}
-                                    tokenSymbols={tokenSymbolsArr}
-                                    tokenAmounts={newTokenBalances}
-                                />
-                            </PoolValueCryptoFiatWrapperBorder>
-                        }
-                        // difference values
-                        fourthColumn={
-                            <PoolValueCryptoFiatWrapper>
-                                <ColorizedFiatValueWrapper
-                                    value={newPoolValueUsd - poolValueUsd}
-                                    usePlusSymbol
-                                    colorized
-                                />
-                                <VerticalCryptoAmounts
-                                    maxWidth={40}
-                                    tokenSymbols={tokenSymbolsArr}
-                                    tokenAmounts={tokenBalancesDiff}
-                                    textAlign="left"
-                                    usePlusSymbol
-                                />
-                            </PoolValueCryptoFiatWrapper>
-                        }
-                    />
-                </PoolValueGridWrapper>
-            </GrayBox>
-            <ImpLossHeader>Impermanent loss compared to HODLing pooled tokens</ImpLossHeader>
-            <GrayBox
-                padding={[15, 20, 15, 20]}
-                bottomBar={
-                    <>
-                        <DaysLeftGridWrapper>
-                            <BoxRow
-                                columnAlignment={['left', 'right', 'left']}
-                                firstColumn={
-                                    <EstDaysLeftWrapper>
-                                        <div>Est. days left to compensate loss*</div>
-                                    </EstDaysLeftWrapper>
-                                }
-                                secondColumn={
-                                    <RightPaddingWrapper>{estDaysLeftStaking}</RightPaddingWrapper>
-                                }
-                                thirdColumn={<></>}
-                            />
-                        </DaysLeftGridWrapper>
-                        <SubNoteDaysLeft>
-                            *According to your average rewards since{' '}
-                            {formatUtils.getFormattedDateFromTimestamp(
-                                lastSnapTimestampStart,
-                                'MONTH_DAY_YEAR',
-                            )}
-                        </SubNoteDaysLeft>
-                    </>
-                }
-            >
-                <ImpLossGridWrapper>
-                    <BoxRow
-                        columnAlignment={['left', 'right', 'left']}
-                        firstColumn="Impermanent loss"
-                        secondColumn={
-                            <PoolValueCryptoFiatWrapperBorder>
-                                <FiatValue value={-impLossUsd} usePlusSymbol />
-                            </PoolValueCryptoFiatWrapperBorder>
-                        }
-                        thirdColumn={
-                            <ImpLossRel>
-                                {formatUtils.getFormattedPercentageValue(
-                                    Math.abs(impLossRel) < 0.00001 ? 0 : impLossRel,
-                                    false,
+                            </DaysLeftGridWrapper>
+                            <SubNoteDaysLeft>
+                                *According to your average rewards since{' '}
+                                {formatUtils.getFormattedDateFromTimestamp(
+                                    lastSnapTimestampStart,
+                                    'MONTH_DAY_YEAR',
                                 )}
-                            </ImpLossRel>
-                        }
-                    />
-                </ImpLossGridWrapper>
-            </GrayBox>
+                            </SubNoteDaysLeft>
+                        </>
+                    }
+                >
+                    <ImpLossGridWrapper>
+                        <BoxRow
+                            columnAlignment={['left', 'right', 'left']}
+                            firstColumn="Impermanent loss"
+                            secondColumn={
+                                <PoolValueCryptoFiatWrapperBorder>
+                                    <FiatValue value={-impLossUsd} usePlusSymbol />
+                                </PoolValueCryptoFiatWrapperBorder>
+                            }
+                            thirdColumn={
+                                <ImpLossRel>
+                                    {formatUtils.getFormattedPercentageValue(
+                                        Math.abs(impLossRel) < 0.00001 ? 0 : impLossRel,
+                                        false,
+                                    )}
+                                </ImpLossRel>
+                            }
+                        />
+                    </ImpLossGridWrapper>
+                </GrayBox>
+            </XScrollWrapper>
+
             <GraphWrapper>
                 <GraphTitle>Pool / HODL value comparison</GraphTitle>
                 <ILGraph data={graphData} maxPossibleValue={maxPossibleSimulationValue} />
