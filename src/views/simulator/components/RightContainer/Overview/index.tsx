@@ -24,7 +24,8 @@ const GridWrapper = styled.div`
     /* overflow-x: auto; */
     word-break: break-all;
     align-items: baseline;
-    width: fit-content;
+    width: 100%;
+    min-width: fit-content;
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.SMALL};

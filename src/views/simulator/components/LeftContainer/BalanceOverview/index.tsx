@@ -21,7 +21,8 @@ const GridWrapper = styled.div`
     align-items: center;
     word-break: break-all;
     padding: 0px 10px;
-    width: fit-content;
+    width: 100%;
+    min-width: fit-content;
 
     @media (max-width: 520px) {
         font-size: ${variables.FONT_SIZE.SMALL};

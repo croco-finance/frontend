@@ -22,9 +22,10 @@ const GridWrapper = styled.div<{ rowsCount: number }>`
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
-    width: fit-content;
     word-break: break-all;
     padding: 5px;
+    width: 100%;
+    min-width: fit-content;
 `;
 
 const Title = styled.div`

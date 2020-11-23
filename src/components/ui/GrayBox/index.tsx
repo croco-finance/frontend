@@ -3,11 +3,8 @@ import styled from 'styled-components';
 import { colors, variables } from '@config';
 
 const Wrapper = styled.div`
+    min-width: fit-content;
     width: 100%;
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        width: fit-content;
-    } ;
 `;
 
 const Content = styled.div<{ hasBottomBar: boolean; padding: Array<number> }>`
