@@ -14,7 +14,7 @@ const Wrapper = styled.div<Props>`
 
     @media (max-width: ${variables.SCREEN_SIZE.LG}) {
         width: 100%;
-        max-height: 85vh;
+        max-height: 80vh;
         height: auto;
         /* padding-bottom: 20px; */
         border-bottom: 10px solid ${colors.STROKE_GREY};

@@ -22,6 +22,7 @@ import BoxRow from './BoxRow';
 import SignedValue from './SignedValue';
 import CustomLink from './CustomLink';
 import PoolHeader from './PoolHeader';
+import NoTextLogo from './NoTextLogo';
 
 export {
     TokenLogo,
@@ -48,4 +49,5 @@ export {
     SignedValue,
     CustomLink,
     PoolHeader,
+    NoTextLogo,
 };

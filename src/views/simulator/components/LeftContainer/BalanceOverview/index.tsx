@@ -15,15 +15,13 @@ const GridWrapper = styled.div`
     display: grid;
     grid-gap: ${GRID_GAP}px;
     color: ${colors.FONT_MEDIUM};
-
     grid-template-columns: 140px minmax(70px, auto) minmax(130px, auto) minmax(140px, auto);
-
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
-    overflow-x: auto; /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
     word-break: break-all;
     padding: 0px 10px;
+    width: fit-content;
 
     @media (max-width: 520px) {
         font-size: ${variables.FONT_SIZE.SMALL};
@@ -55,6 +53,10 @@ const TokenSymbol = styled.div`
     text-overflow: ellipsis;
 `;
 
+const XScrollWrapper = styled.div`
+    overflow-x: auto;
+`;
+
 interface Props {
     iconSize?: number;
 }
@@ -75,37 +77,39 @@ const BalanceOverview = ({ iconSize = 20 }: Props) => {
 
     return (
         <Wrapper>
-            <HeaderWrapper>
-                <OverviewRow
-                    firstColumn="Token"
-                    secondColumn="Weight"
-                    thirdColumn="Your balance"
-                    fourthColumn={isActive ? 'Current price' : 'Withdrawal price'}
-                    color="light"
-                />
-            </HeaderWrapper>
-            <TokenInfoWrapper rowsCount={numberOfTokens}>
-                {pooledTokens.map((token, i) => {
-                    return (
-                        <OverviewRow
-                            key={i}
-                            firstColumn={
-                                <TokenWrapper>
-                                    <TokenLogo symbol={token.symbol} size={iconSize} />
-                                    <TokenSymbol>{token.symbol}</TokenSymbol>
-                                </TokenWrapper>
-                            }
-                            secondColumn={formatUtils.getFormattedPercentageValue(
-                                token.weight,
-                                true,
-                            )}
-                            thirdColumn={tokenBalances[i].toFixed(4)}
-                            fourthColumn={<FiatValue value={tokenPricesEnd[i]} />}
-                            color="medium"
-                        />
-                    );
-                })}
-            </TokenInfoWrapper>
+            <XScrollWrapper>
+                <HeaderWrapper>
+                    <OverviewRow
+                        firstColumn="Token"
+                        secondColumn="Weight"
+                        thirdColumn="Your balance"
+                        fourthColumn={isActive ? 'Current price' : 'Withdrawal price'}
+                        color="light"
+                    />
+                </HeaderWrapper>
+                <TokenInfoWrapper rowsCount={numberOfTokens}>
+                    {pooledTokens.map((token, i) => {
+                        return (
+                            <OverviewRow
+                                key={i}
+                                firstColumn={
+                                    <TokenWrapper>
+                                        <TokenLogo symbol={token.symbol} size={iconSize} />
+                                        <TokenSymbol>{token.symbol}</TokenSymbol>
+                                    </TokenWrapper>
+                                }
+                                secondColumn={formatUtils.getFormattedPercentageValue(
+                                    token.weight,
+                                    true,
+                                )}
+                                thirdColumn={tokenBalances[i].toFixed(4)}
+                                fourthColumn={<FiatValue value={tokenPricesEnd[i]} />}
+                                color="medium"
+                            />
+                        );
+                    })}
+                </TokenInfoWrapper>
+            </XScrollWrapper>
         </Wrapper>
     );
 };

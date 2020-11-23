@@ -8,7 +8,7 @@ import PriceChangeRow from './PriceChangeRow';
 const GRID_GAP = 5;
 
 const Wrapper = styled.div`
-    @media (max-width: 580px) {
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         font-size: ${variables.FONT_SIZE.SMALL};
     }
 `;
@@ -22,7 +22,7 @@ const GridWrapper = styled.div<{ rowsCount: number }>`
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
-    overflow-x: auto; /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
+    width: fit-content;
     word-break: break-all;
     padding: 5px;
 `;
@@ -63,6 +63,10 @@ const TokenSymbol = styled.div`
     text-overflow: ellipsis;
 `;
 
+const XScrollWrapper = styled.div`
+    overflow-x: auto;
+`;
+
 interface Props {
     tokensPool?: any;
     onChange: any;
@@ -94,32 +98,38 @@ const SimulationBox = ({
                 <SubTitleRight>Simulated price</SubTitleRight>
             </SubTitlesWrapper>
 
-            <GridWrapper rowsCount={pooledTokens.length}>
-                {pooledTokens.map((token, i) => {
-                    const tokenSymbol = token.symbol;
-                    return (
-                        <PriceChangeRow
-                            // make sure the id is unique to the pool and the token. We want the token sliders
-                            // to re/render if in the new pool are the same tokens as in the previous pool
-                            key={`${poolId}${tokenSymbol}`}
-                            onSliderChange={newValue => {
-                                onChange(newValue, i);
-                            }}
-                            onDefaultSliderValueChange={newValue => onNewDefaultValue(newValue, i)}
-                            firstColumn={
-                                <TokenWrapper>
-                                    <TokenLogo symbol={tokenSymbol} size={22} />
-                                    <TokenSymbol>{tokenSymbol}</TokenSymbol>
-                                </TokenWrapper>
-                            }
-                            fourthColumn={
-                                <FiatValue value={tokenPricesEnd[i] * simulatedCoefficients[i]} />
-                            }
-                            color="dark"
-                        />
-                    );
-                })}
-            </GridWrapper>
+            <XScrollWrapper>
+                <GridWrapper rowsCount={pooledTokens.length}>
+                    {pooledTokens.map((token, i) => {
+                        const tokenSymbol = token.symbol;
+                        return (
+                            <PriceChangeRow
+                                // make sure the id is unique to the pool and the token. We want the token sliders
+                                // to re/render if in the new pool are the same tokens as in the previous pool
+                                key={`${poolId}${tokenSymbol}`}
+                                onSliderChange={newValue => {
+                                    onChange(newValue, i);
+                                }}
+                                onDefaultSliderValueChange={newValue =>
+                                    onNewDefaultValue(newValue, i)
+                                }
+                                firstColumn={
+                                    <TokenWrapper>
+                                        <TokenLogo symbol={tokenSymbol} size={22} />
+                                        <TokenSymbol>{tokenSymbol}</TokenSymbol>
+                                    </TokenWrapper>
+                                }
+                                fourthColumn={
+                                    <FiatValue
+                                        value={tokenPricesEnd[i] * simulatedCoefficients[i]}
+                                    />
+                                }
+                                color="dark"
+                            />
+                        );
+                    })}
+                </GridWrapper>
+            </XScrollWrapper>
         </Wrapper>
     );
 };

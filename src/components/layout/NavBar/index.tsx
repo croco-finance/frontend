@@ -1,9 +1,8 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { variables } from '../../../config';
-import colors from '../../../config/colors';
-import { PageLogo } from '../../ui';
+import { variables, colors } from '@config';
+import { PageLogo, NoTextLogo } from '@components/ui';
 import { useSelector } from 'react-redux';
 
 const linkActiveStyles = {
@@ -20,9 +19,25 @@ const Wrapper = styled.div`
     height: 80px;
     align-items: center;
 
-    @media (max-width: 520px) {
-        padding: 0 10px 10px 10px;
-        height: 70px;
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        padding: 10px 0;
+        height: auto;
+    }
+`;
+
+const PageLogoWrapper = styled.div`
+    display: flex;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        display: none;
+    }
+`;
+
+const NoTextLogoWrapper = styled.div`
+    display: flex;
+
+    @media (min-width: ${variables.SCREEN_SIZE.SM}) {
+        display: none;
     }
 `;
 
@@ -51,7 +66,12 @@ const NavBar = () => {
                     pathname: '/',
                 }}
             >
-                <PageLogo height={20}></PageLogo>
+                <PageLogoWrapper>
+                    <PageLogo height={20} />
+                </PageLogoWrapper>
+                <NoTextLogoWrapper>
+                    <NoTextLogo height={20} />
+                </NoTextLogoWrapper>
             </Link>
             <NavItemsWrapper>
                 <StyledLink

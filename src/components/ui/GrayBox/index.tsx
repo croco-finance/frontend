@@ -1,9 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import colors from '../../../config/colors';
+import { colors, variables } from '@config';
 
 const Wrapper = styled.div`
     width: 100%;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        width: fit-content;
+    } ;
 `;
 
 const Content = styled.div<{ hasBottomBar: boolean; padding: Array<number> }>`
