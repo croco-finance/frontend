@@ -68,6 +68,11 @@ function sortAndTransformSnaps(userData: any): SnapStructure {
     for (const exchange of ['BALANCER', 'UNI_V2']) {
         if (userData.hasOwnProperty(exchange)) {
             let snaps_ = userData[exchange]['snaps'];
+            if (snaps_ === undefined) {
+                // TODO: send log to firebase along with address
+                console.log('WARNING: no snaps for existing yield');
+                continue;
+            }
             for (const poolId of Object.keys(snaps_)) {
                 let poolSnaps: Snap[] = [];
                 for (const snapId of Object.keys(snaps_[poolId])) {
