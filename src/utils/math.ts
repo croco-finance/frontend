@@ -22,7 +22,7 @@ const roundToNDecimals = (value: number, nDecimals: number) => {
     return Math.round(value * coeff) / coeff;
 };
 
-const getDailyAverageFeeGains = (timeStampStartMillis, timeStampEndMillis, totalFeesUsd) => {
+const getAverageDailyRewards = (timeStampStartMillis, timeStampEndMillis, totalFeesUsd) => {
     const differenceMillis = timeStampEndMillis - timeStampStartMillis;
     const differenceDays = differenceMillis / (3600 * 24 * 1000);
     return totalFeesUsd / differenceDays;
@@ -106,10 +106,21 @@ const multiplyEachArrayElementByValue = (arr: Array<number>, value: number) => {
     return modifiedArr;
 };
 
+const sumArrayOfTokenArrays = (tokenArr: Array<Array<number>>) => {
+    let tokenCount = tokenArr[0].length;
+    let tokenAmountsSum = new Array(tokenCount).fill(0);
+
+    tokenArr.forEach(arr => {
+        tokenAmountsSum = sumArraysElementWise(tokenAmountsSum, arr);
+    });
+
+    return tokenAmountsSum;
+};
+
 export {
     countDecimals,
     arrangeArray,
-    getDailyAverageFeeGains,
+    getAverageDailyRewards,
     multiplyArraysElementWise,
     subtractArraysElementWise,
     sumArraysElementWise,
@@ -119,4 +130,5 @@ export {
     getFirstTwoNonZeroDecimals,
     getTokenArrayValue,
     roundToNDecimals,
+    sumArrayOfTokenArrays,
 };

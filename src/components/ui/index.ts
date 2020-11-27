@@ -23,6 +23,8 @@ import SignedValue from './SignedValue';
 import CustomLink from './CustomLink';
 import PoolHeader from './PoolHeader';
 import NoTextLogo from './NoTextLogo';
+import TextBadge from './TextBadge';
+import CollapsibleContainer from './CollapsibleContainer';
 
 export {
     TokenLogo,
@@ -50,4 +52,6 @@ export {
     CustomLink,
     PoolHeader,
     NoTextLogo,
+    TextBadge,
+    CollapsibleContainer,
 };

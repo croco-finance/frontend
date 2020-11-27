@@ -134,7 +134,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
         tokenBalances,
         feesTokenAmounts,
         tokenPricesEnd,
-        poolValueUsd,
+        endPoolValueUsd,
     } = pool.cumulativeStats;
 
     // ----- GET SIMULATION VALUES -----
@@ -164,12 +164,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
 
     const tokenBalancesDiff = mathUtils.subtractArraysElementWise(newTokenBalances, tokenBalances);
 
-    const graphData = graphUtils.getILGraphData(
-        poolValueUsd,
-        newPoolValueUsd,
-        newHodlValueUsd,
-        isActive,
-    );
+    const graphData = graphUtils.getILGraphData(endPoolValueUsd, newPoolValueUsd, newHodlValueUsd);
     const maxPossibleSimulationValue = graphUtils.getMaxPossiblePoolValue(
         tokenBalances,
         tokenPricesEnd,
@@ -187,9 +182,9 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
         ? lastIntervalStat.yieldTokenAmount * lastIntervalStat.yieldTokenPriceEnd
         : 0;
 
-    const poolValueIncreaseCoeff = newPoolValueUsd / poolValueUsd;
+    const poolValueIncreaseCoeff = newPoolValueUsd / endPoolValueUsd;
 
-    const averageRewardsLastSnapshot = mathUtils.getDailyAverageFeeGains(
+    const averageRewardsLastSnapshot = mathUtils.getAverageDailyRewards(
         lastSnapTimestampStart,
         lastSnapTimestampEnd,
         // TODO is this correct way how to compute new fee value after price change?
@@ -220,7 +215,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                             firstColumn="Your pool size"
                             secondColumn={
                                 <PoolValueCryptoFiatWrapper>
-                                    <StyledFiatValueWrapper value={poolValueUsd} />
+                                    <StyledFiatValueWrapper value={endPoolValueUsd} />
                                     <VerticalCryptoAmounts
                                         maxWidth={70}
                                         tokenSymbols={tokenSymbolsArr}
@@ -243,7 +238,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                             fourthColumn={
                                 <PoolValueCryptoFiatWrapper>
                                     <ColorizedFiatValueWrapper
-                                        value={newPoolValueUsd - poolValueUsd}
+                                        value={newPoolValueUsd - endPoolValueUsd}
                                         usePlusSymbol
                                         colorized
                                     />

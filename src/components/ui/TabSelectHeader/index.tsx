@@ -46,18 +46,6 @@ const Button = styled.div<{ selected: boolean; disabled?: boolean }>`
     align-items: center;
 `;
 
-const SoonBadge = styled.div`
-    color: ${colors.GREEN};
-    background-color: #e9ffeb;
-    font-size: ${variables.FONT_SIZE.TINY};
-    padding: 3px 5px;
-    border-radius: 3px;
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    position: absolute;
-    right: 0px;
-    top: -8px;
-`;
-
 type TabOptions = 'overview' | 'strategies';
 
 interface Props {
@@ -84,15 +72,13 @@ const TabSelectHeader = ({ headline, onSelectTab, hideTabs = false }: Props) => 
                         <span>Overview</span>
                     </Button>
                     <Button
-                        disabled
                         onClick={() => {
-                            // onSelectTab('strategies');
-                            // setSelectedTab('strategies');
+                            onSelectTab('strategies');
+                            setSelectedTab('strategies');
                         }}
                         selected={selectedTab === 'strategies'}
                     >
                         <span>Compare strategies</span>
-                        <SoonBadge>SOON</SoonBadge>
                     </Button>
                 </ButtonsWrapper>
             )}

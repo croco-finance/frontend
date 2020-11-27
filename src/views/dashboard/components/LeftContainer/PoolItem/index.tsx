@@ -94,7 +94,7 @@ const PoolItem = ({ poolId }: Props) => {
     const { pooledTokens, exchange } = allPools[poolId];
 
     if (allPools[poolId].cumulativeStats === null) return <p> No stats </p>;
-    const { feesUsd, yieldUsd, txCostUsd, poolValueUsd } = allPools[poolId].cumulativeStats;
+    const { feesUsd, yieldUsd, txCostUsd, endPoolValueUsd } = allPools[poolId].cumulativeStats;
 
     let isSelected = selectedPoolId === poolId;
 
@@ -123,7 +123,7 @@ const PoolItem = ({ poolId }: Props) => {
                 </PoolWrapper>
 
                 <Value>
-                    <FiatValue value={poolValueUsd}></FiatValue>
+                    <FiatValue value={endPoolValueUsd}></FiatValue>
                 </Value>
                 <Gains>
                     <FiatValue
