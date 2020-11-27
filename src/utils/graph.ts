@@ -60,11 +60,16 @@ const getGraphData = (intervalStats: types.IntervalStats[]) => {
     return graphData;
 };
 
-const getILGraphData = (currentPoolValue: number, newPoolValue: number, newHodlValue: number) => {
+const getILGraphData = (
+    currentPoolValue: number,
+    newPoolValue: number,
+    newHodlValue: number,
+    poolIsActive: boolean,
+) => {
     const data = new Array(2);
 
     data[0] = {
-        name: 'Today',
+        name: poolIsActive ? 'Today' : 'Withdrawal time',
         poolValue: currentPoolValue,
         hodlValue: currentPoolValue,
     };

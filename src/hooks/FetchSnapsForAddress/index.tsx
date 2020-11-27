@@ -58,14 +58,17 @@ const FetchSnapsForAddress = initialAddress => {
                 }
 
                 // declare Redux variables
-                let exToPoolMap: DexToPoolIdMap = { BALANCER: [], UNI_V2: [] };
+                let exToPoolMap: DexToPoolIdMap = { BALANCER: [], UNI_V2: [], SUSHI: [] };
                 let activePoolIds: Array<string> = [];
                 let inactivePoolIds: Array<string> = [];
                 const customPoolsObject: AllPoolsGlobal = {};
 
                 for (const [poolId, snapshotsArr] of Object.entries(fetchedSnapshots)) {
                     const snapshotsCount = snapshotsArr.length;
-                    if (snapshotsCount > 1) {
+                    const exchange: Exchange = snapshotsArr[0].exchange;
+
+                    // check the exchange is supported
+                    if (snapshotsCount > 1 && exchange in exToPoolMap) {
                         // compute interval and cumulative stats
                         const {
                             intervalStats,
@@ -83,7 +86,6 @@ const FetchSnapsForAddress = initialAddress => {
                         }
 
                         // Push PoolId to <Exchange, PoolId> mapping
-                        const exchange: Exchange = snapshotsArr[0].exchange;
                         exToPoolMap[exchange].push(poolId);
 
                         // Create new pool object

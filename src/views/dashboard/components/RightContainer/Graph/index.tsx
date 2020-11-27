@@ -84,9 +84,9 @@ class Graph extends PureComponent<Props, State> {
                     data={data}
                     margin={{
                         top: 10,
-                        right: 55,
+                        right: 10,
                         bottom: 10,
-                        left: 55,
+                        left: 70,
                     }}
                 >
                     <CartesianGrid strokeDasharray="2 2" />
@@ -148,11 +148,11 @@ class Graph extends PureComponent<Props, State> {
                         stroke={colors.FONT_MEDIUM}
                         tickFormatter={this.valueToUsd}
                         label={{
-                            // value: 'Pool value [$]',
+                            value: 'Pool value',
                             angle: -90,
                             offset: 460,
                             position: 'center',
-                            dx: -60,
+                            dx: -90,
                             style: {
                                 textAnchor: 'middle',
                                 fontSize: variables.FONT_SIZE.SMALL,

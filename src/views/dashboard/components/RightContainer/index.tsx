@@ -23,8 +23,8 @@ const GraphWrapper = styled.div`
 const GraphTitle = styled.div`
     color: ${colors.FONT_MEDIUM};
     text-align: center;
-    padding-bottom: 15px;
-    padding-left: 40px;
+    padding-bottom: 30px;
+    font-size: ${variables.FONT_SIZE.H3};
 `;
 
 const SimulatorButtonWrapper = styled.div`
@@ -119,7 +119,9 @@ const RightContainer = () => {
                 <>
                     <PoolOverview />
                     <GraphWrapper>
-                        <GraphTitle>History of your pool share value</GraphTitle>
+                        <GraphTitle>
+                            Your pool share value at the days you deposited/withdrew some funds
+                        </GraphTitle>
                         <Graph data={graphData} />
                     </GraphWrapper>
                     {activePoolIds.includes(selectedPoolId) ? (

@@ -127,7 +127,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const pool = allPools[selectedPoolId];
 
-    let { pooledTokens, exchange, tokenWeights } = pool;
+    let { pooledTokens, exchange, tokenWeights, isActive } = pool;
 
     let {
         // TODO make sure you use current token balances, not cumulative values
@@ -164,7 +164,12 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
 
     const tokenBalancesDiff = mathUtils.subtractArraysElementWise(newTokenBalances, tokenBalances);
 
-    const graphData = graphUtils.getILGraphData(poolValueUsd, newPoolValueUsd, newHodlValueUsd);
+    const graphData = graphUtils.getILGraphData(
+        poolValueUsd,
+        newPoolValueUsd,
+        newHodlValueUsd,
+        isActive,
+    );
     const maxPossibleSimulationValue = graphUtils.getMaxPossiblePoolValue(
         tokenBalances,
         tokenPricesEnd,
@@ -283,6 +288,8 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                                     lastSnapTimestampStart,
                                     'MONTH_DAY_YEAR',
                                 )}
+                                <br></br>
+                                (date of your last interaction with the pool)
                             </SubNoteDaysLeft>
                         </>
                     }

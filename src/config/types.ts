@@ -1,6 +1,7 @@
 export enum Exchange {
     UNI_V2 = 'UNI_V2',
     BALANCER = 'BALANCER',
+    SUSHI = 'SUSHI',
 }
 
 export type DexBaseUrls = { [key in keyof typeof Exchange]: string };

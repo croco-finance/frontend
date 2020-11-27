@@ -13,7 +13,7 @@ const getSimulationStats = (
     // const weightsSum = mathUtils.sumArr(tokenWeights);
 
     let newTokenBalances;
-    if (exchange === 'UNI_V2') {
+    if (exchange === 'UNI_V2' || exchange === 'SUSHI') {
         newTokenBalances = lossUtils.getNewBalancesUniswap(currentTokenBalances, newTokenPrices);
     } else if (exchange === 'BALANCER') {
         newTokenBalances = lossUtils.getNewBalancesBalancer(

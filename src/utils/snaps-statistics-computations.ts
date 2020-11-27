@@ -65,7 +65,7 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
     const { exchange } = snapshotT0;
     let newBalancesNoFees;
 
-    if (exchange === 'UNI_V2') {
+    if (exchange === 'UNI_V2' || exchange === 'SUSHI') {
         newBalancesNoFees = lossUtils.getNewBalancesUniswap(tokenBalancesStart, tokenPricesEnd);
     } else if (exchange === 'BALANCER') {
         newBalancesNoFees = lossUtils.getNewBalancesBalancer(
