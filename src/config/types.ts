@@ -118,9 +118,11 @@ export interface PoolItem {
     yieldToken: Token | null;
     hasYieldReward: boolean;
     timestampEnd: number;
-    intervalStats: Array<IntervalStats>;
+    intervalStats: IntervalStats[];
     cumulativeStats: CumulativeStats;
-    tokenWeights: Array<number>;
+    tokenWeights: number[];
+    withdrawals: Withdrawal[];
+    deposits: Deposit[];
 }
 
 export interface YieldTokenInfo {

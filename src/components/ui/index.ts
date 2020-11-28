@@ -25,6 +25,7 @@ import PoolHeader from './PoolHeader';
 import NoTextLogo from './NoTextLogo';
 import TextBadge from './TextBadge';
 import CollapsibleContainer from './CollapsibleContainer';
+import InfoBox from './InfoBox';
 
 export {
     TokenLogo,
@@ -54,4 +55,5 @@ export {
     NoTextLogo,
     TextBadge,
     CollapsibleContainer,
+    InfoBox,
 };

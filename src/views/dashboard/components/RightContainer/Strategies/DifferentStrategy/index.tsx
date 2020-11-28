@@ -4,13 +4,12 @@ import {
     VerticalCryptoAmounts,
     CollapsibleContainer,
     BoxRow,
+    Icon,
 } from '@components/ui';
 import { colors, variables } from '@config';
-import { formatUtils } from '@utils';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import { formatUtils, mathUtils } from '@utils';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { AllPoolsGlobal } from '@types';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -42,36 +41,47 @@ const RewardsExpensesHeader = styled(GridWrapper)`
     grid-template-rows: repeat(1, 20px);
     margin-bottom: 18px;
     padding: 0;
-    font-size: ${variables.FONT_SIZE.TINY};
+    font-size: ${variables.FONT_SIZE.SMALL};
     border-bottom: 1px solid ${colors.STROKE_GREY};
 `;
 
-const TotalLossRow = styled(GridWrapper)`
+const BottomBarRow = styled(GridWrapper)`
+    grid-template-columns: minmax(100px, auto) minmax(100px, auto);
     height: 40px;
     align-items: center;
 `;
 
 const StrategyHeaderGridWrapper = styled(GridWrapper)`
-    grid-template-columns: minmax(100px, auto) minmax(100px, auto);
-    padding-right: 10px;
+    grid-template-columns: minmax(100px, auto) minmax(100px, auto) 26px;
 `;
 
 const CollapseWrapper = styled.div``;
-
-const DaysLeftGridWrapper = styled.div`
-    background-color: ${colors.BACKGROUND_DARK};
-    padding: 15px 50px 15px 15px;
-    border-radius: 0 0 10px 10px;
-    color: ${colors.FONT_LIGHT};
-`;
 
 const getEstDaysLeft = (loss: number, avDailyRewards: number) => {
     if (loss > 0) return 0;
     return Math.round(Math.abs(loss / avDailyRewards));
 };
 
+const ExpandButton = styled.div`
+    cursor: pointer;
+    border-radius: 20px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+        background-color: #dcdce6; // used only here
+    }
+`;
+
+const ValueDifferenceWrapper = styled.div<{ thickBorder: boolean }>`
+    border-top: 1px solid ${colors.STROKE_GREY};
+    border-width: ${props => (props.thickBorder ? '5px' : '1px')};
+`;
+
 interface Props {
-    headline: string;
+    depositsHeadline: string;
     endTimeText: string;
     poolStrategyUsd: number;
     feesUsd: number;
@@ -84,10 +94,15 @@ interface Props {
     yieldTokenSymbol: string | undefined;
     txCostEth: number;
     lastIntAvDailyRewardsUsd: number;
+    depositTimestampsArr: number[];
+    depositTokenAmountsArr: Array<Array<number>>;
+    currentDepositTokenPricesArr: number[];
+    depositTokenSymbolsArr: string[];
+    poolIsActive: boolean;
 }
 
 const DifferentStrategy = ({
-    headline,
+    depositsHeadline,
     poolStrategyUsd,
     feesUsd,
     yieldUsd,
@@ -100,34 +115,14 @@ const DifferentStrategy = ({
     txCostEth,
     endTimeText,
     lastIntAvDailyRewardsUsd,
+    depositTimestampsArr,
+    depositTokenAmountsArr,
+    currentDepositTokenPricesArr,
+    depositTokenSymbolsArr,
+    poolIsActive,
 }: Props) => {
-    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    let pool = allPools[selectedPoolId];
-
-    // Compute imp loss, fees, hold, ETH hold, token hold fo each snapshot
-
-    // TODO make the following checks and computations cleaner
-    if (!allPools || !pool) {
-        return (
-            <Wrapper>
-                <h2>We didn't find any pools associated with this address :( </h2>
-            </Wrapper>
-        );
-    }
-
-    let { intervalStats, exchange } = pool;
-
-    // Temporary check if to show unclaimed UNI yield rewards
-    let showUnclaimedUni = false;
-
-    if (exchange === 'UNI_V2' && yieldTokenAmount === 0) {
-        intervalStats.forEach(stat => {
-            if (stat.staked === true) {
-                showUnclaimedUni = true;
-            }
-        });
-    }
+    const [valueOpened, setValueOpened] = useState(false);
+    const [diffOpened, setDiffOpened] = useState(false);
 
     const divergenceLoss = poolStrategyUsd - differentStrategyUsd - feesUsd - yieldUsd + txCostUsd;
 
@@ -138,6 +133,11 @@ const DifferentStrategy = ({
 
     let divergenceLossTExt = 'Price divergence loss';
     if (divergenceLoss > 0) divergenceLossTExt = 'Price divergence gain';
+
+    const gainLossText =
+        differentStrategyUsd > poolStrategyUsd
+            ? 'You lost comp. to this strategy'
+            : 'You gained comp. to this strategy';
 
     const feesRow = (
         <BoxRow
@@ -187,78 +187,185 @@ const DifferentStrategy = ({
         />
     );
 
+    const depositRows = (
+        <>
+            {depositTimestampsArr.map((timestamp, i) => (
+                <BoxRow
+                    key={timestamp}
+                    firstColumn={formatUtils.getFormattedDateFromTimestamp(
+                        timestamp,
+                        'MONTH_DAY_YEAR',
+                    )}
+                    secondColumn={
+                        <VerticalCryptoAmounts
+                            tokenSymbols={depositTokenSymbolsArr}
+                            tokenAmounts={depositTokenAmountsArr[i]}
+                        />
+                    }
+                    thirdColumn={
+                        <FiatValue
+                            value={mathUtils.getTokenArrayValue(
+                                depositTokenAmountsArr[i],
+                                currentDepositTokenPricesArr,
+                            )}
+                        />
+                    }
+                    columnColors={['medium', 'light', 'dark']}
+                />
+            ))}
+        </>
+    );
+
     return (
         <Wrapper>
             <CollapsibleContainer
-                headline={
-                    <StrategyHeaderGridWrapper>
-                        <BoxRow
-                            firstColumn={headline}
-                            secondColumn={
-                                <FiatValue
-                                    value={poolStrategyUsd - differentStrategyUsd}
-                                    usePlusSymbol
-                                    colorized
-                                />
-                            }
-                            columnColors={['light', 'light', 'light']}
-                        />
-                    </StrategyHeaderGridWrapper>
+                onChange={isOpened => {
+                    setValueOpened(isOpened);
+                }}
+                header={
+                    <GrayBox borderRadius={[10, 10, 0, 0]}>
+                        <StrategyHeaderGridWrapper>
+                            <BoxRow
+                                firstColumn="You would have"
+                                secondColumn={<FiatValue value={differentStrategyUsd} />}
+                                thirdColumn={
+                                    <ExpandButton>
+                                        <Icon
+                                            icon={valueOpened ? 'arrow_up' : 'arrow_down'}
+                                            size={16}
+                                            color={colors.FONT_MEDIUM}
+                                        />
+                                    </ExpandButton>
+                                }
+                            />
+                        </StrategyHeaderGridWrapper>
+                    </GrayBox>
                 }
                 collapseBody={
                     <CollapseWrapper>
                         <GrayBox
                             padding={[15, 50, 15, 15]}
                             borderRadius={[0, 0, 0, 0]}
-                            bottomBarPadding={[10, 50, 0, 15]}
+                            bottomBarPadding={[10, 50, 10, 15]}
                             bottomBarBorderRadius={[0, 0, 0, 0]}
                             bottomBar={
-                                <TotalLossRow>
-                                    <BoxRow
-                                        firstColumn="Total value"
-                                        secondColumn={<></>}
-                                        thirdColumn={
-                                            <FiatValue
-                                                value={poolStrategyUsd - differentStrategyUsd}
-                                                usePlusSymbol
-                                                useBadgeStyle
-                                                colorized
-                                            />
-                                        }
-                                    />
-                                </TotalLossRow>
+                                <>
+                                    <BottomBarRow>
+                                        <BoxRow
+                                            firstColumn="Strategy value"
+                                            secondColumn={
+                                                <FiatValue
+                                                    value={differentStrategyUsd}
+                                                    useBadgeStyle
+                                                />
+                                            }
+                                        />
+                                    </BottomBarRow>
+                                </>
                             }
                         >
                             <RewardsExpensesHeader>
                                 <BoxRow
-                                    firstColumn="Gains & losses"
-                                    secondColumn="Crypto"
+                                    firstColumn="Pool deposits"
+                                    secondColumn={depositsHeadline}
                                     thirdColumn={endTimeText}
                                     columnColors={['light', 'light', 'light']}
                                 />
                             </RewardsExpensesHeader>
-                            <GridWrapper>
-                                {feesRow}
-                                {yieldRow}
-                                {txCostRow}
-                                {divergenceLossRow}
-                            </GridWrapper>
+                            <GridWrapper>{depositRows}</GridWrapper>
                         </GrayBox>
                     </CollapseWrapper>
                 }
             />
-
-            {estDaysLeft > 0 && (
-                <DaysLeftGridWrapper>
-                    <StrategyHeaderGridWrapper>
-                        <BoxRow
-                            firstColumn="Est. days left to compensate loss*"
-                            secondColumn={estDaysLeft}
-                            columnColors={['light', 'light']}
-                        />
-                    </StrategyHeaderGridWrapper>
-                </DaysLeftGridWrapper>
-            )}
+            <ValueDifferenceWrapper thickBorder={valueOpened}>
+                <CollapsibleContainer
+                    onChange={isOpened => {
+                        setDiffOpened(isOpened);
+                    }}
+                    header={
+                        <GrayBox borderRadius={diffOpened ? [0, 0, 0, 0] : [0, 0, 10, 10]}>
+                            <StrategyHeaderGridWrapper>
+                                <BoxRow
+                                    firstColumn={gainLossText}
+                                    secondColumn={
+                                        <FiatValue
+                                            value={poolStrategyUsd - differentStrategyUsd}
+                                            usePlusSymbol
+                                            colorized
+                                        />
+                                    }
+                                    thirdColumn={
+                                        <ExpandButton>
+                                            <Icon
+                                                icon={diffOpened ? 'arrow_up' : 'arrow_down'}
+                                                size={16}
+                                                color={colors.FONT_MEDIUM}
+                                            />
+                                        </ExpandButton>
+                                    }
+                                />
+                            </StrategyHeaderGridWrapper>
+                        </GrayBox>
+                    }
+                    collapseBody={
+                        <CollapseWrapper>
+                            <GrayBox
+                                padding={[15, 50, 15, 15]}
+                                borderRadius={[0, 0, 0, 0]}
+                                bottomBarPadding={[10, 50, 10, 15]}
+                                bottomBarBorderRadius={[0, 0, 10, 10]}
+                                bottomBar={
+                                    <>
+                                        <BottomBarRow>
+                                            <BoxRow
+                                                firstColumn={
+                                                    poolStrategyUsd - differentStrategyUsd > 0
+                                                        ? 'Total gain'
+                                                        : 'Total loss'
+                                                }
+                                                secondColumn={
+                                                    <FiatValue
+                                                        value={
+                                                            poolStrategyUsd - differentStrategyUsd
+                                                        }
+                                                        usePlusSymbol
+                                                        useBadgeStyle
+                                                        colorized
+                                                    />
+                                                }
+                                            />
+                                        </BottomBarRow>
+                                        {estDaysLeft > 0 && poolIsActive && (
+                                            <BottomBarRow>
+                                                <BoxRow
+                                                    firstColumn="Est. days left to compensate loss*"
+                                                    secondColumn={estDaysLeft}
+                                                    // columnColors={['medium', 'medium']}
+                                                />
+                                            </BottomBarRow>
+                                        )}
+                                    </>
+                                }
+                            >
+                                <RewardsExpensesHeader>
+                                    <BoxRow
+                                        firstColumn="Gains & losses"
+                                        secondColumn="Crypto"
+                                        thirdColumn={endTimeText}
+                                        columnColors={['light', 'light', 'light']}
+                                    />
+                                </RewardsExpensesHeader>
+                                <GridWrapper>
+                                    {feesRow}
+                                    {yieldRow}
+                                    {txCostRow}
+                                    {divergenceLossRow}
+                                </GridWrapper>
+                            </GrayBox>
+                        </CollapseWrapper>
+                    }
+                />
+            </ValueDifferenceWrapper>
         </Wrapper>
     );
 };

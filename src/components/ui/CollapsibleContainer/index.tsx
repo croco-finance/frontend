@@ -6,11 +6,11 @@ import { Icon } from '@components/ui';
 import { colors } from '@config';
 
 const Header = styled.div<{ roundedBottom: boolean }>`
-    display: flex;
+    /* display: flex;
     align-items: center;
     background-color: ${colors.BACKGROUND};
     border-radius: 10px 10px 0 0;
-    padding: 15px;
+    padding: 15px; */
     cursor: pointer;
 `;
 
@@ -35,11 +35,17 @@ const Content = styled.div``;
 
 interface Props {
     isOpenedDefault?: boolean;
-    headline: React.ReactNode;
+    header: React.ReactNode;
     collapseBody: React.ReactNode;
+    onChange?: any;
 }
 
-const CollapsibleContainer = ({ isOpenedDefault = false, collapseBody, headline }: Props) => {
+const CollapsibleContainer = ({
+    isOpenedDefault = false,
+    collapseBody,
+    header,
+    onChange,
+}: Props) => {
     const [isOpened, setIsOpened] = useState(isOpenedDefault);
     return (
         <div>
@@ -48,12 +54,14 @@ const CollapsibleContainer = ({ isOpenedDefault = false, collapseBody, headline 
                 roundedBottom={!isOpened}
                 onClick={() => {
                     setIsOpened(!isOpened);
+                    onChange(!isOpened);
                 }}
             >
-                <Headline>{headline}</Headline>
+                {header}
+                {/* <Headline>{headline}</Headline>
                 <ExpandButton>
                     <Icon icon="arrow_down" size={16} color={colors.FONT_DARK} />
-                </ExpandButton>
+                </ExpandButton> */}
             </Header>
 
             <Collapse isOpened={isOpened}>

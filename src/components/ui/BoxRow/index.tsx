@@ -15,16 +15,22 @@ const leftAlignedStyles = css`
 interface RowContentProps {
     color?: 'light' | 'medium' | 'dark';
     textAlign?: 'left' | 'right';
+    customColor?: string;
 }
 
 // this wrapper sets the text color of the item based on the  color: 'light' | 'dark' prop
 const Col = styled.div<RowContentProps>`
     display: flex;
     align-items: center;
-    /* height: 36px; */
-    color: ${props => (props.color === 'light' ? `${colors.FONT_MEDIUM}` : `${colors.FONT_DARK}`)};
 
     ${props => {
+        // custom color is first so it return and overrides following styles
+        if (props.customColor) {
+            return css`
+                color: ${props.customColor};
+            `;
+        }
+
         switch (props.color) {
             case 'light':
                 return css`
@@ -56,6 +62,7 @@ interface Props {
     showThreeCols?: boolean;
     columnColors?: Array<'light' | 'medium' | 'dark'>;
     columnAlignment?: Array<'left' | 'right'>;
+    customColor?: string;
 }
 
 const BoxRow = ({
@@ -66,25 +73,38 @@ const BoxRow = ({
     fourthColumn,
     columnColors = ['medium', 'medium', 'medium', 'medium'],
     columnAlignment = ['left', 'right', 'right', 'left'],
+    customColor,
 }: Props) => {
     return (
         <>
-            <Col textAlign={columnAlignment[0]} color={columnColors[0]}>
+            <Col textAlign={columnAlignment[0]} color={columnColors[0]} customColor={customColor}>
                 {firstColumn}
             </Col>
             {secondColumn ? (
-                <Col textAlign={columnAlignment[1]} color={columnColors[1]}>
+                <Col
+                    textAlign={columnAlignment[1]}
+                    color={columnColors[1]}
+                    customColor={customColor}
+                >
                     {secondColumn}
                 </Col>
             ) : null}
 
             {thirdColumn ? (
-                <Col textAlign={columnAlignment[2]} color={columnColors[2]}>
+                <Col
+                    textAlign={columnAlignment[2]}
+                    color={columnColors[2]}
+                    customColor={customColor}
+                >
                     {thirdColumn}
                 </Col>
             ) : null}
             {fourthColumn ? (
-                <Col textAlign={columnAlignment[3]} color={columnColors[3]}>
+                <Col
+                    textAlign={columnAlignment[3]}
+                    color={columnColors[3]}
+                    customColor={customColor}
+                >
                     {fourthColumn}
                 </Col>
             ) : null}

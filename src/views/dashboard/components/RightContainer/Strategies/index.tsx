@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import { graphUtils, formatUtils } from '@utils';
 import LiquidityPool from './LiquidityPool';
 import DifferentStrategy from './DifferentStrategy';
-import { BoxRow, GrayBox } from '@components/ui';
+import { BoxRow, GrayBox, Icon, InfoBox } from '@components/ui';
+import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
     display: flex;
@@ -20,9 +21,9 @@ const Headline = styled.h3`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     display: flex;
     text-align: left;
-    color: ${colors.FONT_DARK};
-    padding-left: 20px;
-    margin-top: 30px;
+    color: ${colors.FONT_MEDIUM};
+    padding-left: 15px;
+    margin-top: 10px;
     margin-bottom: 10px;
 `;
 
@@ -32,15 +33,17 @@ const SubHeadline = styled.h3`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     display: flex;
     text-align: left;
-    color: ${colors.FONT_DARK};
-    padding-left: 20px;
-    margin-top: 30px;
+    color: ${colors.FONT_MEDIUM};
+    padding-left: 15px;
+    margin-top: 35px;
     margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid ${colors.STROKE_GREY};
 `;
 
 const Description = styled.p`
     width: 100%;
-    padding-left: 20px;
+    padding-left: 15px;
     color: ${colors.FONT_MEDIUM};
     margin-top: 0;
     margin-bottom: 30px;
@@ -51,37 +54,31 @@ const StrategyItemWrapper = styled.div`
     margin-bottom: 15px;
 `;
 
-const GridWrapper = styled.div`
-    flex-grow: 1;
-    display: grid;
-    gap: 28px 10px;
-    grid-template-columns: 180px minmax(100px, auto) minmax(100px, auto);
-    grid-auto-rows: auto;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    align-items: center;
-    /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
-    /* overflow-x: auto; */
-    word-break: break-all;
-    align-items: baseline;
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        font-size: ${variables.FONT_SIZE.SMALL};
-        gap: 18px 5px;
-        grid-template-columns: 140px minmax(90px, auto) minmax(90px, auto);
-    }
-`;
-
-const HeaderWrapper = styled.div`
-    padding: 0 50px 10px 20px;
-    margin-top: 10px;
+const SectionHeader = styled.div<{ marginTop: number }>`
+    padding: 0 50px 10px 15px;
+    margin-top: ${props => props.marginTop}px;
     width: 100%;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_LIGHT};
 `;
 
-const StrategyHeaderGridWrapper = styled(GridWrapper)`
-    grid-template-columns: minmax(100px, auto) minmax(100px, auto);
+const Note = styled.div`
+    margin-top: 18px;
+`;
+
+const RememberNote = styled.span`
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+`;
+
+const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: ${colors.PASTEL_BLUE_DARK};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 const Strategies = () => {
@@ -94,13 +91,23 @@ const Strategies = () => {
         return null;
     }
 
-    let { pooledTokens, isActive, hasYieldReward, yieldToken, intervalStats, exchange } = pool;
+    let {
+        pooledTokens,
+        isActive,
+        hasYieldReward,
+        yieldToken,
+        intervalStats,
+        exchange,
+        deposits,
+        withdrawals,
+    } = pool;
 
     const {
         feesUsd,
         yieldUsd,
         txCostEth,
         txCostUsd,
+        ethPriceEnd,
         currentPoolValueUsd,
         tokenBalances,
         feesTokenAmounts,
@@ -114,48 +121,65 @@ const Strategies = () => {
         tokensHodlStrategyUsd,
         ethHodlStrategyUsd,
         lastIntAvDailyRewardsUsd,
+        tokenPricesEnd,
     } = pool.cumulativeStats;
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
 
     const endTimeText = isActive ? 'Value today' : 'Withdrawal time value';
 
-    let tokensHodlHeadline = 'Gain compared to HODLing pooled tokens';
-    if (tokensHodlStrategyUsd > poolStrategyUsd)
-        tokensHodlHeadline = 'Loss compared to HODLing pooled tokens';
+    const depositTimestampsArr: number[] = [];
+    const depositTokenAmountsArr: Array<Array<number>> = [];
+    const depositEthAmountsArr: Array<Array<number>> = [];
 
-    let ethHodlHeadline = 'Gain compared to exchanging pooled tokens for ETH';
-    if (ethHodlStrategyUsd > poolStrategyUsd)
-        ethHodlHeadline = 'Loss compared to exchanging pooled tokens for ETH';
+    deposits.forEach(deposit => {
+        if (deposit.timestamp) {
+            depositTimestampsArr.push(deposit.timestamp);
+            depositTokenAmountsArr.push(deposit.tokenAmounts);
+            depositEthAmountsArr.push([deposit.valueEth]);
+        }
+    });
 
     return (
         <Wrapper>
             <Headline>Is it worth it to be liquidity provider in this pool?</Headline>
             <Description>
-                Here we compare how does your pool perform compared to other commonly applied
-                strategies.
+                We compared your pool's performance to other popular strategies. These values are
+                computed for current token prices. Try{' '}
+                <StyledLink
+                    to={{
+                        pathname: '/simulator',
+                    }}
+                >
+                    simulator
+                </StyledLink>{' '}
+                to see estimates for different prices.
+                {/* <InfoBox>
+                    <RememberNote>Remember</RememberNote> that these values are computed for current
+                    ETH and tokens prices. Try{' '}
+                    <StyledLink
+                        to={{
+                            pathname: '/simulator',
+                        }}
+                    >
+                        simulator
+                    </StyledLink>{' '}
+                    to see estimates for different prices.
+                </InfoBox> */}
             </Description>
-            {/* <SubHeadline>Being liqudity provider</SubHeadline> */}
 
+            <SectionHeader marginTop={0}>Being liquidity provider</SectionHeader>
             <StrategyItemWrapper>
                 <LiquidityPool />
             </StrategyItemWrapper>
 
-            {/* <SubHeadline>Comparison to other strategies</SubHeadline> */}
+            <SubHeadline>Comparison to other strategies</SubHeadline>
 
-            <HeaderWrapper>
-                <StrategyHeaderGridWrapper>
-                    <BoxRow
-                        firstColumn="Strategy"
-                        secondColumn="Gain/Loss"
-                        columnColors={['light', 'light']}
-                    />
-                </StrategyHeaderGridWrapper>
-            </HeaderWrapper>
+            <SectionHeader marginTop={25}>If you HODL'd pooled tokens</SectionHeader>
 
             <StrategyItemWrapper>
                 <DifferentStrategy
-                    headline={tokensHodlHeadline}
+                    depositsHeadline={'Tokens'}
                     endTimeText={endTimeText}
                     tokenSymbols={tokenSymbolsArr}
                     poolStrategyUsd={poolStrategyUsd}
@@ -168,12 +192,21 @@ const Strategies = () => {
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
+                    depositTimestampsArr={depositTimestampsArr}
+                    depositTokenAmountsArr={depositTokenAmountsArr}
+                    currentDepositTokenPricesArr={tokenPricesEnd}
+                    depositTokenSymbolsArr={tokenSymbolsArr}
+                    poolIsActive={isActive}
                 />
             </StrategyItemWrapper>
 
+            <SectionHeader marginTop={30}>
+                If you exchanged all pooled tokens for ETH and HODL'd
+            </SectionHeader>
+
             <StrategyItemWrapper>
                 <DifferentStrategy
-                    headline={ethHodlHeadline}
+                    depositsHeadline={'ETH value'}
                     endTimeText={endTimeText}
                     tokenSymbols={tokenSymbolsArr}
                     poolStrategyUsd={poolStrategyUsd}
@@ -186,6 +219,11 @@ const Strategies = () => {
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
+                    depositTimestampsArr={depositTimestampsArr}
+                    depositTokenAmountsArr={depositEthAmountsArr}
+                    currentDepositTokenPricesArr={[ethPriceEnd]}
+                    depositTokenSymbolsArr={['ETH']}
+                    poolIsActive={isActive}
                 />
             </StrategyItemWrapper>
         </Wrapper>

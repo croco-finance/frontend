@@ -11,9 +11,10 @@ const Content = styled.div<{
     hasBottomBar: boolean;
     padding: Array<number>;
     borderRadius: Array<number>;
+    backgroundColor: string;
 }>`
     border-radius: ${props => (props.hasBottomBar ? '10px 10px 0 0' : '10px')};
-    background-color: ${colors.BACKGROUND};
+    background-color: ${props => props.backgroundColor};
     padding: ${props => `${props.padding[0]}px 
     ${props.padding[1]}px
     ${props.padding[2]}px
@@ -45,6 +46,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     bottomBarPadding?: Array<number>;
     borderRadius?: Array<number>;
     bottomBarBorderRadius?: Array<number>;
+    backgroundColor?: string;
 }
 
 const GrayBox = ({
@@ -55,6 +57,7 @@ const GrayBox = ({
     bottomBarPadding = padding,
     borderRadius = [10, 10, 10, 10],
     bottomBarBorderRadius = borderRadius,
+    backgroundColor = colors.BACKGROUND,
 }: Props) => {
     return (
         <Wrapper className={className}>
@@ -62,6 +65,7 @@ const GrayBox = ({
                 hasBottomBar={bottomBar !== undefined}
                 padding={padding}
                 borderRadius={borderRadius}
+                backgroundColor={backgroundColor}
             >
                 {children}
             </Content>

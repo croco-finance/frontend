@@ -4,10 +4,11 @@ import {
     VerticalCryptoAmounts,
     CollapsibleContainer,
     BoxRow,
+    Icon,
 } from '@components/ui';
 import { colors, variables } from '@config';
 import { formatUtils } from '@utils';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { AllPoolsGlobal } from '@types';
@@ -38,14 +39,6 @@ const GridWrapper = styled.div`
     }
 `;
 
-const HeaderWrapper = styled.div`
-    padding: 0 20px 10px 20px;
-    margin-top: 10px;
-    font-size: ${variables.FONT_SIZE.SMALL};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
-`;
-
 const RewardsExpensesHeader = styled(GridWrapper)`
     grid-template-rows: repeat(1, 20px);
     margin-bottom: 18px;
@@ -63,7 +56,7 @@ const StrategyHeaderGridWrapper = styled(GridWrapper)`
     grid-template-columns: minmax(100px, auto) minmax(100px, auto) 26px;
 `;
 
-const CollapseIconWrapper = styled.div`
+const ExpandButton = styled.div`
     cursor: pointer;
     border-radius: 20px;
     width: 22px;
@@ -76,12 +69,21 @@ const CollapseIconWrapper = styled.div`
     }
 `;
 
+const PoolShareHeadline = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+const SubNote = styled.div`
+    font-size: ${variables.FONT_SIZE.SMALL};
+`;
+
 const CollapseWrapper = styled.div``;
 
 const LiquidityPool = () => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     let pool = allPools[selectedPoolId];
+    const [isOpened, setIsOpened] = useState(false);
 
     // Compute imp loss, fees, hold, ETH hold, token hold fo each snapshot
 
@@ -97,23 +99,18 @@ const LiquidityPool = () => {
     let { pooledTokens, isActive, hasYieldReward, yieldToken, intervalStats, exchange } = pool;
 
     const {
-        feesUsd,
         yieldUsd,
         txCostEth,
         txCostUsd,
         currentPoolValueUsd,
         tokenBalances,
-        feesTokenAmounts,
         yieldTokenAmount,
-        depositsUsd,
         withdrawalsUsd,
-        depositsTokenAmounts,
         withdrawalsTokenAmounts,
         poolStrategyUsd,
     } = pool.cumulativeStats;
 
-    const endTimeText = isActive ? 'Value today' : 'Withdrawal time';
-    const poolShareValueText = isActive ? 'Your pool share' : 'End pool share';
+    const endTimeText = isActive ? 'Value today' : 'Withdrawal time value';
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
 
@@ -130,7 +127,11 @@ const LiquidityPool = () => {
 
     const poolShareRow = (
         <BoxRow
-            firstColumn="Current pool share (fees inc.)"
+            firstColumn={
+                <PoolShareHeadline>
+                    Current pool share<SubNote>(fees included)</SubNote>
+                </PoolShareHeadline>
+            }
             secondColumn={
                 <VerticalCryptoAmounts
                     tokenSymbols={tokenSymbolsArr}
@@ -183,31 +184,40 @@ const LiquidityPool = () => {
 
     return (
         <Wrapper>
-            <HeaderWrapper>
-                <GridWrapper>
-                    <BoxRow
-                        firstColumn="Pool overview"
-                        secondColumn="Crypto "
-                        thirdColumn={endTimeText}
-                        columnColors={['light', 'light', 'light']}
-                    />
-                </GridWrapper>
-            </HeaderWrapper>
-
             <CollapsibleContainer
-                headline={
-                    <StrategyHeaderGridWrapper>
-                        <BoxRow
-                            firstColumn="Being liquidity provider"
-                            secondColumn={<FiatValue value={poolStrategyUsd} usePlusSymbol />}
-                            columnColors={['light', 'light', 'light']}
-                        />
-                    </StrategyHeaderGridWrapper>
+                onChange={isOpened => {
+                    setIsOpened(isOpened);
+                }}
+                header={
+                    <GrayBox
+                        backgroundColor={colors.BACKGROUND_BLUE}
+                        borderRadius={isOpened ? [10, 10, 0, 0] : [10, 10, 10, 10]}
+                    >
+                        <StrategyHeaderGridWrapper>
+                            <BoxRow
+                                firstColumn="Strategy is worth"
+                                secondColumn={<FiatValue value={poolStrategyUsd} />}
+                                thirdColumn={
+                                    <ExpandButton>
+                                        <Icon
+                                            icon={isOpened ? 'arrow_up' : 'arrow_down'}
+                                            size={16}
+                                            color={colors.BLUE}
+                                        />
+                                    </ExpandButton>
+                                }
+                                customColor={colors.BLUE}
+                            />
+                        </StrategyHeaderGridWrapper>
+                    </GrayBox>
                 }
                 collapseBody={
                     <CollapseWrapper>
                         <GrayBox
-                            padding={[15, 15, 15, 15]}
+                            padding={[15, 50, 15, 15]}
+                            borderRadius={[0, 0, 0, 0]}
+                            bottomBarBorderRadius={[0, 0, 10, 10]}
+                            bottomBarPadding={[10, 50, 10, 15]}
                             bottomBar={
                                 <TotalLossRow>
                                     <BoxRow
@@ -223,8 +233,8 @@ const LiquidityPool = () => {
                             <RewardsExpensesHeader>
                                 <BoxRow
                                     firstColumn="Overview"
-                                    secondColumn="Crypto"
-                                    thirdColumn="Value today"
+                                    secondColumn="Tokens"
+                                    thirdColumn={endTimeText}
                                     columnColors={['light', 'light', 'light']}
                                 />
                             </RewardsExpensesHeader>

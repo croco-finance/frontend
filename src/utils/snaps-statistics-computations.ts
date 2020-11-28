@@ -25,7 +25,7 @@ const getPoolStatsFromSnapshots = (poolSnapshots: Array<Snap>) => {
     // get cumulative stats
     let cumulativeStats = getCumulativeStats(intervalStats, deposits, withdrawals);
 
-    return { intervalStats, cumulativeStats };
+    return { intervalStats, cumulativeStats, deposits, withdrawals };
 };
 
 const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => {
