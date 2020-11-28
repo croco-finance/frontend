@@ -23,7 +23,7 @@ const SvgWrapper = styled.img`
 `;
 
 const LandingPageText = () => {
-    return <SvgWrapper height={160} src={image} />;
+    return <SvgWrapper height={150} src={image} />;
 };
 
 export default LandingPageText;

@@ -1,4 +1,4 @@
-import { Icon, PageLogo, Spinner } from '@components/ui';
+import { Icon, PageLogo, Spinner, TokenLogo } from '@components/ui';
 import { analytics, colors, constants, variables } from '@config';
 import Portis from '@portis/web3';
 import { validationUtils } from '@utils';
@@ -17,6 +17,7 @@ const MainWrapper = styled.div`
     align-items: center;
     text-align: center;
     padding: 0 20px;
+    background-color: #fbfbfc;
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         padding: 0 10px;
@@ -26,7 +27,7 @@ const MainWrapper = styled.div`
 const AnimatedWrapper = styled.div`
     animation: showup 1.8s;
     width: 100%;
-    max-width: 700px;
+    max-width: 740px;
 
     @keyframes showup {
         0% {
@@ -83,7 +84,7 @@ const IconLinkWrapper = styled.a`
     }
 `;
 const IllustrationWrapper = styled.h1`
-    margin-top: 125px;
+    margin-top: 115px;
     margin-bottom: 60px;
 
     @media (max-width: 900px) {
@@ -93,12 +94,13 @@ const IllustrationWrapper = styled.h1`
 `;
 
 const AddressInputWrapper = styled.div`
+    background-color: white;
+    margin: 0 30px;
     display: flex;
     justify-content: center;
     border: 1px solid ${colors.BACKGROUND};
     /* border: 7px solid ${colors.FONT_DARK}; */
-    padding: 10px;
-    /* max-width: 600px; */
+    padding: 8px;
 
     border-radius: 18px;
     box-shadow: rgb(12 22 53 / 11%) 0px 8px 40px;
@@ -106,11 +108,12 @@ const AddressInputWrapper = styled.div`
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         padding: 5px;
         border-radius: 6px;
+        margin: 0;
     }
 `;
 
 const AddressInput = styled.input`
-    padding: 20px;
+    padding: 18px;
     margin-right: 10px;
     border: none;
     flex-grow: 1;
@@ -137,7 +140,7 @@ const AddressInput = styled.input`
 `;
 
 const DashboardButton = styled(Link)<{ active: boolean }>`
-    padding: 20px;
+    padding: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -206,6 +209,30 @@ const PortisButton = styled.button`
 
 const PortisButtonText = styled.div`
     margin-left: 4px;
+`;
+
+const SupportedExchangesWrapper = styled.div`
+    border-top: 1px solid ${colors.STROKE_GREY};
+    padding-top: 46px;
+    margin-top: 46px;
+    color: ${colors.FONT_LIGHT};
+`;
+
+const ExchangeLogosWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+`;
+
+const ExchangeLogoWrapper = styled.div`
+    margin: 10px;
+    display: flex;
+    box-shadow: 2px 2px 4px 0px rgba(215, 216, 222, 1);
+    /* width: 28px;
+    height: 28px; */
+    border-radius: 200px;
+    /* border: 1px solid ${colors.BACKGROUND_DARK}; */
+    background-color: white;
 `;
 
 const portis = new Portis(constants.PORTIS_DAPP_KEY, 'mainnet');
@@ -370,6 +397,20 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                             <PortisButtonText>Portis</PortisButtonText>
                         </PortisButton>
                     </PortisButtonWrapper>
+                    <SupportedExchangesWrapper>
+                        <div>We track your liquidity pools on</div>
+                        <ExchangeLogosWrapper>
+                            <ExchangeLogoWrapper>
+                                <TokenLogo symbol="uni" size={38} />
+                            </ExchangeLogoWrapper>
+                            <ExchangeLogoWrapper>
+                                <TokenLogo symbol="bal" size={38} />
+                            </ExchangeLogoWrapper>
+                            {/* <ExchangeLogoWrapper>
+                                <TokenLogo symbol="sushi" size={28} />
+                            </ExchangeLogoWrapper> */}
+                        </ExchangeLogosWrapper>
+                    </SupportedExchangesWrapper>
                 </AnimatedWrapper>
             </ContentWrapper>
         </MainWrapper>
