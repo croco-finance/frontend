@@ -134,55 +134,15 @@ const FetchSnapsForAddress = initialAddress => {
                 });
                 dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
 
-            // declare Redux variables
-            let exToPoolMap: DexToPoolIdMap = { BALANCER: [], UNI_V2: [] };
-            let activePoolIds: Array<string> = [];
-            let inactivePoolIds: Array<string> = [];
-            const customPoolsObject: AllPoolsGlobal = {};
+                // save address to browser local storage
+                localStorage.setItem('address', queryAddress);
 
-            for (const [poolId, snapshotsArr] of Object.entries(fetchedSnapshots)) {
-                const snapshotsCount = snapshotsArr.length;
-                if (snapshotsCount > 1) {
-                    // compute interval and cumulative stats
-                    const {
-                        intervalStats,
-                        cumulativeStats,
-                        deposits,
-                        withdrawals,
-                    } = statsComputations.getPoolStatsFromSnapshots(snapshotsArr);
-
-                    // Check if pool is active by checking if user's liquidity token balance in last snapshot is > 0
-                    const poolIsActive = snapshotsArr[snapshotsCount - 1].liquidityTokenBalance > 0;
-
-                    if (poolIsActive) {
-                        activePoolIds.push(poolId);
-                    } else {
-                        inactivePoolIds.push(poolId);
-                    }
-
-                    // Push PoolId to <Exchange, PoolId> mapping
-                    const exchange: Exchange = snapshotsArr[0].exchange;
-                    exToPoolMap[exchange].push(poolId);
-
-                    // Create new pool object
-                    customPoolsObject[poolId] = {
-                        exchange: exchange,
-                        userAddr: queryAddress,
-                        poolId: poolId,
-                        isActive: poolIsActive,
-                        timestampEnd: snapshotsArr[snapshotsCount - 1].timestamp, // last sna
-                        hasYieldReward: snapshotsArr[0].yieldReward !== null,
-                        yieldToken: snapshotsArr[0].yieldReward
-                            ? snapshotsArr[0].yieldReward.token
-                            : null,
-                        pooledTokens: getPooledTokensInfo(snapshotsArr[0].tokens),
-                        intervalStats: intervalStats,
-                        cumulativeStats: cumulativeStats,
-                        tokenWeights: formatUtils.getTokenWeightsArr(snapshotsArr[0].tokens),
-                        deposits: deposits,
-                        withdrawals: withdrawals,
-                    };
-                }
+                // fire Google Analytics event
+                analytics.Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
+            } catch (e) {
+                console.log('ERROR while fetching data about pools...');
+                setIsFetchError(true);
+                analytics.Event('ADDRESS INPUT', 'Data fetching hook fail', queryAddress);
             }
 
             setIsLoading(false);

@@ -4,6 +4,7 @@ export const TOKENS: any = {
     bal: require('../../../data/images/tokens/bal.svg'),
     comp: require('../../../data/images/tokens/comp.svg'),
     dai: require('../../../data/images/tokens/dai.svg'),
+    eth: require('../../../data/images/tokens/weth.svg'),
     keep: require('../../../data/images/tokens/keep.svg'),
     lend: require('../../../data/images/tokens/lend.svg'),
     link: require('../../../data/images/tokens/link.svg'),

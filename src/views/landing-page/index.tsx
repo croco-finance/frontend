@@ -213,26 +213,36 @@ const PortisButtonText = styled.div`
 
 const SupportedExchangesWrapper = styled.div`
     border-top: 1px solid ${colors.STROKE_GREY};
-    padding-top: 46px;
+    padding-top: 35px;
     margin-top: 46px;
-    color: ${colors.FONT_LIGHT};
+    color: ${colors.FONT_MEDIUM};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    /* display: flex; */
 `;
 
 const ExchangeLogosWrapper = styled.div`
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 30px;
 `;
 
 const ExchangeLogoWrapper = styled.div`
-    margin: 10px;
+    margin: 10px 20px;
     display: flex;
-    box-shadow: 2px 2px 4px 0px rgba(215, 216, 222, 1);
+    /* box-shadow: 2px 2px 4px 0px rgba(215, 216, 222, 1); */
     /* width: 28px;
     height: 28px; */
-    border-radius: 200px;
+    /* border-radius: 200px; */
     /* border: 1px solid ${colors.BACKGROUND_DARK}; */
-    background-color: white;
+    /* background-color: white; */
+    flex-direction: column;
+`;
+
+const ExchangeName = styled.div`
+    margin-top: 10px;
+    color: ${colors.FONT_LIGHT};
+    font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    /* font-size: ${variables.FONT_SIZE.TINY}; */
 `;
 
 const portis = new Portis(constants.PORTIS_DAPP_KEY, 'mainnet');
@@ -398,13 +408,15 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                         </PortisButton>
                     </PortisButtonWrapper>
                     <SupportedExchangesWrapper>
-                        <div>We track your liquidity pools on</div>
+                        <div>We support</div>
                         <ExchangeLogosWrapper>
                             <ExchangeLogoWrapper>
                                 <TokenLogo symbol="uni" size={38} />
+                                <ExchangeName>Uniswap</ExchangeName>
                             </ExchangeLogoWrapper>
                             <ExchangeLogoWrapper>
                                 <TokenLogo symbol="bal" size={38} />
+                                <ExchangeName>Balancer</ExchangeName>
                             </ExchangeLogoWrapper>
                             {/* <ExchangeLogoWrapper>
                                 <TokenLogo symbol="sushi" size={28} />

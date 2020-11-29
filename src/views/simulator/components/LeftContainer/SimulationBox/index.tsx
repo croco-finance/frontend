@@ -4,6 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import PriceChangeRow from './PriceChangeRow';
+import { formatUtils } from '@utils';
 
 const GRID_GAP = 5;
 
@@ -13,12 +14,12 @@ const Wrapper = styled.div`
     }
 `;
 
-const GridWrapper = styled.div<{ rowsCount: number }>`
+const GridWrapper = styled.div`
     flex-grow: 1;
     display: grid;
     grid-gap: ${GRID_GAP}px;
     grid-template-columns: 110px minmax(100px, auto) minmax(120px, auto) minmax(110px, auto);
-    grid-template-rows: ${props => `repeat(${props.rowsCount}, 55px)`};
+    grid-auto-rows: 55px;
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
@@ -69,16 +70,20 @@ const XScrollWrapper = styled.div`
 `;
 
 interface Props {
-    tokensPool?: any;
     onChange: any;
+    onEthChange: any;
     simulatedCoefficients: any;
+    simulatedEthCoefficient?: any;
+    simulatedYieldCoefficient?: any;
     onNewDefaultValue: any;
 }
 const SimulationBox = ({
-    tokensPool,
     onChange,
+    onEthChange,
     simulatedCoefficients,
     onNewDefaultValue,
+    simulatedEthCoefficient,
+    simulatedYieldCoefficient,
 }: Props) => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
@@ -89,7 +94,11 @@ const SimulationBox = ({
 
     const pool = allPools[selectedPoolId];
     const { pooledTokens, poolId } = pool;
-    const { tokenPricesEnd } = pool.cumulativeStats;
+    const { tokenPricesEnd, ethPriceEnd } = pool.cumulativeStats;
+    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
+
+    // find out if WETH is among pooled tokens. If not, the index will be -1
+    const indexOfWeth = tokenSymbolsArr.indexOf('WETH');
 
     return (
         <Wrapper>
@@ -100,7 +109,7 @@ const SimulationBox = ({
             </SubTitlesWrapper>
 
             <XScrollWrapper>
-                <GridWrapper rowsCount={pooledTokens.length}>
+                <GridWrapper>
                     {pooledTokens.map((token, i) => {
                         const tokenSymbol = token.symbol;
                         return (
@@ -110,6 +119,9 @@ const SimulationBox = ({
                                 key={`${poolId}${tokenSymbol}`}
                                 onSliderChange={newValue => {
                                     onChange(newValue, i);
+
+                                    // if it is WETH slider, increase price of ETH as well
+                                    if (i === indexOfWeth) onEthChange(newValue);
                                 }}
                                 onDefaultSliderValueChange={newValue =>
                                     onNewDefaultValue(newValue, i)
@@ -129,6 +141,26 @@ const SimulationBox = ({
                             />
                         );
                     })}
+                    {/* If WETH not among pooled tokens, show ETH slider as well */}
+                    {indexOfWeth === -1 && (
+                        <PriceChangeRow
+                            key={`${poolId}ETH`}
+                            onSliderChange={newValue => {
+                                onEthChange(newValue);
+                            }}
+                            // onDefaultSliderValueChange={newValue => onNewDefaultValue(newValue, 0)}
+                            firstColumn={
+                                <TokenWrapper>
+                                    <TokenLogo symbol={'ETH'} size={22} />
+                                    <TokenSymbol>ETH</TokenSymbol>
+                                </TokenWrapper>
+                            }
+                            fourthColumn={
+                                <FiatValue value={ethPriceEnd * simulatedEthCoefficient} />
+                            }
+                            color="dark"
+                        />
+                    )}
                 </GridWrapper>
             </XScrollWrapper>
         </Wrapper>

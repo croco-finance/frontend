@@ -45,4 +45,14 @@ const getSimulationStats = (
     };
 };
 
+// const getHodlSTrategyValue = () => {
+
+//        // strategies
+//        const poolStrategyUsd = currentPoolValueUsd + withdrawalsUsd + yieldUsd - txCostUsd;
+//        const tokensHodlStrategyTokenAmounts = depositsTokenAmounts;
+//        const tokensHodlStrategyUsd = depositsUsd;
+//        const ethHodlStrategyUsd = depositsEth * ethPriceEnd;
+//        const ethHodlStrategyEth = depositsEth;
+// };
+
 export { getSimulationStats };

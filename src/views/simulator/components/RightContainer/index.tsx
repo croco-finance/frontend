@@ -5,6 +5,7 @@ import Overview from './Overview';
 import { TabSelectHeader, PoolHeader } from '@components/ui';
 import { formatUtils, graphUtils } from '@utils';
 import { AllPoolsGlobal } from '@types';
+import Strategies from './Strategies';
 
 const Wrapper = styled.div`
     display: flex;
@@ -13,13 +14,22 @@ const Wrapper = styled.div`
     width: 100%;
 `;
 
+const PageWrapper = styled.div<{ show: boolean }>`
+    width: 100%;
+    display: ${props => (props.show ? 'flex' : 'none')};
+`;
+
+const OverviewWrapper = styled(PageWrapper)``;
+const StrategiesWrapper = styled(PageWrapper)``;
+
 type TabOptions = 'overview' | 'strategies';
 
 interface Props {
-    simulatedCoefficients: Array<number>;
+    simulatedCoeffs: Array<number>;
     sliderDefaultCoeffs: Array<number>;
+    simulatedEthCoeff: number;
 }
-const RightContainer = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => {
+const RightContainer = ({ simulatedCoeffs, sliderDefaultCoeffs, simulatedEthCoeff }: Props) => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
@@ -39,6 +49,19 @@ const RightContainer = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) =
     const { exchange, poolId, pooledTokens } = allPools[selectedPoolId];
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
 
+    let pageSelected = (
+        <Overview simulatedCoeffs={simulatedCoeffs} sliderDefaultCoeffs={sliderDefaultCoeffs} />
+    );
+
+    if (selectedTab === 'strategies')
+        pageSelected = (
+            <Strategies
+                simulatedCoeffs={simulatedCoeffs}
+                sliderDefaultCoeffs={sliderDefaultCoeffs}
+                simulatedEthCoeff={simulatedEthCoeff}
+            />
+        );
+
     return (
         <Wrapper>
             <TabSelectHeader
@@ -51,10 +74,7 @@ const RightContainer = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) =
                 }
                 onSelectTab={tabName => setSelectedTab(tabName)}
             />
-            <Overview
-                simulatedCoefficients={simulatedCoefficients}
-                sliderDefaultCoeffs={sliderDefaultCoeffs}
-            />
+            {pageSelected}
         </Wrapper>
     );
 };

@@ -118,11 +118,11 @@ const XScrollWrapper = styled.div`
 `;
 
 interface Props {
-    simulatedCoefficients: Array<number>;
+    simulatedCoeffs: Array<number>;
     sliderDefaultCoeffs: Array<number>;
 }
 
-const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => {
+const CardOverview = ({ simulatedCoeffs, sliderDefaultCoeffs }: Props) => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const pool = allPools[selectedPoolId];
@@ -139,10 +139,7 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
 
     // ----- GET SIMULATION VALUES -----
     // Array of new prices, not coefficients
-    const newTokenPrices = mathUtils.multiplyArraysElementWise(
-        tokenPricesEnd,
-        simulatedCoefficients,
-    );
+    const newTokenPrices = mathUtils.multiplyArraysElementWise(tokenPricesEnd, simulatedCoeffs);
 
     let simulatedValues = simulatorUtils.getSimulationStats(
         tokenBalances,

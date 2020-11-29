@@ -7,11 +7,12 @@ import {
     Icon,
 } from '@components/ui';
 import { colors, variables } from '@config';
-import { formatUtils } from '@utils';
+import { formatUtils, mathUtils, simulatorUtils } from '@utils';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { AllPoolsGlobal } from '@types';
+import DoubleValue from '../DoubleValue';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -54,6 +55,7 @@ const TotalLossRow = styled(GridWrapper)`
 
 const StrategyHeaderGridWrapper = styled(GridWrapper)`
     grid-template-columns: minmax(100px, auto) minmax(100px, auto) 26px;
+    align-items: center;
 `;
 
 const ExpandButton = styled.div`
@@ -79,7 +81,12 @@ const SubNote = styled.div`
 
 const CollapseWrapper = styled.div``;
 
-const LiquidityPool = () => {
+interface Props {
+    simulatedPooledTokenPricesArr: number[];
+    simulatedEthPrice: number;
+}
+
+const LiquidityPool = ({ simulatedPooledTokenPricesArr, simulatedEthPrice }: Props) => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     let pool = allPools[selectedPoolId];
@@ -96,7 +103,15 @@ const LiquidityPool = () => {
         );
     }
 
-    let { pooledTokens, isActive, hasYieldReward, yieldToken, intervalStats, exchange } = pool;
+    let {
+        pooledTokens,
+        isActive,
+        hasYieldReward,
+        yieldToken,
+        intervalStats,
+        exchange,
+        tokenWeights,
+    } = pool;
 
     const {
         yieldUsd,
@@ -104,6 +119,7 @@ const LiquidityPool = () => {
         txCostUsd,
         currentPoolValueUsd,
         tokenBalances,
+        feesTokenAmounts,
         yieldTokenAmount,
         withdrawalsUsd,
         withdrawalsTokenAmounts,
@@ -125,6 +141,30 @@ const LiquidityPool = () => {
         });
     }
 
+    let simulatedValues = simulatorUtils.getSimulationStats(
+        tokenBalances,
+        feesTokenAmounts,
+        simulatedPooledTokenPricesArr,
+        tokenWeights,
+        exchange,
+    );
+    let {
+        newTokenBalances,
+        newPoolValueUsd,
+        newHodlValueUsd,
+        impLossRel,
+        impLossUsd,
+    } = simulatedValues;
+
+    const simulatedWithdrawalsUsd = mathUtils.getTokenArrayValue(
+        withdrawalsTokenAmounts,
+        simulatedPooledTokenPricesArr,
+    );
+    const simulatedYieldUsd = yieldUsd; //TODO check if yield among pooled tokens
+    const simulatedTxCostUsd = txCostEth * simulatedEthPrice;
+    const simulatedPoolStrategyUsd =
+        newPoolValueUsd + simulatedWithdrawalsUsd + simulatedYieldUsd - simulatedTxCostUsd;
+
     const poolShareRow = (
         <BoxRow
             firstColumn={
@@ -140,7 +180,7 @@ const LiquidityPool = () => {
                     }
                 />
             }
-            thirdColumn={<FiatValue value={currentPoolValueUsd} usePlusSymbol />}
+            thirdColumn={<FiatValue value={isActive ? newPoolValueUsd : 0} usePlusSymbol />}
             columnColors={['medium', 'light', 'dark']}
         />
     );
@@ -154,7 +194,7 @@ const LiquidityPool = () => {
                     tokenAmounts={withdrawalsTokenAmounts}
                 />
             }
-            thirdColumn={<FiatValue value={withdrawalsUsd} usePlusSymbol />}
+            thirdColumn={<FiatValue value={simulatedWithdrawalsUsd} usePlusSymbol />}
             columnColors={['medium', 'light', 'dark']}
         />
     );
@@ -168,7 +208,7 @@ const LiquidityPool = () => {
                     tokenAmounts={[yieldTokenAmount]}
                 />
             }
-            thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+            thirdColumn={<FiatValue value={simulatedYieldUsd} usePlusSymbol />}
             columnColors={['medium', 'light', 'dark']}
         />
     ) : null;
@@ -179,7 +219,7 @@ const LiquidityPool = () => {
             secondColumn={
                 <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
             }
-            thirdColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
+            thirdColumn={<FiatValue value={-simulatedTxCostUsd} usePlusSymbol />}
             columnColors={['medium', 'light', 'dark']}
         />
     );
@@ -198,7 +238,17 @@ const LiquidityPool = () => {
                         <StrategyHeaderGridWrapper>
                             <BoxRow
                                 firstColumn="Strategy is worth"
-                                secondColumn={<FiatValue value={poolStrategyUsd} />}
+                                secondColumn={
+                                    <DoubleValue
+                                        top={<FiatValue value={poolStrategyUsd} />}
+                                        bottom={
+                                            <FiatValue
+                                                customColor={colors.BLUE}
+                                                value={simulatedPoolStrategyUsd}
+                                            />
+                                        }
+                                    />
+                                }
                                 thirdColumn={
                                     <ExpandButton>
                                         <Icon

@@ -241,6 +241,8 @@ const Simulator = (props: RouteComponentProps<any>) => {
             : [],
     );
 
+    const [simulatedEthPriceCoefficient, setSimulatedEthPriceCoefficient] = useState(1);
+
     const [sliderDefaultCoeffs, setSliderDefaultCoeffs]: any = useState(
         allPools[selectedPoolId]
             ? getInitialPriceCoeffs(allPools[selectedPoolId].pooledTokens)
@@ -251,6 +253,10 @@ const Simulator = (props: RouteComponentProps<any>) => {
         const coefficientsArrCopy = [...simulatedPriceCoefficients];
         coefficientsArrCopy[index] = newValue;
         setSimulatedPriceCoefficients(coefficientsArrCopy);
+    };
+
+    const setNewEthPrice = newValue => {
+        setSimulatedEthPriceCoefficient(newValue);
     };
 
     const setNewDefaultCoeffs = (newValue, index) => {
@@ -370,8 +376,10 @@ const Simulator = (props: RouteComponentProps<any>) => {
                             <SimulationBoxWrapper>
                                 <SimulationBox
                                     onChange={setNewPrices}
+                                    onEthChange={setNewEthPrice}
                                     onNewDefaultValue={setNewDefaultCoeffs}
                                     simulatedCoefficients={simulatedPriceCoefficients}
+                                    simulatedEthCoefficient={simulatedEthPriceCoefficient}
                                 />
                             </SimulationBoxWrapper>
                         </>
@@ -380,8 +388,9 @@ const Simulator = (props: RouteComponentProps<any>) => {
             </LeftLayoutContainer>
             <RightLayoutContainer>
                 <RightContainer
-                    simulatedCoefficients={simulatedPriceCoefficients}
+                    simulatedCoeffs={simulatedPriceCoefficients}
                     sliderDefaultCoeffs={sliderDefaultCoeffs}
+                    simulatedEthCoeff={simulatedEthPriceCoefficient}
                 />
             </RightLayoutContainer>
         </SimulatorContainer>

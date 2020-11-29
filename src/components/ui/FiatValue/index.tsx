@@ -8,6 +8,7 @@ const Wrapper = styled.div<{
     colorized: boolean;
     useBadgeStyle: boolean;
     useLightRed: boolean;
+    color?: string;
 }>`
     ${props =>
         props.colorized &&
@@ -61,6 +62,12 @@ const Wrapper = styled.div<{
             margin: -5px;
             border-radius: 5px;
         `}
+
+        ${props =>
+        props.color &&
+        css`
+            color: ${props.color};
+        `}
 `;
 
 const Nan = styled.div`
@@ -75,6 +82,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     usePlusSymbol?: boolean;
     useBadgeStyle?: boolean;
     useLightRed?: boolean;
+    customColor?: string;
 }
 
 const FiatValue = ({
@@ -85,6 +93,7 @@ const FiatValue = ({
     minimumFractionDigits = 2,
     useBadgeStyle = false,
     useLightRed = false,
+    customColor,
     className,
 }: Props) => {
     const formatter = new Intl.NumberFormat('en-US', {
@@ -108,6 +117,7 @@ const FiatValue = ({
                 useBadgeStyle={useBadgeStyle}
                 useLightRed={false}
                 className={className}
+                color={customColor}
             >
                 <Nan>-</Nan>
             </Wrapper>
@@ -123,6 +133,7 @@ const FiatValue = ({
                 useBadgeStyle={useBadgeStyle}
                 useLightRed={false}
                 className={className}
+                color={customColor}
             >
                 {formatter.format(0)}
             </Wrapper>
@@ -145,6 +156,7 @@ const FiatValue = ({
             useBadgeStyle={useBadgeStyle}
             useLightRed={useLightRed}
             className={className}
+            color={customColor}
         >
             {roundedValueTwoDec ? (
                 <>
