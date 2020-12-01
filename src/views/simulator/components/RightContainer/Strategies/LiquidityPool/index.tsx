@@ -82,88 +82,39 @@ const SubNote = styled.div`
 const CollapseWrapper = styled.div``;
 
 interface Props {
-    simulatedPooledTokenPricesArr: number[];
-    simulatedEthPrice: number;
+    isActive: boolean;
+    tokenSymbols: string[];
+    pooledTokenBalances: number[];
+    simulatedPoolValueUsd: number;
+    withdrawalsTokenAmounts: number[];
+    simulatedWithdrawalsUsd: number;
+    yieldTokenSymbol: string | undefined;
+    yieldTokenAmount: number;
+    simulatedTxCostUsd: number;
+    simulatedPoolStrategyUsd: number;
+    poolStrategyUsd: number;
+    txCostEth: number;
+    simulatedYieldUsd: number;
 }
 
-const LiquidityPool = ({ simulatedPooledTokenPricesArr, simulatedEthPrice }: Props) => {
-    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    let pool = allPools[selectedPoolId];
+const LiquidityPool = ({
+    isActive,
+    tokenSymbols,
+    pooledTokenBalances,
+    simulatedPoolValueUsd,
+    withdrawalsTokenAmounts,
+    simulatedWithdrawalsUsd,
+    yieldTokenSymbol,
+    yieldTokenAmount,
+    simulatedTxCostUsd,
+    simulatedPoolStrategyUsd,
+    poolStrategyUsd,
+    txCostEth,
+    simulatedYieldUsd,
+}: Props) => {
     const [isOpened, setIsOpened] = useState(false);
 
-    // Compute imp loss, fees, hold, ETH hold, token hold fo each snapshot
-
-    // TODO make the following checks and computations cleaner
-    if (!allPools || !pool) {
-        return (
-            <Wrapper>
-                <h2>We didn't find any pools associated with this address :( </h2>
-            </Wrapper>
-        );
-    }
-
-    let {
-        pooledTokens,
-        isActive,
-        hasYieldReward,
-        yieldToken,
-        intervalStats,
-        exchange,
-        tokenWeights,
-    } = pool;
-
-    const {
-        yieldUsd,
-        txCostEth,
-        txCostUsd,
-        currentPoolValueUsd,
-        tokenBalances,
-        feesTokenAmounts,
-        yieldTokenAmount,
-        withdrawalsUsd,
-        withdrawalsTokenAmounts,
-        poolStrategyUsd,
-    } = pool.cumulativeStats;
-
     const endTimeText = isActive ? 'Value today' : 'Withdrawal time value';
-
-    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
-
-    // Temporary check if to show unclaimed UNI yield rewards
-    let showUnclaimedUni = false;
-
-    if (exchange === 'UNI_V2' && yieldTokenAmount === 0) {
-        intervalStats.forEach(stat => {
-            if (stat.staked === true) {
-                showUnclaimedUni = true;
-            }
-        });
-    }
-
-    let simulatedValues = simulatorUtils.getSimulationStats(
-        tokenBalances,
-        feesTokenAmounts,
-        simulatedPooledTokenPricesArr,
-        tokenWeights,
-        exchange,
-    );
-    let {
-        newTokenBalances,
-        newPoolValueUsd,
-        newHodlValueUsd,
-        impLossRel,
-        impLossUsd,
-    } = simulatedValues;
-
-    const simulatedWithdrawalsUsd = mathUtils.getTokenArrayValue(
-        withdrawalsTokenAmounts,
-        simulatedPooledTokenPricesArr,
-    );
-    const simulatedYieldUsd = yieldUsd; //TODO check if yield among pooled tokens
-    const simulatedTxCostUsd = txCostEth * simulatedEthPrice;
-    const simulatedPoolStrategyUsd =
-        newPoolValueUsd + simulatedWithdrawalsUsd + simulatedYieldUsd - simulatedTxCostUsd;
 
     const poolShareRow = (
         <BoxRow
@@ -174,13 +125,11 @@ const LiquidityPool = ({ simulatedPooledTokenPricesArr, simulatedEthPrice }: Pro
             }
             secondColumn={
                 <VerticalCryptoAmounts
-                    tokenSymbols={tokenSymbolsArr}
-                    tokenAmounts={
-                        isActive ? tokenBalances : new Array(tokenBalances.length).fill(0)
-                    }
+                    tokenSymbols={tokenSymbols}
+                    tokenAmounts={pooledTokenBalances}
                 />
             }
-            thirdColumn={<FiatValue value={isActive ? newPoolValueUsd : 0} usePlusSymbol />}
+            thirdColumn={<FiatValue value={simulatedPoolValueUsd} usePlusSymbol />}
             columnColors={['medium', 'light', 'dark']}
         />
     );
@@ -190,7 +139,7 @@ const LiquidityPool = ({ simulatedPooledTokenPricesArr, simulatedEthPrice }: Pro
             firstColumn="Pool withdrawals"
             secondColumn={
                 <VerticalCryptoAmounts
-                    tokenSymbols={tokenSymbolsArr}
+                    tokenSymbols={tokenSymbols}
                     tokenAmounts={withdrawalsTokenAmounts}
                 />
             }
@@ -199,12 +148,12 @@ const LiquidityPool = ({ simulatedPooledTokenPricesArr, simulatedEthPrice }: Pro
         />
     );
 
-    const yieldRow = yieldToken ? (
+    const yieldRow = yieldTokenSymbol ? (
         <BoxRow
             firstColumn="Yield rewards"
             secondColumn={
                 <VerticalCryptoAmounts
-                    tokenSymbols={[yieldToken.symbol]}
+                    tokenSymbols={[yieldTokenSymbol]}
                     tokenAmounts={[yieldTokenAmount]}
                 />
             }

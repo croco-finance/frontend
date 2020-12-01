@@ -15,18 +15,6 @@ const Wrapper = styled.div`
     width: 100%;
 `;
 
-const Headline = styled.h3`
-    width: 100%;
-    font-size: ${variables.FONT_SIZE.H3};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    display: flex;
-    text-align: left;
-    color: ${colors.FONT_MEDIUM};
-    padding-left: 15px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-`;
-
 const SubHeadline = styled.h3`
     width: 100%;
     font-size: ${variables.FONT_SIZE.NORMAL};
@@ -41,14 +29,6 @@ const SubHeadline = styled.h3`
     border-bottom: 1px solid ${colors.STROKE_GREY};
 `;
 
-const Description = styled.p`
-    width: 100%;
-    padding-left: 15px;
-    color: ${colors.FONT_MEDIUM};
-    margin-top: 0;
-    margin-bottom: 30px;
-`;
-
 const StrategyItemWrapper = styled.div`
     width: 100%;
     margin-bottom: 15px;
@@ -61,111 +41,88 @@ const SectionHeader = styled.div<{ marginTop: number }>`
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${colors.FONT_LIGHT};
+    display: flex;
 `;
 
-const Note = styled.div`
-    margin-top: 18px;
+const Left = styled.div`
+    flex-grow: 1;
 `;
 
-const RememberNote = styled.span`
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+const Right = styled.div`
+    /* font-weight: ${variables.FONT_WEIGHT.REGULAR}; */
 `;
 
-const StyledLink = styled(Link)`
-    text-decoration: none;
-    color: ${colors.PASTEL_BLUE_DARK};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-
-    &:hover {
-        text-decoration: underline;
-    }
+const Current = styled.span``;
+const Simulated = styled.span`
+    color: ${colors.FONT_DARK};
 `;
 
+const SimulatedBlue = styled.span`
+    color: ${colors.BLUE};
+`;
 interface Props {
-    simulatedCoeffs: Array<number>;
-    simulatedEthCoeff: number;
-    simulatedYieldCoeff?: number;
-    sliderDefaultCoeffs: Array<number>;
+    poolStrategyUsd: number;
+    feesUsd: number;
+    yieldUsd: number;
+    txCostUsd: number;
+    feesTokenAmounts: number[];
+    yieldTokenAmount: number;
+    tokenSymbols: string[];
+    yieldTokenSymbol: string | undefined;
+    txCostEth: number;
+    lastIntAvDailyRewardsUsd: number;
+    depositTimestampsArr: number[];
+    depositTokenAmountsArr: Array<Array<number>>;
+    poolIsActive: boolean;
+    depositEthAmountsArr: any;
+    simulatedPooledTokenPrices: any;
+    simulatedEthPrice: any;
+    simulatedTokensHodlStrategyUsd: number;
+    simulatedEthHodlStrategyUsd: number;
+    tokensHodlStrategyUsd: number;
+    ethHodlStrategyUsd: number;
+    simulatedPoolStrategyUsd: number;
+    simulatedPooledTokenBalances: number[];
+    simulatedPoolValueUsd: number;
+    withdrawalsTokenAmounts: number[];
+    simulatedWithdrawalsUsd: number;
+    simulatedTxCostUsd: number;
+    simulatedFeesUsd: number;
+    simulatedFeesTokenAmounts: number[];
+    simulatedYieldUsd: number;
 }
 
 const Strategies = ({
-    simulatedCoeffs,
-    sliderDefaultCoeffs,
-    simulatedEthCoeff,
-    simulatedYieldCoeff,
+    poolStrategyUsd,
+    feesUsd,
+    yieldUsd,
+    txCostUsd,
+    feesTokenAmounts,
+    yieldTokenAmount,
+    tokenSymbols,
+    yieldTokenSymbol,
+    txCostEth,
+    lastIntAvDailyRewardsUsd,
+    depositTimestampsArr,
+    depositTokenAmountsArr,
+    poolIsActive,
+    depositEthAmountsArr,
+    simulatedPooledTokenPrices,
+    simulatedEthPrice,
+    simulatedTokensHodlStrategyUsd,
+    simulatedEthHodlStrategyUsd,
+    tokensHodlStrategyUsd,
+    ethHodlStrategyUsd,
+    simulatedPoolStrategyUsd,
+    simulatedPooledTokenBalances,
+    simulatedPoolValueUsd,
+    withdrawalsTokenAmounts,
+    simulatedWithdrawalsUsd,
+    simulatedTxCostUsd,
+    simulatedFeesUsd,
+    simulatedFeesTokenAmounts,
+    simulatedYieldUsd,
 }: Props) => {
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    const activePoolIds = useSelector(state => state.activePoolIds);
-    let pool = allPools[selectedPoolId];
-
-    if (activePoolIds.length <= 0 && selectedPoolId === 'all') {
-        return null;
-    }
-
-    let {
-        pooledTokens,
-        isActive,
-        hasYieldReward,
-        yieldToken,
-        intervalStats,
-        exchange,
-        deposits,
-        withdrawals,
-    } = pool;
-
-    const {
-        feesUsd,
-        yieldUsd,
-        txCostEth,
-        txCostUsd,
-        ethPriceEnd,
-        currentPoolValueUsd,
-        tokenBalances,
-        feesTokenAmounts,
-        yieldTokenAmount,
-        depositsUsd,
-        withdrawalsUsd,
-        depositsTokenAmounts,
-        withdrawalsTokenAmounts,
-        poolStrategyUsd,
-        tokensHodlStrategyTokenAmounts,
-        tokensHodlStrategyUsd,
-        ethHodlStrategyUsd,
-        ethHodlStrategyEth,
-        lastIntAvDailyRewardsUsd,
-        tokenPricesEnd,
-    } = pool.cumulativeStats;
-
-    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
-
-    const endTimeText = isActive ? 'Value today' : 'Withdrawal time value';
-
-    const depositTimestampsArr: number[] = [];
-    const depositTokenAmountsArr: Array<Array<number>> = [];
-    const depositEthAmountsArr: Array<Array<number>> = [];
-
-    deposits.forEach(deposit => {
-        if (deposit.timestamp) {
-            depositTimestampsArr.push(deposit.timestamp);
-            depositTokenAmountsArr.push(deposit.tokenAmounts);
-            depositEthAmountsArr.push([deposit.valueEth]);
-        }
-    });
-
-    const simulatedPooledTokenPrices = mathUtils.multiplyArraysElementWise(
-        tokenPricesEnd,
-        simulatedCoeffs,
-    );
-
-    const simulatedEthPrice = ethPriceEnd * simulatedEthCoeff;
-
-    const simulatedTokensHodlStrategyUsd = mathUtils.getTokenArrayValue(
-        tokensHodlStrategyTokenAmounts,
-        simulatedPooledTokenPrices,
-    );
-    const simulatedEthHodlStrategyUsd = ethHodlStrategyEth * simulatedEthPrice;
-
     return (
         <Wrapper>
             {/* <Headline>Is it worth it to be liquidity provider in this pool?</Headline> */}
@@ -173,23 +130,48 @@ const Strategies = ({
                 We compared your pool's performance to other popular strategies.
             </Description> */}
 
-            <SectionHeader marginTop={0}>Being liquidity provider</SectionHeader>
+            {/* <SectionHeader marginTop={0}>Being liquidity provider</SectionHeader> */}
+            <SectionHeader marginTop={0}>
+                <Left>Being liquidity provider</Left>
+                <Right>
+                    <Current>Current</Current> | <SimulatedBlue>Simulated</SimulatedBlue>
+                </Right>
+            </SectionHeader>
             <StrategyItemWrapper>
                 <LiquidityPool
-                    simulatedPooledTokenPricesArr={simulatedPooledTokenPrices}
-                    simulatedEthPrice={simulatedEthPrice}
+                    isActive={poolIsActive}
+                    tokenSymbols={tokenSymbols}
+                    pooledTokenBalances={
+                        poolIsActive
+                            ? simulatedPooledTokenBalances
+                            : new Array(simulatedPooledTokenBalances.length).fill(0)
+                    }
+                    simulatedPoolValueUsd={poolIsActive ? simulatedPoolValueUsd : 0}
+                    withdrawalsTokenAmounts={withdrawalsTokenAmounts}
+                    simulatedWithdrawalsUsd={simulatedWithdrawalsUsd}
+                    yieldTokenSymbol={yieldTokenSymbol}
+                    yieldTokenAmount={yieldTokenAmount}
+                    simulatedTxCostUsd={simulatedTxCostUsd}
+                    simulatedPoolStrategyUsd={simulatedPoolStrategyUsd}
+                    poolStrategyUsd={poolStrategyUsd}
+                    txCostEth={txCostEth}
+                    simulatedYieldUsd={simulatedYieldUsd}
                 />
             </StrategyItemWrapper>
 
             <SubHeadline>Comparison to other strategies</SubHeadline>
 
-            <SectionHeader marginTop={25}>If you HODL'd pooled tokens</SectionHeader>
+            <SectionHeader marginTop={25}>
+                <Left>If you HODL'd pooled tokens</Left>
+                {/* <Right>
+                    <Current>Current</Current> | <Simulated>Simulated</Simulated>
+                </Right> */}
+            </SectionHeader>
 
             <StrategyItemWrapper>
                 <DifferentStrategy
                     depositsHeadline={'Tokens'}
-                    endTimeText={endTimeText}
-                    tokenSymbols={tokenSymbolsArr}
+                    tokenSymbols={tokenSymbols}
                     poolStrategyUsd={poolStrategyUsd}
                     feesUsd={feesUsd}
                     yieldUsd={yieldUsd}
@@ -198,27 +180,36 @@ const Strategies = ({
                     simulatedDifferentStrategyUsd={simulatedTokensHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
                     yieldTokenAmount={yieldTokenAmount}
-                    yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
+                    yieldTokenSymbol={yieldTokenSymbol}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
                     depositTimestampsArr={depositTimestampsArr}
                     depositTokenAmountsArr={depositTokenAmountsArr}
                     currentDepositTokenPricesArr={simulatedPooledTokenPrices}
-                    depositTokenSymbolsArr={tokenSymbolsArr}
-                    poolIsActive={isActive}
-                    simulatedPoolStrategyUsd={0}
+                    depositTokenSymbolsArr={tokenSymbols}
+                    poolIsActive={poolIsActive}
+                    simulatedPoolStrategyUsd={simulatedPoolStrategyUsd}
+                    simulatedTxCostUsd={simulatedTxCostUsd}
+                    simulatedFeesUsd={simulatedFeesUsd}
+                    simulatedFeesTokenAmounts={simulatedFeesTokenAmounts}
+                    simulatedYieldUsd={simulatedYieldUsd}
                 />
             </StrategyItemWrapper>
 
-            <SectionHeader marginTop={30}>
+            {/* <SectionHeader marginTop={30}>
                 If you exchanged all pooled tokens for ETH and HODL'd
+            </SectionHeader> */}
+            <SectionHeader marginTop={25}>
+                <Left> If you exchanged all pooled tokens for ETH and HODL'd</Left>
+                {/* <Right>
+                    <Current>Current</Current> | <Simulated>Simulated</Simulated>
+                </Right> */}
             </SectionHeader>
 
             <StrategyItemWrapper>
                 <DifferentStrategy
                     depositsHeadline={'ETH value'}
-                    endTimeText={endTimeText}
-                    tokenSymbols={tokenSymbolsArr}
+                    tokenSymbols={tokenSymbols}
                     poolStrategyUsd={poolStrategyUsd}
                     feesUsd={feesUsd}
                     yieldUsd={yieldUsd}
@@ -227,15 +218,19 @@ const Strategies = ({
                     simulatedDifferentStrategyUsd={simulatedEthHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
                     yieldTokenAmount={yieldTokenAmount}
-                    yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
+                    yieldTokenSymbol={yieldTokenSymbol}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
                     depositTimestampsArr={depositTimestampsArr}
                     depositTokenAmountsArr={depositEthAmountsArr}
                     currentDepositTokenPricesArr={[simulatedEthPrice]}
                     depositTokenSymbolsArr={['ETH']}
-                    poolIsActive={isActive}
-                    simulatedPoolStrategyUsd={0}
+                    poolIsActive={poolIsActive}
+                    simulatedPoolStrategyUsd={simulatedPoolStrategyUsd}
+                    simulatedTxCostUsd={simulatedTxCostUsd}
+                    simulatedFeesUsd={simulatedFeesUsd}
+                    simulatedFeesTokenAmounts={simulatedFeesTokenAmounts}
+                    simulatedYieldUsd={simulatedYieldUsd}
                 />
             </StrategyItemWrapper>
         </Wrapper>

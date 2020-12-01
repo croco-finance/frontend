@@ -84,7 +84,6 @@ const ValueDifferenceWrapper = styled.div<{ thickBorder: boolean }>`
 
 interface Props {
     depositsHeadline: string;
-    endTimeText: string;
     poolStrategyUsd: number;
     feesUsd: number;
     yieldUsd: number;
@@ -103,6 +102,10 @@ interface Props {
     poolIsActive: boolean;
     simulatedDifferentStrategyUsd: number;
     simulatedPoolStrategyUsd: number;
+    simulatedTxCostUsd: number;
+    simulatedFeesUsd: number;
+    simulatedFeesTokenAmounts: number[];
+    simulatedYieldUsd: number;
 }
 
 const DifferentStrategy = ({
@@ -117,7 +120,6 @@ const DifferentStrategy = ({
     tokenSymbols,
     yieldTokenSymbol,
     txCostEth,
-    endTimeText,
     lastIntAvDailyRewardsUsd,
     depositTimestampsArr,
     depositTokenAmountsArr,
@@ -126,11 +128,20 @@ const DifferentStrategy = ({
     poolIsActive,
     simulatedDifferentStrategyUsd,
     simulatedPoolStrategyUsd,
+    simulatedTxCostUsd,
+    simulatedFeesUsd,
+    simulatedFeesTokenAmounts,
+    simulatedYieldUsd,
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
 
-    const divergenceLoss = poolStrategyUsd - differentStrategyUsd - feesUsd - yieldUsd + txCostUsd;
+    const divergenceLoss =
+        simulatedPoolStrategyUsd -
+        simulatedDifferentStrategyUsd -
+        simulatedFeesUsd -
+        yieldUsd +
+        simulatedTxCostUsd;
 
     const estDaysLeft = getEstDaysLeft(
         poolStrategyUsd - differentStrategyUsd,
@@ -141,7 +152,7 @@ const DifferentStrategy = ({
     if (divergenceLoss > 0) divergenceLossTExt = 'Price divergence gain';
 
     const gainLossText =
-        differentStrategyUsd > poolStrategyUsd
+        simulatedDifferentStrategyUsd > simulatedPoolStrategyUsd
             ? "You would've lost comp. to this strategy"
             : "You would've gained comp. to this strategy";
 
@@ -151,10 +162,10 @@ const DifferentStrategy = ({
             secondColumn={
                 <VerticalCryptoAmounts
                     tokenSymbols={tokenSymbols}
-                    tokenAmounts={feesTokenAmounts}
+                    tokenAmounts={simulatedFeesTokenAmounts}
                 />
             }
-            thirdColumn={<FiatValue value={feesUsd} usePlusSymbol />}
+            thirdColumn={<FiatValue value={simulatedFeesUsd} usePlusSymbol />}
             columnColors={['medium', 'light', 'dark']}
         />
     );
@@ -168,7 +179,7 @@ const DifferentStrategy = ({
                     tokenAmounts={[yieldTokenAmount]}
                 />
             }
-            thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+            thirdColumn={<FiatValue value={simulatedYieldUsd} usePlusSymbol />}
             columnColors={['medium', 'light', 'dark']}
         />
     ) : null;
@@ -179,7 +190,7 @@ const DifferentStrategy = ({
             secondColumn={
                 <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
             }
-            thirdColumn={<FiatValue value={-txCostUsd} usePlusSymbol />}
+            thirdColumn={<FiatValue value={-simulatedTxCostUsd} usePlusSymbol />}
             columnColors={['medium', 'light', 'dark']}
         />
     );

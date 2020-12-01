@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Collapse } from 'react-collapse';
+import { Collapse, UnmountClosed } from 'react-collapse';
 import styled from 'styled-components';
 import './index.css';
 import { Icon } from '@components/ui';
@@ -64,9 +64,9 @@ const CollapsibleContainer = ({
                 </ExpandButton> */}
             </Header>
 
-            <Collapse isOpened={isOpened}>
+            <UnmountClosed isOpened={isOpened}>
                 <Content className="text">{collapseBody}</Content>
-            </Collapse>
+            </UnmountClosed>
         </div>
     );
 };

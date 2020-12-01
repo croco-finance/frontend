@@ -118,50 +118,48 @@ const XScrollWrapper = styled.div`
 `;
 
 interface Props {
-    simulatedCoeffs: Array<number>;
+    tokenSymbols: string[];
+    simulatedPooledTokenBalances: number[];
+    tokenBalances: number[];
+    endPoolValueUsd: number;
+    simulatedPoolValueUsd: number;
+    simulatedHodlValueUsd: number;
+    tokenPricesEnd: number[];
     sliderDefaultCoeffs: Array<number>;
+    lastIntSimulatedFeesUsd: number;
+    lastIntYieldUsd: number;
+    lastSnapTimestampStart: number;
+    lastSnapTimestampEnd: number;
+    impLossUsd: number;
+    impLossRel: number;
 }
 
-const CardOverview = ({ simulatedCoeffs, sliderDefaultCoeffs }: Props) => {
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    const pool = allPools[selectedPoolId];
-
-    let { pooledTokens, exchange, tokenWeights, isActive } = pool;
-
-    let {
-        // TODO make sure you use current token balances, not cumulative values
+const Overview = ({
+    tokenSymbols,
+    simulatedPooledTokenBalances,
+    tokenBalances,
+    endPoolValueUsd,
+    simulatedPoolValueUsd,
+    simulatedHodlValueUsd,
+    tokenPricesEnd,
+    sliderDefaultCoeffs,
+    lastIntSimulatedFeesUsd,
+    lastIntYieldUsd,
+    lastSnapTimestampStart,
+    lastSnapTimestampEnd,
+    impLossUsd,
+    impLossRel,
+}: Props) => {
+    const tokenBalancesDiff = mathUtils.subtractArraysElementWise(
+        simulatedPooledTokenBalances,
         tokenBalances,
-        feesTokenAmounts,
-        tokenPricesEnd,
-        endPoolValueUsd,
-    } = pool.cumulativeStats;
-
-    // ----- GET SIMULATION VALUES -----
-    // Array of new prices, not coefficients
-    const newTokenPrices = mathUtils.multiplyArraysElementWise(tokenPricesEnd, simulatedCoeffs);
-
-    let simulatedValues = simulatorUtils.getSimulationStats(
-        tokenBalances,
-        feesTokenAmounts,
-        newTokenPrices,
-        tokenWeights,
-        exchange,
     );
-    let {
-        newTokenBalances,
-        newPoolValueUsd,
-        newHodlValueUsd,
-        impLossRel,
-        impLossUsd,
-    } = simulatedValues;
 
-    // TODO check if yield token is also part of pool (if yes, change its price accordingly)
-    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
-
-    const tokenBalancesDiff = mathUtils.subtractArraysElementWise(newTokenBalances, tokenBalances);
-
-    const graphData = graphUtils.getILGraphData(endPoolValueUsd, newPoolValueUsd, newHodlValueUsd);
+    const graphData = graphUtils.getILGraphData(
+        endPoolValueUsd,
+        simulatedPoolValueUsd,
+        simulatedHodlValueUsd,
+    );
     const maxPossibleSimulationValue = graphUtils.getMaxPossiblePoolValue(
         tokenBalances,
         tokenPricesEnd,
@@ -169,23 +167,11 @@ const CardOverview = ({ simulatedCoeffs, sliderDefaultCoeffs }: Props) => {
         2,
     );
 
-    // get estimated days left to compensate loss
-    const lastIntervalStat = pool.intervalStats[pool.intervalStats.length - 1];
-    const lastSnapTimestampStart = lastIntervalStat.timestampStart;
-    const lastSnapTimestampEnd = lastIntervalStat.timestampEnd;
-    const lastSnapFeesUsd = lastIntervalStat.feesUsdEndPrice;
-
-    const lastSnapYieldUsd = lastIntervalStat.yieldTokenPriceEnd
-        ? lastIntervalStat.yieldTokenAmount * lastIntervalStat.yieldTokenPriceEnd
-        : 0;
-
-    const poolValueIncreaseCoeff = newPoolValueUsd / endPoolValueUsd;
-
     const averageRewardsLastSnapshot = mathUtils.getAverageDailyRewards(
         lastSnapTimestampStart,
         lastSnapTimestampEnd,
         // TODO is this correct way how to compute new fee value after price change?
-        lastSnapFeesUsd * poolValueIncreaseCoeff + lastSnapYieldUsd,
+        lastIntSimulatedFeesUsd + lastIntYieldUsd,
     );
 
     const estDaysLeftStaking = Math.round(Math.abs(impLossUsd / averageRewardsLastSnapshot));
@@ -215,7 +201,7 @@ const CardOverview = ({ simulatedCoeffs, sliderDefaultCoeffs }: Props) => {
                                     <StyledFiatValueWrapper value={endPoolValueUsd} />
                                     <VerticalCryptoAmounts
                                         maxWidth={70}
-                                        tokenSymbols={tokenSymbolsArr}
+                                        tokenSymbols={tokenSymbols}
                                         tokenAmounts={tokenBalances}
                                     />
                                 </PoolValueCryptoFiatWrapper>
@@ -223,11 +209,11 @@ const CardOverview = ({ simulatedCoeffs, sliderDefaultCoeffs }: Props) => {
                             // simulation values
                             thirdColumn={
                                 <PoolValueCryptoFiatWrapperBorder>
-                                    <StyledFiatValueWrapper value={newPoolValueUsd} />
+                                    <StyledFiatValueWrapper value={simulatedPoolValueUsd} />
                                     <VerticalCryptoAmounts
                                         maxWidth={70}
-                                        tokenSymbols={tokenSymbolsArr}
-                                        tokenAmounts={newTokenBalances}
+                                        tokenSymbols={tokenSymbols}
+                                        tokenAmounts={simulatedPooledTokenBalances}
                                     />
                                 </PoolValueCryptoFiatWrapperBorder>
                             }
@@ -235,13 +221,13 @@ const CardOverview = ({ simulatedCoeffs, sliderDefaultCoeffs }: Props) => {
                             fourthColumn={
                                 <PoolValueCryptoFiatWrapper>
                                     <ColorizedFiatValueWrapper
-                                        value={newPoolValueUsd - endPoolValueUsd}
+                                        value={simulatedPoolValueUsd - endPoolValueUsd}
                                         usePlusSymbol
                                         colorized
                                     />
                                     <VerticalCryptoAmounts
                                         maxWidth={40}
-                                        tokenSymbols={tokenSymbolsArr}
+                                        tokenSymbols={tokenSymbols}
                                         tokenAmounts={tokenBalancesDiff}
                                         textAlign="left"
                                         usePlusSymbol
@@ -316,4 +302,4 @@ const CardOverview = ({ simulatedCoeffs, sliderDefaultCoeffs }: Props) => {
     );
 };
 
-export default CardOverview;
+export default Overview;

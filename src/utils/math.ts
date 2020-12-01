@@ -66,6 +66,21 @@ const multiplyArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => 
     return result;
 };
 
+const divideArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
+    // TODO make sure both arrays are the same length
+    let result = new Array(arr1.length);
+
+    arr1.forEach((num, i) => {
+        if (arr2[i] === 0) {
+            result[i] = Infinity;
+        } else {
+            result[i] = arr1[i] / arr2[i];
+        }
+    });
+
+    return result;
+};
+
 const sumArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
     // TODO make sure both arrays are the same length
     let result = new Array(arr1.length);
@@ -131,4 +146,5 @@ export {
     getTokenArrayValue,
     roundToNDecimals,
     sumArrayOfTokenArrays,
+    divideArraysElementWise,
 };
