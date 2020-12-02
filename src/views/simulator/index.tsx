@@ -238,6 +238,8 @@ const Simulator = (props: RouteComponentProps<any>) => {
             : [],
     );
 
+    const [sliderDefaultEthPriceCoefficient, setSliderDefaultEthPriceCoefficient] = useState(1);
+
     const setNewPrices = (newValue, index) => {
         const coefficientsArrCopy = [...simulatedPriceCoefficients];
         coefficientsArrCopy[index] = newValue;
@@ -371,7 +373,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                                     onYieldChange={setNewYieldPrice}
                                     onNewDefaultValue={setNewDefaultCoeffs}
                                     onNewDefaultEthValue={newValue =>
-                                        setSimulatedEthPriceCoefficient(newValue)
+                                        setSliderDefaultEthPriceCoefficient(newValue)
                                     }
                                     simulatedCoefficients={simulatedPriceCoefficients}
                                     simulatedEthCoefficient={simulatedEthPriceCoefficient}
@@ -389,6 +391,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                     sliderDefaultCoeffs={sliderDefaultCoeffs}
                     simulatedEthCoeff={simulatedEthPriceCoefficient}
                     simulatedYieldCoeff={simulatedYieldPriceCoefficient}
+                    sliderDefaultEthCoeff={sliderDefaultEthPriceCoefficient}
                 />
             </RightLayoutContainer>
         </SimulatorContainer>

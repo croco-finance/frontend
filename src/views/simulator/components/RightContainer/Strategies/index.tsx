@@ -7,11 +7,13 @@ import LiquidityPool from './LiquidityPool';
 import DifferentStrategy from './DifferentStrategy';
 import { BoxRow, GrayBox, Icon, InfoBox } from '@components/ui';
 import { Link } from 'react-router-dom';
+import Graph from './Graph';
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 50px;
     width: 100%;
 `;
 
@@ -60,8 +62,24 @@ const Simulated = styled.span`
 const SimulatedBlue = styled.span`
     color: ${colors.BLUE};
 `;
+
+const GraphWrapper = styled.div`
+    padding: 30px 10px 10px 10px;
+    width: 100%;
+`;
+
+const GraphTitle = styled.div`
+    color: ${colors.FONT_MEDIUM};
+    text-align: center;
+    padding-bottom: 15px;
+    padding-left: 50px;
+`;
+
 interface Props {
     poolStrategyUsd: number;
+    currentTokenBalances: number[];
+    currentEthPrice: number;
+    currentTokenPrices: number[];
     feesUsd: number;
     yieldUsd: number;
     txCostUsd: number;
@@ -90,10 +108,22 @@ interface Props {
     simulatedFeesUsd: number;
     simulatedFeesTokenAmounts: number[];
     simulatedYieldUsd: number;
+    tokensHodlStrategyTokenAmounts: number[];
+    ethHodlStrategyEth: number;
+    lastIntSimulatedAverageRewards: number;
+    // slider
+    sliderDefaultCoeffs: number[];
+    sliderDefaultEthCoeff: number;
 }
 
 const Strategies = ({
+    poolIsActive,
+    currentTokenBalances,
+    currentEthPrice,
+    currentTokenPrices,
     poolStrategyUsd,
+    tokensHodlStrategyUsd,
+    ethHodlStrategyUsd,
     feesUsd,
     yieldUsd,
     txCostUsd,
@@ -105,24 +135,49 @@ const Strategies = ({
     lastIntAvDailyRewardsUsd,
     depositTimestampsArr,
     depositTokenAmountsArr,
-    poolIsActive,
     depositEthAmountsArr,
+    withdrawalsTokenAmounts,
     simulatedPooledTokenPrices,
     simulatedEthPrice,
     simulatedTokensHodlStrategyUsd,
     simulatedEthHodlStrategyUsd,
-    tokensHodlStrategyUsd,
-    ethHodlStrategyUsd,
     simulatedPoolStrategyUsd,
     simulatedPooledTokenBalances,
     simulatedPoolValueUsd,
-    withdrawalsTokenAmounts,
     simulatedWithdrawalsUsd,
     simulatedTxCostUsd,
     simulatedFeesUsd,
     simulatedFeesTokenAmounts,
     simulatedYieldUsd,
+    tokensHodlStrategyTokenAmounts,
+    ethHodlStrategyEth,
+    sliderDefaultCoeffs,
+    sliderDefaultEthCoeff,
+    lastIntSimulatedAverageRewards,
 }: Props) => {
+    const graphData = graphUtils.getStrategiesGraphData(
+        poolStrategyUsd,
+        tokensHodlStrategyUsd,
+        ethHodlStrategyUsd,
+        simulatedPoolStrategyUsd,
+        simulatedTokensHodlStrategyUsd,
+        simulatedEthHodlStrategyUsd,
+    );
+
+    const maxPossibleGraphValue = graphUtils.getStrategiesMaxPossiblePoolValues(
+        currentTokenPrices,
+        currentEthPrice,
+        sliderDefaultCoeffs,
+        sliderDefaultEthCoeff,
+        currentTokenBalances,
+        withdrawalsTokenAmounts,
+        yieldUsd,
+        txCostEth,
+        tokensHodlStrategyTokenAmounts,
+        ethHodlStrategyEth,
+    );
+
+    // const maxPossibleSimulationValue
     return (
         <Wrapper>
             {/* <Headline>Is it worth it to be liquidity provider in this pool?</Headline> */}
@@ -163,9 +218,9 @@ const Strategies = ({
 
             <SectionHeader marginTop={25}>
                 <Left>If you HODL'd pooled tokens</Left>
-                {/* <Right>
+                <Right>
                     <Current>Current</Current> | <Simulated>Simulated</Simulated>
-                </Right> */}
+                </Right>
             </SectionHeader>
 
             <StrategyItemWrapper>
@@ -193,6 +248,7 @@ const Strategies = ({
                     simulatedFeesUsd={simulatedFeesUsd}
                     simulatedFeesTokenAmounts={simulatedFeesTokenAmounts}
                     simulatedYieldUsd={simulatedYieldUsd}
+                    lastIntSimulatedAverageRewards={lastIntSimulatedAverageRewards}
                 />
             </StrategyItemWrapper>
 
@@ -231,8 +287,14 @@ const Strategies = ({
                     simulatedFeesUsd={simulatedFeesUsd}
                     simulatedFeesTokenAmounts={simulatedFeesTokenAmounts}
                     simulatedYieldUsd={simulatedYieldUsd}
+                    lastIntSimulatedAverageRewards={lastIntSimulatedAverageRewards}
                 />
             </StrategyItemWrapper>
+            {/* <SubHeadline>Strategy values</SubHeadline> */}
+            <GraphWrapper>
+                <GraphTitle>Value of different Strategies</GraphTitle>
+                <Graph data={graphData} maxPossibleValue={maxPossibleGraphValue} />
+            </GraphWrapper>
         </Wrapper>
     );
 };

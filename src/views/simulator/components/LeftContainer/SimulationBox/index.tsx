@@ -136,9 +136,10 @@ const SimulationBox = ({
                                     if (i === indexOfWeth) onEthChange(newValue);
                                     if (i === indexOfYield) onYieldChange(newValue);
                                 }}
-                                onDefaultSliderValueChange={newValue =>
-                                    onNewDefaultValue(newValue, i)
-                                }
+                                onDefaultSliderValueChange={newValue => {
+                                    onNewDefaultValue(newValue, i);
+                                    if (i === indexOfWeth) onNewDefaultEthValue(newValue);
+                                }}
                                 firstColumn={
                                     <TokenWrapper>
                                         <TokenLogo symbol={tokenSymbol} size={22} />

@@ -106,6 +106,7 @@ interface Props {
     simulatedFeesUsd: number;
     simulatedFeesTokenAmounts: number[];
     simulatedYieldUsd: number;
+    lastIntSimulatedAverageRewards: number;
 }
 
 const DifferentStrategy = ({
@@ -132,6 +133,7 @@ const DifferentStrategy = ({
     simulatedFeesUsd,
     simulatedFeesTokenAmounts,
     simulatedYieldUsd,
+    lastIntSimulatedAverageRewards,
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
@@ -144,8 +146,8 @@ const DifferentStrategy = ({
         simulatedTxCostUsd;
 
     const estDaysLeft = getEstDaysLeft(
-        poolStrategyUsd - differentStrategyUsd,
-        lastIntAvDailyRewardsUsd,
+        simulatedPoolStrategyUsd - simulatedDifferentStrategyUsd,
+        lastIntSimulatedAverageRewards,
     );
 
     let divergenceLossTExt = 'Price divergence loss';
@@ -379,7 +381,6 @@ const DifferentStrategy = ({
                                                 <BoxRow
                                                     firstColumn="Est. days left to compensate loss*"
                                                     secondColumn={estDaysLeft}
-                                                    // columnColors={['medium', 'medium']}
                                                 />
                                             </BottomBarRow>
                                         )}

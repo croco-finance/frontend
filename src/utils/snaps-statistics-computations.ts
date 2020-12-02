@@ -20,12 +20,26 @@ const getPoolStatsFromSnapshots = (poolSnapshots: Array<Snap>) => {
     });
 
     const poolIsActive = poolSnapshots[poolSnapshots.length - 1].liquidityTokenBalance > 0;
-    const { deposits, withdrawals } = getDepositsAndWithdrawals(intervalStats, poolIsActive);
+    const {
+        deposits,
+        withdrawals,
+        depositTimestamps,
+        depositTokenAmounts,
+        depositEthAmounts,
+    } = getDepositsAndWithdrawals(intervalStats, poolIsActive);
 
     // get cumulative stats
     let cumulativeStats = getCumulativeStats(intervalStats, deposits, withdrawals);
 
-    return { intervalStats, cumulativeStats, deposits, withdrawals };
+    return {
+        intervalStats,
+        cumulativeStats,
+        deposits,
+        withdrawals,
+        depositTimestamps,
+        depositTokenAmounts,
+        depositEthAmounts,
+    };
 };
 
 const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => {
@@ -268,7 +282,21 @@ const getDepositsAndWithdrawals = (intervalStats: Array<IntervalStats>, poolIsAc
         });
     }
 
-    return { deposits, withdrawals };
+    // DEPOSITS / WITHDRAWALS
+    const depositTimestamps: number[] = [];
+    const depositTokenAmounts: number[][] = [];
+    const depositEthAmounts: number[][] = [];
+
+    deposits.forEach(deposit => {
+        // put withdrawals data into an array so I can render it more easily
+        if (deposit.timestamp) {
+            depositTimestamps.push(deposit.timestamp);
+            depositTokenAmounts.push(deposit.tokenAmounts);
+            depositEthAmounts.push([deposit.valueEth]);
+        }
+    });
+
+    return { deposits, withdrawals, depositTimestamps, depositTokenAmounts, depositEthAmounts };
 };
 
 const getDepositsOrWithdrawalsSum = (deposits: Deposit[]) => {
@@ -324,7 +352,9 @@ const getCumulativeStats = (
         currentPoolValueUsd = 0;
     }
 
-    // const endPoolValueUsd =
+    const currentTokenBalances = isActive
+        ? lastInterval.tokenBalancesEnd
+        : new Array(pooledTokensCount).fill(0);
 
     // Sum and value of all withdrawals/deposits
     const depositsTokenAmounts = getDepositsOrWithdrawalsSum(deposits);
@@ -335,9 +365,6 @@ const getCumulativeStats = (
         withdrawalsTokenAmounts,
         pooledTokenPricesEnd,
     );
-
-    console.log('deposits', deposits);
-    console.log('withdrawals', withdrawals);
 
     // get cumulative fees, yield, txCostEth gains
     let yieldTokenAmount = 0;
@@ -362,6 +389,14 @@ const getCumulativeStats = (
 
     // Fees USD
     let feesUsd = mathUtils.getTokenArrayValue(feesTokenAmounts, pooledTokenPricesEnd);
+
+    let feesTokenAmountsExceptLastInt = new Array(pooledTokensCount).fill(0);
+    for (let i = 0; i < intervalStats.length - 1; i++) {
+        feesTokenAmountsExceptLastInt = mathUtils.sumArraysElementWise(
+            feesTokenAmountsExceptLastInt,
+            intervalStats[i].feesTokenAmounts,
+        );
+    }
 
     // yield USD
     let yieldUsd = 0;
@@ -406,6 +441,8 @@ const getCumulativeStats = (
         tokensHodlStrategyUsd: tokensHodlStrategyUsd,
         ethHodlStrategyUsd: ethHodlStrategyUsd,
         ethHodlStrategyEth: ethHodlStrategyEth,
+        currentTokenBalances,
+        feesTokenAmountsExceptLastInt,
     };
 };
 

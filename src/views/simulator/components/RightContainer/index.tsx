@@ -22,6 +22,7 @@ interface Props {
     simulatedEthCoeff: number;
     simulatedYieldCoeff: number;
     sliderDefaultCoeffs: Array<number>;
+    sliderDefaultEthCoeff: number;
     onTabChanged: any;
     selectedTab: TabOptions;
 }
@@ -30,6 +31,7 @@ const RightContainer = ({
     sliderDefaultCoeffs,
     simulatedYieldCoeff,
     simulatedEthCoeff,
+    sliderDefaultEthCoeff,
     onTabChanged,
     selectedTab,
 }: Props) => {
@@ -60,6 +62,10 @@ const RightContainer = ({
         exchange,
         tokenWeights,
         deposits,
+        depositTimestamps,
+        depositTokenAmounts,
+        depositEthAmounts,
+        tokenSymbols,
     } = pool;
 
     const {
@@ -81,6 +87,8 @@ const RightContainer = ({
         ethHodlStrategyEth,
         endPoolValueUsd,
         yieldTokenPriceEnd,
+        currentTokenBalances,
+        feesTokenAmountsExceptLastInt,
     } = pool.cumulativeStats;
 
     // Get simulated prices of pooled tokens and ETH
@@ -117,26 +125,16 @@ const RightContainer = ({
         impLossUsd,
     } = simulatedValues;
 
-    // token symbols arr
-    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
     // FEES
-
     // Get USD value of all fees except the last interval
-    let feesTokenAmountsExceptLast = new Array(tokenPricesEnd.length).fill(0);
-    for (let i = 0; i < intervalStats.length - 1; i++) {
-        feesTokenAmountsExceptLast = mathUtils.sumArraysElementWise(
-            feesTokenAmountsExceptLast,
-            intervalStats[i].feesTokenAmounts,
-        );
-    }
     const feesUsdExceptLast = mathUtils.getTokenArrayValue(
-        feesTokenAmountsExceptLast,
+        feesTokenAmountsExceptLastInt,
         simulatedPooledTokenPrices,
     );
 
     // To get the simulates fees amounts, you have to sum the simulated fees (last interval) with all the previous fees
     const simulatedFeesTokenAmountsAll = mathUtils.sumArraysElementWise(
-        feesTokenAmountsExceptLast,
+        feesTokenAmountsExceptLastInt,
         simulatedFeesTokenAmounts,
     );
     const simulatedFeesUsdAll = simulatedFeesUsd + feesUsdExceptLast;
@@ -145,20 +143,6 @@ const RightContainer = ({
     const lastIntYieldUsd = lastIntervalStat.yieldTokenPriceEnd
         ? lastIntervalStat.yieldTokenAmount * lastIntervalStat.yieldTokenPriceEnd
         : 0;
-
-    // DEPOSITS / WITHDRAWALS
-    const depositTimestampsArr: number[] = [];
-    const depositTokenAmountsArr: Array<Array<number>> = [];
-    const depositEthAmountsArr: Array<Array<number>> = [];
-
-    deposits.forEach(deposit => {
-        // put withdrawals data into an array so I can render it more easily
-        if (deposit.timestamp) {
-            depositTimestampsArr.push(deposit.timestamp);
-            depositTokenAmountsArr.push(deposit.tokenAmounts);
-            depositEthAmountsArr.push([deposit.valueEth]);
-        }
-    });
 
     const simulatedWithdrawalsUsd = mathUtils.getTokenArrayValue(
         withdrawalsTokenAmounts,
@@ -184,12 +168,19 @@ const RightContainer = ({
     );
     const simulatedEthHodlStrategyUsd = ethHodlStrategyEth * simulatedEthPrice;
 
+    //  last interval simulated rewards
+    const lastIntSimulatedAverageRewards = mathUtils.getAverageDailyRewards(
+        lastSnapTimestampStart,
+        lastSnapTimestampEnd,
+        simulatedFeesUsd + lastIntYieldUsd,
+    );
+
     return (
         <Wrapper>
             <TabSelectHeader
                 headline={
                     <PoolHeader
-                        tokenSymbolsArr={tokenSymbolsArr}
+                        tokenSymbolsArr={tokenSymbols}
                         exchange={exchange}
                         poolId={poolId}
                     />
@@ -199,7 +190,7 @@ const RightContainer = ({
 
             {selectedTab === 'overview' && (
                 <Overview
-                    tokenSymbols={tokenSymbolsArr}
+                    tokenSymbols={tokenSymbols}
                     tokenBalances={tokenBalances}
                     simulatedPooledTokenBalances={simulatedTokenBalances}
                     endPoolValueUsd={endPoolValueUsd}
@@ -219,7 +210,10 @@ const RightContainer = ({
             {selectedTab === 'strategies' && (
                 <Strategies
                     poolStrategyUsd={poolStrategyUsd}
-                    tokenSymbols={tokenSymbolsArr}
+                    currentTokenBalances={currentTokenBalances}
+                    currentEthPrice={ethPriceEnd}
+                    currentTokenPrices={tokenPricesEnd}
+                    tokenSymbols={tokenSymbols}
                     poolIsActive={isActive}
                     feesUsd={feesUsd}
                     feesTokenAmounts={feesTokenAmounts}
@@ -229,10 +223,11 @@ const RightContainer = ({
                     yieldUsd={yieldUsd}
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
-                    depositTimestampsArr={depositTimestampsArr}
-                    depositTokenAmountsArr={depositTokenAmountsArr}
-                    depositEthAmountsArr={depositEthAmountsArr}
+                    depositTimestampsArr={depositTimestamps}
+                    depositTokenAmountsArr={depositTokenAmounts}
+                    depositEthAmountsArr={depositEthAmounts}
                     withdrawalsTokenAmounts={withdrawalsTokenAmounts}
+                    lastIntSimulatedAverageRewards={lastIntSimulatedAverageRewards}
                     simulatedPooledTokenPrices={simulatedPooledTokenPrices}
                     simulatedEthPrice={simulatedEthPrice}
                     simulatedPooledTokenBalances={simulatedTokenBalances}
@@ -248,6 +243,11 @@ const RightContainer = ({
                     simulatedEthHodlStrategyUsd={simulatedEthHodlStrategyUsd}
                     tokensHodlStrategyUsd={tokensHodlStrategyUsd}
                     ethHodlStrategyUsd={ethHodlStrategyUsd}
+                    tokensHodlStrategyTokenAmounts={tokensHodlStrategyTokenAmounts}
+                    ethHodlStrategyEth={ethHodlStrategyEth}
+                    //slider
+                    sliderDefaultCoeffs={sliderDefaultCoeffs}
+                    sliderDefaultEthCoeff={sliderDefaultEthCoeff}
                 />
             )}
         </Wrapper>

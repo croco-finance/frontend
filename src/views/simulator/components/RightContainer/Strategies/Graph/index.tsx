@@ -94,7 +94,7 @@ class Graph extends PureComponent<Props, State> {
                         iconType="plainline"
                         wrapperStyle={{
                             paddingLeft: '50px',
-                            paddingTop: '10px',
+                            paddingTop: '20px',
                         }}
                         formatter={this.renderColorfulLegendText}
                     />
@@ -104,7 +104,7 @@ class Graph extends PureComponent<Props, State> {
                         isAnimationActive={false}
                         dataKey={'poolValue'}
                         strokeWidth={1}
-                        fillOpacity={0.7}
+                        fillOpacity={0.5}
                         fill={colors.GRAPH_1_DARK}
                         stroke={colors.GRAPH_1_DARK}
                     />
@@ -117,18 +117,18 @@ class Graph extends PureComponent<Props, State> {
                         fill={colors.BLUE}
                         stroke={'#a600ffff'}
                         // stroke={colors.BLUE}
-                        strokeDasharray="4 3"
+                        strokeDasharray="6 3"
                     />
                     <Area
                         key={'ethHodlValue'}
                         isAnimationActive={false}
                         dataKey={'ethHodlValue'}
-                        strokeWidth={2}
+                        strokeWidth={2.5}
                         fillOpacity={0}
                         fill={colors.BLUE}
-                        stroke={'#0100d2'}
+                        stroke={'#00cbe8'}
                         // stroke={colors.BLUE}
-                        strokeDasharray="4 3"
+                        strokeDasharray="6 3"
                     />
 
                     <XAxis

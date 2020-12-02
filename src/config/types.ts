@@ -100,6 +100,8 @@ export interface CumulativeStats {
     ethHodlStrategyUsd: number;
     ethHodlStrategyEth: number;
     lastIntAvDailyRewardsUsd: number;
+    currentTokenBalances: number[];
+    feesTokenAmountsExceptLastInt: number[];
 }
 
 export interface Pool {
@@ -123,6 +125,10 @@ export interface PoolItem {
     tokenWeights: number[];
     withdrawals: Withdrawal[];
     deposits: Deposit[];
+    depositTimestamps: number[];
+    depositTokenAmounts: number[][];
+    depositEthAmounts: number[][];
+    tokenSymbols: string[];
 }
 
 export interface YieldTokenInfo {

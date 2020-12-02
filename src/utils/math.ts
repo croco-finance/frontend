@@ -33,7 +33,12 @@ const getTokenArrayValue = (tokenBalances: Array<number>, tokenPrices: Array<num
         throw 'Arrays have to have the same length';
     }
 
-    return mathUtils.sumArr(mathUtils.multiplyArraysElementWise(tokenBalances, tokenPrices));
+    let sum = 0;
+    for (let i = 0; i < tokenBalances.length; i++) {
+        sum += tokenBalances[i] * tokenPrices[i];
+    }
+    return sum;
+    // return mathUtils.sumArr(mathUtils.multiplyArraysElementWise(tokenBalances, tokenPrices));
 };
 
 // This is useful for generating data for imp.loss curve.
