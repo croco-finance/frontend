@@ -132,6 +132,7 @@ interface Props {
     lastSnapTimestampEnd: number;
     impLossUsd: number;
     impLossRel: number;
+    isActive: boolean;
 }
 
 const Overview = ({
@@ -149,6 +150,7 @@ const Overview = ({
     lastSnapTimestampEnd,
     impLossUsd,
     impLossRel,
+    isActive,
 }: Props) => {
     const tokenBalancesDiff = mathUtils.subtractArraysElementWise(
         simulatedPooledTokenBalances,
@@ -159,6 +161,7 @@ const Overview = ({
         endPoolValueUsd,
         simulatedPoolValueUsd,
         simulatedHodlValueUsd,
+        isActive,
     );
     const maxPossibleSimulationValue = graphUtils.getMaxPossiblePoolValue(
         tokenBalances,

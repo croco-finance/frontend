@@ -190,6 +190,7 @@ const RightContainer = ({
 
             {selectedTab === 'overview' && (
                 <Overview
+                    isActive={isActive}
                     tokenSymbols={tokenSymbols}
                     tokenBalances={tokenBalances}
                     simulatedPooledTokenBalances={simulatedTokenBalances}
