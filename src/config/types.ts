@@ -71,11 +71,14 @@ export interface IntervalStats {
     poolValueUsdEnd: number;
     ethHodlValueUsd: number;
     staked: boolean;
-    // TODO Deposits / Withdrawals
+    liquidityTokenBalanceStart: number;
+    liquidityTokenBalanceEnd: number;
+    // ethAmountStart: number; // this is how much ETH was your deposits worth
 }
 
 export interface CumulativeStats {
-    poolValueUsd: any;
+    currentPoolValueUsd: number;
+    endPoolValueUsd: number;
     tokenBalances: any;
     feesTokenAmounts: any;
     feesUsd: number;
@@ -87,7 +90,18 @@ export interface CumulativeStats {
     txCostUsd: number;
     ethPriceEnd: number;
     timestampEnd: number;
-    // average rewards since last deposit -> average rewards in last snapshot
+    depositsTokenAmounts: Array<number>;
+    withdrawalsTokenAmounts: Array<number>;
+    depositsUsd: number;
+    withdrawalsUsd: number;
+    poolStrategyUsd: number;
+    tokensHodlStrategyTokenAmounts: number[];
+    tokensHodlStrategyUsd: number;
+    ethHodlStrategyUsd: number;
+    ethHodlStrategyEth: number;
+    lastIntAvDailyRewardsUsd: number;
+    currentTokenBalances: number[];
+    feesTokenAmountsExceptLastInt: number[];
 }
 
 export interface Pool {
@@ -106,9 +120,15 @@ export interface PoolItem {
     yieldToken: Token | null;
     hasYieldReward: boolean;
     timestampEnd: number;
-    intervalStats: Array<IntervalStats>;
+    intervalStats: IntervalStats[];
     cumulativeStats: CumulativeStats;
-    tokenWeights: Array<number>;
+    tokenWeights: number[];
+    withdrawals: Withdrawal[];
+    deposits: Deposit[];
+    depositTimestamps: number[];
+    depositTokenAmounts: number[][];
+    depositEthAmounts: number[][];
+    tokenSymbols: string[];
 }
 
 export interface YieldTokenInfo {
@@ -149,3 +169,12 @@ export interface SummaryStats {
     txCostUsd: number;
     // average rewards since last deposit -> average rewards in last snapshot
 }
+
+export interface Deposit {
+    timestamp: number | undefined;
+    tokenAmounts: Array<number>;
+    valueUsd: number;
+    valueEth: number;
+}
+
+export interface Withdrawal extends Deposit {}

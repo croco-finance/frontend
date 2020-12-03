@@ -4,6 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import PriceChangeRow from './PriceChangeRow';
+import { formatUtils } from '@utils';
 
 const GRID_GAP = 5;
 
@@ -13,12 +14,12 @@ const Wrapper = styled.div`
     }
 `;
 
-const GridWrapper = styled.div<{ rowsCount: number }>`
+const GridWrapper = styled.div`
     flex-grow: 1;
     display: grid;
     grid-gap: ${GRID_GAP}px;
     grid-template-columns: 110px minmax(100px, auto) minmax(120px, auto) minmax(110px, auto);
-    grid-template-rows: ${props => `repeat(${props.rowsCount}, 55px)`};
+    grid-auto-rows: 55px;
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
@@ -69,16 +70,24 @@ const XScrollWrapper = styled.div`
 `;
 
 interface Props {
-    tokensPool?: any;
     onChange: any;
-    simulatedCoefficients: any;
+    onEthChange: any;
+    onYieldChange: any;
+    simulatedCoefficients: number[];
+    simulatedEthCoefficient?: number;
     onNewDefaultValue: any;
+    selectedTab: string;
+    onNewDefaultEthValue: any;
 }
 const SimulationBox = ({
-    tokensPool,
     onChange,
+    onEthChange,
+    onYieldChange,
     simulatedCoefficients,
     onNewDefaultValue,
+    onNewDefaultEthValue,
+    simulatedEthCoefficient,
+    selectedTab,
 }: Props) => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
@@ -88,8 +97,20 @@ const SimulationBox = ({
     }
 
     const pool = allPools[selectedPoolId];
-    const { pooledTokens, poolId } = pool;
-    const { tokenPricesEnd } = pool.cumulativeStats;
+    const { pooledTokens, poolId, yieldToken } = pool;
+    const { tokenPricesEnd, ethPriceEnd } = pool.cumulativeStats;
+    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
+    const yieldTokenSymbol = yieldToken?.symbol;
+
+    // find out if WETH is among pooled tokens. If not, the index will be -1
+    const indexOfWeth = tokenSymbolsArr.indexOf('WETH');
+
+    // get index of yield token
+    const indexOfYield = tokenSymbolsArr.indexOf(yieldTokenSymbol);
+
+    const simulatedEthPrice = simulatedEthCoefficient
+        ? ethPriceEnd * simulatedEthCoefficient
+        : ethPriceEnd;
 
     return (
         <Wrapper>
@@ -100,7 +121,7 @@ const SimulationBox = ({
             </SubTitlesWrapper>
 
             <XScrollWrapper>
-                <GridWrapper rowsCount={pooledTokens.length}>
+                <GridWrapper>
                     {pooledTokens.map((token, i) => {
                         const tokenSymbol = token.symbol;
                         return (
@@ -110,10 +131,15 @@ const SimulationBox = ({
                                 key={`${poolId}${tokenSymbol}`}
                                 onSliderChange={newValue => {
                                     onChange(newValue, i);
+
+                                    // if it is WETH slider, increase price of ETH as well
+                                    if (i === indexOfWeth) onEthChange(newValue);
+                                    if (i === indexOfYield) onYieldChange(newValue);
                                 }}
-                                onDefaultSliderValueChange={newValue =>
-                                    onNewDefaultValue(newValue, i)
-                                }
+                                onDefaultSliderValueChange={newValue => {
+                                    onNewDefaultValue(newValue, i);
+                                    if (i === indexOfWeth) onNewDefaultEthValue(newValue);
+                                }}
                                 firstColumn={
                                     <TokenWrapper>
                                         <TokenLogo symbol={tokenSymbol} size={22} />
@@ -129,6 +155,24 @@ const SimulationBox = ({
                             />
                         );
                     })}
+                    {/* If WETH not among pooled tokens, show ETH slider as well */}
+                    {indexOfWeth === -1 && selectedTab !== 'overview' && (
+                        <PriceChangeRow
+                            key={`${poolId}ETH`}
+                            onSliderChange={newValue => {
+                                onEthChange(newValue);
+                            }}
+                            onDefaultSliderValueChange={newValue => onNewDefaultEthValue(newValue)}
+                            firstColumn={
+                                <TokenWrapper>
+                                    <TokenLogo symbol={'ETH'} size={22} />
+                                    <TokenSymbol>ETH</TokenSymbol>
+                                </TokenWrapper>
+                            }
+                            fourthColumn={<FiatValue value={simulatedEthPrice} />}
+                            color="dark"
+                        />
+                    )}
                 </GridWrapper>
             </XScrollWrapper>
         </Wrapper>

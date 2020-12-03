@@ -1,5 +1,13 @@
 import { lossUtils, mathUtils } from '.';
-import { Snap, IntervalStats, CumulativeStats, AllPoolsGlobal, SummaryStats } from '@types';
+import {
+    Snap,
+    IntervalStats,
+    CumulativeStats,
+    AllPoolsGlobal,
+    SummaryStats,
+    Deposit,
+    Withdrawal,
+} from '@types';
 
 const getPoolStatsFromSnapshots = (poolSnapshots: Array<Snap>) => {
     // get interval stats first
@@ -11,10 +19,27 @@ const getPoolStatsFromSnapshots = (poolSnapshots: Array<Snap>) => {
         }
     });
 
-    // get cumulative stats
-    let cumulativeStats = getCumulativeStats(intervalStats);
+    const poolIsActive = poolSnapshots[poolSnapshots.length - 1].liquidityTokenBalance > 0;
+    const {
+        deposits,
+        withdrawals,
+        depositTimestamps,
+        depositTokenAmounts,
+        depositEthAmounts,
+    } = getDepositsAndWithdrawals(intervalStats, poolIsActive);
 
-    return { intervalStats, cumulativeStats };
+    // get cumulative stats
+    let cumulativeStats = getCumulativeStats(intervalStats, deposits, withdrawals);
+
+    return {
+        intervalStats,
+        cumulativeStats,
+        deposits,
+        withdrawals,
+        depositTimestamps,
+        depositTokenAmounts,
+        depositEthAmounts,
+    };
 };
 
 const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => {
@@ -100,15 +125,15 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
 
     // this his how much ETH was your deposit worth at the beginning of the interval
     // array[5.0 ETH, 5.0 ETH]
-    const startEthAmount = mathUtils.sumArr(
+    const ethAmountStart = mathUtils.sumArr(
         mathUtils.divideEachArrayElementByValue(startTokenValue, ethPriceStart),
     );
 
     // this is how much would your assets be worth if you put everything to ETH instead of pooled tokens
-    const ethHodlValueUsd = startEthAmount * ethPriceEnd;
+    const ethHodlValueUsd = ethAmountStart * ethPriceEnd;
     const endTokenValues = mathUtils.multiplyArraysElementWise(tokenBalancesEnd, tokenPricesEnd);
 
-    // this his how much ETH wis the pool worth at the end of interval
+    // this his how much ETH was the pool worth at the end of interval
     const endEthAmount = mathUtils.sumArr(
         mathUtils.divideEachArrayElementByValue(endTokenValues, ethPriceEnd),
     );
@@ -137,6 +162,8 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
         // User's pool share
         userPoolShareStart: userPoolShareStart,
         userPoolShareEnd: userPoolShareEnd,
+        liquidityTokenBalanceStart: snapshotT0.liquidityTokenBalance,
+        liquidityTokenBalanceEnd: snapshotT1.liquidityTokenBalance,
 
         // Token prices
         tokenPricesStart: tokenPricesStart,
@@ -168,72 +195,261 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
     };
 };
 
-const getCumulativeStats = (intervalStats: Array<IntervalStats>) => {
+const getEthValueOfTokenArray = (tokenBalances, tokenPrices, ethPrice): number => {
+    const startTokenValue = mathUtils.multiplyArraysElementWise(tokenBalances, tokenPrices);
+
+    return mathUtils.sumArr(mathUtils.divideEachArrayElementByValue(startTokenValue, ethPrice));
+};
+
+const getDepositsAndWithdrawals = (intervalStats: Array<IntervalStats>, poolIsActive: boolean) => {
+    const deposits: Deposit[] = [];
+    const withdrawals: Withdrawal[] = [];
+
+    // add first deposit to pool separately
+    const {
+        timestampStart,
+        tokenBalancesStart,
+        poolValueUsdStart,
+        ethPriceStart,
+        tokenPricesStart,
+    } = intervalStats[0];
+    deposits[0] = {
+        timestamp: timestampStart,
+        tokenAmounts: tokenBalancesStart,
+        valueUsd: poolValueUsdStart,
+        valueEth: getEthValueOfTokenArray(tokenBalancesStart, tokenPricesStart, ethPriceStart),
+    };
+
+    // Note: loop until the "i < length - 1 snap", because i + 1 is not defined for last snap
+    for (let i = 0, length = intervalStats.length; i < length - 1; i++) {
+        const endBalancePrev = intervalStats[i].tokenBalancesEnd;
+        const startBalanceNext = intervalStats[i + 1].tokenBalancesStart;
+        const startTokenPricesNext = intervalStats[i + 1].tokenPricesStart;
+        const startEthPriceNext = intervalStats[i + 1].ethPriceStart;
+
+        const endUsdValuePrev = intervalStats[i].poolValueUsdEnd;
+        const startUsdValueNext = intervalStats[i + 1].poolValueUsdStart;
+
+        const valueEth = getEthValueOfTokenArray(
+            startBalanceNext,
+            startTokenPricesNext,
+            startEthPriceNext,
+        );
+
+        // deposit
+        if (endUsdValuePrev < startUsdValueNext) {
+            deposits.push({
+                timestamp: intervalStats[i].timestampEnd,
+                tokenAmounts: mathUtils.subtractArraysElementWise(startBalanceNext, endBalancePrev),
+                valueUsd: endUsdValuePrev - startUsdValueNext,
+                valueEth: valueEth,
+            });
+        }
+
+        // withdrawal
+        if (endUsdValuePrev > startUsdValueNext) {
+            withdrawals.push({
+                timestamp: intervalStats[i].timestampEnd,
+                tokenAmounts: mathUtils.subtractArraysElementWise(endBalancePrev, startBalanceNext),
+                valueUsd: startUsdValueNext - endUsdValuePrev,
+                valueEth: valueEth,
+            });
+        }
+    }
+
+    // If pool is not active, the user withdrew all his funds and we want to add this to withdrawals array
+    const lastInterval = intervalStats[intervalStats.length - 1];
+    if (!poolIsActive) {
+        withdrawals.push({
+            timestamp: lastInterval.timestampEnd,
+            tokenAmounts: lastInterval.tokenBalancesEnd,
+            valueUsd: lastInterval.poolValueUsdEnd,
+            valueEth: getEthValueOfTokenArray(
+                lastInterval.tokenBalancesEnd,
+                lastInterval.tokenPricesEnd,
+                lastInterval.ethPriceEnd,
+            ),
+        });
+    }
+
+    // if there were no withdrawals, return an array full of zero (I can manipulate with this easier than with an empty array or null)
+    if (withdrawals.length === 0) {
+        withdrawals.push({
+            timestamp: undefined,
+            tokenAmounts: new Array(lastInterval.tokenBalancesEnd.length).fill(0),
+            valueUsd: 0,
+            valueEth: 0,
+        });
+    }
+
+    // DEPOSITS / WITHDRAWALS
+    const depositTimestamps: number[] = [];
+    const depositTokenAmounts: number[][] = [];
+    const depositEthAmounts: number[][] = [];
+
+    deposits.forEach(deposit => {
+        // put withdrawals data into an array so I can render it more easily
+        if (deposit.timestamp) {
+            depositTimestamps.push(deposit.timestamp);
+            depositTokenAmounts.push(deposit.tokenAmounts);
+            depositEthAmounts.push([deposit.valueEth]);
+        }
+    });
+
+    return { deposits, withdrawals, depositTimestamps, depositTokenAmounts, depositEthAmounts };
+};
+
+const getDepositsOrWithdrawalsSum = (deposits: Deposit[]) => {
+    // deposits and withdrawals share the same interface (for now)
+
+    let tokenCount = deposits[0].tokenAmounts.length;
+    let tokenAmountsSum = new Array(tokenCount).fill(0);
+
+    deposits.forEach(deposit => {
+        tokenAmountsSum = mathUtils.sumArraysElementWise(tokenAmountsSum, deposit.tokenAmounts);
+    });
+
+    return tokenAmountsSum;
+};
+
+const getDepositsOrWithdrawalsEthSum = (deposits: Deposit[] | Withdrawal[]) => {
+    // deposits and withdrawals share the same interface (for now)
+    let valueEthSum = 0;
+
+    deposits.forEach(deposit => {
+        valueEthSum += deposit.valueEth;
+    });
+
+    return valueEthSum;
+};
+
+const getCumulativeStats = (
+    intervalStats: IntervalStats[],
+    deposits: Deposit[],
+    withdrawals: Withdrawal[],
+): CumulativeStats => {
     const pooledTokensCount = intervalStats[0].tokenBalancesStart.length;
     const intervalsCount = intervalStats.length;
     const lastInterval = intervalStats[intervalsCount - 1];
 
-    // TODO: this is not really cumulative pool value, but value of current pool size. (TODO improve naming)
-    const poolValueUsd = mathUtils.getTokenArrayValue(
+    // End token prices
+    const pooledTokenPricesEnd = lastInterval.tokenPricesEnd;
+    const yieldTokenPriceEnd = lastInterval.yieldTokenPriceEnd
+        ? lastInterval.yieldTokenPriceEnd
+        : 0;
+    const ethPriceEnd = lastInterval.ethPriceEnd;
+
+    const isActive = lastInterval.liquidityTokenBalanceEnd !== 0;
+
+    const endPoolValueUsd = mathUtils.getTokenArrayValue(
         lastInterval.tokenBalancesEnd,
-        lastInterval.tokenPricesEnd,
+        pooledTokenPricesEnd,
     );
 
-    // Stats object initialization
-    let cumulativeStats: CumulativeStats = {
-        txCostEth: 0,
-        txCostUsd: 0,
-        feesUsd: 0,
-        yieldUsd: 0,
-        yieldTokenAmount: 0,
-        tokenBalances: lastInterval.tokenBalancesEnd,
-        feesTokenAmounts: new Array(pooledTokensCount).fill(0),
-        ethPriceEnd: lastInterval.ethPriceEnd,
-        tokenPricesEnd: lastInterval.tokenPricesEnd,
-        yieldTokenPriceEnd: lastInterval.yieldTokenPriceEnd
-            ? lastInterval.yieldTokenPriceEnd
-            : null,
-        poolValueUsd: poolValueUsd,
-        timestampEnd: lastInterval.timestampEnd,
-    };
+    // Current pool value. If pool is not active, current pool value is 0
+    let currentPoolValueUsd = endPoolValueUsd;
+    if (!isActive) {
+        currentPoolValueUsd = 0;
+    }
+
+    const currentTokenBalances = isActive
+        ? lastInterval.tokenBalancesEnd
+        : new Array(pooledTokensCount).fill(0);
+
+    // Sum and value of all withdrawals/deposits
+    const depositsTokenAmounts = getDepositsOrWithdrawalsSum(deposits);
+    const withdrawalsTokenAmounts = getDepositsOrWithdrawalsSum(withdrawals);
+    const depositsEth = getDepositsOrWithdrawalsEthSum(deposits);
+    const depositsUsd = mathUtils.getTokenArrayValue(depositsTokenAmounts, pooledTokenPricesEnd);
+    const withdrawalsUsd = mathUtils.getTokenArrayValue(
+        withdrawalsTokenAmounts,
+        pooledTokenPricesEnd,
+    );
 
     // get cumulative fees, yield, txCostEth gains
+    let yieldTokenAmount = 0;
+    let feesTokenAmounts = new Array(pooledTokensCount).fill(0);
+    let txCostEth = 0;
     intervalStats.forEach((stat, i) => {
-        cumulativeStats['feesTokenAmounts'] = mathUtils.sumArraysElementWise(
-            cumulativeStats['feesTokenAmounts'],
+        feesTokenAmounts = mathUtils.sumArraysElementWise(
+            feesTokenAmounts,
             stat['feesTokenAmounts'],
         );
-        cumulativeStats['yieldTokenAmount'] += stat['yieldTokenAmount'];
-        cumulativeStats['txCostEth'] += stat['txCostEthStart'];
+        yieldTokenAmount += stat['yieldTokenAmount'];
+        txCostEth += stat['txCostEthStart'];
 
         // if last stat, add txCostEthEnd as well
         if (i === intervalStats.length - 1) {
-            cumulativeStats['txCostEth'] += stat['txCostEthEnd'];
+            txCostEth += stat['txCostEthEnd'];
         }
     });
 
     // Tx. cost USD
-    cumulativeStats['txCostUsd'] = cumulativeStats['txCostEth'] * cumulativeStats['ethPriceEnd'];
+    const txCostUsd = txCostEth * ethPriceEnd;
 
     // Fees USD
-    cumulativeStats['feesUsd'] = mathUtils.getTokenArrayValue(
-        cumulativeStats['feesTokenAmounts'],
-        cumulativeStats['tokenPricesEnd'],
-    );
+    let feesUsd = mathUtils.getTokenArrayValue(feesTokenAmounts, pooledTokenPricesEnd);
 
-    // yield USD
-    if (cumulativeStats['yieldTokenPriceEnd']) {
-        cumulativeStats['yieldUsd'] =
-            cumulativeStats['yieldTokenAmount'] * cumulativeStats['yieldTokenPriceEnd'];
+    let feesTokenAmountsExceptLastInt = new Array(pooledTokensCount).fill(0);
+    for (let i = 0; i < intervalStats.length - 1; i++) {
+        feesTokenAmountsExceptLastInt = mathUtils.sumArraysElementWise(
+            feesTokenAmountsExceptLastInt,
+            intervalStats[i].feesTokenAmounts,
+        );
     }
 
-    return cumulativeStats;
+    // yield USD
+    let yieldUsd = 0;
+    if (yieldTokenPriceEnd) {
+        yieldUsd = yieldTokenAmount * yieldTokenPriceEnd;
+    }
+
+    // Average daily rewards in last interval
+    const lastIntAvDailyRewardsUsd = mathUtils.getAverageDailyRewards(
+        lastInterval.timestampStart,
+        lastInterval.timestampEnd,
+        lastInterval.feesUsdEndPrice + lastInterval.yieldTokenAmount * yieldTokenPriceEnd,
+    );
+    // strategies
+    const poolStrategyUsd = currentPoolValueUsd + withdrawalsUsd + yieldUsd - txCostUsd;
+    const tokensHodlStrategyTokenAmounts = depositsTokenAmounts;
+    const tokensHodlStrategyUsd = depositsUsd;
+    const ethHodlStrategyUsd = depositsEth * ethPriceEnd;
+    const ethHodlStrategyEth = depositsEth;
+
+    return {
+        txCostEth: txCostEth,
+        txCostUsd: txCostUsd,
+        feesUsd: feesUsd,
+        yieldUsd: yieldUsd,
+        yieldTokenAmount: yieldTokenAmount,
+        tokenBalances: lastInterval.tokenBalancesEnd,
+        feesTokenAmounts: feesTokenAmounts,
+        ethPriceEnd: lastInterval.ethPriceEnd,
+        tokenPricesEnd: pooledTokenPricesEnd,
+        yieldTokenPriceEnd: yieldTokenPriceEnd,
+        currentPoolValueUsd: currentPoolValueUsd,
+        endPoolValueUsd: endPoolValueUsd,
+        timestampEnd: lastInterval.timestampEnd,
+        depositsTokenAmounts: depositsTokenAmounts,
+        withdrawalsTokenAmounts: withdrawalsTokenAmounts,
+        depositsUsd: depositsUsd,
+        withdrawalsUsd: withdrawalsUsd,
+        lastIntAvDailyRewardsUsd: lastIntAvDailyRewardsUsd,
+        poolStrategyUsd: poolStrategyUsd,
+        tokensHodlStrategyTokenAmounts: tokensHodlStrategyTokenAmounts,
+        tokensHodlStrategyUsd: tokensHodlStrategyUsd,
+        ethHodlStrategyUsd: ethHodlStrategyUsd,
+        ethHodlStrategyEth: ethHodlStrategyEth,
+        currentTokenBalances,
+        feesTokenAmountsExceptLastInt,
+    };
 };
 
 // TODO this works with the old croco version
 const getPoolsSummaryObject = (
     allPools: AllPoolsGlobal,
-    filteredPoolIds: Array<string>, // do summary from these pool Ids
+    filteredPoolIds: string[], // do summary from these pool Ids
 ): SummaryStats => {
     // TODO compute separately for Balancer and for Uniswap
     let feesUsdSum = 0;
@@ -249,7 +465,7 @@ const getPoolsSummaryObject = (
         const pool = allPools[poolId];
         const { cumulativeStats, pooledTokens, yieldToken } = pool;
         const {
-            poolValueUsd,
+            currentPoolValueUsd,
             tokenBalances,
             feesTokenAmounts,
             feesUsd,
@@ -282,7 +498,7 @@ const getPoolsSummaryObject = (
         // double check you sum only non-NaN values
         // TODO maybe check directly in interval-stats computations, if number is NaN
         // (but keep in mind that sometimes I might want to know if the number is NaN and not 0)
-        if (poolValueUsd) totalValueLockedUsd += poolValueUsd;
+        if (currentPoolValueUsd) totalValueLockedUsd += currentPoolValueUsd;
         if (yieldUsd) yieldUsdSum += yieldUsd;
         if (feesUsd) feesUsdSum += feesUsd;
         if (txCostEth) txCostEthSum += txCostEth;
@@ -307,4 +523,9 @@ const getPoolsSummaryObject = (
     };
 };
 
-export { getPoolStatsFromSnapshots, getCumulativeStats, getPoolsSummaryObject };
+export {
+    getPoolStatsFromSnapshots,
+    getCumulativeStats,
+    getPoolsSummaryObject,
+    getDepositsAndWithdrawals,
+};

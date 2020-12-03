@@ -70,6 +70,7 @@ interface Props {
     onSliderChange?: any;
     defaultSliderValue?: number;
     onDefaultSliderValueChange?: any;
+    numSteps?: number;
 }
 
 const PriceChangeRow = ({
@@ -79,6 +80,7 @@ const PriceChangeRow = ({
     onDefaultSliderValueChange,
     defaultSliderValue = 1,
     color = 'light',
+    numSteps = 100,
 }: Props) => {
     const [sliderMidValue, setSliderMidValue] = useState(defaultSliderValue);
     const [sliderValue, setSliderValue] = useState(defaultSliderValue);
@@ -127,7 +129,7 @@ const PriceChangeRow = ({
                     <MaterialSlider
                         min={0}
                         max={sliderMidValue * 2}
-                        step={sliderMidValue / 400}
+                        step={sliderMidValue / numSteps}
                         value={sliderValue}
                         onChange={(event, newValue) => handleSliderChange(newValue)}
                     />

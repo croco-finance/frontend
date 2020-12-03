@@ -9,10 +9,7 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    Label,
     ResponsiveContainer,
-    ReferenceDot,
-    ReferenceLine,
     Legend,
 } from 'recharts';
 
@@ -50,9 +47,19 @@ class Graph extends PureComponent<Props, State> {
     }
 
     renderColorfulLegendText(value, entry) {
-        const legendText = value === 'poolValue' ? 'Pool value' : 'HODL value';
+        let legendText = '';
+        switch (value) {
+            case 'poolValue':
+                legendText = 'Being LP';
+                break;
+            case 'hodlValue':
+                legendText = 'HODL value';
+                break;
+            case 'ethHodlValue':
+                legendText = 'ETH HODL value';
+        }
 
-        return <LegendItem style={{ color: colors.FONT_MEDIUM }}>{legendText}</LegendItem>;
+        return <LegendItem style={{ color: colors.FONT_MEDIUM }}>{legendText}&nbsp;</LegendItem>;
     }
 
     valueToUsd(value) {
@@ -85,7 +92,7 @@ class Graph extends PureComponent<Props, State> {
                         iconSize={18}
                         wrapperStyle={{
                             paddingLeft: '50px',
-                            paddingTop: '10px',
+                            paddingTop: '20px',
                         }}
                         formatter={this.renderColorfulLegendText}
                     />
@@ -95,7 +102,7 @@ class Graph extends PureComponent<Props, State> {
                         isAnimationActive={false}
                         dataKey={'poolValue'}
                         strokeWidth={1}
-                        fillOpacity={0.65}
+                        fillOpacity={0.5}
                         fill={colors.GRAPH_1_DARK}
                         stroke={colors.GRAPH_1_DARK}
                     />
@@ -107,6 +114,17 @@ class Graph extends PureComponent<Props, State> {
                         fillOpacity={0}
                         fill={colors.BLUE}
                         stroke={'#a600ffff'}
+                        // stroke={colors.BLUE}
+                        strokeDasharray="6 3"
+                    />
+                    <Area
+                        key={'ethHodlValue'}
+                        isAnimationActive={false}
+                        dataKey={'ethHodlValue'}
+                        strokeWidth={2.5}
+                        fillOpacity={0}
+                        fill={colors.BLUE}
+                        stroke={'#00cbe8'}
                         // stroke={colors.BLUE}
                         strokeDasharray="6 3"
                     />

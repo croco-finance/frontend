@@ -118,56 +118,49 @@ const XScrollWrapper = styled.div`
 `;
 
 interface Props {
-    simulatedCoefficients: Array<number>;
+    tokenSymbols: string[];
+    simulatedPooledTokenBalances: number[];
+    tokenBalances: number[];
+    endPoolValueUsd: number;
+    simulatedPoolValueUsd: number;
+    simulatedHodlValueUsd: number;
+    tokenPricesEnd: number[];
     sliderDefaultCoeffs: Array<number>;
+    lastIntSimulatedFeesUsd: number;
+    lastIntYieldUsd: number;
+    lastSnapTimestampStart: number;
+    lastSnapTimestampEnd: number;
+    impLossUsd: number;
+    impLossRel: number;
+    isActive: boolean;
 }
 
-const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => {
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    const pool = allPools[selectedPoolId];
-
-    let { pooledTokens, exchange, tokenWeights, isActive } = pool;
-
-    let {
-        // TODO make sure you use current token balances, not cumulative values
+const Overview = ({
+    tokenSymbols,
+    simulatedPooledTokenBalances,
+    tokenBalances,
+    endPoolValueUsd,
+    simulatedPoolValueUsd,
+    simulatedHodlValueUsd,
+    tokenPricesEnd,
+    sliderDefaultCoeffs,
+    lastIntSimulatedFeesUsd,
+    lastIntYieldUsd,
+    lastSnapTimestampStart,
+    lastSnapTimestampEnd,
+    impLossUsd,
+    impLossRel,
+    isActive,
+}: Props) => {
+    const tokenBalancesDiff = mathUtils.subtractArraysElementWise(
+        simulatedPooledTokenBalances,
         tokenBalances,
-        feesTokenAmounts,
-        tokenPricesEnd,
-        poolValueUsd,
-    } = pool.cumulativeStats;
-
-    // ----- GET SIMULATION VALUES -----
-    // Array of new prices, not coefficients
-    const newTokenPrices = mathUtils.multiplyArraysElementWise(
-        tokenPricesEnd,
-        simulatedCoefficients,
     );
-
-    let simulatedValues = simulatorUtils.getSimulationStats(
-        tokenBalances,
-        feesTokenAmounts,
-        newTokenPrices,
-        tokenWeights,
-        exchange,
-    );
-    let {
-        newTokenBalances,
-        newPoolValueUsd,
-        newHodlValueUsd,
-        impLossRel,
-        impLossUsd,
-    } = simulatedValues;
-
-    // TODO check if yield token is also part of pool (if yes, change its price accordingly)
-    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
-
-    const tokenBalancesDiff = mathUtils.subtractArraysElementWise(newTokenBalances, tokenBalances);
 
     const graphData = graphUtils.getILGraphData(
-        poolValueUsd,
-        newPoolValueUsd,
-        newHodlValueUsd,
+        endPoolValueUsd,
+        simulatedPoolValueUsd,
+        simulatedHodlValueUsd,
         isActive,
     );
     const maxPossibleSimulationValue = graphUtils.getMaxPossiblePoolValue(
@@ -177,23 +170,11 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
         2,
     );
 
-    // get estimated days left to compensate loss
-    const lastIntervalStat = pool.intervalStats[pool.intervalStats.length - 1];
-    const lastSnapTimestampStart = lastIntervalStat.timestampStart;
-    const lastSnapTimestampEnd = lastIntervalStat.timestampEnd;
-    const lastSnapFeesUsd = lastIntervalStat.feesUsdEndPrice;
-
-    const lastSnapYieldUsd = lastIntervalStat.yieldTokenPriceEnd
-        ? lastIntervalStat.yieldTokenAmount * lastIntervalStat.yieldTokenPriceEnd
-        : 0;
-
-    const poolValueIncreaseCoeff = newPoolValueUsd / poolValueUsd;
-
-    const averageRewardsLastSnapshot = mathUtils.getDailyAverageFeeGains(
+    const averageRewardsLastSnapshot = mathUtils.getAverageDailyRewards(
         lastSnapTimestampStart,
         lastSnapTimestampEnd,
         // TODO is this correct way how to compute new fee value after price change?
-        lastSnapFeesUsd * poolValueIncreaseCoeff + lastSnapYieldUsd,
+        lastIntSimulatedFeesUsd + lastIntYieldUsd,
     );
 
     const estDaysLeftStaking = Math.round(Math.abs(impLossUsd / averageRewardsLastSnapshot));
@@ -220,10 +201,10 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                             firstColumn="Your pool size"
                             secondColumn={
                                 <PoolValueCryptoFiatWrapper>
-                                    <StyledFiatValueWrapper value={poolValueUsd} />
+                                    <StyledFiatValueWrapper value={endPoolValueUsd} />
                                     <VerticalCryptoAmounts
                                         maxWidth={70}
-                                        tokenSymbols={tokenSymbolsArr}
+                                        tokenSymbols={tokenSymbols}
                                         tokenAmounts={tokenBalances}
                                     />
                                 </PoolValueCryptoFiatWrapper>
@@ -231,11 +212,11 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                             // simulation values
                             thirdColumn={
                                 <PoolValueCryptoFiatWrapperBorder>
-                                    <StyledFiatValueWrapper value={newPoolValueUsd} />
+                                    <StyledFiatValueWrapper value={simulatedPoolValueUsd} />
                                     <VerticalCryptoAmounts
                                         maxWidth={70}
-                                        tokenSymbols={tokenSymbolsArr}
-                                        tokenAmounts={newTokenBalances}
+                                        tokenSymbols={tokenSymbols}
+                                        tokenAmounts={simulatedPooledTokenBalances}
                                     />
                                 </PoolValueCryptoFiatWrapperBorder>
                             }
@@ -243,13 +224,13 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                             fourthColumn={
                                 <PoolValueCryptoFiatWrapper>
                                     <ColorizedFiatValueWrapper
-                                        value={newPoolValueUsd - poolValueUsd}
+                                        value={simulatedPoolValueUsd - endPoolValueUsd}
                                         usePlusSymbol
                                         colorized
                                     />
                                     <VerticalCryptoAmounts
                                         maxWidth={40}
-                                        tokenSymbols={tokenSymbolsArr}
+                                        tokenSymbols={tokenSymbols}
                                         tokenAmounts={tokenBalancesDiff}
                                         textAlign="left"
                                         usePlusSymbol
@@ -264,6 +245,8 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
                 <ImpLossHeader>Impermanent loss compared to HODLing pooled tokens</ImpLossHeader>
                 <GrayBox
                     padding={[15, 20, 15, 20]}
+                    borderRadius={[10, 10, 0, 0]}
+                    bottomBarBorderRadius={[0, 0, 10, 10]}
                     bottomBar={
                         <>
                             <DaysLeftGridWrapper>
@@ -317,11 +300,11 @@ const CardOverview = ({ simulatedCoefficients, sliderDefaultCoeffs }: Props) => 
             </XScrollWrapper>
 
             <GraphWrapper>
-                <GraphTitle>Pool / HODL value comparison</GraphTitle>
+                <GraphTitle>Pool vs HODL value comparison</GraphTitle>
                 <ILGraph data={graphData} maxPossibleValue={maxPossibleSimulationValue} />
             </GraphWrapper>
         </Wrapper>
     );
 };
 
-export default CardOverview;
+export default Overview;

@@ -22,7 +22,7 @@ const roundToNDecimals = (value: number, nDecimals: number) => {
     return Math.round(value * coeff) / coeff;
 };
 
-const getDailyAverageFeeGains = (timeStampStartMillis, timeStampEndMillis, totalFeesUsd) => {
+const getAverageDailyRewards = (timeStampStartMillis, timeStampEndMillis, totalFeesUsd) => {
     const differenceMillis = timeStampEndMillis - timeStampStartMillis;
     const differenceDays = differenceMillis / (3600 * 24 * 1000);
     return totalFeesUsd / differenceDays;
@@ -33,7 +33,12 @@ const getTokenArrayValue = (tokenBalances: Array<number>, tokenPrices: Array<num
         throw 'Arrays have to have the same length';
     }
 
-    return mathUtils.sumArr(mathUtils.multiplyArraysElementWise(tokenBalances, tokenPrices));
+    let sum = 0;
+    for (let i = 0; i < tokenBalances.length; i++) {
+        sum += tokenBalances[i] * tokenPrices[i];
+    }
+    return sum;
+    // return mathUtils.sumArr(mathUtils.multiplyArraysElementWise(tokenBalances, tokenPrices));
 };
 
 // This is useful for generating data for imp.loss curve.
@@ -61,6 +66,21 @@ const multiplyArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => 
 
     arr1.forEach((num, i) => {
         result[i] = arr1[i] * arr2[i];
+    });
+
+    return result;
+};
+
+const divideArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
+    // TODO make sure both arrays are the same length
+    let result = new Array(arr1.length);
+
+    arr1.forEach((num, i) => {
+        if (arr2[i] === 0) {
+            result[i] = Infinity;
+        } else {
+            result[i] = arr1[i] / arr2[i];
+        }
     });
 
     return result;
@@ -106,10 +126,21 @@ const multiplyEachArrayElementByValue = (arr: Array<number>, value: number) => {
     return modifiedArr;
 };
 
+const sumArrayOfTokenArrays = (tokenArr: Array<Array<number>>) => {
+    let tokenCount = tokenArr[0].length;
+    let tokenAmountsSum = new Array(tokenCount).fill(0);
+
+    tokenArr.forEach(arr => {
+        tokenAmountsSum = sumArraysElementWise(tokenAmountsSum, arr);
+    });
+
+    return tokenAmountsSum;
+};
+
 export {
     countDecimals,
     arrangeArray,
-    getDailyAverageFeeGains,
+    getAverageDailyRewards,
     multiplyArraysElementWise,
     subtractArraysElementWise,
     sumArraysElementWise,
@@ -119,4 +150,6 @@ export {
     getFirstTwoNonZeroDecimals,
     getTokenArrayValue,
     roundToNDecimals,
+    sumArrayOfTokenArrays,
+    divideArraysElementWise,
 };

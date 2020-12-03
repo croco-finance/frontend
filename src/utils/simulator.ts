@@ -26,9 +26,18 @@ const getSimulationStats = (
     const newPoolValueUsd = mathUtils.sumArr(
         mathUtils.multiplyArraysElementWise(newTokenBalances, newTokenPrices),
     );
-    const newFeesUsd = mathUtils.sumArr(
-        mathUtils.multiplyArraysElementWise(currentFeesTokenAmounts, newTokenPrices),
+
+    const currentFeesTokenPercentages = mathUtils.divideArraysElementWise(
+        currentFeesTokenAmounts,
+        currentTokenBalances,
     );
+
+    const simulatedFeesTokenAmounts = mathUtils.multiplyArraysElementWise(
+        currentFeesTokenPercentages,
+        newTokenBalances,
+    );
+
+    const newFeesUsd = mathUtils.getTokenArrayValue(simulatedFeesTokenAmounts, newTokenPrices);
 
     // Imp. loss and HODL value
     const hodlValueUsd = mathUtils.sumArr(
@@ -36,10 +45,11 @@ const getSimulationStats = (
     );
 
     return {
-        newTokenBalances: newTokenBalances,
-        newPoolValueUsd: newPoolValueUsd,
-        newFeesUsd: newFeesUsd,
-        newHodlValueUsd: hodlValueUsd,
+        simulatedTokenBalances: newTokenBalances,
+        simulatedPoolValueUsd: newPoolValueUsd,
+        simulatedFeesUsd: newFeesUsd,
+        simulatedFeesTokenAmounts: simulatedFeesTokenAmounts,
+        simulatedHodlValueUsd: hodlValueUsd,
         impLossRel: lossUtils.getRelativeImpLoss(newPoolValueUsd, hodlValueUsd),
         impLossUsd: hodlValueUsd - newPoolValueUsd,
     };

@@ -67,12 +67,16 @@ const FetchSnapsForAddress = initialAddress => {
                     const snapshotsCount = snapshotsArr.length;
                     const exchange: Exchange = snapshotsArr[0].exchange;
 
-                    // check the exchange is supported
                     if (snapshotsCount > 1 && exchange in exToPoolMap) {
                         // compute interval and cumulative stats
                         const {
                             intervalStats,
                             cumulativeStats,
+                            deposits,
+                            withdrawals,
+                            depositTimestamps,
+                            depositTokenAmounts,
+                            depositEthAmounts,
                         } = statsComputations.getPoolStatsFromSnapshots(snapshotsArr);
 
                         // Check if pool is active by checking if user's liquidity token balance in last snapshot is > 0
@@ -86,6 +90,7 @@ const FetchSnapsForAddress = initialAddress => {
                         }
 
                         // Push PoolId to <Exchange, PoolId> mapping
+                        const exchange: Exchange = snapshotsArr[0].exchange;
                         exToPoolMap[exchange].push(poolId);
 
                         // Create new pool object
@@ -103,6 +108,14 @@ const FetchSnapsForAddress = initialAddress => {
                             intervalStats: intervalStats,
                             cumulativeStats: cumulativeStats,
                             tokenWeights: formatUtils.getTokenWeightsArr(snapshotsArr[0].tokens),
+                            deposits,
+                            withdrawals,
+                            depositTimestamps,
+                            depositTokenAmounts,
+                            depositEthAmounts,
+                            tokenSymbols: formatUtils.getTokenSymbolArr(
+                                getPooledTokensInfo(snapshotsArr[0].tokens),
+                            ),
                         };
                     }
                 }

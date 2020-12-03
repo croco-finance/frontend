@@ -83,6 +83,33 @@ const getILGraphData = (
     return data;
 };
 
+const getStrategiesGraphData = (
+    currentPoolValue: number,
+    currentTokensHodlValue: number,
+    currentEthHodlValue: number,
+    simulatedPoolValue: number,
+    simulatedTokensHodlValue: number,
+    simulatedEthHodlValue: number,
+) => {
+    const data = new Array(2);
+
+    data[0] = {
+        name: 'Today',
+        poolValue: currentPoolValue,
+        hodlValue: currentTokensHodlValue,
+        ethHodlValue: currentEthHodlValue,
+    };
+
+    data[1] = {
+        name: 'Simulated',
+        poolValue: simulatedPoolValue,
+        hodlValue: simulatedTokensHodlValue,
+        ethHodlValue: simulatedEthHodlValue,
+    };
+
+    return data;
+};
+
 const getMaxPossiblePoolValue = (
     currentTokenBalances: Array<number>,
     currentTokenPrices: Array<number>,
@@ -105,7 +132,62 @@ const getMaxPossiblePoolValue = (
     return maxPossiblePoolValue;
 };
 
-export { getGraphData, getILGraphData, getMaxPossiblePoolValue };
+const getStrategiesMaxPossiblePoolValues = (
+    currentTokenPrices: Array<number>,
+    currentEthPrice: number,
+    defaultTokensPriceChangeCoeffs: Array<number>,
+    defaultEthPriceCoeff: number,
+    currentTokenBalances: Array<number>,
+    withdrawalsTokenAmounts: number[],
+    yieldUsd: number,
+    txCostEth: number,
+    tokensHodlTokenAmounts: number[],
+    ethHodlEthAmount: number,
+    maxCoeffIncreaseRate: number = 2,
+) => {
+    const maxPossibleCoeffs = mathUtils.multiplyEachArrayElementByValue(
+        defaultTokensPriceChangeCoeffs,
+        maxCoeffIncreaseRate,
+    );
+    const maxPossibleEthCoeff = defaultEthPriceCoeff * maxCoeffIncreaseRate;
+
+    const maxPossiblePrices = mathUtils.multiplyArraysElementWise(
+        currentTokenPrices,
+        maxPossibleCoeffs,
+    );
+
+    const maxPossibleEthPrice = currentEthPrice * maxPossibleEthCoeff;
+
+    // Pool strategy
+    let maxPossiblePoolStrategyValue = mathUtils.getTokenArrayValue(
+        currentTokenBalances,
+        maxPossiblePrices,
+    );
+
+    maxPossiblePoolStrategyValue += mathUtils.getTokenArrayValue(
+        withdrawalsTokenAmounts,
+        maxPossiblePrices,
+    );
+
+    maxPossiblePoolStrategyValue += yieldUsd - txCostEth * maxPossibleEthPrice;
+
+    // HODL strategies
+    const maxPossibleTokensHodlValue = mathUtils.getTokenArrayValue(
+        tokensHodlTokenAmounts,
+        maxPossiblePrices,
+    );
+    const possibleEthHodlValue = ethHodlEthAmount * maxPossibleEthPrice;
+
+    return Math.max(maxPossiblePoolStrategyValue, maxPossibleTokensHodlValue, possibleEthHodlValue);
+};
+
+export {
+    getGraphData,
+    getILGraphData,
+    getMaxPossiblePoolValue,
+    getStrategiesGraphData,
+    getStrategiesMaxPossiblePoolValues,
+};
 
 const exampleGraphData = [
     {

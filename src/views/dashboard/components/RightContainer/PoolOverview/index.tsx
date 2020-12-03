@@ -118,7 +118,7 @@ const PoolOverview = () => {
         yieldUsd,
         txCostEth,
         txCostUsd,
-        poolValueUsd,
+        endPoolValueUsd,
         tokenBalances,
         feesTokenAmounts,
         yieldTokenAmount,
@@ -200,6 +200,9 @@ const PoolOverview = () => {
             </HeaderWrapper>
             <GrayBox
                 padding={[15, 20, 15, 20]}
+                borderRadius={[10, 10, 0, 0]}
+                bottomBarBorderRadius={[0, 0, 10, 10]}
+                bottomBarPadding={[10, 20, 10, 20]}
                 bottomBar={
                     <TotalLossRow>
                         <CardRow
@@ -227,7 +230,7 @@ const PoolOverview = () => {
                                 tokenAmounts={tokenBalances}
                             />
                         }
-                        thirdColumn={<FiatValue value={poolValueUsd} />}
+                        thirdColumn={<FiatValue value={endPoolValueUsd} />}
                         columnColors={['medium', 'light', 'dark']}
                     />
                 </PoolValueGridWrapper>

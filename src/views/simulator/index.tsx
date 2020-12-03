@@ -5,7 +5,7 @@ import {
     LeftLayoutContainer,
     RightLayoutContainer,
 } from '@components/layout';
-import { GrayBox, Icon, Input, LoadingBox, MultipleTokenSelect } from '@components/ui';
+import { GrayBox, Icon, Input, LoadingBox, MultipleTokenSelect, InfoBox } from '@components/ui';
 import { animations, colors, variables, types, styles } from '@config';
 import { formatUtils, validationUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
@@ -142,21 +142,6 @@ const OverviewWrapper = styled.div`
     width: 100%;
 `;
 
-const InactivePoolWarning = styled.div`
-    margin-top: 30px;
-    padding: 10px;
-    border-radius: 3px;
-    font-weight: ${variables.FONT_WEIGHT.REGULAR};
-    background-color: #f7f4ff;
-    border: 1px solid #baa6f9;
-    color: #673df1;
-    display: flex;
-`;
-
-const WarningText = styled.div`
-    margin-left: 5px;
-`;
-
 const SimulationBoxWrapper = styled.div`
     /* background-color: ${colors.WHITE}; */
     background-color: ${colors.BACKGROUND_DARK};
@@ -206,10 +191,13 @@ const getInitialPriceCoeffs = (tokens: any) => {
     return coefficients;
 };
 
+type TabOptions = 'overview' | 'strategies';
+
 const Simulator = (props: RouteComponentProps<any>) => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const dispatch = useDispatch();
+    const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
 
     const [inputAddress, setInputAddress] = useState(
         props.match.params.address ? props.match.params.address : '',
@@ -241,16 +229,29 @@ const Simulator = (props: RouteComponentProps<any>) => {
             : [],
     );
 
+    const [simulatedEthPriceCoefficient, setSimulatedEthPriceCoefficient] = useState(1);
+    const [simulatedYieldPriceCoefficient, setSimulatedYieldPriceCoefficient] = useState(1);
+
     const [sliderDefaultCoeffs, setSliderDefaultCoeffs]: any = useState(
         allPools[selectedPoolId]
             ? getInitialPriceCoeffs(allPools[selectedPoolId].pooledTokens)
             : [],
     );
 
+    const [sliderDefaultEthPriceCoefficient, setSliderDefaultEthPriceCoefficient] = useState(1);
+
     const setNewPrices = (newValue, index) => {
         const coefficientsArrCopy = [...simulatedPriceCoefficients];
         coefficientsArrCopy[index] = newValue;
         setSimulatedPriceCoefficients(coefficientsArrCopy);
+    };
+
+    const setNewEthPrice = newValue => {
+        setSimulatedEthPriceCoefficient(newValue);
+    };
+
+    const setNewYieldPrice = newValue => {
+        setSimulatedYieldPriceCoefficient(newValue);
     };
 
     const setNewDefaultCoeffs = (newValue, index) => {
@@ -351,13 +352,10 @@ const Simulator = (props: RouteComponentProps<any>) => {
                     {allPools[selectedPoolId] && (
                         <>
                             {!allPools[selectedPoolId].isActive ? (
-                                <InactivePoolWarning>
-                                    <Icon icon="info" color={'#673df1'} size={18} />
-                                    <WarningText>
-                                        You have already withdrawn all funds from this pool. Below
-                                        you see prices and balances at the time of your withdrawal.
-                                    </WarningText>
-                                </InactivePoolWarning>
+                                <InfoBox>
+                                    You have already withdrawn all funds from this pool. Below you
+                                    see prices and balances at the time of your withdrawal.
+                                </InfoBox>
                             ) : null}
                         </>
                     )}
@@ -369,9 +367,16 @@ const Simulator = (props: RouteComponentProps<any>) => {
                             </OverviewWrapper>
                             <SimulationBoxWrapper>
                                 <SimulationBox
+                                    selectedTab={selectedTab}
                                     onChange={setNewPrices}
+                                    onEthChange={setNewEthPrice}
+                                    onYieldChange={setNewYieldPrice}
                                     onNewDefaultValue={setNewDefaultCoeffs}
+                                    onNewDefaultEthValue={newValue =>
+                                        setSliderDefaultEthPriceCoefficient(newValue)
+                                    }
                                     simulatedCoefficients={simulatedPriceCoefficients}
+                                    simulatedEthCoefficient={simulatedEthPriceCoefficient}
                                 />
                             </SimulationBoxWrapper>
                         </>
@@ -380,8 +385,13 @@ const Simulator = (props: RouteComponentProps<any>) => {
             </LeftLayoutContainer>
             <RightLayoutContainer>
                 <RightContainer
-                    simulatedCoefficients={simulatedPriceCoefficients}
+                    onTabChanged={tab => setSelectedTab(tab)}
+                    selectedTab={selectedTab}
+                    simulatedPooledTokensCoeffs={simulatedPriceCoefficients}
                     sliderDefaultCoeffs={sliderDefaultCoeffs}
+                    simulatedEthCoeff={simulatedEthPriceCoefficient}
+                    simulatedYieldCoeff={simulatedYieldPriceCoefficient}
+                    sliderDefaultEthCoeff={sliderDefaultEthPriceCoefficient}
                 />
             </RightLayoutContainer>
         </SimulatorContainer>

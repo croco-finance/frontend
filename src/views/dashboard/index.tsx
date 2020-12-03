@@ -191,7 +191,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
             <NoPoolFoundInfo>
                 We didn't find any pools associated with this address.
                 <br />
-                Try different address or refresh the page.
+                Don't forget that we support only Uniswap and Balancer at this time.
             </NoPoolFoundInfo>
         );
     }
