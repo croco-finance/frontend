@@ -21,6 +21,7 @@ export const TOKENS: any = {
     sushi: require('../../../data/images/tokens/sushi.svg'),
     yfv: require('../../../data/images/tokens/yfv.svg'),
     renbtc: require('../../../data/images/tokens/renbtc.svg'),
+    dpi: require('../../../data/images/tokens/dpi.svg'),
 
     // unknown token
     unknown: require('../../../data/images/tokens/unknown.svg'),

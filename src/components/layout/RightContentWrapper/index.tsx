@@ -9,6 +9,8 @@ const Wrapper = styled.div`
     width: 100%;
     max-width: 650px;
     align-items: center;
+    flex-grow: 1;
+    flex-shrink: 0.1;
 
     @media (max-width: ${variables.SCREEN_SIZE.MD}) {
         padding: 20px 10px;

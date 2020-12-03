@@ -200,6 +200,7 @@ const PoolOverview = () => {
             </HeaderWrapper>
             <GrayBox
                 padding={[15, 20, 15, 20]}
+                borderRadius={[10, 10, 0, 0]}
                 bottomBarBorderRadius={[0, 0, 10, 10]}
                 bottomBarPadding={[10, 20, 10, 20]}
                 bottomBar={

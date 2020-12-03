@@ -197,7 +197,7 @@ const LiquidityPool = () => {
                     >
                         <StrategyHeaderGridWrapper>
                             <BoxRow
-                                firstColumn="Strategy is worth"
+                                firstColumn={`Strategy ${isActive ? 'is' : 'was'} worth`}
                                 secondColumn={<FiatValue value={poolStrategyUsd} />}
                                 thirdColumn={
                                     <ExpandButton>

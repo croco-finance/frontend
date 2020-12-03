@@ -1,4 +1,4 @@
-import { Icon, PageLogo, Spinner, TokenLogo } from '@components/ui';
+import { Icon, PageLogo, Spinner, TokenLogo, TextBadge } from '@components/ui';
 import { analytics, colors, constants, variables } from '@config';
 import Portis from '@portis/web3';
 import { validationUtils } from '@utils';
@@ -236,6 +236,7 @@ const ExchangeLogoWrapper = styled.div`
     /* border: 1px solid ${colors.BACKGROUND_DARK}; */
     /* background-color: white; */
     flex-direction: column;
+    position: relative;
 `;
 
 const ExchangeName = styled.div`
@@ -243,6 +244,11 @@ const ExchangeName = styled.div`
     color: ${colors.FONT_LIGHT};
     font-weight: ${variables.FONT_WEIGHT.REGULAR};
     /* font-size: ${variables.FONT_SIZE.TINY}; */
+`;
+
+const StyledTextBadge = styled(TextBadge)`
+    top: -8px;
+    right: -8px;
 `;
 
 const portis = new Portis(constants.PORTIS_DAPP_KEY, 'mainnet');
@@ -418,9 +424,11 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                                 <TokenLogo symbol="bal" size={38} />
                                 <ExchangeName>Balancer</ExchangeName>
                             </ExchangeLogoWrapper>
-                            {/* <ExchangeLogoWrapper>
-                                <TokenLogo symbol="sushi" size={28} />
-                            </ExchangeLogoWrapper> */}
+                            <ExchangeLogoWrapper>
+                                <StyledTextBadge>SOON</StyledTextBadge>
+                                <TokenLogo symbol="sushi" size={38} />
+                                <ExchangeName>Sushiswap</ExchangeName>
+                            </ExchangeLogoWrapper>
                         </ExchangeLogosWrapper>
                     </SupportedExchangesWrapper>
                 </AnimatedWrapper>

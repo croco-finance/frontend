@@ -14,11 +14,11 @@ const Wrapper = styled.div`
     top: -8px;
 `;
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
 }
 
-const TextBadge = ({ children }: Props) => {
-    return <Wrapper>{children}</Wrapper>;
+const TextBadge = ({ className, children }: Props) => {
+    return <Wrapper className={className}>{children}</Wrapper>;
 };
 export default TextBadge;

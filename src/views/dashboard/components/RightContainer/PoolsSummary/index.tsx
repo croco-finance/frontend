@@ -160,6 +160,8 @@ const PoolsSummary = () => {
             </HeaderWrapper>
             <GrayBox
                 padding={[15, 20, 15, 20]}
+                borderRadius={[10, 10, 0, 0]}
+                bottomBarBorderRadius={[0, 0, 10, 10]}
                 bottomBar={
                     <TotalLossRow>
                         <CardRow

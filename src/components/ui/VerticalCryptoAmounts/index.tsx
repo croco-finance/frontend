@@ -29,7 +29,11 @@ const Wrapper = styled.div<{ textAlign: 'left' | 'right'; maxHeight: number }>`
     ${props =>
         props.textAlign === 'left'
             ? leftAlignedStyles
-            : rightAlignedStyles}/* justify-content: center; */
+            : rightAlignedStyles} /* justify-content: center; */
+
+    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
+        font-size: 10px;
+    }
 `;
 
 const Row = styled.div`

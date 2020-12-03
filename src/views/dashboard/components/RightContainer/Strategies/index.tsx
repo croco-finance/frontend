@@ -13,6 +13,10 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    flex-grow: 1;
+    flex-shrink: 0;
 `;
 
 const Headline = styled.h3`
@@ -100,6 +104,10 @@ const Strategies = () => {
         exchange,
         deposits,
         withdrawals,
+        userAddr,
+        depositTimestamps,
+        depositTokenAmounts,
+        depositEthAmounts,
     } = pool;
 
     const {
@@ -128,27 +136,17 @@ const Strategies = () => {
 
     const endTimeText = isActive ? 'Value today' : 'Withdrawal time value';
 
-    const depositTimestampsArr: number[] = [];
-    const depositTokenAmountsArr: Array<Array<number>> = [];
-    const depositEthAmountsArr: Array<Array<number>> = [];
-
-    deposits.forEach(deposit => {
-        if (deposit.timestamp) {
-            depositTimestampsArr.push(deposit.timestamp);
-            depositTokenAmountsArr.push(deposit.tokenAmounts);
-            depositEthAmountsArr.push([deposit.valueEth]);
-        }
-    });
-
     return (
         <Wrapper>
-            <Headline>Is it worth it to be liquidity provider in this pool?</Headline>
+            <Headline>
+                {isActive ? 'Is' : 'Was'} it worth it to be liquidity provider in this pool?
+            </Headline>
             <Description>
                 We compared your pool's performance to other popular strategies. These values are
                 computed for current token prices. Try{' '}
                 <StyledLink
                     to={{
-                        pathname: '/simulator',
+                        pathname: `/simulator/${userAddr}`,
                     }}
                 >
                     simulator
@@ -179,7 +177,7 @@ const Strategies = () => {
 
             <StrategyItemWrapper>
                 <DifferentStrategy
-                    depositsHeadline={'Tokens'}
+                    depositsHeadline={'Crypto'}
                     endTimeText={endTimeText}
                     tokenSymbols={tokenSymbolsArr}
                     poolStrategyUsd={poolStrategyUsd}
@@ -192,8 +190,8 @@ const Strategies = () => {
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
-                    depositTimestampsArr={depositTimestampsArr}
-                    depositTokenAmountsArr={depositTokenAmountsArr}
+                    depositTimestampsArr={depositTimestamps}
+                    depositTokenAmountsArr={depositTokenAmounts}
                     currentDepositTokenPricesArr={tokenPricesEnd}
                     depositTokenSymbolsArr={tokenSymbolsArr}
                     poolIsActive={isActive}
@@ -219,8 +217,8 @@ const Strategies = () => {
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
-                    depositTimestampsArr={depositTimestampsArr}
-                    depositTokenAmountsArr={depositEthAmountsArr}
+                    depositTimestampsArr={depositTimestamps}
+                    depositTokenAmountsArr={depositEthAmounts}
                     currentDepositTokenPricesArr={[ethPriceEnd]}
                     depositTokenSymbolsArr={['ETH']}
                     poolIsActive={isActive}
