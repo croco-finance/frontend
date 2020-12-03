@@ -300,7 +300,7 @@ const Overview = ({
             </XScrollWrapper>
 
             <GraphWrapper>
-                <GraphTitle>Pool / HODL value comparison</GraphTitle>
+                <GraphTitle>Pool vs HODL value comparison</GraphTitle>
                 <ILGraph data={graphData} maxPossibleValue={maxPossibleSimulationValue} />
             </GraphWrapper>
         </Wrapper>
