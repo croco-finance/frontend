@@ -235,7 +235,7 @@ const LiquidityPool = () => {
                             <RewardsExpensesHeader>
                                 <BoxRow
                                     firstColumn="Overview"
-                                    secondColumn="Tokens"
+                                    secondColumn="Crypto"
                                     thirdColumn={endTimeText}
                                     columnColors={['light', 'light', 'light']}
                                 />

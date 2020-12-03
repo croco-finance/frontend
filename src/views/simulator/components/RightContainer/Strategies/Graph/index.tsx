@@ -9,10 +9,7 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    Label,
     ResponsiveContainer,
-    ReferenceDot,
-    ReferenceLine,
     Legend,
 } from 'recharts';
 
@@ -53,7 +50,7 @@ class Graph extends PureComponent<Props, State> {
         let legendText = '';
         switch (value) {
             case 'poolValue':
-                legendText = 'Pool value';
+                legendText = 'Being LP';
                 break;
             case 'hodlValue':
                 legendText = 'HODL value';
@@ -62,7 +59,7 @@ class Graph extends PureComponent<Props, State> {
                 legendText = 'ETH HODL value';
         }
 
-        return <LegendItem style={{ color: colors.FONT_LIGHT }}>{legendText}</LegendItem>;
+        return <LegendItem style={{ color: colors.FONT_MEDIUM }}>{legendText}&nbsp;</LegendItem>;
     }
 
     valueToUsd(value) {
@@ -92,6 +89,7 @@ class Graph extends PureComponent<Props, State> {
                     />
                     <Legend
                         iconType="plainline"
+                        iconSize={18}
                         wrapperStyle={{
                             paddingLeft: '50px',
                             paddingTop: '20px',
@@ -112,7 +110,7 @@ class Graph extends PureComponent<Props, State> {
                         key={'hodlValue'}
                         isAnimationActive={false}
                         dataKey={'hodlValue'}
-                        strokeWidth={2}
+                        strokeWidth={2.5}
                         fillOpacity={0}
                         fill={colors.BLUE}
                         stroke={'#a600ffff'}

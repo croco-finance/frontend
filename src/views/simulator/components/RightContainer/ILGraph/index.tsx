@@ -52,7 +52,7 @@ class Graph extends PureComponent<Props, State> {
     renderColorfulLegendText(value, entry) {
         const legendText = value === 'poolValue' ? 'Pool value' : 'HODL value';
 
-        return <LegendItem style={{ color: colors.FONT_LIGHT }}>{legendText}</LegendItem>;
+        return <LegendItem style={{ color: colors.FONT_MEDIUM }}>{legendText}</LegendItem>;
     }
 
     valueToUsd(value) {
@@ -82,6 +82,7 @@ class Graph extends PureComponent<Props, State> {
                     />
                     <Legend
                         iconType="plainline"
+                        iconSize={18}
                         wrapperStyle={{
                             paddingLeft: '50px',
                             paddingTop: '10px',
@@ -102,12 +103,12 @@ class Graph extends PureComponent<Props, State> {
                         key={'hodlValue'}
                         isAnimationActive={false}
                         dataKey={'hodlValue'}
-                        strokeWidth={2}
+                        strokeWidth={2.5}
                         fillOpacity={0}
                         fill={colors.BLUE}
                         stroke={'#a600ffff'}
                         // stroke={colors.BLUE}
-                        strokeDasharray="4 3"
+                        strokeDasharray="6 3"
                     />
 
                     <XAxis

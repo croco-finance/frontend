@@ -43,38 +43,23 @@ interface Props extends TooltipProps {
 
 const CustomTooltip = (props: Props) => {
     if (props.active && props.payload) {
-        const { dataKey, name } = props.payload[0];
         const graphData: any = props.payload[0].payload;
-        const { poolValue, hodlValue } = graphData;
-
-        const poolValueDiff = poolValue - hodlValue;
-
+        const { poolValue, hodlValue, ethHodlValue } = graphData;
         return (
             <CustomTooltipWrapper>
                 <GridWrapper>
                     <TooltipRow
-                        firstColumn="HODL value"
-                        secondColumn={<FiatValue value={hodlValue ? hodlValue : 0} />}
-                    />
-
-                    <TooltipRow
-                        firstColumn="Pool value"
+                        firstColumn="Being LP"
                         secondColumn={<FiatValue value={poolValue ? poolValue : 0} />}
                     />
-
-                    {poolValueDiff ? (
-                        <TooltipRow
-                            firstColumn=""
-                            secondColumn={
-                                <FiatValue
-                                    value={poolValueDiff ? poolValueDiff : 0}
-                                    colorized
-                                    usePlusSymbol
-                                    useLightRed
-                                />
-                            }
-                        />
-                    ) : null}
+                    <TooltipRow
+                        firstColumn="Tokens HODL"
+                        secondColumn={<FiatValue value={hodlValue ? hodlValue : 0} />}
+                    />
+                    <TooltipRow
+                        firstColumn="ETH HODL"
+                        secondColumn={<FiatValue value={ethHodlValue ? ethHodlValue : 0} />}
+                    />
                 </GridWrapper>
             </CustomTooltipWrapper>
         );
