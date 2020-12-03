@@ -265,6 +265,9 @@ const Simulator = (props: RouteComponentProps<any>) => {
             const newPool = allPools[selectedPoolId];
             setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.pooledTokens));
             setSliderDefaultCoeffs(getInitialPriceCoeffs(newPool.pooledTokens));
+            setSimulatedEthPriceCoefficient(1);
+            setSliderDefaultEthPriceCoefficient(1);
+            setSimulatedYieldPriceCoefficient(1);
         }
     }, [selectedPoolId]);
 
