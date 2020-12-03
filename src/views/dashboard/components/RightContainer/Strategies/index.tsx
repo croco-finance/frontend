@@ -98,12 +98,8 @@ const Strategies = () => {
     let {
         pooledTokens,
         isActive,
-        hasYieldReward,
         yieldToken,
         intervalStats,
-        exchange,
-        deposits,
-        withdrawals,
         userAddr,
         depositTimestamps,
         depositTokenAmounts,
@@ -116,25 +112,24 @@ const Strategies = () => {
         txCostEth,
         txCostUsd,
         ethPriceEnd,
-        currentPoolValueUsd,
-        tokenBalances,
         feesTokenAmounts,
         yieldTokenAmount,
-        depositsUsd,
-        withdrawalsUsd,
-        depositsTokenAmounts,
-        withdrawalsTokenAmounts,
         poolStrategyUsd,
         tokensHodlStrategyTokenAmounts,
-        tokensHodlStrategyUsd,
         ethHodlStrategyUsd,
         lastIntAvDailyRewardsUsd,
         tokenPricesEnd,
+        tokensHodlStrategyUsd,
     } = pool.cumulativeStats;
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
 
-    const endTimeText = isActive ? 'Value today' : 'Withdrawal time value';
+    const endTimeText = isActive
+        ? 'Value today'
+        : `Value on ${formatUtils.getFormattedDateFromTimestamp(
+              intervalStats[intervalStats.length - 1].timestampEnd,
+              'MONTH_DAY_YEAR',
+          )}`;
 
     return (
         <Wrapper>

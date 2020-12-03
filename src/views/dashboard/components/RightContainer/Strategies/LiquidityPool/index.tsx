@@ -110,20 +110,14 @@ const LiquidityPool = () => {
         poolStrategyUsd,
     } = pool.cumulativeStats;
 
-    const endTimeText = isActive ? 'Value today' : 'Withdrawal time value';
+    const endTimeText = isActive
+        ? 'Value today'
+        : `Value on ${formatUtils.getFormattedDateFromTimestamp(
+              intervalStats[intervalStats.length - 1].timestampEnd,
+              'MONTH_DAY_YEAR',
+          )}`;
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
-
-    // Temporary check if to show unclaimed UNI yield rewards
-    let showUnclaimedUni = false;
-
-    if (exchange === 'UNI_V2' && yieldTokenAmount === 0) {
-        intervalStats.forEach(stat => {
-            if (stat.staked === true) {
-                showUnclaimedUni = true;
-            }
-        });
-    }
 
     const poolShareRow = (
         <BoxRow

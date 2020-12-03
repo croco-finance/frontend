@@ -229,6 +229,7 @@ const RightContainer = ({
                     depositEthAmountsArr={depositEthAmounts}
                     withdrawalsTokenAmounts={withdrawalsTokenAmounts}
                     lastIntSimulatedAverageRewards={lastIntSimulatedAverageRewards}
+                    lastSnapTimestampEnd={lastSnapTimestampEnd}
                     simulatedPooledTokenPrices={simulatedPooledTokenPrices}
                     simulatedEthPrice={simulatedEthPrice}
                     simulatedPooledTokenBalances={simulatedTokenBalances}

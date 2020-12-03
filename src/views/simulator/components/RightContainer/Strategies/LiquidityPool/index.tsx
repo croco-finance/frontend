@@ -95,6 +95,7 @@ interface Props {
     poolStrategyUsd: number;
     txCostEth: number;
     simulatedYieldUsd: number;
+    lastSnapTimestampEnd: number;
 }
 
 const LiquidityPool = ({
@@ -111,11 +112,16 @@ const LiquidityPool = ({
     poolStrategyUsd,
     txCostEth,
     simulatedYieldUsd,
+    lastSnapTimestampEnd,
 }: Props) => {
     const [isOpened, setIsOpened] = useState(false);
 
-    const endTimeText = isActive ? 'Value today' : 'Withdrawal time value';
-
+    const endTimeText = isActive
+        ? 'Value today'
+        : `Value on ${formatUtils.getFormattedDateFromTimestamp(
+              lastSnapTimestampEnd,
+              'MONTH_DAY_YEAR',
+          )}`;
     const poolShareRow = (
         <BoxRow
             firstColumn={

@@ -186,7 +186,14 @@ const Overview = ({
                     <GridWrapper>
                         <BoxRow
                             firstColumn="Pool overview"
-                            secondColumn="Today"
+                            secondColumn={
+                                isActive
+                                    ? 'Today'
+                                    : formatUtils.getFormattedDateFromTimestamp(
+                                          lastSnapTimestampEnd,
+                                          'MONTH_DAY_YEAR',
+                                      )
+                            }
                             thirdColumn={<RightPaddingWrapper>Simulated</RightPaddingWrapper>}
                             fourthColumn="Difference"
                             columnColors={['light', 'light', 'light', 'light']}

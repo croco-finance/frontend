@@ -93,6 +93,7 @@ interface Props {
     depositTokenAmountsArr: Array<Array<number>>;
     poolIsActive: boolean;
     depositEthAmountsArr: any;
+    lastSnapTimestampEnd: number;
     simulatedPooledTokenPrices: any;
     simulatedEthPrice: any;
     simulatedTokensHodlStrategyUsd: number;
@@ -133,6 +134,7 @@ const Strategies = ({
     yieldTokenSymbol,
     txCostEth,
     lastIntAvDailyRewardsUsd,
+    lastSnapTimestampEnd,
     depositTimestampsArr,
     depositTokenAmountsArr,
     depositEthAmountsArr,
@@ -211,6 +213,7 @@ const Strategies = ({
                     poolStrategyUsd={poolStrategyUsd}
                     txCostEth={txCostEth}
                     simulatedYieldUsd={simulatedYieldUsd}
+                    lastSnapTimestampEnd={lastSnapTimestampEnd}
                 />
             </StrategyItemWrapper>
 
@@ -292,7 +295,7 @@ const Strategies = ({
             </StrategyItemWrapper>
             {/* <SubHeadline>Strategy values</SubHeadline> */}
             <GraphWrapper>
-                <GraphTitle>Value of different Strategies</GraphTitle>
+                <GraphTitle>Value of different strategies</GraphTitle>
                 <Graph data={graphData} maxPossibleValue={maxPossibleGraphValue} />
             </GraphWrapper>
         </Wrapper>

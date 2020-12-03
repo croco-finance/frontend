@@ -124,7 +124,12 @@ const PoolOverview = () => {
         yieldTokenAmount,
     } = pool.cumulativeStats;
 
-    const endTimeText = isActive ? 'Value today' : 'Withdrawal time';
+    const endTimeText = isActive
+        ? 'Value today'
+        : `Value on ${formatUtils.getFormattedDateFromTimestamp(
+              intervalStats[intervalStats.length - 1].timestampEnd,
+              'MONTH_DAY_YEAR',
+          )}`;
     const poolShareValueText = isActive ? 'Your pool share' : 'End pool share';
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
