@@ -35,12 +35,12 @@ const RightLayout = styled.div`
 
 const LeftFillContainer = styled.div`
     width: 120px;
-    flex-shrink: 1;
+    flex-shrink: 10;
 `;
 
 const RightFillContainer = styled.div`
     width: 120px;
-    flex-shrink: 1;
+    flex-shrink: 10;
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {

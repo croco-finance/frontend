@@ -31,8 +31,8 @@ const FeedbackIconWrapper = styled.div`
     padding: 20px;
     background-color: #7c56f7;
     border-radius: 100px;
-    height: 50px;
-    width: 50px;
+    height: 46px;
+    width: 46px;
 
     @media (max-width: ${variables.SCREEN_SIZE.LG}) {
         display: none;
@@ -46,12 +46,12 @@ const SocialIconsWrapper = styled.div<{ isHovered: boolean }>`
     align-items: center;
     background-color: ${colors.BACKGROUND};
     border-radius: 100px;
-    padding-bottom: 60px;
+    padding-bottom: 56px;
     padding-top: 8px;
     position: fixed;
     bottom: 25px;
     right: 25px;
-    width: 50px;
+    width: 46px;
     max-height: ${props => (props.isHovered ? '500px' : '0px')};
     opacity: ${props => (props.isHovered ? '1' : '0')};
     transition: ${props =>
@@ -81,8 +81,8 @@ const IconLinkWrapper = styled.a`
     text-decoration: none;
     cursor: pointer;
     margin: 5px 0;
-    height: 36px;
-    width: 35px;
+    height: 32px;
+    width: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -112,17 +112,17 @@ const SocialButtonBubble = () => {
             }}
         >
             <FeedbackIconWrapper>
-                <Icon icon={'feedback'} size={20} color={colors.WHITE} />
+                <Icon icon={'feedback'} size={18} color={colors.WHITE} />
             </FeedbackIconWrapper>
             <SocialIconsWrapper isHovered={isHovered}>
                 <IconLinkWrapper rel="noreferrer" target="_blank" href={constants.TWITTER_LINK}>
-                    <Icon icon="twitter" size={20} />
+                    <Icon icon="twitter" size={18} />
                 </IconLinkWrapper>
                 <IconLinkWrapper rel="noreferrer" target="_blank" href={constants.TELEGRAM_LINK}>
-                    <Icon icon="telegram" size={20} />
+                    <Icon icon="telegram" size={18} />
                 </IconLinkWrapper>
                 <IconLinkWrapper rel="noreferrer" target="_blank" href={constants.DISCORD_LINK}>
-                    <Icon icon="discord" size={20} />
+                    <Icon icon="discord" size={18} />
                 </IconLinkWrapper>
             </SocialIconsWrapper>
         </Wrapper>
