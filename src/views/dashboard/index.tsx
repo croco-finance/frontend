@@ -4,7 +4,7 @@ import {
     RightLayoutContainer,
     NavBar,
 } from '@components/layout';
-import { Input, LoadingBox } from '@components/ui';
+import { Input, LoadingBox, SocialButtonBubble } from '@components/ui';
 import { animations, colors, variables, styles } from '@config';
 import { validationUtils } from '@utils';
 import React, { useState } from 'react';
@@ -249,6 +249,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                     </RightNonExceptionContentWrapper>
                 )}
             </RightLayoutContainer>
+            <SocialButtonBubble />
         </DashboardContainer>
     );
 };

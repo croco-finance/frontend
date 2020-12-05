@@ -8,7 +8,7 @@ const Wrapper = styled.div`
     flex-direction: row;
     flex: 1 1 0%;
     overflow-y: auto;
-    min-height: 100%;
+    min-height: 100vh;
 
     @media (max-width: ${variables.SCREEN_SIZE.LG}) {
         flex-direction: column;

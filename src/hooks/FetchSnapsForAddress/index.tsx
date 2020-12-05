@@ -42,6 +42,7 @@ const FetchSnapsForAddress = initialAddress => {
 
             try {
                 const fetchedSnapshots = await getSnaps(queryAddress);
+                // const fetchedSnapshots = exampleFirebaseData;
 
                 // check if some pools were founds. If not, set the following variables to global redux state
                 if (!fetchedSnapshots) {
