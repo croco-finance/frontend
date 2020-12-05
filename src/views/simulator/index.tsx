@@ -1,22 +1,28 @@
 import * as actionTypes from '@actionTypes';
 import {
-    NavBar,
-    SimulatorContainer,
     LeftLayoutContainer,
+    NavBar,
     RightLayoutContainer,
+    SimulatorContainer,
 } from '@components/layout';
-import { GrayBox, Icon, Input, LoadingBox, MultipleTokenSelect, InfoBox } from '@components/ui';
-import { animations, colors, variables, types, styles } from '@config';
+import {
+    InfoBox,
+    Input,
+    LoadingBox,
+    MultipleTokenSelect,
+    SocialButtonBubble,
+} from '@components/ui';
+import { animations, colors, styles, types, variables } from '@config';
+import { AllPoolsGlobal } from '@types';
 import { formatUtils, validationUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 import { FetchSnapsForAddress } from '../../hooks';
-import RightContainer from './components/RightContainer';
 import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
-import { AllPoolsGlobal } from '@types';
+import RightContainer from './components/RightContainer';
 
 const Header = styled.div`
     padding: 0 20px;
@@ -41,7 +47,7 @@ const LeftSubHeaderContent = styled.div`
     align-self: center;
     ${styles.scrollBarStyles};
 
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
         // because choose pool options are not visible on mobile screen
         min-height: 60vh;
     }
@@ -397,6 +403,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                     sliderDefaultEthCoeff={sliderDefaultEthPriceCoefficient}
                 />
             </RightLayoutContainer>
+            <SocialButtonBubble />
         </SimulatorContainer>
     );
 };

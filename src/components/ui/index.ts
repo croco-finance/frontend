@@ -26,6 +26,7 @@ import NoTextLogo from './NoTextLogo';
 import TextBadge from './TextBadge';
 import CollapsibleContainer from './CollapsibleContainer';
 import InfoBox from './InfoBox';
+import SocialButtonBubble from './SocialButtonBubble';
 
 export {
     TokenLogo,
@@ -56,4 +57,5 @@ export {
     TextBadge,
     CollapsibleContainer,
     InfoBox,
+    SocialButtonBubble,
 };
