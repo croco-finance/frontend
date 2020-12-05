@@ -1,49 +1,85 @@
+export interface Snap {
+    block: number,
+    ethPrice: number,
+    exchange: Exchange,
+    liquidityTokenBalance: number,
+    liquidityTokenTotalSupply: number,
+    timestamp: number,
+    txCostEth: number,
+    tokens: PoolToken[],
+    txHash: string | null,
+    yieldReward: YieldReward | null,
+    stakingService: StakingService | null
+}
+
 export enum Exchange {
     UNI_V2 = 'UNI_V2',
     BALANCER = 'BALANCER',
-    SUSHI = 'SUSHI',
+    SUSHI = 'SUSHI'
 }
 
-export type DexBaseUrls = { [key in keyof typeof Exchange]: string };
-export type DexToPoolIdMap = { [key in keyof typeof Exchange]: Array<string> };
-
-export interface Token {
-    symbol: string;
-    name: string;
-    contractAddress: string;
-    platform: string;
+export enum StakingService {
+    UNI_V2 = 'UNI_V2',
+    BALANCER = 'BALANCER',
+    SUSHI = 'SUSHI',
+    INDEX = 'INDEX'
 }
 
 export interface PoolToken {
-    priceUsd: number;
-    reserve: number;
-    weight: number;
-    token: Token;
+    priceUsd: number,
+    reserve: number,
+    weight: number,
+    token: Token,
+}
+
+export interface Token {
+    symbol: string
+    name: string,
+    contractAddress: string,
+    platform: string,
 }
 
 export interface YieldReward {
-    token: Token;
-    amount: number;
-    price: number;
+    'token': Token,
+    'amount': number,
+    'price': number
 }
 
-export interface Snap {
-    block: number;
-    ethPrice: number;
-    exchange: Exchange;
-    liquidityTokenBalance: number;
-    liquidityTokenTotalSupply: number;
-    timestamp: number;
-    txCostEth: number;
-    tokens: PoolToken[];
-    txHash: string | null;
-    yieldReward: YieldReward | null;
-    staked: boolean;
-}
+export const tokens: { [key in StakingService]: Token } = {
+    'UNI_V2': {
+        'symbol': 'UNI',
+        'name': 'Uniswap',
+        'contractAddress': '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+        'platform': 'ethereum',
+    },
+    'BALANCER': {
+        'symbol': 'BAL',
+        'name': 'Balancer',
+        'contractAddress': '0xba100000625a3754423978a60c9317c58a424e3d',
+        'platform': 'ethereum',
+    },
+    'SUSHI': {
+        'symbol': 'SUSHI',
+        'name': 'SushiToken',
+        'contractAddress': '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+        'platform': 'ethereum',
+    },
+    'INDEX': {
+        'symbol': 'INDEX',
+        'name': 'Index',
+        'contractAddress': '0x0954906da0Bf32d5479e25f46056d22f08464cab',
+        'platform': 'ethereum',
+    },
+};
 
 export interface SnapStructure {
-    [key: string]: Snap[];
+    [key: string]: Snap[]
 }
+
+// Types from above are used in firebase-loader
+
+export type DexBaseUrls = { [key in keyof typeof Exchange]: string };
+export type DexToPoolIdMap = { [key in keyof typeof Exchange]: Array<string> };
 
 export interface IntervalStats {
     timestampStart: number;
