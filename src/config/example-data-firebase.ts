@@ -1,4 +1,4 @@
-import { Exchange, SnapStructure } from '@types';
+import { Exchange, StakingService, SnapStructure } from '@types';
 
 const data: SnapStructure = {
     '0x003a70265a3662342010823bea15dc84c6f7ed54': [
@@ -36,7 +36,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xaa2e9f223dc0aac9f43eaff66a80c76f8bcc472c71f94cc59800d4dd08aaf18a',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 108.73100445859127,
                 price: 8.212923157636324,
                 token: {
                     symbol: 'BAL',
@@ -45,7 +45,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10484403,
@@ -81,7 +81,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7e7ec11f603a97fabf71e175623c82a57aacb919f36a0962d1b654ec011300e9',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 0,
                 price: 8.209823445485515,
                 token: {
                     symbol: 'BAL',
@@ -90,7 +90,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10489863,
@@ -126,7 +126,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x350992698108cc04384aad351ec6382ad61a91c2df19bf322eb35e09853a3975',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 0,
                 price: 8.591204872260738,
                 token: {
                     symbol: 'BAL',
@@ -135,7 +135,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10506779,
@@ -171,7 +171,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xc0879880d2a2358fea332f59689cd92a8d89f42c4ef214e109690d2c160df3a5',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 9.594581982538536,
                 token: {
                     symbol: 'BAL',
@@ -180,7 +180,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10507075,
@@ -216,7 +216,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x1cf4d6b04dbffebef4806f1ae6c23191cc86a567e8cddae4c1af8ee291549fde',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 9.62429949787097,
                 token: {
                     symbol: 'BAL',
@@ -225,7 +225,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10507331,
@@ -261,7 +261,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7a2a7b4eaca46227ab37921c091c11694b54ed6e3828f1cadfec34245fe126c8',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 9.55314434167718,
                 token: {
                     symbol: 'BAL',
@@ -270,7 +270,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10507366,
@@ -306,7 +306,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8dee2657862d2e2ebe540d1a00f09d43972adf344f1d9f04bb3fe0767523bd01',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 9.56424749696669,
                 token: {
                     symbol: 'BAL',
@@ -315,7 +315,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10515699,
@@ -351,7 +351,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xaa359f0616ee0422b0cf700372299778978675fe0bf6023e4a8a0fe2c15758be',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 11.103277671576366,
                 token: {
                     symbol: 'BAL',
@@ -360,7 +360,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10516445,
@@ -396,7 +396,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xeeec960740f309848f1a37f9f45e55f091b4fc594846b7a330586c5d43002973',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 11.01513857172801,
                 token: {
                     symbol: 'BAL',
@@ -405,7 +405,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10517773,
@@ -441,7 +441,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xff105edad9eacc19a6e0ad257a99cece794f8c8a914380a818d610142e517e28',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 11.434660670966386,
                 token: {
                     symbol: 'BAL',
@@ -450,7 +450,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10524876,
@@ -486,7 +486,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x9bf4cccafbd2362411f2de3a1f0da56fb70a84e4dd096386ed733b3717f35c55',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 10.849140001547836,
                 token: {
                     symbol: 'BAL',
@@ -495,7 +495,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10530574,
@@ -531,7 +531,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x382e52b064b91b38a093bba6dd57c266b211f4f1dbc72ada670c9ae0f50ff310',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 10.967769030828498,
                 token: {
                     symbol: 'BAL',
@@ -540,7 +540,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10531110,
@@ -576,7 +576,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xdc4013aa46a11068c8627bbd93a103244f61076a585871a53248f0a6457206cb',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 10.653673967576072,
                 token: {
                     symbol: 'BAL',
@@ -585,7 +585,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10536734,
@@ -621,7 +621,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb374d033ebe9bfcde5698265cfdfcbca57f7bea4bc14cbb6d5a5faf9ab17e9a5',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 10.634037890985406,
                 token: {
                     symbol: 'BAL',
@@ -630,7 +630,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10542162,
@@ -666,7 +666,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x2346c923db9cd6bf5cb289992d8f0beab4e5a128d6d31d903ebe1db321f5b365',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 10.301711260802326,
                 token: {
                     symbol: 'BAL',
@@ -675,7 +675,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10542396,
@@ -711,7 +711,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xe1317565c128c71e01d7674ad301db7747d28162606dd0c0988d2ae8db4f8a71',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 10.005338543831403,
                 token: {
                     symbol: 'BAL',
@@ -720,7 +720,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10543773,
@@ -756,7 +756,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x9a2314529cfd8f30c0c5b370e3863c81310cafde75c3fc0af19a095b09bc5c16',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 9.842056942086993,
                 token: {
                     symbol: 'BAL',
@@ -765,7 +765,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10557884,
@@ -801,7 +801,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xed2dad71fa1c0f8c047d7157aaf74de480e77245a583b60cd74213f82cd927e5',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 9.503859772979464,
                 token: {
                     symbol: 'BAL',
@@ -810,7 +810,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10567332,
@@ -846,7 +846,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4ee584ff632b3e659d69bcb231aee86865526150ded4fde7556e8f94cf16b641',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 10.046895865638682,
                 token: {
                     symbol: 'BAL',
@@ -855,7 +855,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10567443,
@@ -891,7 +891,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb27a2d8936cdb3461f69f2f95fdb21f43f01789c570f53afb3f8a60daa815455',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 10.118744968108423,
                 token: {
                     symbol: 'BAL',
@@ -900,7 +900,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10570308,
@@ -936,7 +936,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xc1007c11c4abe2d33074070d237a753868580f585cf4214ae8a41551e895d7f7',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 10.249161216027924,
                 token: {
                     symbol: 'BAL',
@@ -945,7 +945,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10570453,
@@ -981,7 +981,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xad1dccb5c6f5f589dc6fedccc582ce73df54373f5cc4a84277886275e50773aa',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 10.291351417152427,
                 token: {
                     symbol: 'BAL',
@@ -990,7 +990,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10587271,
@@ -1026,7 +1026,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb0b63c0068456b4d57a10d7068b7d47e18b21a1724aad7cb8392db96253743ec',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 10.596671604653034,
                 token: {
                     symbol: 'BAL',
@@ -1035,7 +1035,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10588481,
@@ -1080,7 +1080,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x1df8f3aad2353e087ec0296ed5c504f6d622ca18': [
@@ -1118,7 +1118,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6bccc8560e68501d35a61ef4d800ec2f95dfd53b04c6466b6eec2bf8f31fcf1f',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0.13081523132361178,
                 price: 21.50569843982334,
                 token: {
                     symbol: 'BAL',
@@ -1127,7 +1127,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10795790,
@@ -1163,7 +1163,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xefa7cc585db0d3e4e7e672e7ad9a4eeaa1619306d19278b4a91af0e2bf8ab3e2',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0,
                 price: 21.409085225347276,
                 token: {
                     symbol: 'BAL',
@@ -1172,7 +1172,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10799142,
@@ -1217,7 +1217,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x330416c863f2acce7af9c9314b422d24c672534a': [
@@ -1264,7 +1264,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x4b0b0bf60abbf79a2fd028e4d52ac393982488ce': [
@@ -1302,7 +1302,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x37ae1954480ff18cf958627a15f931559c4471eaa0f33a20798151ae3445269f',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0.201631569451128,
                 price: 32.23927880197662,
                 token: {
                     symbol: 'BAL',
@@ -1311,7 +1311,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10808148,
@@ -1356,7 +1356,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x60626db611a9957c1ae4ac5b7ede69e24a3b76c5': [
@@ -1394,7 +1394,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xaea69638771817e2564300d065ed0879d993587d5982614d2eda455fceb554d3',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 35.833299582364525,
                 price: 8.363732401883592,
                 token: {
                     symbol: 'BAL',
@@ -1403,7 +1403,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10486926,
@@ -1439,7 +1439,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xdb204a6677b01ac0bc9ac87b6d671568cfa6f74d7d82c6ae7b775b0236ec0075',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 354.84517619444057,
                 price: 8.374689694458327,
                 token: {
                     symbol: 'BAL',
@@ -1448,7 +1448,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10507386,
@@ -1484,7 +1484,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xf22efd2cad60bd689a1a38f62f52b24662ea9bb5c90e691c924af4511ad74fbf',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 9.570823913931136,
                 token: {
                     symbol: 'BAL',
@@ -1493,7 +1493,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10515942,
@@ -1538,7 +1538,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x72cd8f4504941bf8c5a21d1fd83a96499fd71d2c': [
@@ -1576,7 +1576,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd82663ed42fdf8541b833f462af8e6e1a2da11da6988d0804d045664813624b6',
             yieldReward: {
-                amount: 40.90889648100955,
+                amount: 122.72668944302865,
                 price: 14.122954370034133,
                 token: {
                     symbol: 'BAL',
@@ -1585,7 +1585,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10342421,
@@ -1621,7 +1621,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8bd43efc2eab0e072b542b8376e014035b6351efd463e1bdce7ab0c975c786f0',
             yieldReward: {
-                amount: 40.90889648100955,
+                amount: 0,
                 price: 14.117654386010791,
                 token: {
                     symbol: 'BAL',
@@ -1630,7 +1630,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10348268,
@@ -1666,7 +1666,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6e1d89a40f65888c51678157f1bf41c9295803ee365327af41b5c6c2fdd0c2d8',
             yieldReward: {
-                amount: 126.5665162535692,
+                amount: 619.3245104649184,
                 price: 13.081672567578496,
                 token: {
                     symbol: 'BAL',
@@ -1675,7 +1675,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10485842,
@@ -1711,7 +1711,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x5d34710744165f8c4b13f9c52948fca3d95bd66d7baa6a64a823b407dba45b40',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 0,
                 price: 8.262497279696998,
                 token: {
                     symbol: 'BAL',
@@ -1720,7 +1720,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10486743,
@@ -1765,7 +1765,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x742569fd5266486fd2a50171dbdc88b8ee893ee9': [
@@ -1812,7 +1812,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10712482,
@@ -1857,7 +1857,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10712528,
@@ -1902,7 +1902,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10713938,
@@ -1947,7 +1947,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10714108,
@@ -1992,7 +1992,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10716750,
@@ -2037,7 +2037,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10724289,
@@ -2082,7 +2082,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10725010,
@@ -2127,7 +2127,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10725656,
@@ -2172,7 +2172,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10769279,
@@ -2208,7 +2208,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x624139229c5476c6ee9897ecc5b7c45819686c475212ef6ea92bf805dde5104e',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 4.563189109794381,
                 price: 35.27734316471413,
                 token: {
                     symbol: 'BAL',
@@ -2217,7 +2217,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10775323,
@@ -2253,7 +2253,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd590964b17de33f273a6def68cbbdd479c27e51bcb313ff51bd4278f1474d982',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0,
                 price: 32.47666513265404,
                 token: {
                     symbol: 'BAL',
@@ -2262,7 +2262,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10775492,
@@ -2298,7 +2298,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7a510691b095f8849a76e25af7bd3f9a164aac5803cbe6a74ca565eda02a1d20',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0,
                 price: 32.80612022307984,
                 token: {
                     symbol: 'BAL',
@@ -2307,7 +2307,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10786064,
@@ -2343,7 +2343,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x51692ad6bd05d74fd7f84c9b2053dd442a144aad623a165cd9b8f4893bac6a62',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0,
                 price: 31.872529597283034,
                 token: {
                     symbol: 'BAL',
@@ -2352,7 +2352,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10788091,
@@ -2388,7 +2388,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xddc6ca4926fbbb89d062fb97723783827125e1825a97b0f70e743ac2e11a030c',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0,
                 price: 29.249443800227514,
                 token: {
                     symbol: 'BAL',
@@ -2397,7 +2397,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10788137,
@@ -2433,7 +2433,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4daca220c0e3b509e3b6fd7ca53ffad91cefd695498e930dcbc8b67c46e6fb7b',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0,
                 price: 28.123873052561724,
                 token: {
                     symbol: 'BAL',
@@ -2442,7 +2442,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10788858,
@@ -2478,7 +2478,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x546d0efa45b621177fa3c61e84f5f59181de98221cb75aa8c5a1147a059475fb',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0,
                 price: 26.9944412467259,
                 token: {
                     symbol: 'BAL',
@@ -2487,7 +2487,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10799402,
@@ -2523,7 +2523,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb29b66ca061414d0a12cdb3ddb729fce46063abad546b1c06c1dee6f221fa4af',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0,
                 price: 22.407564768611852,
                 token: {
                     symbol: 'BAL',
@@ -2532,7 +2532,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10801871,
@@ -2577,7 +2577,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x7fc95945eaa14e7a2954052a4c9bfbaa79d170ae': [
@@ -2615,7 +2615,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd3cd0551732f72c55a3fcf1c6e2f9e8c4979e679d866f95835e4f0ddebf4595e',
             yieldReward: {
-                amount: 126.5665162535692,
+                amount: 69.44833424579365,
                 price: 9.665520742392575,
                 token: {
                     symbol: 'BAL',
@@ -2624,7 +2624,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10491970,
@@ -2660,7 +2660,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x88719c51afe073899b4ebf0d3b031a33eeed5d211b404e97ca8b6233692028e5',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 110.90556134642482,
                 price: 9.654457998591724,
                 token: {
                     symbol: 'BAL',
@@ -2669,7 +2669,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10516265,
@@ -2705,7 +2705,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6ead5c9978398dc47fea711adedd0b023c737224f190025bfe7a0a16e4d79e7c',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 10.969421705309713,
                 token: {
                     symbol: 'BAL',
@@ -2714,7 +2714,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10539522,
@@ -2750,7 +2750,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xdc099b347170c2c2be53ad8da2962e9ce1fa6ab0d00ff6817417f421f7f2ed83',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 11.073499807098775,
                 token: {
                     symbol: 'BAL',
@@ -2759,7 +2759,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10543232,
@@ -2795,7 +2795,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x09cbb1525c9e4ad610d9dd782784803abcbf3cbda81f92e6d495586de959622b',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 71.4364847356703,
                 price: 9.786452439014802,
                 token: {
                     symbol: 'BAL',
@@ -2804,7 +2804,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10616071,
@@ -2849,7 +2849,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x826f313076afae1b86ad211ef79d0616451a9045': [
@@ -2887,7 +2887,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xc6ee283dad8ed934201a08710f93279ec791dcd66022d9243dd96328062af1bb',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0.29456607086188186,
                 price: 10.48314492964086,
                 token: {
                     symbol: 'BAL',
@@ -2896,7 +2896,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10583784,
@@ -2932,7 +2932,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x45cd899f61e5643ca4de63cd3008b6ed1a9dd9c3aaea1c5d19e9897d7ad72128',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 10.606149034638387,
                 token: {
                     symbol: 'BAL',
@@ -2941,7 +2941,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10583971,
@@ -2977,7 +2977,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb0821c3d715a43e0a2c7c031f6d603ae2360b5c39570846548b3ca185806b9a2',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 10.609948913079815,
                 token: {
                     symbol: 'BAL',
@@ -2986,7 +2986,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10584586,
@@ -3031,7 +3031,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x83297cdfd415301bd27fa2c68c7b639c717b1a3a': [
@@ -3078,7 +3078,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x95c4b6c7cff608c0ca048df8b81a484aa377172b': [
@@ -3116,7 +3116,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xf79723543ca36fb5f6e1149edfe1d6b80f8a60211492e59f389550bb88c00e08',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 9.558475460925619,
                 price: 11.45707613645174,
                 token: {
                     symbol: 'BAL',
@@ -3125,7 +3125,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10516069,
@@ -3161,7 +3161,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xe5ed5da67c7ffe76f5a8f62f55dfa387eff929c1cdff4694763bbe5dd38fc2fc',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 228.4259196892847,
                 price: 11.07164992676452,
                 token: {
                     symbol: 'BAL',
@@ -3170,7 +3170,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10549726,
@@ -3215,7 +3215,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xa74485e5f668bba37b5c044c386b363f4cbd7c8c': [
@@ -3253,7 +3253,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd6477c5f2bdac64d46ab4e6c373c55766b55bc282dcae4dcb0573c70a988f915',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 120.54691874206179,
                 price: 9.671371599705305,
                 token: {
                     symbol: 'BAL',
@@ -3262,7 +3262,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10525981,
@@ -3307,7 +3307,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xa7d7d09484fa6e5f497b6b687f979509373c6530': [
@@ -3345,7 +3345,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd0ad015a947c8426e640937b33399dbac458ca888672387881ea20388b3c043f',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 41.00296439734354,
                 price: 8.664164134685342,
                 token: {
                     symbol: 'BAL',
@@ -3354,7 +3354,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10491485,
@@ -3390,7 +3390,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xfb8ed59dfdc37743a2aebad641866dfd6cadde3d0cfe41aa4578b957e2a6bc71',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 0,
                 price: 9.416896523431213,
                 token: {
                     symbol: 'BAL',
@@ -3399,7 +3399,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10491686,
@@ -3435,7 +3435,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xa5d5db614d967f4da9472323ff8d73a3f2825157b2abd766609cdd412c476c7a',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 225.01638602234385,
                 price: 9.699936671681147,
                 token: {
                     symbol: 'BAL',
@@ -3444,7 +3444,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10549705,
@@ -3480,7 +3480,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xe53b4df4a22847c5ea584bd7331eddb3b83beb0fca02ec4717a2da3d1ae2cbe9',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 9.286435705672167,
                 token: {
                     symbol: 'BAL',
@@ -3489,7 +3489,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10574569,
@@ -3534,7 +3534,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xdc7d39628855b6013000c9af957e6cd484beda6c': [
@@ -3592,7 +3592,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10724295,
@@ -3648,7 +3648,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10769642,
@@ -3704,7 +3704,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10769725,
@@ -3751,7 +3751,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x47d783c294d201f8ff8fd4f0a8e3d5225c2ab30753c9e85a1f621732d83e375d',
             yieldReward: {
-                amount: 0.431049715097809,
+                amount: 0.47242331172264884,
                 price: 35.48648215028635,
                 token: {
                     symbol: 'BAL',
@@ -3760,7 +3760,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10808158,
@@ -3816,7 +3816,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xe036cce08cf4e23d33bc6b18e53caf532afa8513': [
@@ -3854,7 +3854,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xc6565f5c62fb35ac17f0a44d88c56c4e287903da8a3fbb49e193f8a1a99f584c',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 31.567386214345504,
                 price: 8.016998802635893,
                 token: {
                     symbol: 'BAL',
@@ -3863,7 +3863,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10485930,
@@ -3899,7 +3899,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x62f7d0e88df924648807fc8e921e8244a35ba74e7de6154daef80b3696b7821f',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 0,
                 price: 8.262497279696998,
                 token: {
                     symbol: 'BAL',
@@ -3908,7 +3908,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10489844,
@@ -3944,7 +3944,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x81416d67428a31b855604f6933516e107036d263e4e48877d33d66cb5e668b5c',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 0,
                 price: 8.577446639435983,
                 token: {
                     symbol: 'BAL',
@@ -3953,7 +3953,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10543770,
@@ -3989,7 +3989,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x226d1f1b13a6384e932902c678a4c091615274131edc88e2953afd321f627074',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 0,
                 price: 9.842056942086993,
                 token: {
                     symbol: 'BAL',
@@ -3998,7 +3998,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10544011,
@@ -4034,7 +4034,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xef6836e202013ce4f2eaa32e3b8cbbdc70131b72567b633dccb524d66695a447',
             yieldReward: {
-                amount: 26.11161665601846,
+                amount: 66.62649790900231,
                 price: 9.779575526076519,
                 token: {
                     symbol: 'BAL',
@@ -4043,7 +4043,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10557138,
@@ -4079,7 +4079,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x74e17d70c7103ddea593c4a02a712b378a2ae975a13b1cbca6d86c4c1536ae51',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 9.521009234174079,
                 token: {
                     symbol: 'BAL',
@@ -4088,7 +4088,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10563369,
@@ -4124,7 +4124,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7dcce145cf5fb3f45e5edd1940bbb120d3c514ef7f08f46267eea00c67edb2cd',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 9.811711954762854,
                 token: {
                     symbol: 'BAL',
@@ -4133,7 +4133,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10564074,
@@ -4169,7 +4169,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x9015688feef9b2a67c29a305695adfead8d28d3c7f6b49dc258b05a1c7b07f81',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 9.840380139783553,
                 token: {
                     symbol: 'BAL',
@@ -4178,7 +4178,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10567437,
@@ -4214,7 +4214,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x55a1b596ba5622afc6ac37e52123ab3f6b3e7ca49297f6ff33587e5b0437e6a4',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 0,
                 price: 10.15187208429054,
                 token: {
                     symbol: 'BAL',
@@ -4223,7 +4223,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10570433,
@@ -4259,7 +4259,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x55ebf6df4b1f05dc4246e6d14b42842d0a77c979ed0132007680db23e33a80ad',
             yieldReward: {
-                amount: 19.743136445318186,
+                amount: 50.45563853514202,
                 price: 10.261567550719205,
                 token: {
                     symbol: 'BAL',
@@ -4268,20 +4268,20 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
-            block: 11269341,
-            ethPrice: 454.339561336535,
+            block: 11285694,
+            ethPrice: 477.49329214378776,
             exchange: Exchange.BALANCER,
-            liquidityTokenBalance: 1104.8327975187126,
-            liquidityTokenTotalSupply: 30382.435977274705,
-            timestamp: 1605786441,
-            txCostEth: 0,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 26731.174481538954,
+            timestamp: 1605752860,
+            txCostEth: 0.013346025,
             tokens: [
                 {
-                    priceUsd: 452.5533120691217,
-                    reserve: 9598.451300297356,
+                    priceUsd: 477.49329214378776,
+                    reserve: 8251.28354850873,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -4291,8 +4291,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 0.9879156011341889,
-                    reserve: 4396945.368305522,
+                    priceUsd: 0.9947885510474711,
+                    reserve: 3960572.8693205435,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xe2f2a5c287993345a840db3b0845fbc70f5935a5',
@@ -4302,10 +4302,10 @@ const data: SnapStructure = {
                     },
                 },
             ],
-            txHash: null,
+            txHash: '0xe1af71060f07054158148623d45017e5e8975e7f6c719872191380d6a4203740',
             yieldReward: {
                 amount: 0,
-                price: 12.904476667752583,
+                price: 13.141078442791171,
                 token: {
                     symbol: 'BAL',
                     name: 'Balancer',
@@ -4313,7 +4313,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xe26a220a341eaca116bda64cf9d5638a935ae629': [
@@ -4351,7 +4351,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xbb4ce480e743f0cf00b85b5288f62b61fa111addc912ea3a9b4f5b7034253c8b',
             yieldReward: {
-                amount: 18.31349528162188,
+                amount: 40.63560312860559,
                 price: 11.121593833057,
                 token: {
                     symbol: 'BAL',
@@ -4360,7 +4360,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10525238,
@@ -4405,7 +4405,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a': [
@@ -4452,7 +4452,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10985158,
@@ -4497,7 +4497,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10990302,
@@ -4542,7 +4542,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10990318,
@@ -4587,20 +4587,20 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
-            block: 11269341,
-            ethPrice: 454.339561336535,
+            block: 11299518,
+            ethPrice: 508.73796590168115,
             exchange: Exchange.BALANCER,
-            liquidityTokenBalance: 2.296113565722983,
-            liquidityTokenTotalSupply: 321.6388970340472,
-            timestamp: 1605786442,
-            txCostEth: 0,
+            liquidityTokenBalance: 3.6417506894741347,
+            liquidityTokenTotalSupply: 338.4937144072305,
+            timestamp: 1605936066,
+            txCostEth: 0.02391893,
             tokens: [
                 {
-                    priceUsd: 0.6665693468788803,
-                    reserve: 4864452.145668335,
+                    priceUsd: 0.8905332916873486,
+                    reserve: 4942186.53258225,
                     weight: 0.8,
                     token: {
                         contractAddress: '0xad32a8e6220741182940c5abf610bde99e737b2d',
@@ -4610,8 +4610,53 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 454.339561336535,
-                    reserve: 1784.180250627544,
+                    priceUsd: 508.73796590168115,
+                    reserve: 2162.793980390648,
+                    weight: 0.2,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xabebf6a402153ce95c5b8db32d1673f375cdbb478642c3e06318f9d15e5726ba',
+            yieldReward: {
+                amount: 0,
+                price: 15.524977453572053,
+                token: {
+                    symbol: 'BAL',
+                    name: 'Balancer',
+                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+                    platform: 'ethereum',
+                },
+            },
+            stakingService: null,
+        },
+        {
+            block: 11406957,
+            ethPrice: 594.8647421563973,
+            exchange: Exchange.BALANCER,
+            liquidityTokenBalance: 3.6417506894741347,
+            liquidityTokenTotalSupply: 297.4394827643674,
+            timestamp: 1607366585,
+            txCostEth: 0,
+            tokens: [
+                {
+                    priceUsd: 0.8222020182981803,
+                    reserve: 4554867.395136275,
+                    weight: 0.8,
+                    token: {
+                        contractAddress: '0xad32a8e6220741182940c5abf610bde99e737b2d',
+                        name: 'PieDAO DOUGH v2',
+                        platform: 'ethereum',
+                        symbol: 'DOUGH',
+                    },
+                },
+                {
+                    priceUsd: 595.1980903839858,
+                    reserve: 1573.0146088613792,
                     weight: 0.2,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -4622,17 +4667,8 @@ const data: SnapStructure = {
                 },
             ],
             txHash: null,
-            yieldReward: {
-                amount: 0,
-                price: 12.904476667752583,
-                token: {
-                    symbol: 'BAL',
-                    name: 'Balancer',
-                    contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
-                    platform: 'ethereum',
-                },
-            },
-            staked: false,
+            yieldReward: null,
+            stakingService: null,
         },
     ],
     '0x2c7a51a357d5739c5c74bf3c96816849d2c9f726': [
@@ -4670,7 +4706,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x93fb6a9bdf7b6739fef6953fb1794e93cb080c964cf2e4797d46cda124d94c35',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10647004,
@@ -4706,7 +4742,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xedcdd0c5746a34e2d0bb2014d16a15247fd04b51d2fa86120db1b4ba73cb3e22',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10647294,
@@ -4742,7 +4778,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x5e1ad075aefaea93119ddaac4596c2efc59956a2fe879b9ecf7009063ae69d0d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10647328,
@@ -4778,7 +4814,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x9ed1cf912c4a65f6d9bf337e85c923cf8d7e7b746e0bdc0144fc14a138b5a16a',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10647484,
@@ -4814,7 +4850,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x597946e10953cfe5cede011a8a8aaac64938790f3b377fd57ac33d1674733ec1',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10647497,
@@ -4850,7 +4886,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xc0e647b4cbead6225d19be020b9b71adf777bbbae120a020e853429366b8b44e',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10647947,
@@ -4886,7 +4922,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x560d00758c3f1d7b795170bc70b4771c377e63dd56a134ccba4e7fd68a8cbc5d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10647972,
@@ -4922,7 +4958,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x54d946630c2829a06212e7218d542c992dd889d7b4fa6bb145c528e365e8d3db',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10648260,
@@ -4958,7 +4994,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x78ac4c12542b8f4d582d88909526e993ee23c9c1701601ca43b86cceb80911f0',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10648280,
@@ -4994,7 +5030,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xebd82d0ae48b00181d7501e4724f8e8432840869e44dd4573e51b7ea2fe0bad1',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10648973,
@@ -5030,7 +5066,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd8d7ce690272882f80d31c2a01bc29129072a1466426b0204517b37138bfd045',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10648985,
@@ -5066,7 +5102,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x46d3d6cc7b3fcd0369af18bdca3eec6674e9253dcf8e958c7a0647302c060173',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10649140,
@@ -5102,7 +5138,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x74c655f017cdc254b3fb7ea6da07a60b4144f7e23ed0ec17edd6f915702d435c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10649149,
@@ -5138,7 +5174,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x14a730ff622990f04a302353585aff1d6aa77a63d0a82fe164b6506284b278e7',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10650124,
@@ -5174,7 +5210,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x0830d8d4c84efc84b3c751109743fdeb9a04ef12ee273ddff1f793b5f5509cea',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10650135,
@@ -5210,7 +5246,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x1914c052d148d716e821a634bb345153b0333c5f5d090dabb8d2a9e9d2e3afc2',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10653761,
@@ -5246,7 +5282,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xc1e48c45a61c5142be50c9cb00fe60cf6556fc27c22e60725152feaddbae2d4a',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10653799,
@@ -5282,7 +5318,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6183d1da8c27d5624d49d609bea0cf22b3682c8ea74581523ad70a733040d463',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10653818,
@@ -5318,7 +5354,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xa40c38e74194e44c260962fae33568a588d36f291fd4114e795849b22d6aed2b',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10653824,
@@ -5354,7 +5390,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb90076d34b420d76616d26c331c221099ec9f6012f3fae804e8c5f0ce5ec0b54',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10653855,
@@ -5390,7 +5426,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xf8b21fa66b039a9fc1305a33436647c2038ab63089af6c7116998a29f973f4fe',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10653857,
@@ -5426,7 +5462,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x3a4cb3932d2ffe038e5d0956c4803d5c73969053c72eac65ea4d0b82ab8321d3',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654095,
@@ -5462,7 +5498,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x3bc92d580f74edc240b6863ff2f20207665be1357880e9a3015bff0613c1f10e',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654114,
@@ -5498,7 +5534,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xa5bcf838f0f923d69dab70ba12fd8c18de8fc044a2c07718c37db679ddb26466',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654230,
@@ -5534,7 +5570,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x48920790d6ea9d12d9483b1264b95b402f65ac2eecb26fb72d75645e7a7fd406',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654240,
@@ -5570,7 +5606,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x365a0d920913776136fe66f50cb060e800b59ca177f91409d8db86cdcc0f0712',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654332,
@@ -5606,7 +5642,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xa1bb665e571f127cf4b81c0a5b7c8fb34cba21622b0011561829cbfe5b526a03',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654337,
@@ -5642,7 +5678,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x96cb935e24d82227e5768382269c2d9298b545ba533c6877934d003898284809',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654356,
@@ -5678,7 +5714,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x04b63b10e136c237ce60469900a5f6b767eaf160b431ae65e5018436d770e4dc',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654360,
@@ -5714,7 +5750,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x3d441f8a7107ff513813d88246060185f7b65b9b092c14919e8cb6230999bdd6',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654813,
@@ -5750,7 +5786,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xaf59bc481524b343c9e3eee3f190cab58a3adf1783fdafb1a30faea33efc9588',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654817,
@@ -5786,7 +5822,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xf109fea3a0ea6dcaa572b7f3559ac6fbc9d7b895c6bd87066f210c95e31682cc',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10654998,
@@ -5822,7 +5858,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x9a0bea14b346ff42e250b1978c59824cd4b4947bcb84a15d636311aade9fb407',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10655010,
@@ -5858,7 +5894,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x78490e1aa98287cd088d7e79cc5d46dd1b65151fe6301c194ff74000ceb85199',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10655159,
@@ -5894,7 +5930,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xdb021e331d4f40054914e1b09416d7144853069da80743f8b2aa5f11de14808c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10655166,
@@ -5930,7 +5966,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xeb93957d8deb216fe10e6366c5325a168688a61049f698651438457e623d9dd9',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10655485,
@@ -5966,7 +6002,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x5490dd2d47f42aed5214dea501ecbd442056f46a08adb37b7e74a1f3bda82919',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10655490,
@@ -6002,7 +6038,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x053a15b0313a38b8216e780cb9b95137691fadf0252de72d1e58ef33e0a7ed13',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10655522,
@@ -6038,7 +6074,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x11a817b00feb400c17689c076471a6fae6594db921854903d84dc5c5a361d949',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10655526,
@@ -6074,7 +6110,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7c931a5a7a88e622382ee059fcc301df3c4851c3a224aad8cd725d4fba9c2071',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10657759,
@@ -6110,7 +6146,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x2005486a5b0353958b8d378fe3965126b7d76cac956a882aea70b1926a2f8ede',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10657768,
@@ -6146,7 +6182,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x008a2c15a2fe1970e5b90701fb676f23aa0a44fdf46fe0da13ba46b360cd2d53',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10658863,
@@ -6182,7 +6218,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x2745fbc2e73be0b547764dde9703c2ed2a13ef9f5b3fa20cbba7be14370714a5',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10658869,
@@ -6218,7 +6254,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x44ff9024015ac76d958a633773715ba45f3bd862b61d8411d38738f873b5f804',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10660080,
@@ -6254,7 +6290,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xea935e13d7ca2fc7a23b333d4f03d17ec9c7129c4e9d8b9f5a46d88b23361d91',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10660085,
@@ -6290,7 +6326,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xcaddf68b9ed3fa153c4839bb18d9f49cfa93d6d75a3dccf349b115fb0e29572e',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10660188,
@@ -6326,7 +6362,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x40da8acb81c707a5ebecace62610a7215019bc250517ce32f1d17d766855827c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10660192,
@@ -6362,7 +6398,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x00e98bd24eb329a5b0e79ca8a5181e679b284692b829e0949f74f9fa252a50be',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10660981,
@@ -6398,7 +6434,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x56f242d76c8de5ff7a1237d67206f3856870e590edd98762c8faeafc9c375e26',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10661000,
@@ -6434,7 +6470,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xfdf16e132613d01a349ca28efca4131c845e973ba3222213a118da36af1ebc1c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10661751,
@@ -6470,7 +6506,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb4d0b8047c6ea723d57f990d943b7c930f88e8ae59401575b4175fc5bd1ae9d7',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10661760,
@@ -6506,7 +6542,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xab10ba2f069b4f47d8a4387b65c4741329b7a9fff15f27ce336dfbc2957f4d4d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10661889,
@@ -6542,7 +6578,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xffba24c689ded0a76d3244834cd6de8bf4b24b92c3a59be0746961f8ed181271',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10661920,
@@ -6578,7 +6614,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6aade9122dae4805a3690dbb80c3e44ef306a95b3e967e7a786ee375f228af71',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10663377,
@@ -6614,7 +6650,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xe2a65681fafc81374f197853588963ebf34e6849dfe41c0da21eb743650dfd25',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10663395,
@@ -6650,7 +6686,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x286057e40387137838b5a59727d94ea9cde3f005aa69a2f1e2fa060a517d71f1',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10663534,
@@ -6686,7 +6722,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xa843bfab9f2446a6a7208fc6e0fcd38c83d99fb76d3734f76051cbc80d2dbf33',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10663613,
@@ -6722,7 +6758,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6da78ce3edc8ee293fcecf6ce42f550e3a2e14c2c358720342b8fd088a14283e',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10666315,
@@ -6758,7 +6794,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x54874bfcb7df1a9c55c1a363e350c5383163888dbef5be0a8d954c5375a12bdc',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10666332,
@@ -6794,7 +6830,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xcbdd0b60756b8a5329eb750e02927c43e8c445f45471296fcd09bb6617b58ed7',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10666360,
@@ -6830,7 +6866,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7507a48d6fa02a277fe58c6a7d8b3b85de2149cf55482d69702e8f0db2f07290',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10666365,
@@ -6866,7 +6902,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xf2f8a23d69853af67c188a82793ad804118bcc38d846eef1ce98da8794f7dee4',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10666686,
@@ -6902,7 +6938,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x80a4a56f0f624c0d9802903a54f4822dbe0f35336bdc79dac30873977a5f5ae0',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10666696,
@@ -6938,7 +6974,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xf3a1852fa4ab5aaaa5c4398e28f1e648782b960f608aac85a145e299dfd1960a',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10671454,
@@ -6974,7 +7010,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x10975e21055fede76fa15b9f62fb0ba191e7c1633d0b4ce76f18ede51c05ff4c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10671474,
@@ -7010,7 +7046,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8a0ea7777229ca3a2cde47355221b16f976b34584dfe480f5a79ea58a2085ad3',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10671535,
@@ -7046,7 +7082,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x5660f67062318a6b9431fac63614d3dae6aa3ad085441b6a2db5e75ae343de35',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10671548,
@@ -7082,7 +7118,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6d70bc77c6a38ba12dd68a0a240f2313e43b19a533ab98aea74d45da0c9b7dce',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10672125,
@@ -7118,7 +7154,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x24be72503d1c63984ba877996b1f3987c59a2f143ed6aa0477e26c54e1b7a76e',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10672129,
@@ -7154,7 +7190,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xe1aa5cfe93c382d2f26095422ae21da853affac40beb16eb0f004ed3ea5f688c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10677651,
@@ -7190,7 +7226,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x89219adf90fa97033632f756ea73db81947b0c2efaf0070641ab53c975a4ff0d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10677654,
@@ -7226,7 +7262,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x62e0b4ae3e223dc82a315d2cdb15dd5a862fc9d5d659c7019ffc33b50792968f',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10677667,
@@ -7262,7 +7298,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb1cf971ef69961e21825f86ceeee7a090cb4ca8684e29f64fb5b6dae6d066c89',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10677674,
@@ -7298,7 +7334,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8495722f21e00150511e15a8d83ad49c95680c67a584e39bd6346078be734e78',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10678692,
@@ -7334,7 +7370,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x3ef19ebe188b2e534020f5cb42f803a9176c85aeef87c0feee9000adfb0c82a0',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10678699,
@@ -7370,7 +7406,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x39403961764aaf45ea41c90a83a0c1c05b896068dfab8075384ec4b7a77994f0',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10678978,
@@ -7406,7 +7442,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x17fde258b91150c198f7e61d253f33cfc0382a15ab2b8f7b646575e708ef6c1a',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10678981,
@@ -7442,7 +7478,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x274de5f5bc677f19aa64949b6182f1e3cabc1c9e0b9f33aff20de4154a8345d0',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10679642,
@@ -7478,7 +7514,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xe56f1a003222f3d3e27b072c04d2a450393fc4925b767a96511d6cfd20d4ffc8',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10679645,
@@ -7514,7 +7550,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x03b36bf7369787b0c6b61e0cc408dd08d5d456f2ebb285d5d1a94956449ac559',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10679684,
@@ -7550,7 +7586,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x1bd6b00b1dd8879de40bd3caf84003ecee09fdbc3eb829ff6401a8d066d21e3e',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10679687,
@@ -7586,7 +7622,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x172982cbe2dc69fe9b05e7ff31e832b0c380b99191412525265fbc21bdb3bf3f',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10692171,
@@ -7622,7 +7658,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd307327a62490d63394d480f60d0db68c74b50b4c8ad3ba10d5ef15a40a4b981',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10692178,
@@ -7658,7 +7694,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb36f0db93c32abf7862b9cbd875eefde626ba1c73d6d0658f5a9b1fda476db8c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10693167,
@@ -7694,7 +7730,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4260c483d13a868db8563f43a09e79596ce2c6fa488d95b6ec90a3ed2c95e003',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10693173,
@@ -7730,7 +7766,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4acbc9280fee15178e5a8fc7913c4c02ce2abf77061dc1cc6d60ceeeb809395d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x2fdbadf3c4d5a8666bc06645b8358ab803996e28': [
@@ -7768,13 +7804,13 @@ const data: SnapStructure = {
             ],
             txHash: '0xb54643eb28c810690302fb4a07bcb1195c830816477eb0d3c701525f07628f50',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10775349,
             ethPrice: 466.3368036722964,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 157.60495061180956,
             liquidityTokenTotalSupply: 8135.192119251648,
             timestamp: 1598964372,
             txCostEth: 0.11045892,
@@ -7804,7 +7840,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x016d245d80c6e520ad92a9fcb62e9999e51b78d0115f9b1055ee7f6b70f733d1',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10778571,
@@ -7840,7 +7876,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x0012d757cccd1199171777089a08fb92ec57b5ebdf0abd1f0e103ac7195ebb34',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10782762,
@@ -7876,7 +7912,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x310b583fedbaed9f04c5d79ae59f24e8e75b6e9afb898ad4c50c36e88d5c1525',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10785554,
@@ -7912,7 +7948,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x2f5293ec4072b0295f755c31d26b25495e26bbd6bb9abec6b81c8948339d691e',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10786040,
@@ -7948,7 +7984,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x43f925b5a5a9846fd11db3ad707ef3adb07f649841e00f300f8659b1b9a78ad6',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10786047,
@@ -7984,7 +8020,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8e7bb19022e884a4240e491875602ed05a665feb101eaadb2a6ab0368b1950a6',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10786054,
@@ -8020,13 +8056,13 @@ const data: SnapStructure = {
             ],
             txHash: '0x0bc66c3e768202909224a7c250a006f0df46ccac4b4e4cbdfc0ae6c650fd2b44',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10786058,
             ethPrice: 442.6123035361828,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 105.56774560072267,
             liquidityTokenTotalSupply: 14216.948309783194,
             timestamp: 1599105297,
             txCostEth: 0.0849684,
@@ -8056,7 +8092,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8de4b3c3dc96f1eeea35b461544f9f78f2c4b8e1eb30158dee41434a651b84a2',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10787956,
@@ -8092,7 +8128,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x23be99e27c4193633363ebd78995c31a74b261e76d69023a1d4d96ddba9e1107',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10788096,
@@ -8128,13 +8164,13 @@ const data: SnapStructure = {
             ],
             txHash: '0x5d88f8be5da7b11feab9d0696b2dfdd3e22817c002a67a137adfa197b43c87c5',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10788099,
             ethPrice: 421.7298758902808,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 404.3628184175888,
             liquidityTokenTotalSupply: 15461.84090424605,
             timestamp: 1599133087,
             txCostEth: 0.105,
@@ -8164,7 +8200,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xae4810879db78f0f876bc73117d51303dd50e74720d4a6ee7a5e0292f3fda7fd',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10788654,
@@ -8200,7 +8236,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4b0c7f238b42febf76a9e1c96f5725504ea90bf5c372e66a1fc0147498256a65',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10788837,
@@ -8236,7 +8272,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x12728b911b5a5a5de8b1e09e0528f535bd2fdc40c0cfa3932103d493fe48a94f',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10788841,
@@ -8272,7 +8308,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xe3b1aff34cb50bbb29481e7c502f0a973f372a08a35bd5f321ca72b75cc054c6',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10789632,
@@ -8308,13 +8344,13 @@ const data: SnapStructure = {
             ],
             txHash: '0x255a88ae5dc640fe09d3083553e0403f24d8fa4d08e0308c28e1cdd228a61248',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10789634,
             ethPrice: 400.4546834720706,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 222.3545149673197,
             liquidityTokenTotalSupply: 15145.900606662493,
             timestamp: 1599153963,
             txCostEth: 0.1274526,
@@ -8344,7 +8380,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x258fa69cf4f2cdce73b5c658d3df8cc10d2fbbd0959debbfda8f11b7f82e1131',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10791576,
@@ -8380,20 +8416,20 @@ const data: SnapStructure = {
             ],
             txHash: '0xe04158fd2bfe65ed5b1c2c7a245c8a525420054643dfb9e643b291811fad7ce4',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10791584,
             ethPrice: 389.338592668281,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 488.7314925175135,
             liquidityTokenTotalSupply: 16433.26746032544,
             timestamp: 1599179832,
             txCostEth: 0.1376641,
             tokens: [
                 {
-                    priceUsd: 29882.430437269177,
-                    reserve: 2814.7049699641098,
+                    priceUsd: 29870.169350689437,
+                    reserve: 2814.829549435733,
                     weight: 0.5,
                     token: {
                         contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
@@ -8403,8 +8439,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 389.46102720992803,
-                    reserve: 215965.70539791413,
+                    priceUsd: 389.33563729732356,
+                    reserve: 215956.17580406938,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -8416,7 +8452,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x285b4ee2cbb66c76532ed2a5479f3440e066622bb85a02d92cf2369fbbfc188a',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10791686,
@@ -8452,7 +8488,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x2ca0cc79f2c446481d5a5f87abf34cd6a060157212ca91289b7e60f8e6f62611',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10791697,
@@ -8488,7 +8524,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6fb127cbdde7ba8d53cab15224431f547faa43378e0e74c3335da706713c47ce',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10791710,
@@ -8524,7 +8560,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x3a14193968137447f8a98d6b0f945b54f65afea352691b88a49063287337c632',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10791754,
@@ -8560,7 +8596,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x254108e82c474d14c27aeca0994e4902f268966ab24d7bf8d5ca78de3fe9dd41',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10810047,
@@ -8596,13 +8632,13 @@ const data: SnapStructure = {
             ],
             txHash: '0x70795dd07e2ec8d21568842ce6b4bb8fbba95fbceab0d23d419f5d65fe6e6943',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10810050,
             ethPrice: 351.9808435134552,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 401.19299120969106,
             liquidityTokenTotalSupply: 16877.5244620387,
             timestamp: 1599422340,
             txCostEth: 0.03186315,
@@ -8632,7 +8668,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb42a980b7df7219c2eb784c22a754310de29f12230d9130dcc2e1dbf4ed70c16',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10810992,
@@ -8668,7 +8704,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x2b106e8ba2b9d9f8a319ecaabd91847fc44fddb3623ca1da79cb909af6922194',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10811026,
@@ -8704,20 +8740,20 @@ const data: SnapStructure = {
             ],
             txHash: '0x63f875c1e619ed8e1f66f7c69e6c0beec24da9d70d8adad70f21cc57158137fb',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10811059,
             ethPrice: 349.37920223625855,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 200.59649560484553,
             liquidityTokenTotalSupply: 17013.464282310582,
             timestamp: 1599435198,
             txCostEth: 0.0212421,
             tokens: [
                 {
-                    priceUsd: 23415.248684128324,
-                    reserve: 3128.9506089266592,
+                    priceUsd: 23388.31540695859,
+                    reserve: 3131.077608926659,
                     weight: 0.5,
                     token: {
                         contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
@@ -8727,8 +8763,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 349.4126343832057,
-                    reserve: 209680.90280336447,
+                    priceUsd: 349.48467467994993,
+                    reserve: 209538.8896474656,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -8740,7 +8776,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x148642862953157b13974309de451921d232936f22cacb0813d56f83f7752c6b',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10824425,
@@ -8776,7 +8812,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8c72b1958f367c70319c2045ac0e2e3e1937374984425513f0624afaab1c982a',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10827760,
@@ -8812,7 +8848,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x42e59cd8d1115166d9bd6015a52475425387fb40d32ce62edfc8155ba5b4754f',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10827762,
@@ -8848,7 +8884,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4d62e818c3d07fb29cb8b760b9a659bb91856fe378f968176798056c2d33fdd9',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10835067,
@@ -8884,7 +8920,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd9048c770552e9f420772c9ed5b4abd1c1264582d5a9954baf7ec0d274b196d3',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10835081,
@@ -8920,7 +8956,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd5a4285b169d0b949d7c3bd3cbee7e90b80c4fee46e2af3a77179ea3245d54ba',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10836265,
@@ -8956,7 +8992,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd59f437f16269ab56d4d03dc095907db7dddd953ea74b8ae9f3102e6b9ae991f',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10836340,
@@ -8992,7 +9028,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4d1fdb4427a559883e1a0b45066cf5ae32bfbc3d10d1d492fcca8710c6f2e483',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10836351,
@@ -9028,7 +9064,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xad393a122a14200c703f6a2e1efd3099e89cb4dcd4c28f899a0b1dfc9342365b',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x43ae24960e5534731fc831386c07755a2dc33d47': [
@@ -9066,20 +9102,20 @@ const data: SnapStructure = {
             ],
             txHash: '0xdc856a4696fe9de19d4dbac3048fdec43b2c3746f28221c3b6f3ce4f38b4b2f3',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10749989,
             ethPrice: 393.6595917289198,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 6873.442879601168,
             liquidityTokenTotalSupply: 83289.94088097013,
             timestamp: 1598628438,
             txCostEth: 0.0225,
             tokens: [
                 {
-                    priceUsd: 6.856413452467067,
-                    reserve: 742231.1047453855,
+                    priceUsd: 6.853482676682221,
+                    reserve: 742578.9191967312,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f',
@@ -9089,8 +9125,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 393.45964494435947,
-                    reserve: 12934.092217094878,
+                    priceUsd: 393.6595917289198,
+                    reserve: 12928.052220022477,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -9102,7 +9138,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4317d1c75e71d199887ba6926c92c48feacdaca3760f2f094801eda92fc83347',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10749991,
@@ -9138,7 +9174,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x123e6e644c71a32ce3c2fc7129321fc652c19fe3e28838bd6ffd4aad77f4e610',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10749996,
@@ -9174,7 +9210,43 @@ const data: SnapStructure = {
             ],
             txHash: '0xa6ac5f2b46ce0fa17b3e9eb57f80f6d29f7a2fb2a8f828f84ab899eb42830722',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
+        },
+        {
+            block: 10749996,
+            ethPrice: 393.4474755825525,
+            exchange: Exchange.UNI_V2,
+            liquidityTokenBalance: 3400,
+            liquidityTokenTotalSupply: 87345.42146974159,
+            timestamp: 1598628598,
+            txCostEth: 0.0225,
+            tokens: [
+                {
+                    priceUsd: 6.851716832764743,
+                    reserve: 778735.9191967312,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f',
+                        name: 'Synthetix Network Token',
+                        platform: 'ethereum',
+                        symbol: 'SNX',
+                    },
+                },
+                {
+                    priceUsd: 393.5581628017006,
+                    reserve: 13557.53357484601,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xa6ac5f2b46ce0fa17b3e9eb57f80f6d29f7a2fb2a8f828f84ab899eb42830722',
+            yieldReward: null,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10750002,
@@ -9210,7 +9282,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x2c436f59fd64693c6132ee7cbe5bbb89623cf2c5a1ebfe9725a056b7dfe5c829',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10750433,
@@ -9246,7 +9318,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xbeb6838831a793c2299e5770456af9119ccaff2c9e11be5b7bc6d5816eb8f70f',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10751084,
@@ -9282,13 +9354,13 @@ const data: SnapStructure = {
             ],
             txHash: '0xb20d59b7d09ec5f8b1530d6976fd902824e408fced18d93b2fad1f26ad5f954c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10751096,
             ethPrice: 394.7837535454117,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 6873.442879601168,
             liquidityTokenTotalSupply: 148436.302050964,
             timestamp: 1598643007,
             txCostEth: 0.03186585,
@@ -9318,7 +9390,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xace4e45235742fb2dba6359ff89aa79f798cdd9e8387ddc96e9b7c6f52d0236c',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10751119,
@@ -9354,13 +9426,13 @@ const data: SnapStructure = {
             ],
             txHash: '0x14ea7434f73c80aff056a934641c2d52ec63f13f66187cb2e1b402796e30c886',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10751346,
             ethPrice: 394.9036400966094,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 6873.442879601168,
             liquidityTokenTotalSupply: 150398.90621389623,
             timestamp: 1598646633,
             txCostEth: 0.03186585,
@@ -9390,7 +9462,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x705b39c574d2c9122f1e7fc6fc6c1b1ed36db58aad5c7d7170c3c7f534a79ed2',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10751569,
@@ -9426,7 +9498,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x31df7ecaef3106bce4044fdcd197d7233193a5b1cc8c63265da4d6dbdcc81769',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10751584,
@@ -9462,20 +9534,20 @@ const data: SnapStructure = {
             ],
             txHash: '0x8079474115df419b1bcba35af894cf22d8a7aae2ed010752e655b6efd3f630c6',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10751658,
             ethPrice: 394.02013556142526,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 6873.442879601168,
             liquidityTokenTotalSupply: 154328.1141693498,
             timestamp: 1598650822,
             txCostEth: 0.0212439,
             tokens: [
                 {
-                    priceUsd: 6.763048018420457,
-                    reserve: 1386489.2552678958,
+                    priceUsd: 6.761271555773973,
+                    reserve: 1386508.1333437958,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f',
@@ -9485,8 +9557,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 394.21159726648017,
-                    reserve: 23786.447368422243,
+                    priceUsd: 394.1187650780912,
+                    reserve: 23786.124474355303,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -9498,7 +9570,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7b06c089625bf95de79fcf48ef8a49d9bd4e3f0fbf29c5c14b415013e7959246',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10752047,
@@ -9534,13 +9606,13 @@ const data: SnapStructure = {
             ],
             txHash: '0x3fc6424cc477e645b57312d9fcfde8368c81f3b3e2352b553204f7d295bfeb25',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10752271,
             ethPrice: 393.680661539869,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 6873.442879601168,
             liquidityTokenTotalSupply: 195596.27639486192,
             timestamp: 1598658903,
             txCostEth: 0.02549268,
@@ -9570,7 +9642,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8eb386a9bf4120bd23d866ca50e7f7b3604d4b8c51fa539876d1d88972b36125',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10752439,
@@ -9606,7 +9678,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x9bf53030a16180d78df5add3a26870d52d58bdbd6fa50e38652fef7ec46ed01d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10752451,
@@ -9642,7 +9714,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xba9047ab909b6b250f6fd852802fded335781a0d25607f013d97b70ff2657d19',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10769091,
@@ -9678,13 +9750,13 @@ const data: SnapStructure = {
             ],
             txHash: '0xbe505bc1177ff615313f9450c6e903697f5a971ee768678cdf8809e63cb1b990',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10769107,
             ethPrice: 434.84801069093254,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 6634.242366132375,
             liquidityTokenTotalSupply: 464747.69312664995,
             timestamp: 1598882494,
             txCostEth: 0.07435365,
@@ -9714,7 +9786,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd330af1fc93d56c9618e7c8a229ab7cfba5a77b70e20c89121d41ff65f8bdf24',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10775087,
@@ -9750,7 +9822,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7e4774d1e119353b24b2be58f511fd5bb0ef94d6b8f705da1413107fce763a09',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10778571,
@@ -9786,7 +9858,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd2b0ea6c20d2263ea7f5253b5d853d3af9817b8b53b9580b436b982217c489fd',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10782760,
@@ -9822,7 +9894,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x698ab9280a8a9803b783e75398c872a92e93e7007f8263d31f0b7588035ea090',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10785554,
@@ -9858,7 +9930,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x76cc9eec24b221964f712f28189b0ee36c44747207420536282686f479ffb3b5',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10787953,
@@ -9894,7 +9966,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x914fe49ba0447807c71e22242a288bb9581b24f2fd9fe762c4be37acfbc2b069',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10788658,
@@ -9930,7 +10002,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8b96fa180bcb2d85abef1a12fa59ebaac46baf841004a7250cbd8cb8baa34eeb',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10790427,
@@ -9966,7 +10038,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x2c52ae0d037d56a9dbc1083ffb896cfaeca6b1dd1370f12bd6cebb4efe61add3',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10790437,
@@ -10002,7 +10074,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xbcde9a829ec4b0c127e333c95d07394704e8f989592d332fc47650b950aa507a',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x6b4a0bd2eee3ca06652f758844937daf91ea8422': [
@@ -10040,7 +10112,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x537a93a6b5ab6157c1583bacc35f917184f9dfe81d64ba79e6e00ad51f63185a',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10789374,
@@ -10076,7 +10148,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x629db605feabc3422f6233412b43f018580b1295a6af15cafb1dd0fb41ff7ba0',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10790884,
@@ -10112,7 +10184,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x3d8ddb3700a8c79ae38f3b4ffa86416d9c90ccd431c2a502ce4bbb7cd1c24002',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10790896,
@@ -10148,7 +10220,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xa71bd515c6404dae5ab65f30b7ab2ecf0bb5de87ab5acc77e5f0577e14508107',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10790924,
@@ -10184,7 +10256,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x9a7f91973fdd13cdf7809d4e86a2427b1da2e4003769ba782709c5be080532e0',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10790931,
@@ -10220,7 +10292,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xc6efb7b634435e48bf1c03c5aad72d83962dcc32a9b2b2c84a8d6a480db18ead',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10791189,
@@ -10256,7 +10328,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8fe23e6797156560b7816e1490ea22797ffd542819196113b083dbd3c8a149e5',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10791194,
@@ -10292,7 +10364,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x51716f6275fcb9c1170bcdf243b08ff24da8fb80b0f8ab4d691c6b98b95e226d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10791199,
@@ -10328,7 +10400,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xbf0da8d68da2621b3de6e57252592bd0833e0d5fc00f9c6cdaebf455ace735de',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10791202,
@@ -10364,7 +10436,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x79a4bae4b0e311f10c379f4c10f85c38a701b1e7239fe445207d5935fb0e5823',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
     ],
     '0x8927616110cf23c4e87dc98614eb9fbaae95216c': [
@@ -10402,7 +10474,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4ea1c8842497c0c49d3a9e7d46579a40ff08eadcb5d175e283353388f61fa4ab',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10844843,
@@ -10438,7 +10510,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xc76a57aafebd3cab10140663e2ed4a43a65e6037c60a56d559e71d1092e8cb26',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10844905,
@@ -10474,7 +10546,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd2ebe088bd8791d98a03d82877b947418ba661f3da4449a3f9971a5ceabc40db',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10844907,
@@ -10510,7 +10582,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xfe0bef19bea9ea021ebdc29a80f59fecfa090a7af5ce8e0c1d4c11b97066a2e8',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10849553,
@@ -10546,7 +10618,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb047adb6cc104add0b58cec30b1deb56da7888c2825eb8dcb5991a969b31cf51',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10849567,
@@ -10582,7 +10654,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x2d32c490c490c57bef630f662de4d2bb3c9afef076a56223340cc618bf42b980',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10849574,
@@ -10618,7 +10690,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x13a3d20383bfdb0859f1c0aa12e46b29a4558bbaa3521c3d00dec3a029b74164',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10850004,
@@ -10654,7 +10726,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x857e1631eabb2b5742dc0f1f8d16d26031013fc2fd8efd7dc40a1037082c2f2b',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10850007,
@@ -10690,7 +10762,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb4cdfd369977c5b6cfb2eec6756e569001a7083d53c42f6a973622f7c2012489',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10850026,
@@ -10726,7 +10798,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xe8b58cb57298d5202ecdcb92363182b955066db6f5969ae561d4c0cadfbe81d8',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10850036,
@@ -10762,7 +10834,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xbd9e9b40b4af837d9bc69a204e7f69a2399936c658ac9ea0ca03e1851fe7813c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10850960,
@@ -10798,7 +10870,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8179960e107f80a2440943ad9792df07e67ddb3df72831aa5473cf418dd3e0fe',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10850965,
@@ -10834,7 +10906,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xe38874740e576ac73d1b7f75302eecf53c6777239de7e03f792f2b153f2227c5',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974': [
@@ -10872,13 +10944,13 @@ const data: SnapStructure = {
             ],
             txHash: '0xdfe5ffe3c012c16069bd7d07a9c0c0dbcb446690ee0d31e00259cd3aa61e67aa',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10749901,
             ethPrice: 389.7481348585378,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 2477.6754590448486,
             liquidityTokenTotalSupply: 71153.32747838777,
             timestamp: 1598627247,
             txCostEth: 0.010230165,
@@ -10908,7 +10980,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x51ba0b097813f33638b4225476f99ed01020dda57edfe57d83b229de7519b14f',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10749950,
@@ -10944,7 +11016,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6783a07ccdc40b15595a84db7366dd090cb96c989edb2d631807ab2a71a4c207',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10752445,
@@ -10980,7 +11052,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xd33cc1c227c470fe937370a3a9a7aaf1d8918b14efa77743de2554e31cbe0cd9',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10769105,
@@ -11016,13 +11088,13 @@ const data: SnapStructure = {
             ],
             txHash: '0xd3f2c564c23ae6eb3d4f8b71aa815d579b2a7d5de881e67ab9e15b073000926f',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10769108,
             ethPrice: 434.82793830536167,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 2473.514600829606,
             liquidityTokenTotalSupply: 345163.95709652366,
             timestamp: 1598882510,
             txCostEth: 0.07434735,
@@ -11052,7 +11124,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x707df13c0fec836a4e00d000c203531cae13fcec04512da5b294071ab71d7a79',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10775304,
@@ -11088,7 +11160,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xff521fbda365fe9552f69e8474c2a3a6294355ea55a660effe8433d36ced72e6',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10784413,
@@ -11124,7 +11196,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xccc1c25d042e6538e4da71d04a2d19448093f83ab7efb36ca6742c107d214f57',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xab3f9bf1d81ddb224a2014e98b238638824bcf20': [
@@ -11162,13 +11234,13 @@ const data: SnapStructure = {
             ],
             txHash: '0x51d6750e36e9a62b3670cd4015e2dd43b0843d79ee66b92bb7fb8066f095c67c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10770361,
             ethPrice: 435.9639816096769,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 3745.028934196674,
             liquidityTokenTotalSupply: 1427595.3176929534,
             timestamp: 1598898895,
             txCostEth: 0.0637263,
@@ -11198,7 +11270,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6fabe5baee93d9a7597563aede9c85de515d7570eacf002ca7d2bbe83a073496',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10778578,
@@ -11234,7 +11306,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xcc818e641669106a53494cb42f0af0583bc94534a63ce560acbb949197a8c247',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10782762,
@@ -11270,7 +11342,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4ccad1108c6ee0619546ffd5b9b887378bd33c345d72268ade634529ec4e009b',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10787959,
@@ -11306,7 +11378,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x5eca9942a3f059bc332717052893ad965478803c3c2ded1e1ba6c5fa5774805b',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10790419,
@@ -11342,7 +11414,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x30c1398ff4696cff0b7037d3b4bb7a0b6ed459758ef4278373f1b3e914d15537',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10790441,
@@ -11378,7 +11450,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x42fa66e14f07886b7308b720a74102faf1171ffa8077435d913095c843b94525',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xb9b752f7f4a4680eeb327ffe728f46666763a796': [
@@ -11416,7 +11488,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x2cbcf74b264a18b9fd5745b7f0ca856d3fe23b498a632fd070f61d6a4cadd7c8',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10487298,
@@ -11452,7 +11524,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xc729f1f6092d199a22bea8e22609c6063030b01ac8026687e6dde07d1142db13',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xbb2b8038a1640196fbe3e38816f3e67cba72d940': [
@@ -11499,52 +11571,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
-        },
-        {
-            block: 10890557,
-            ethPrice: 380.6111422207949,
-            exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
-            liquidityTokenTotalSupply: 0.8911151557410104,
-            timestamp: 1600490711,
-            txCostEth: 0.02434,
-            tokens: [
-                {
-                    priceUsd: 10873.580481343526,
-                    reserve: 18072.38935071,
-                    weight: 0.5,
-                    token: {
-                        contractAddress: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
-                        name: 'Wrapped BTC',
-                        platform: 'ethereum',
-                        symbol: 'WBTC',
-                    },
-                },
-                {
-                    priceUsd: 380.6576046279613,
-                    reserve: 516242.3598162002,
-                    weight: 0.5,
-                    token: {
-                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-                        name: 'Wrapped Ether',
-                        platform: 'ethereum',
-                        symbol: 'WETH',
-                    },
-                },
-            ],
-            txHash: '0x431fad599f49582ee18d3801bcb22914ba8818d0dc7350af34db42ff8cb1b5c6',
-            yieldReward: {
-                amount: 0,
-                price: 6.618440542978457,
-                token: {
-                    symbol: 'UNI',
-                    name: 'Uniswap',
-                    contractAddress: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
-                    platform: 'ethereum',
-                },
-            },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10890557,
@@ -11580,7 +11607,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x431fad599f49582ee18d3801bcb22914ba8818d0dc7350af34db42ff8cb1b5c6',
             yieldReward: {
-                amount: 4943.4918645784965,
+                amount: 405.67863261783907,
                 price: 6.618440542978457,
                 token: {
                     symbol: 'UNI',
@@ -11589,52 +11616,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: true,
-        },
-        {
-            block: 11070849,
-            ethPrice: 366.17804563012953,
-            exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
-            liquidityTokenTotalSupply: 1.5978979111957936,
-            timestamp: 1602902822,
-            txCostEth: 0.021,
-            tokens: [
-                {
-                    priceUsd: 11316.71090071595,
-                    reserve: 31230.41746087,
-                    weight: 0.5,
-                    token: {
-                        contractAddress: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
-                        name: 'Wrapped BTC',
-                        platform: 'ethereum',
-                        symbol: 'WBTC',
-                    },
-                },
-                {
-                    priceUsd: 366.1713378608053,
-                    reserve: 965191.8901628694,
-                    weight: 0.5,
-                    token: {
-                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-                        name: 'Wrapped Ether',
-                        platform: 'ethereum',
-                        symbol: 'WETH',
-                    },
-                },
-            ],
-            txHash: '0xb02a8a0bbebe856f810ed040fa9e00e725af0d4d506d1f5fbd8afa91b9a2ee32',
-            yieldReward: {
-                amount: 0,
-                price: 3.0806604819693306,
-                token: {
-                    symbol: 'UNI',
-                    name: 'Uniswap',
-                    contractAddress: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
-                    platform: 'ethereum',
-                },
-            },
-            staked: true,
+            stakingService: StakingService.UNI_V2,
         },
         {
             block: 11070849,
@@ -11679,7 +11661,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
         {
             block: 11070863,
@@ -11724,7 +11706,7 @@ const data: SnapStructure = {
                     platform: 'ethereum',
                 },
             },
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xce84867c3c02b05dc570d0135103d3fb9cc19433': [
@@ -11762,20 +11744,20 @@ const data: SnapStructure = {
             ],
             txHash: '0x21064b15d2a7fe37ef0482eca6850cd772000130673100c9468bb80bae43a2cb',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10750461,
             ethPrice: 397.525216741223,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
-            liquidityTokenTotalSupply: 18471.407545988455,
+            liquidityTokenBalance: 285.96819994333316,
+            liquidityTokenTotalSupply: 18579.93762422675,
             timestamp: 1598634851,
             txCostEth: 0.0424842,
             tokens: [
                 {
-                    priceUsd: 2.0782367409258105,
-                    reserve: 258629.46934265917,
+                    priceUsd: 2.077230554713447,
+                    reserve: 260249.7325582358,
                     weight: 0.5,
                     token: {
                         contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
@@ -11785,8 +11767,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 397.4106114634615,
-                    reserve: 1352.488458963753,
+                    priceUsd: 397.525216741223,
+                    reserve: 1359.9104498517484,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -11798,7 +11780,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb9a4ce97ce9ef2427e38372ed79a6e4c6937dc06f0ba50cc261fcf0ed1569864',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10751086,
@@ -11834,7 +11816,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x09b6ee12d30147e9205ca5686701a067afc035dd380d70c7cc1fd64f9155f77b',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10751090,
@@ -11870,7 +11852,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xce0bd1828b19e2eac6e1c52871c2fb4a79b0ab11434d85f1dd166dc0458e4539',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10751184,
@@ -11906,20 +11888,20 @@ const data: SnapStructure = {
             ],
             txHash: '0x7a16dc5edcf1f0136ee66af91d20ac74fbe35bcf5e2940bcb21e61bddffe08f3',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10751187,
             ethPrice: 397.3444085402746,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
-            liquidityTokenTotalSupply: 55883.230237944896,
+            liquidityTokenBalance: 2998.9343370454894,
+            liquidityTokenTotalSupply: 56146.92362363538,
             timestamp: 1598644332,
             txCostEth: 0.03,
             tokens: [
                 {
-                    priceUsd: 3.59412085563955,
-                    reserve: 596828.9357054889,
+                    priceUsd: 3.6327652742789867,
+                    reserve: 596543.9430932042,
                     weight: 0.5,
                     token: {
                         contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
@@ -11929,8 +11911,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 397.22185116350136,
-                    reserve: 5400.1946740470585,
+                    priceUsd: 397.3444085402746,
+                    reserve: 5453.969086948396,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -11942,7 +11924,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xad22c129c9bb1e1e462c90c43ee8347a9c423aedc7137459f7a0f2d6fe814f24',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10751368,
@@ -11978,7 +11960,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xc53b495a0f9c8e760e39c171d6ae12f1e2ce7978acac2ff58e661ed59e59e577',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10751387,
@@ -12014,20 +11996,20 @@ const data: SnapStructure = {
             ],
             txHash: '0x84ac668c4ad521a1133126cfdf27777bba8347e3071d23ea549933de863b8a85',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10751390,
             ethPrice: 395.22097849045224,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 4070.5636849433704,
             liquidityTokenTotalSupply: 77325.94839304045,
             timestamp: 1598647245,
             txCostEth: 0.03287445,
             tokens: [
                 {
-                    priceUsd: 5.027737718238731,
-                    reserve: 697079.2764079999,
+                    priceUsd: 5.029646971361299,
+                    reserve: 697059.5029355625,
                     weight: 0.5,
                     token: {
                         contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
@@ -12037,8 +12019,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 395.093400655272,
-                    reserve: 8870.641131404322,
+                    priceUsd: 395.22097849045224,
+                    reserve: 8870.893521870985,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -12050,7 +12032,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x93da326edfd924ae719c1c352f743cdfcd1377e159e62cbf519d6685118240f0',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10751573,
@@ -12086,7 +12068,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xabcab5728e333013ab2569bf34e6d16b6a8d3fd164d115661f469168066047b3',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10752050,
@@ -12122,7 +12104,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x1a53ed5a02871a52598a070678254b3d96e045dfb13e12005ae4825d2188e0ad',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10752391,
@@ -12158,7 +12140,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7cef3d7dd2fd2e852296e5be44abea5590548c0a239f740af382c1bf69082c9d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10755799,
@@ -12194,7 +12176,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xdc854cef961a8889382d5f3f8d706d33486b46d878e6ebde7307102122512f9c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10756917,
@@ -12230,7 +12212,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8fdf40014b0ed294d4c6eca93a77fca64a6095081133c91db1b34f609139eb1d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10756949,
@@ -12266,7 +12248,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xf0382d8025f2729f6c679647478a265b1c83104fbfb0417cc1159e23aec17f93',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10758709,
@@ -12302,13 +12284,13 @@ const data: SnapStructure = {
             ],
             txHash: '0xd53a87cf8322c72071fe41016e85198de3681b657369be401f119f182c7643a6',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10758722,
             ethPrice: 401.1049044391562,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 6129.894125790269,
             liquidityTokenTotalSupply: 268675.3307931808,
             timestamp: 1598744608,
             txCostEth: 0.03287445,
@@ -12338,7 +12320,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xf331c1876c6b78bb1c094fe8fce489caca0b9b0a751172279d75b0376f9bf847',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10759642,
@@ -12374,7 +12356,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x913b05d62d08aa6c180cd66c7e18c44bcccc483a713f9b8a327dc6226e5afbdb',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10762238,
@@ -12410,7 +12392,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8b8dfccbae2aa4c7300d5518561c08d8818a5ef6e6e33febbc490fb7d4b88603',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10762547,
@@ -12446,7 +12428,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6df79c91c67406b3746f6f1dfd84bf1bfdb33f7f0784342f57f0f0ec51c3deb4',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10762854,
@@ -12482,20 +12464,20 @@ const data: SnapStructure = {
             ],
             txHash: '0x7bfbb2b33b16021ae1a33165c1008775bb0b8bddbff5f82b27ec66acd4d04952',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10762858,
             ethPrice: 413.9745300742545,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 14676.33221233666,
             liquidityTokenTotalSupply: 496024.86676008796,
             timestamp: 1598799487,
             txCostEth: 0.054283956,
             tokens: [
                 {
-                    priceUsd: 2.470074707496338,
-                    reserve: 6610984.012079573,
+                    priceUsd: 2.470534482129903,
+                    reserve: 6610431.494031435,
                     weight: 0.5,
                     token: {
                         contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
@@ -12505,8 +12487,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 413.9666720355307,
-                    reserve: 39446.712750099956,
+                    priceUsd: 413.9744176841149,
+                    reserve: 39450.01973581813,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -12518,7 +12500,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x47f22989986ab5e28e1feea6a222264594780ecacff84ff7d8206e7435690278',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10763739,
@@ -12554,7 +12536,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x51dcf32f75d1b3aa0352224b983788ee3b46a9e2c1610028784ab77160c3e388',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10763756,
@@ -12590,13 +12572,13 @@ const data: SnapStructure = {
             ],
             txHash: '0xf6dd658d62921c7edbd16ed8ec23fba049f67e4c3bac0a2259a50c42dfe78444',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10763762,
             ethPrice: 423.71902718569896,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 15083.465144361307,
             liquidityTokenTotalSupply: 564556.6117957446,
             timestamp: 1598811272,
             txCostEth: 0.0393326,
@@ -12626,7 +12608,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xedd7fce8118322a6481301bf94d3c358273e5b13a2d0707fb02779aabb24028e',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10765777,
@@ -12662,7 +12644,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x4c9cd5b1163aee00c5eba3b858e034b0bdacb5c5180fa66b260e135e4d5472c1',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10768888,
@@ -12698,7 +12680,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x8ce2c12ef54e95fdecb64ddf35c66812b27dae86102247478a8c8ef779c06a93',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10768913,
@@ -12734,7 +12716,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x805c05ddef11cfd480603e1d5a8e424ff29829d94a456314f717be04a41278b2',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10770885,
@@ -12770,20 +12752,20 @@ const data: SnapStructure = {
             ],
             txHash: '0xe1e721bb51d4479b53541c74b12f78a89d7b1ba51f060a363f586e7c3cfc8d18',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10770888,
             ethPrice: 433.08533185156256,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
-            liquidityTokenTotalSupply: 989845.3673437424,
+            liquidityTokenBalance: 9147.091076493614,
+            liquidityTokenTotalSupply: 989861.2869903848,
             timestamp: 1598905563,
             txCostEth: 0.07435365,
             tokens: [
                 {
-                    priceUsd: 5.84262475737924,
-                    reserve: 8811466.832106635,
+                    priceUsd: 5.836497505683304,
+                    reserve: 8815965.152294986,
                     weight: 0.5,
                     token: {
                         contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
@@ -12793,8 +12775,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 433.1122925424505,
-                    reserve: 118865.46548905988,
+                    priceUsd: 433.08533185156256,
+                    reserve: 118808.82319791029,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -12806,7 +12788,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x181e2f3ca6dcee72969d85733095557bc8a5229163948f78829eac800e854f9b',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10771508,
@@ -12842,7 +12824,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x99b632d05ce44f5604ba2de635ed0b573fc071a931b6cc64038dc9f2e27acdeb',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10771515,
@@ -12878,7 +12860,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7e581af4098b1342fbaf2cf58fb84ea01a62d51493dd0eed9d31195a52d51eed',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10786051,
@@ -12914,13 +12896,13 @@ const data: SnapStructure = {
             ],
             txHash: '0xb61254ad4518461a709758060ebf0e36025bc039be0c338789e1800763ade90b',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10786056,
             ethPrice: 442.9957543624703,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 13748.263913633346,
             liquidityTokenTotalSupply: 1534121.3698334044,
             timestamp: 1599105277,
             txCostEth: 0.09559755,
@@ -12950,7 +12932,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x3ea2c5afd8cfb683d21d9c4a930d7f534933b9054433455b1159fca9887ee015',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10787942,
@@ -12986,7 +12968,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x0343f6b883586ee1c578245a305bc03f3db4e329346ff75906eacaaac030cf0c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10787949,
@@ -13022,7 +13004,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xf5c9a4819b2f1f02904c64cbf352e8f2a95c104227534a10cba42979019c6e1d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10791759,
@@ -13058,20 +13040,20 @@ const data: SnapStructure = {
             ],
             txHash: '0x016e0e50131c12070362db3302a6183df846a97f6d2b54ef2049d5a7721139b8',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10791761,
             ethPrice: 387.7325335250915,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 26402.03005934472,
             liquidityTokenTotalSupply: 1780415.9980900972,
             timestamp: 1599182025,
             txCostEth: 0.15,
             tokens: [
                 {
-                    priceUsd: 5.02889878326445,
-                    reserve: 16322919.49266939,
+                    priceUsd: 5.027488307128995,
+                    reserve: 16322682.985030355,
                     weight: 0.5,
                     token: {
                         contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
@@ -13081,8 +13063,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 387.852569240108,
-                    reserve: 211643.0739052072,
+                    priceUsd: 387.7325335250915,
+                    reserve: 211646.14973662762,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -13094,7 +13076,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xb1779f10ff4e97567e74655c98c82696d201b31f9b3dd76ef5bf525a696125a8',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10795383,
@@ -13130,7 +13112,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x41adb469c894d01cc2b2e5ccacc917ff57bddd6df6053979451a442f65265611',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10799083,
@@ -13166,7 +13148,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x9209599fc3263dc5e395860af9238f4450b64bf5a9931589687f731e4e05e5c0',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10801804,
@@ -13202,7 +13184,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x86d015320ea1b077d4a38bafa64239382c3ab581ce3a10c8e9490e4d5665d078',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10801815,
@@ -13238,7 +13220,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x174b51cb0506d7331cad2d32865f47f786b60cd406bf688f3f3db95c727c6a6e',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10807834,
@@ -13274,20 +13256,20 @@ const data: SnapStructure = {
             ],
             txHash: '0xdd8bbf3e5263e887742e5579ea2d41afabda0f970669fef345d8392b0f39e91c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10807836,
             ethPrice: 352.4027258931322,
             exchange: Exchange.UNI_V2,
-            liquidityTokenBalance: 0,
+            liquidityTokenBalance: 28963.591926218847,
             liquidityTokenTotalSupply: 1378949.3358407924,
             timestamp: 1599393550,
             txCostEth: 0.0424878,
             tokens: [
                 {
-                    priceUsd: 2.9707613257579726,
-                    reserve: 15798118.389380192,
+                    priceUsd: 2.9686762495620056,
+                    reserve: 15802916.320302851,
                     weight: 0.5,
                     token: {
                         contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
@@ -13297,8 +13279,8 @@ const data: SnapStructure = {
                     },
                 },
                 {
-                    priceUsd: 352.4413284131271,
-                    reserve: 133163.8356438803,
+                    priceUsd: 352.40741330493637,
+                    reserve: 133123.59667446796,
                     weight: 0.5,
                     token: {
                         contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -13310,7 +13292,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x7c0db26fc4f5666aa961102a436605aace77dca128169d0b0c83d625f5e0cbb3',
             yieldReward: null,
-            staked: false,
+            stakingService: StakingService.SUSHI,
         },
         {
             block: 10808392,
@@ -13346,7 +13328,7 @@ const data: SnapStructure = {
             ],
             txHash: '0xe46fe8014ab12f519fe0163bfb3aec9b86c3628e495aa14f8fde1e8094fb7f0d',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10808398,
@@ -13382,7 +13364,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x423a092a20d1104ea77900bec6e99f29af2fa37ae83bb46e9e4c8cfa0b8189b0',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xe0cc5afc0ff2c76183416fb8d1a29f6799fb2cdf': [
@@ -13420,7 +13402,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x75fb3f45913320597766de7673e6fddfdd6a0d96fcb43787ca964906f9439e3c',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 10530871,
@@ -13456,7 +13438,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x6d91aecbf2a0520aad6d9fadea2401d9bf1836f596c14f665d28c0ee3cd85905',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
     ],
     '0xf043c39a106db6b58c76995f30ba35fd211c3b76': [
@@ -13494,7 +13476,7 @@ const data: SnapStructure = {
             ],
             txHash: '0x52876e946367897229fd21c9493e7dd38af37390c144e3be23bf29c1f90d21eb',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
         },
         {
             block: 11266216,
@@ -13530,7 +13512,857 @@ const data: SnapStructure = {
             ],
             txHash: '0x7fd1d7b771080ab11e397d33b815bae90ebfeb3f20124d8fb490139ff6b96bd5',
             yieldReward: null,
-            staked: false,
+            stakingService: null,
+        },
+    ],
+    '0x088ee5007c98a9677165d78dd2109ae4a3d04d0c': [
+        {
+            block: 10829376,
+            ethPrice: 356.6146864101256,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 242.31162072635877,
+            liquidityTokenTotalSupply: 8630.436879273975,
+            timestamp: 1599679028,
+            txCostEth: 0.03418395,
+            tokens: [
+                {
+                    priceUsd: 27365.128192424152,
+                    reserve: 1485.2865701951944,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 356.6146864101256,
+                    reserve: 113974.7154135249,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xe0964958c8aa09e612419477e81e39d27d9ef3b82f2b4b95401cb7c69e96dd14',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10829378,
+            ethPrice: 356.7447166654243,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 8645.581355569373,
+            timestamp: 1599679060,
+            txCostEth: 0.03187725,
+            tokens: [
+                {
+                    priceUsd: 27365.128192424152,
+                    reserve: 1487.892914180887,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 356.6146864101256,
+                    reserve: 114174.7154135249,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xd2055aa22b82cda99af9be37acc718378021ec2bbc8ae44ca8200c5483daaf21',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10829378,
+            ethPrice: 356.7447166654243,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 242.31162072635877,
+            liquidityTokenTotalSupply: 8645.581355569373,
+            timestamp: 1599679060,
+            txCostEth: 0.03187725,
+            tokens: [
+                {
+                    priceUsd: 27365.128192424152,
+                    reserve: 1487.892914180887,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 356.6146864101256,
+                    reserve: 114174.7154135249,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xd2055aa22b82cda99af9be37acc718378021ec2bbc8ae44ca8200c5483daaf21',
+            yieldReward: {
+                amount: 0,
+                price: 2.9931587078067596,
+                token: {
+                    symbol: 'SUSHI',
+                    name: 'SushiToken',
+                    contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                    platform: 'ethereum',
+                },
+            },
+            stakingService: null,
+        },
+        {
+            block: 10829378,
+            ethPrice: 356.7447166654243,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 242.31162072635877,
+            liquidityTokenTotalSupply: 8645.581355569373,
+            timestamp: 1599679060,
+            txCostEth: 0.03187725,
+            tokens: [
+                {
+                    priceUsd: 27365.128192424152,
+                    reserve: 1487.892914180887,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 356.6146864101256,
+                    reserve: 114174.7154135249,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xd2055aa22b82cda99af9be37acc718378021ec2bbc8ae44ca8200c5483daaf21',
+            yieldReward: {
+                amount: 10290.045865539534,
+                price: 2.9931587078067596,
+                token: {
+                    symbol: 'SUSHI',
+                    name: 'SushiToken',
+                    contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                    platform: 'ethereum',
+                },
+            },
+            stakingService: StakingService.SUSHI,
+        },
+        {
+            block: 10835002,
+            ethPrice: 366.8373709543722,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 11007.734752338023,
+            timestamp: 1599754117,
+            txCostEth: 0.0577512,
+            tokens: [
+                {
+                    priceUsd: 30801.365472308546,
+                    reserve: 1809.2618176395522,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 365.88300149865495,
+                    reserve: 152310.25833927398,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x5976dfbbc1ce771926ec8eb6c0cea89d5063c1e6c7ecfd13a744b1f7f705bf77',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10835044,
+            ethPrice: 365.40736104133265,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 202.36232681536833,
+            liquidityTokenTotalSupply: 11202.20864379234,
+            timestamp: 1599754712,
+            txCostEth: 0.07675872,
+            tokens: [
+                {
+                    priceUsd: 30789.77788947538,
+                    reserve: 1807.978259664388,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 365.75037113349094,
+                    reserve: 152200.11635681815,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xa0628808739796f38787c062264f0a9e47206c6b387f96dd24f26608e8188072',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10835049,
+            ethPrice: 365.52334115368103,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 11202.20864379234,
+            timestamp: 1599754824,
+            txCostEth: 0.06968544,
+            tokens: [
+                {
+                    priceUsd: 30755.677596441034,
+                    reserve: 1841.2393323116135,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 365.34529530352415,
+                    reserve: 155000.11635681815,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x293a393a75a480f8f6872573e7b22a200173898383df6f599e3389bb8adba58f',
+            yieldReward: {
+                amount: 0,
+                price: 2.3201245017430296,
+                token: {
+                    symbol: 'SUSHI',
+                    name: 'SushiToken',
+                    contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                    platform: 'ethereum',
+                },
+            },
+            stakingService: null,
+        },
+        {
+            block: 10835049,
+            ethPrice: 365.52334115368103,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 444.6739475417271,
+            liquidityTokenTotalSupply: 11202.20864379234,
+            timestamp: 1599754824,
+            txCostEth: 0.06968544,
+            tokens: [
+                {
+                    priceUsd: 30755.677596441034,
+                    reserve: 1841.2393323116135,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 365.34529530352415,
+                    reserve: 155000.11635681815,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x293a393a75a480f8f6872573e7b22a200173898383df6f599e3389bb8adba58f',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10835061,
+            ethPrice: 365.6369886804655,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 10757.534696250614,
+            timestamp: 1599754965,
+            txCostEth: 0.0844848,
+            tokens: [
+                {
+                    priceUsd: 30780.233071969385,
+                    reserve: 1768.15096301742,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 365.6369886804655,
+                    reserve: 148847.35525394336,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x3eadc65a3cb29eb76fb2acbbedacbaba7143b6280e411a778b701cfd17acb43b',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10844845,
+            ethPrice: 365.88566443189103,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 330.82426957712954,
+            liquidityTokenTotalSupply: 14313.954692312842,
+            timestamp: 1599883905,
+            txCostEth: 0.0455786,
+            tokens: [
+                {
+                    priceUsd: 36673.61142823105,
+                    reserve: 2158.3605529794363,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 365.88566443189103,
+                    reserve: 216337.7359014411,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xb9b98135bee6045931f110b18f06289c04f17dc11407ab0c24128ad5498d1002',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10844847,
+            ethPrice: 365.88566443189103,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 14309.242660756387,
+            timestamp: 1599883932,
+            txCostEth: 0.0494,
+            tokens: [
+                {
+                    priceUsd: 36673.61142823105,
+                    reserve: 2157.650039130925,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 365.88566443189103,
+                    reserve: 216266.51936762274,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xce7f8dbc5d664032a01b12deafba356c68e0c17eaeb5788bde65b2d4268d55c8',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10849549,
+            ethPrice: 380.84201164569606,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 12116.129704961197,
+            timestamp: 1599945776,
+            txCostEth: 0.0430154,
+            tokens: [
+                {
+                    priceUsd: 42664.67440187076,
+                    reserve: 1729.1500474733557,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 380.9258390056855,
+                    reserve: 193669.2558320492,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x4c5208653f3a104593302f7e1475447d57e8f9e578674efe7d1a3179b4ad7e4c',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10849587,
+            ethPrice: 380.5631577501843,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 330.82426957712954,
+            liquidityTokenTotalSupply: 12116.129704961197,
+            timestamp: 1599946277,
+            txCostEth: 0.06912475,
+            tokens: [
+                {
+                    priceUsd: 42575.02894762761,
+                    reserve: 1730.2791300139459,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 380.62053370096777,
+                    reserve: 193543.6413046897,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xb2ef3ddb11156251d04f2a5b9f35605119262ec3a11cbefe4a364f0a0c29d609',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10849660,
+            ethPrice: 380.46403841967333,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 11473.6822611183,
+            timestamp: 1599947214,
+            txCostEth: 0.0525234,
+            tokens: [
+                {
+                    priceUsd: 42602.12760578273,
+                    reserve: 1637.6474881809697,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
+                        name: 'yearn.finance',
+                        platform: 'ethereum',
+                        symbol: 'YFI',
+                    },
+                },
+                {
+                    priceUsd: 380.4483599685136,
+                    reserve: 183381.70066116008,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xd891ae4a5cf5bf1dcac1f607552c0a6e34b7aca218247cbb6f3b2ce0ec4e20d9',
+            yieldReward: null,
+            stakingService: null,
+        },
+    ],
+    '0x795065dcc9f64b5614c407a6efdc400da6221fb0': [
+        {
+            block: 10829358,
+            ethPrice: 356.76927365150914,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 16379.944244443173,
+            liquidityTokenTotalSupply: 2136508.925221505,
+            timestamp: 1599678773,
+            txCostEth: 0.0443102,
+            tokens: [
+                {
+                    priceUsd: 3.0207100573580075,
+                    reserve: 24573849.306494694,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                        name: 'SushiToken',
+                        platform: 'ethereum',
+                        symbol: 'SUSHI',
+                    },
+                },
+                {
+                    priceUsd: 356.7688912904614,
+                    reserve: 208063.19037411336,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xd82612630842bbfa2c4ab84209b2c328e605e59a39202960b5d919d2f6d0ecf8',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10829373,
+            ethPrice: 356.66263137692005,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 2136512.4041918856,
+            timestamp: 1599678962,
+            txCostEth: 0.03187995,
+            tokens: [
+                {
+                    priceUsd: 2.993164882876158,
+                    reserve: 24683226.93004216,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                        name: 'SushiToken',
+                        platform: 'ethereum',
+                        symbol: 'SUSHI',
+                    },
+                },
+                {
+                    priceUsd: 356.6633669608275,
+                    reserve: 207144.8174580252,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xb4f7fe030f7aa00c5c4df7ab54764867ab299fd9e4e71344d1b1dd9fc90d0d08',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10829373,
+            ethPrice: 356.66263137692005,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 16379.944244443173,
+            liquidityTokenTotalSupply: 2144798.9131604554,
+            timestamp: 1599678962,
+            txCostEth: 0.03187995,
+            tokens: [
+                {
+                    priceUsd: 2.9931587078067596,
+                    reserve: 24778932.1261725,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                        name: 'SushiToken',
+                        platform: 'ethereum',
+                        symbol: 'SUSHI',
+                    },
+                },
+                {
+                    priceUsd: 356.66263114401517,
+                    reserve: 207947.98778248858,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xb4f7fe030f7aa00c5c4df7ab54764867ab299fd9e4e71344d1b1dd9fc90d0d08',
+            yieldReward: {
+                amount: 0,
+                price: 2.9931587078067596,
+                token: {
+                    symbol: 'SUSHI',
+                    name: 'SushiToken',
+                    contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                    platform: 'ethereum',
+                },
+            },
+            stakingService: null,
+        },
+        {
+            block: 10829373,
+            ethPrice: 356.66263137692005,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 16379.944244443173,
+            liquidityTokenTotalSupply: 2144798.9131604554,
+            timestamp: 1599678962,
+            txCostEth: 0.03187995,
+            tokens: [
+                {
+                    priceUsd: 2.9931587078067596,
+                    reserve: 24778932.1261725,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                        name: 'SushiToken',
+                        platform: 'ethereum',
+                        symbol: 'SUSHI',
+                    },
+                },
+                {
+                    priceUsd: 356.66263114401517,
+                    reserve: 207947.98778248858,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xb4f7fe030f7aa00c5c4df7ab54764867ab299fd9e4e71344d1b1dd9fc90d0d08',
+            yieldReward: {
+                amount: 8611.292468834421,
+                price: 2.9931587078067596,
+                token: {
+                    symbol: 'SUSHI',
+                    name: 'SushiToken',
+                    contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                    platform: 'ethereum',
+                },
+            },
+            stakingService: StakingService.SUSHI,
+        },
+        {
+            block: 10835000,
+            ethPrice: 365.73097231150734,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 2412386.1363728624,
+            timestamp: 1599754060,
+            txCostEth: 0.0533088,
+            tokens: [
+                {
+                    priceUsd: 2.3701235791056194,
+                    reserve: 31742733.67704834,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                        name: 'SushiToken',
+                        platform: 'ethereum',
+                        symbol: 'SUSHI',
+                    },
+                },
+                {
+                    priceUsd: 365.7320951215054,
+                    reserve: 205708.5023622212,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xb2253bacf0b36785f3fca292c06e2a17968ef33575efb2a2b0e055d59155bea7',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10835011,
+            ethPrice: 366.34706319209783,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 16379.944244443173,
+            liquidityTokenTotalSupply: 2412051.699403293,
+            timestamp: 1599754258,
+            txCostEth: 0.054041325,
+            tokens: [
+                {
+                    priceUsd: 2.3558359524690764,
+                    reserve: 31878378.681962628,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                        name: 'SushiToken',
+                        platform: 'ethereum',
+                        symbol: 'SUSHI',
+                    },
+                },
+                {
+                    priceUsd: 366.73803918552875,
+                    reserve: 204778.95004340942,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xfc5076d4c52175b54818d64d288aa702b55b71911d0b7a4e82283c287c8ae9fe',
+            yieldReward: null,
+            stakingService: null,
+        },
+        {
+            block: 10835011,
+            ethPrice: 366.34706319209783,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 2412051.699403293,
+            timestamp: 1599754258,
+            txCostEth: 0.054041325,
+            tokens: [
+                {
+                    priceUsd: 2.3558359524690764,
+                    reserve: 31878378.681962628,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                        name: 'SushiToken',
+                        platform: 'ethereum',
+                        symbol: 'SUSHI',
+                    },
+                },
+                {
+                    priceUsd: 366.73803918552875,
+                    reserve: 204778.95004340942,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0xfc5076d4c52175b54818d64d288aa702b55b71911d0b7a4e82283c287c8ae9fe',
+            yieldReward: {
+                amount: 0,
+                price: 2.3558359524690764,
+                token: {
+                    symbol: 'SUSHI',
+                    name: 'SushiToken',
+                    contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                    platform: 'ethereum',
+                },
+            },
+            stakingService: StakingService.SUSHI,
+        },
+        {
+            block: 10835030,
+            ethPrice: 365.730232539314,
+            exchange: Exchange.SUSHI,
+            liquidityTokenBalance: 0,
+            liquidityTokenTotalSupply: 2388700.162160028,
+            timestamp: 1599754480,
+            txCostEth: 0.09,
+            tokens: [
+                {
+                    priceUsd: 2.3419177303277174,
+                    reserve: 31619978.1664282,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                        name: 'SushiToken',
+                        platform: 'ethereum',
+                        symbol: 'SUSHI',
+                    },
+                },
+                {
+                    priceUsd: 365.7302408081829,
+                    reserve: 202475.42925872453,
+                    weight: 0.5,
+                    token: {
+                        contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+                        name: 'Wrapped Ether',
+                        platform: 'ethereum',
+                        symbol: 'WETH',
+                    },
+                },
+            ],
+            txHash: '0x1947af44cbb98272f90d01bd598eb8af041e0baf7ee6bf280542626384ffba72',
+            yieldReward: null,
+            stakingService: null,
         },
     ],
 };
