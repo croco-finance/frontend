@@ -191,7 +191,7 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
         ethHodlValueUsd: ethHodlValueUsd,
 
         // If staked LP tokens (for Uniswap)
-        staked: snapshotT0.staked,
+        staked: snapshotT0.stakingService !== null,
     };
 };
 
