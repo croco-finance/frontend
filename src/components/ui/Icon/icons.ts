@@ -15,6 +15,7 @@ export const ICONS: any = {
     arrow_right: require('../../../data/images/icons/arrow_right.svg'),
     check: require('../../../data/images/icons/check.svg'),
     check_active: require('../../../data/images/icons/check_active.svg'),
+    edit: require('../../../data/images/icons/edit.svg'),
     info: require('../../../data/images/icons/info.svg'),
     info_active: require('../../../data/images/icons/info_active.svg'),
     warning: require('../../../data/images/icons/warning.svg'),
@@ -26,4 +27,5 @@ export const ICONS: any = {
     refresh: require('../../../data/images/icons/refresh.svg'),
     support: require('../../../data/images/icons/support.svg'),
     close: require('../../../data/images/icons/close.svg'),
+    copy: require('../../../data/images/icons/copy.svg'),
 };

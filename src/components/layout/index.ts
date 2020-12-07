@@ -6,6 +6,7 @@ import LeftFillContainer from './LeftFillContainer';
 import MainContainer from './MainContainer';
 import DashboardContainer from './DashboardContainer';
 import SimulatorContainer from './SimulatorContainer';
+import Modal from './Modal';
 
 export {
     NavBar,
@@ -16,4 +17,5 @@ export {
     MainContainer,
     DashboardContainer,
     SimulatorContainer,
+    Modal,
 };

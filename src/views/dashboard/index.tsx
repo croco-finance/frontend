@@ -3,18 +3,21 @@ import {
     LeftLayoutContainer,
     RightLayoutContainer,
     NavBar,
+    Modal,
 } from '@components/layout';
-import { Input, LoadingBox, SocialButtonBubble } from '@components/ui';
+import { Input, LoadingBox, SocialButtonBubble, Icon, Select } from '@components/ui';
+import { AddressModal } from '@components/containers';
 import { animations, colors, variables, styles } from '@config';
 import { validationUtils } from '@utils';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 import { FetchSnapsForAddress } from '../../hooks';
 import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
+import { useDispatch, useSelector } from 'react-redux';
+import { AllAddressesGlobal } from '@types';
 
 const Header = styled.div`
     width: 100%;
@@ -75,7 +78,7 @@ const AddressWrapper = styled.div`
     width: 100%;
     max-width: 610px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     margin-top: 20px;
     margin-bottom: 30px;
@@ -83,13 +86,6 @@ const AddressWrapper = styled.div`
     /* padding: 6px;
     border-radius: 8px;
     background-color: ${colors.BACKGROUND_DARK}; */
-`;
-
-const InputErrorMessage = styled.div`
-    margin-top: 6px;
-    font-size: ${variables.FONT_SIZE.SMALL};
-    color: ${colors.RED};
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
 `;
 
 const AddressLabel = styled.div`
@@ -136,31 +132,98 @@ const PoolListWrapper = styled.div`
     max-width: 540px;
 `;
 
+const ManageAddressesButton = styled.button`
+    border: none;
+    background-color: ${colors.BACKGROUND_DARK};
+    padding: 12px 15px;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    /* border: 1px solid ${colors.STROKE_GREY}; */
+
+    &:focus {
+        border: none;
+        outline: none;
+    }
+
+    &:hover {
+        background-color: ${colors.STROKE_GREY};
+    }
+`;
+
+const buildAddressOptions = (addresses: string[]) => {
+    const addressesCount = addresses.length;
+    const addressOptions = new Array(addressesCount);
+
+    addresses.forEach((address, i) => {
+        addressOptions[i] = {
+            value: address,
+            label: address,
+        };
+    });
+
+    addressOptions.push({
+        value: 'bundled',
+        label: 'Bundled Wallets',
+    });
+
+    return addressOptions;
+
+    // if (addressesCount > 1) {
+    //     const addressOptions = new Array(addressesCount);
+
+    //     addresses.forEach((address, i) => {
+    //         addressOptions[i] = {
+    //             value: address,
+    //             label: address,
+    //         };
+    //     });
+
+    //     addressOptions.push({
+    //         value: 'bundled',
+    //         label: 'BUNDLED ADDRESSES',
+    //     });
+
+    //     return addressOptions;
+    // }
+
+    // return {
+    //     value: addresses[0],
+    //     label: addresses[0],
+    // };
+};
+
+interface AddressOption {
+    value: string | 'bundled';
+    label: string;
+}
+
 const Dashboard = (props: RouteComponentProps<any>) => {
+    const dispatch = useDispatch();
+    const allAddresses: AllAddressesGlobal = useSelector(state => state.allAddresses);
+
     const [inputAddress, setInputAddress] = useState(
         props.match.params.address ? props.match.params.address : '',
     );
     const allPoolsGlobal = useSelector(state => state.allPools);
-    const [invalidAddressInput, setInvalidAddressInput] = useState(false);
+    const [showAddressModal, setShowAddressModal] = useState(false);
 
     const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchSnapsForAddress(
         props.match.params.address ? props.match.params.address : '',
     );
 
     const handleAddressChange = inputAddr => {
-        setInvalidAddressInput(false);
         // show in the input whatever user typed in, even if it's not a valid ETH address
         setInputAddress(inputAddr);
 
-        if (validationUtils.isValidEthereumAddress(inputAddr)) {
-            setInvalidAddressInput(false);
+        if (inputAddr === 'bundled') {
+            // fetchData(inputAddr);
+        } else if (validationUtils.isValidEthereumAddress(inputAddr)) {
             fetchData(inputAddr);
             // change the url so that the user fetches data for the same address when refreshing the page
             props.history.push({
                 pathname: `/dashboard/${inputAddr}`,
             });
-        } else {
-            if (inputAddr.trim()) setInvalidAddressInput(true);
         }
     };
 
@@ -212,22 +275,45 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                 </Header>
                 <LeftSubHeaderContent>
                     <AddressWrapper>
-                        <Input
-                            textIndent={[70, 0]}
-                            innerAddon={<AddressLabel>Address:</AddressLabel>}
-                            addonAlign="left"
-                            placeholder="Enter valid Ethereum address"
-                            value={inputAddress}
-                            onChange={event => {
-                                handleAddressChange(event.target.value);
-                            }}
-                            useWhiteBackground
+                        <Select
+                            // textIndent={[70, 0]}
+                            // innerAddon={<AddressLabel>Address:</AddressLabel>}
+                            // addonAlign="left"
+                            // placeholder="Enter valid Ethereum address"
+                            // value={inputAddress}
+                            // onChange={event => {
+                            //     handleAddressChange(event.target.value);
+                            // }}
+                            // useWhiteBackground
                             // useDarkBorder
                             // noBorder
+
+                            options={buildAddressOptions(Object.keys(allAddresses))}
+                            onChange={(option: AddressOption) => {
+                                handleAddressChange(option.value);
+                            }}
+                            selected={['a']}
+                            useWhiteBackground
+                            useDarkBorder
                         />
-                        {invalidAddressInput ? (
-                            <InputErrorMessage>Invalid Ethereum address</InputErrorMessage>
-                        ) : null}
+
+                        <ManageAddressesButton
+                            onClick={() => {
+                                setShowAddressModal(true);
+                            }}
+                        >
+                            <Icon icon="edit" size={18} />
+                        </ManageAddressesButton>
+
+                        {showAddressModal && (
+                            <Modal
+                                cancelable
+                                onCancel={() => setShowAddressModal(false)}
+                                heading={'Manage addresses'}
+                            >
+                                <AddressModal />
+                            </Modal>
+                        )}
                     </AddressWrapper>
 
                     {exceptionContent

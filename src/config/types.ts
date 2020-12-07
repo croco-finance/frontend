@@ -178,3 +178,5 @@ export interface Deposit {
 }
 
 export interface Withdrawal extends Deposit {}
+
+export type AllAddressesGlobal = { [key: string]: { bundled: boolean; esn: string | null } };
