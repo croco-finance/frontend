@@ -179,7 +179,7 @@ export interface Withdrawal extends Deposit {}
 export type AllPoolsGlobal = { [key: string]: PoolItem } | {};
 export interface AddressData {
     bundled: boolean;
-    esn: string | null;
+    ens: string;
 }
 
 export type AllAddressesGlobal = { [key: string]: AddressData };

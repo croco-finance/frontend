@@ -170,10 +170,10 @@ const Heading = styled.h2<{
     display: flex;
     align-items: flex-start;
     word-break: break-word;
-    padding: 28px 32px 22px 32px;
+    padding: 28px 42px 22px 42px;
     margin: 0;
     font-size: ${variables.FONT_SIZE.H2};
-    margin-bottom: ${props => (props.showProgressBar ? 0 : '20px')};
+    margin-bottom: 10px;
 
     border-bottom: ${props =>
         props.showHeaderBorder ? `1px solid ${props.theme.STROKE_GREY}` : 'none'};

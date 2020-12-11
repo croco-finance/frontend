@@ -75,7 +75,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 allAddresses: {
                     ...state.allAddresses,
-                    [action.address]: { bundled: false, esn: '' },
+                    [action.address]: { bundled: false, ens: '' },
                 },
             };
         }

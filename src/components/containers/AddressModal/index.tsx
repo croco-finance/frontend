@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actionTypes from '@actionTypes';
 import { validationUtils } from '@utils';
 import { AllAddressesGlobal } from '@types';
-import { formatUtils } from '@utils';
-import { fetchSnapshots } from '../../../store/actions/index';
 
 const Wrapper = styled.div`
     position: relative;
@@ -19,19 +17,22 @@ const Wrapper = styled.div`
 const NewAddressInputWrapper = styled.div`
     margin-bottom: 20px;
     display: flex;
+    flex-direction: column;
+    min-height: 74px;
 `;
 
-const AddButton = styled.button`
-    background-color: ${colors.BLUE};
-    color: ${colors.WHITE};
+const AddButton = styled.button<{ disabled: boolean }>`
+    background-color: ${props => (props.disabled ? colors.BACKGROUND : colors.BLUE)};
+    color: ${props => (props.disabled ? colors.FONT_LIGHT : colors.WHITE)};
     border-radius: 5px;
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     padding: 8px 10px;
     font-size: ${variables.FONT_SIZE.NORMAL};
     border: none;
     margin-left: 10px;
-    cursor: pointer;
+    cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
     width: 240px;
+    height: 50px;
 
     &:focus {
         outline: 0;
@@ -40,7 +41,7 @@ const AddButton = styled.button`
 
 const InputWrapper = styled.div`
     margin: 5px 0;
-    padding: 4px 5px 4px 0;
+    padding: 4px 10px 4px 0;
     display: flex;
     border: 1px solid ${colors.STROKE_GREY};
     border-radius: 5px;
@@ -69,11 +70,15 @@ const BundleButton = styled.button<{ isBundled: boolean }>`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     font-size: ${variables.FONT_SIZE.NORMAL};
     cursor: pointer;
-
+    /* transition: 2.3s; */
     &:focus {
         /* border: 1px solid ${colors.BLUE}; */
         outline: 0;
     }
+
+    /* &:hover {
+        border-width: 2px;
+    } */
 `;
 
 const WatchedHeadline = styled.div`
@@ -82,10 +87,17 @@ const WatchedHeadline = styled.div`
     text-align: left;
     margin-bottom: 10px;
     margin-top: 20px;
+    padding-left: 10px;
 `;
 
 const CheckIcon = styled(Icon)`
     margin-left: 5px;
+`;
+
+const MainInputWrapper = styled.div`
+    display: flex;
+    /* flex-direction: column; */
+    flex-grow: 1;
 `;
 
 const AddressModal = () => {
@@ -111,9 +123,6 @@ const AddressModal = () => {
 
     const deleteAddress = address => {
         // if you deleted just selected address
-        console.log('deleting address: ', address);
-        console.log('state address: ', selectedAddress);
-
         if (address === selectedAddress) {
             dispatch({ type: actionTypes.SET_ALL_POOLS, pools: {} });
             dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: null });
@@ -125,16 +134,23 @@ const AddressModal = () => {
     return (
         <Wrapper>
             <NewAddressInputWrapper>
-                <Input
-                    placeholder="Enter valid Ethereum address"
-                    onChange={event => {
-                        setAddress(event.target.value);
-                    }}
-                    useWhiteBackground
-                    useDarkBorder
-                    value={address}
-                />
-                <AddButton onClick={() => addNewAddress(address)}>Add to watchlist</AddButton>
+                <MainInputWrapper>
+                    <Input
+                        placeholder="Enter valid Ethereum address"
+                        onChange={event => {
+                            setAddress(event.target.value);
+                        }}
+                        useWhiteBackground
+                        useDarkBorder
+                        value={address}
+                    />
+                    <AddButton
+                        onClick={() => addNewAddress(address)}
+                        disabled={!validationUtils.isValidEthereumAddress(address)}
+                    >
+                        Add to watchlist
+                    </AddButton>
+                </MainInputWrapper>
             </NewAddressInputWrapper>
 
             {Object.keys(allAddresses).length > 0 && (
@@ -167,6 +183,7 @@ const AddressModal = () => {
                                     icon="close"
                                     size={20}
                                     color={colors.FONT_LIGHT}
+                                    hoverColor={colors.RED}
                                     onClick={() => deleteAddress(address)}
                                 />
                             </ButtonsWrapper>
