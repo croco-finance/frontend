@@ -4,7 +4,7 @@ import { Select, Icon } from '@components/ui';
 import { Modal } from '@components/layout';
 import { colors } from '@config';
 import { useDispatch, useSelector } from 'react-redux';
-import { AllAddressesGlobal } from '@types';
+import { AllAddressesGlobal, AddressData } from '@types';
 import { validationUtils, formatUtils, mathUtils } from '@utils';
 import * as actionTypes from '@actionTypes';
 import { AddressModal } from '@components/containers';
@@ -43,16 +43,10 @@ const ManageAddressesButton = styled.button`
     }
 `;
 
-const buildAddressOption = (address: string) => {
-    if (address === 'bundled') {
-        return {
-            value: 'bundled',
-            label: 'Bundled Wallets',
-        };
-    }
+const buildAddressOption = (address: string, ens: string) => {
     return {
         value: address,
-        label: address,
+        label: ens ? ens : address,
     };
 };
 
@@ -69,7 +63,7 @@ const buildAddressOptions = (addresses: AllAddressesGlobal) => {
             if (value.bundled) numberOfBundled += 1;
 
             // push address option
-            options.push(buildAddressOption(address));
+            options.push(buildAddressOption(address, value.ens));
         }
     }
 
@@ -113,17 +107,20 @@ const AddressSelect = () => {
     useEffect(() => {
         if (showAddressModal === false) {
             const addressesCount = Object.keys(allAddresses).length;
+            const currentBundled = formatUtils.getBundledAddresses(allAddresses);
+            const bundledAddressesCount = currentBundled.length;
 
             // if the modal was closed right now
             if (selectedAddress === 'bundled' && addressesCount > 1) {
                 // check if the user changed bundled addresses while the modal was opened
+                const currentBundled = formatUtils.getBundledAddresses(allAddresses);
                 const addressesAreEqual = mathUtils.arraysContainEqualElements(
                     bundledAddressesSnapBeforeModalOpened.current,
-                    formatUtils.getBundledAddresses(allAddresses),
+                    currentBundled,
                 );
 
-                if (!addressesAreEqual) {
-                    dispatch(fetchSnapshots(formatUtils.getBundledAddresses(allAddresses)));
+                if (!addressesAreEqual && bundledAddressesCount > 1) {
+                    dispatch(fetchSnapshots(currentBundled));
                 }
             } else {
                 // if there is only one address in allAddresses and it's different from previously selected address, select it automatically
@@ -146,7 +143,15 @@ const AddressSelect = () => {
         }
     }, [showAddressModal]);
 
-    let value = buildAddressOption(selectedAddress);
+    const ens = allAddresses[selectedAddress] ? allAddresses[selectedAddress].ens : '';
+    let value = buildAddressOption(selectedAddress, ens);
+
+    if (selectedAddress === 'bundled') {
+        value = {
+            value: 'bundled',
+            label: 'Bundled Wallets',
+        };
+    }
 
     return (
         <Wrapper>

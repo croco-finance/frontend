@@ -10,6 +10,7 @@ import Web3 from 'web3';
 import LandingPageText from './components/LandingPageText';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionTypes from '@actionTypes';
+import { portis, web3 } from '@config';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -247,21 +248,15 @@ const StyledTextBadge = styled(TextBadge)`
     right: -8px;
 `;
 
-const portis = new Portis(constants.PORTIS_DAPP_KEY, 'mainnet');
-const web3 = new Web3(portis.provider);
-
 // props: RouteComponentProps<any>
 const LandingPage = (props: RouteComponentProps<any>) => {
     const dispatch = useDispatch();
     const [inputAddress, setInputAddress] = useState('');
+    const [inputHexAddress, setInputHexAddress] = useState('');
     const [ensName, setEnsName] = useState('');
-    const [linkAddress, setLinkAddress] = useState('');
     const [portisLoading, setPortisLoading] = useState(false);
     const [isValidAddress, setIsValidAddress] = useState(false);
     const [loadingEnsDomain, setLoadingEnsDomain] = useState(false);
-
-    // check if the address user typed in the input is valid Ethereum address
-    const linkPath = isValidAddress ? `/dashboard/${linkAddress}` : '';
 
     const handleAddressChange = async input => {
         setIsValidAddress(false);
@@ -270,8 +265,8 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         // check for ETH address validity
         if (validationUtils.isValidEthereumAddress(input)) {
             setInputAddress(input);
-            setLinkAddress(input);
             setIsValidAddress(true);
+            setInputHexAddress(input);
             return;
         }
 
@@ -279,13 +274,13 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         if (input.substring(input.length - 4) === '.eth') {
             try {
                 setLoadingEnsDomain(true);
-                const ensAddress = await web3.eth.ens.getAddress(input);
-                if (ensAddress) {
+                const ensHexAddress = await web3.eth.ens.getAddress(input);
+                if (ensHexAddress) {
                     setLoadingEnsDomain(false);
                     setInputAddress(input);
                     setIsValidAddress(true);
-                    setLinkAddress(ensAddress);
-                    setEnsName(ensAddress);
+                    setEnsName(input);
+                    setInputHexAddress(ensHexAddress);
                     return;
                 }
             } catch (e) {
@@ -296,8 +291,6 @@ const LandingPage = (props: RouteComponentProps<any>) => {
 
         setIsValidAddress(false);
         setLoadingEnsDomain(false);
-        setLinkAddress(input);
-        setLinkAddress('');
     };
 
     const handlePortisLogin = async () => {
@@ -306,7 +299,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
             const accounts = await web3.eth.getAccounts();
             setPortisLoading(false);
             let initialAddressesObj = {};
-            initialAddressesObj[accounts[0]] = { bundled: false, esn: null };
+            initialAddressesObj[accounts[0]] = { bundled: false, ens: '' };
 
             dispatch({
                 type: actionTypes.SET_ADDRESSES,
@@ -315,7 +308,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
 
             dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: accounts[0] });
             props.history.push({
-                pathname: `/dashboard/${accounts[0]}`,
+                pathname: `/dashboard`,
             });
         } catch (e) {
             console.log('Error when trying to log in using Portis');
@@ -326,7 +319,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
     const handleButtonOnClick = () => {
         // fire custom Google Analytics event
         let initialAddressesObj = {};
-        initialAddressesObj[inputAddress] = { bundled: false, esn: ensName ? ensName : null };
+        initialAddressesObj[inputHexAddress] = { bundled: false, ens: ensName ? ensName : '' };
 
         dispatch({
             type: actionTypes.SET_ADDRESSES,
@@ -389,7 +382,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                             }}
                             active={isValidAddress}
                             to={{
-                                pathname: linkPath,
+                                pathname: '/dashboard',
                             }}
                         >
                             {loadingEnsDomain ? (

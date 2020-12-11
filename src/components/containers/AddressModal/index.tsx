@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { colors, variables } from '@config';
-import { Icon, Input } from '@components/ui';
+import { colors, variables, web3 } from '@config';
+import { Icon, Input, Spinner } from '@components/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionTypes from '@actionTypes';
 import { validationUtils } from '@utils';
@@ -33,6 +33,9 @@ const AddButton = styled.button<{ disabled: boolean }>`
     cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
     width: 240px;
     height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:focus {
         outline: 0;
@@ -45,6 +48,18 @@ const InputWrapper = styled.div`
     display: flex;
     border: 1px solid ${colors.STROKE_GREY};
     border-radius: 5px;
+    flex-direction: column;
+`;
+
+const MainRowWrapper = styled.div`
+    display: flex;
+`;
+
+const EnsName = styled.div`
+    color: ${colors.FONT_MEDIUM};
+    text-align: left;
+    padding-left: 20px;
+    padding-bottom: 10px;
 `;
 
 const ButtonsWrapper = styled.div`
@@ -105,16 +120,18 @@ const AddressModal = () => {
     const allAddresses: AllAddressesGlobal = useSelector(state => state.allAddresses);
     const selectedAddress: string = useSelector(state => state.selectedAddress);
 
+    const [ensName, setEnsName] = useState('');
+    const [loadingEnsDomain, setLoadingEnsDomain] = useState(false);
+    const [inputHexAddress, setInputHexAddress] = useState('');
     const [address, setAddress] = useState('');
     const [isValidAddress, setIsValidAddress] = useState(false);
 
-    const addNewAddress = address => {
-        const addressTrimmed = address.trim().toLowerCase();
-        if (validationUtils.isValidEthereumAddress(addressTrimmed)) {
-            setIsValidAddress(true);
-            dispatch({ type: actionTypes.ADD_NEW_ADDRESS, address: addressTrimmed });
-            setAddress('');
-        }
+    const addNewAddress = () => {
+        const hexAddressProcessed = inputHexAddress.trim().toLowerCase();
+        // double check it's valid address
+
+        dispatch({ type: actionTypes.ADD_NEW_ADDRESS, address: hexAddressProcessed, ens: ensName });
+        setAddress('');
     };
 
     const setBundleAddress = address => {
@@ -131,24 +148,66 @@ const AddressModal = () => {
         dispatch({ type: actionTypes.DELETE_ADDRESS, address: address });
     };
 
+    const handleAddressChange = async input => {
+        setIsValidAddress(false);
+        setLoadingEnsDomain(false); // just to double check
+
+        // check for ETH address validity
+        if (validationUtils.isValidEthereumAddress(input)) {
+            setAddress(input);
+            setIsValidAddress(true);
+            setInputHexAddress(input);
+            return;
+        }
+
+        // check if valid ENS name
+        if (input.substring(input.length - 4) === '.eth') {
+            try {
+                setLoadingEnsDomain(true);
+                const ensHexAddress = await web3.eth.ens.getAddress(input);
+                if (ensHexAddress) {
+                    setAddress(input);
+                    setEnsName(input);
+                    setInputHexAddress(ensHexAddress);
+                    setIsValidAddress(true);
+                    setLoadingEnsDomain(false);
+                    return;
+                }
+            } catch (e) {
+                console.log('Could not get eth address from ENS name');
+                setIsValidAddress(false);
+            }
+        }
+
+        setIsValidAddress(false);
+        setLoadingEnsDomain(false);
+    };
+
     return (
         <Wrapper>
             <NewAddressInputWrapper>
                 <MainInputWrapper>
                     <Input
-                        placeholder="Enter valid Ethereum address"
+                        placeholder="Enter ENS domain or valid Ethereum address"
                         onChange={event => {
-                            setAddress(event.target.value);
+                            handleAddressChange(event.target.value.trim());
+                            setAddress(event.target.value.trim());
                         }}
                         useWhiteBackground
                         useDarkBorder
                         value={address}
                     />
                     <AddButton
-                        onClick={() => addNewAddress(address)}
-                        disabled={!validationUtils.isValidEthereumAddress(address)}
+                        onClick={() => {
+                            addNewAddress();
+                        }}
+                        disabled={!isValidAddress}
                     >
-                        Add to watchlist
+                        {loadingEnsDomain ? (
+                            <Spinner size={14} color={colors.FONT_MEDIUM} />
+                        ) : (
+                            'Add to watch list'
+                        )}
                     </AddButton>
                 </MainInputWrapper>
             </NewAddressInputWrapper>
@@ -158,35 +217,41 @@ const AddressModal = () => {
                     <WatchedHeadline>Watched addresses</WatchedHeadline>
                     {Object.keys(allAddresses).map(address => (
                         <InputWrapper key={address}>
-                            <Input value={address} disabled useWhiteBackground noBorder />
-                            <ButtonsWrapper>
-                                <BundleButton
-                                    isBundled={allAddresses[address].bundled}
-                                    onClick={() => setBundleAddress(address)}
-                                >
-                                    {allAddresses[address].bundled ? (
-                                        <>
-                                            Bundled
-                                            <CheckIcon
-                                                icon="check"
-                                                size={16}
-                                                color={colors.WHITE}
-                                            />
-                                        </>
-                                    ) : (
-                                        'Bundle'
-                                    )}
-                                </BundleButton>
-                                {/* <StyledIcon icon="edit" size={16} color={colors.FONT_LIGHT} /> */}
-                                {/* <StyledIcon icon="copy" size={20} color={colors.FONT_LIGHT} /> */}
-                                <StyledIcon
-                                    icon="close"
-                                    size={20}
-                                    color={colors.FONT_LIGHT}
-                                    hoverColor={colors.RED}
-                                    onClick={() => deleteAddress(address)}
-                                />
-                            </ButtonsWrapper>
+                            <MainRowWrapper>
+                                <Input value={address} disabled useWhiteBackground noBorder />
+                                <ButtonsWrapper>
+                                    <BundleButton
+                                        isBundled={allAddresses[address].bundled}
+                                        onClick={() => setBundleAddress(address)}
+                                    >
+                                        {allAddresses[address].bundled ? (
+                                            <>
+                                                Bundled
+                                                <CheckIcon
+                                                    icon="check"
+                                                    size={16}
+                                                    color={colors.WHITE}
+                                                />
+                                            </>
+                                        ) : (
+                                            'Bundle'
+                                        )}
+                                    </BundleButton>
+                                    {/* <StyledIcon icon="edit" size={16} color={colors.FONT_LIGHT} /> */}
+                                    {/* <StyledIcon icon="copy" size={20} color={colors.FONT_LIGHT} /> */}
+                                    <StyledIcon
+                                        icon="close"
+                                        size={20}
+                                        color={colors.FONT_LIGHT}
+                                        hoverColor={colors.RED}
+                                        onClick={() => deleteAddress(address)}
+                                    />
+                                </ButtonsWrapper>
+                            </MainRowWrapper>
+
+                            {allAddresses[address].ens && (
+                                <EnsName>{allAddresses[address].ens}</EnsName>
+                            )}
                         </InputWrapper>
                     ))}
                 </>

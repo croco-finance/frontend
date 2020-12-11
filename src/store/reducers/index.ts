@@ -75,7 +75,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 allAddresses: {
                     ...state.allAddresses,
-                    [action.address]: { bundled: false, ens: '' },
+                    [action.address]: { bundled: false, ens: action.ens },
                 },
             };
         }
@@ -101,12 +101,12 @@ const reducer = (state = initialState, action) => {
         }
 
         case actionTypes.SET_BUNDLED_ADDRESS: {
-            const isBundled = state.allAddresses[action.address]?.bundled;
+            const { bundled, ens } = state.allAddresses[action.address];
             return {
                 ...state,
                 allAddresses: {
                     ...state.allAddresses,
-                    [action.address]: { bundled: !isBundled },
+                    [action.address]: { bundled: !bundled, ens: ens },
                 },
             };
         }
