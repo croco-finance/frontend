@@ -127,13 +127,11 @@ const PoolListWrapper = styled.div`
     max-width: 540px;
 `;
 
-const Dashboard = (props: RouteComponentProps<any>) => {
-    const dispatch = useDispatch();
-    const selectedAddress: string = useSelector(state => state.selectedAddress);
+const Dashboard = () => {
     const allPoolsGlobal: AllAddressesGlobal = useSelector(state => state.allPools);
     const isLoading = useSelector(state => state.loading);
     const isFetchError = useSelector(state => state.error);
-    const noPoolsFound = selectedAddress && Object.keys(allPoolsGlobal).length === 0;
+    const noPoolsFound = useSelector(state => state.noPoolsFound);
 
     let exceptionContent;
     let rightWrapperContent;
@@ -142,11 +140,6 @@ const Dashboard = (props: RouteComponentProps<any>) => {
     const refreshPage = () => {
         window.location.reload();
     };
-
-    // if (!allPoolsGlobal) {
-    //     console.log('!allPoolsGlobal', allPoolsGlobal);
-    //     return null;
-    // }
 
     if (isFetchError) {
         exceptionContent = (

@@ -86,11 +86,7 @@ const CheckIcon = styled(Icon)`
     margin-left: 5px;
 `;
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-    children?: React.ReactNode;
-}
-
-const AddressModal = ({ children }: Props) => {
+const AddressModal = () => {
     const dispatch = useDispatch();
     const allAddresses: AllAddressesGlobal = useSelector(state => state.allAddresses);
     const selectedAddress: string = useSelector(state => state.selectedAddress);

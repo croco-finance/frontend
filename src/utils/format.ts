@@ -1,5 +1,5 @@
 import { mathUtils } from '.';
-import { types } from '@config';
+import { AllAddressesGlobal, PoolToken } from '@types';
 
 type DateFormats = 'MONTH_DAY_YEAR' | 'MONTH_DAY';
 
@@ -90,7 +90,7 @@ const getFormattedCryptoValue = (value: number, roundDecimals: number = 4) => {
     return value.toFixed(roundDecimals);
 };
 
-const getTokenSymbolArr = (tokensArr: Array<any>) => {
+const getTokenSymbolArr = (tokensArr: any[]) => {
     const tokenSymbolsArr = new Array(tokensArr.length);
     tokensArr.forEach((token, i) => {
         tokenSymbolsArr[i] = token.symbol;
@@ -99,7 +99,7 @@ const getTokenSymbolArr = (tokensArr: Array<any>) => {
     return tokenSymbolsArr;
 };
 
-const getTokenWeightsArr = (tokensArr: Array<types.PoolToken>) => {
+const getTokenWeightsArr = (tokensArr: PoolToken[]) => {
     const weightsArr = new Array(tokensArr.length);
     tokensArr.forEach((token, i) => {
         weightsArr[i] = token.weight;
@@ -108,12 +108,22 @@ const getTokenWeightsArr = (tokensArr: Array<types.PoolToken>) => {
     return weightsArr;
 };
 
-const tokenArrToCommaSeparatedString = (tokenSymbols: Array<string>) => {
+const tokenArrToCommaSeparatedString = (tokenSymbols: string[]) => {
     let text = '';
     tokenSymbols.forEach((symbol, i) => {
         text = text + ', ' + symbol;
     });
     return text.substring(1); //delete first char (comma)
+};
+
+const getBundledAddresses = (addresses: AllAddressesGlobal) => {
+    const addressesArr = new Array();
+
+    for (const [address, value] of Object.entries(addresses)) {
+        if (value.bundled) addressesArr.push(address);
+    }
+
+    return addressesArr;
 };
 
 export {
@@ -123,4 +133,5 @@ export {
     getTokenSymbolArr,
     getTokenWeightsArr,
     tokenArrToCommaSeparatedString,
+    getBundledAddresses,
 };

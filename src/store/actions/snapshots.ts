@@ -39,10 +39,19 @@ export const setIsLoading = (isLoading: boolean) => {
     };
 };
 
+const renameSnapKeys = (snaps: SnapStructure, address: string) => {
+    const snapsWithNewKeys: SnapStructure | {} = {};
+
+    for (const [key, value] of Object.entries(snaps)) {
+        snapsWithNewKeys[key + address] = value;
+    }
+
+    return snapsWithNewKeys;
+};
+
 export const fetchSnapshots = (addresses: string[] | string) => {
     // I can use dispatch here thanks to redux thunk
     return async dispatch => {
-        console.log('Running fetchSnapshots from REDUX ');
         dispatch(setIsLoading(true));
         if (typeof addresses === 'string') {
             addresses = [addresses];
@@ -64,9 +73,10 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                 if (!fetchedSnapshotsAddress) {
                     console.log(`Did not find any pools associated with: ${queryAddress}`);
                 } else {
+                    // Two addresses can have assets in the same pool. To create a unique iD for each pool, I combine user's address and pool ID
                     fetchedSnapshotsBundled = {
                         ...fetchedSnapshotsBundled,
-                        ...fetchedSnapshotsAddress,
+                        ...renameSnapKeys(fetchedSnapshotsAddress, queryAddress),
                     };
                 }
             } catch (e) {
@@ -74,7 +84,6 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                 console.log("ERROR: Couldn't fetch data from database.");
             }
         }
-        console.log('fetchedSnapshotsAddress', fetchedSnapshotsBundled);
 
         // check if some pools were found
         if (Object.keys(fetchedSnapshotsBundled).length === 0) {
@@ -84,8 +93,10 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                 type: actionTypes.SET_INACTIVE_POOL_IDS,
                 inactivePoolIds: [],
             });
+            dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
             dispatch(setPools({}));
             dispatch(setIsLoading(false));
+            dispatch({ type: actionTypes.SET_NO_POOLS_FOUND, value: true });
             return;
         }
 
@@ -151,8 +162,7 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             }
         }
 
-        console.log('customPoolsObject', customPoolsObject);
-
+        // The order here is important. TODO - change state structure and save all of these at once
         dispatch({
             type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
             exchangeToPoolMapping: exToPoolMap,
@@ -162,6 +172,7 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             type: actionTypes.SET_INACTIVE_POOL_IDS,
             inactivePoolIds: inactivePoolIds,
         });
+        dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
 
         dispatch(setPools(customPoolsObject));
         dispatch(setIsLoading(false));

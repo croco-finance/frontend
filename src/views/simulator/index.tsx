@@ -8,12 +8,11 @@ import {
 import { InfoBox, LoadingBox, MultipleTokenSelect, SocialButtonBubble } from '@components/ui';
 import { animations, colors, styles, types, variables } from '@config';
 import { AllPoolsGlobal } from '@types';
-import { formatUtils, validationUtils } from '@utils';
+import { formatUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import styled from 'styled-components';
-import { FetchSnapsForAddress } from '../../hooks';
 import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
 import RightContainer from './components/RightContainer';
@@ -188,15 +187,14 @@ const getInitialPriceCoeffs = (tokens: any) => {
 
 type TabOptions = 'overview' | 'strategies';
 
-const Simulator = (props: RouteComponentProps<any>) => {
+const Simulator = () => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
-    const selectedAddress = useSelector(state => state.selectedAddress);
     const dispatch = useDispatch();
     const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
     const isLoading = useSelector(state => state.loading);
     const isFetchError = useSelector(state => state.error);
-    const noPoolsFound = selectedAddress && Object.keys(allPools).length === 0;
+    const noPoolsFound = useSelector(state => state.noPoolsFound);
 
     // SIMULATOR FUNCTIONS
     const [simulatedPriceCoefficients, setSimulatedPriceCoefficients]: any = useState(

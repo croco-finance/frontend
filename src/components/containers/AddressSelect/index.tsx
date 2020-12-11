@@ -5,7 +5,7 @@ import { Modal } from '@components/layout';
 import { variables, colors } from '@config';
 import { useDispatch, useSelector } from 'react-redux';
 import { AllAddressesGlobal } from '@types';
-import { validationUtils } from '@utils';
+import { validationUtils, formatUtils } from '@utils';
 import * as actionTypes from '@actionTypes';
 import { AddressModal } from '@components/containers';
 import { fetchSnapshots } from '../../../store/actions/index';
@@ -77,26 +77,12 @@ const buildAddressOptions = (addresses: AllAddressesGlobal) => {
     return options;
 };
 
-const getBundledAddresses = (addresses: AllAddressesGlobal) => {
-    const addressesArr = new Array();
-
-    for (const [address, value] of Object.entries(addresses)) {
-        if (value.bundled) addressesArr.push(address);
-    }
-
-    return addressesArr;
-};
-
 interface AddressOption {
     value: string | 'bundled';
     label: string;
 }
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-    children?: React.ReactNode;
-}
-
-const AddressSelect = ({ children }: Props) => {
+const AddressSelect = () => {
     const dispatch = useDispatch();
     const allAddresses: AllAddressesGlobal = useSelector(state => state.allAddresses);
     const selectedAddress: string = useSelector(state => state.selectedAddress);
@@ -108,7 +94,7 @@ const AddressSelect = ({ children }: Props) => {
         dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: inputAddr.trim() });
 
         if (inputAddr === 'bundled') {
-            dispatch(fetchSnapshots(getBundledAddresses(allAddresses)));
+            dispatch(fetchSnapshots(formatUtils.getBundledAddresses(allAddresses)));
         } else if (validationUtils.isValidEthereumAddress(inputAddr)) {
             dispatch(fetchSnapshots(inputAddr));
         }
@@ -118,6 +104,7 @@ const AddressSelect = ({ children }: Props) => {
         <Wrapper>
             <Select
                 options={buildAddressOptions(allAddresses)}
+                label={selectedAddress === null ? '' : buildAddressOption(selectedAddress)}
                 value={selectedAddress === null ? null : buildAddressOption(selectedAddress)}
                 onChange={(option: AddressOption) => {
                     handleAddressChange(option.value);
