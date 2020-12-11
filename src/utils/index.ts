@@ -6,6 +6,7 @@ import * as simulatorUtils from './simulator';
 import * as formatUtils from './format';
 import * as graphUtils from './graph';
 import { getSnaps } from './firebase-loader';
+import { loadState, saveState } from './local-storage';
 
 export {
     validationUtils,
@@ -16,4 +17,6 @@ export {
     simulatorUtils,
     formatUtils,
     graphUtils,
+    loadState,
+    saveState,
 };

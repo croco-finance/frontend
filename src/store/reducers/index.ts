@@ -3,13 +3,15 @@ import { types } from '@config';
 interface InitialStateInterface {
     allPools: types.AllPoolsGlobal | {};
     selectedPoolId: string;
-    exchangeToPoolMapping: { [key: string]: string[] } | {};
+    exchangeToPoolMapping: { [key: string]: string[] } | null;
     userAddress: string;
     activePoolIds: string[];
     inactivePoolIds: string[];
-    poolSnapshotsGrouped: { [key: string]: any } | {};
+    poolSnapshotsGrouped: { [key: string]: any } | null;
     allAddresses: types.AllAddressesGlobal;
-    selectedAddress: string | 'BUNDLED';
+    selectedAddress: string | 'BUNDLED' | null;
+    error: boolean;
+    loading: boolean;
 }
 
 const initialState: InitialStateInterface = {
@@ -22,6 +24,8 @@ const initialState: InitialStateInterface = {
     poolSnapshotsGrouped: {},
     allAddresses: {},
     selectedAddress: '',
+    error: false,
+    loading: false,
 };
 
 // the argument is previous state. For the forst run it is initial state
@@ -32,6 +36,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 allPools: action.pools,
+                error: false,
             };
         }
 
@@ -99,7 +104,8 @@ const reducer = (state = initialState, action) => {
         }
 
         case actionTypes.SET_BUNDLED_ADDRESS: {
-            const isBundled = state.allAddresses[action.address].bundled;
+            console.log('SET_BUNDLED_ADDRESS...', action.addresses);
+            const isBundled = state.allAddresses[action.address]?.bundled;
             return {
                 ...state,
                 allAddresses: {
@@ -109,13 +115,41 @@ const reducer = (state = initialState, action) => {
             };
         }
 
+        case actionTypes.SET_ADDRESSES: {
+            console.log('SET_ADDRESSES...', action.addresses);
+            return {
+                ...state,
+                allAddresses: { ...action.addresses },
+            };
+        }
+
+        case actionTypes.SET_SELECTED_ADDRESS: {
+            console.log('SET_SELECTED_ADDRESS...', action.address);
+            return {
+                ...state,
+                selectedAddress: action.address,
+            };
+        }
+
+        case actionTypes.FETCH_SNAPS_FAILED: {
+            console.log('SET_SELECTED_ADDRESS...', action.address);
+            return {
+                ...state,
+                error: true,
+            };
+        }
+
+        case actionTypes.SET_IS_LOADING: {
+            console.log('SET_IS_LOADING...', action.value);
+            return {
+                ...state,
+                loading: action.value,
+            };
+        }
+
         default:
             return state;
     }
 };
 
 export default reducer;
-
-export const ADD_NEW_ADDRESS = 'ADD_NEW_ADDRESS';
-export const DELETE_ADDRESS = 'DELETE_ADDRESS';
-export const SET_SELECTED_ADDRESS = 'SET_SELECTED_ADDRESS';

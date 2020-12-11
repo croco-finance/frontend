@@ -24,12 +24,16 @@ const AddButton = styled.button`
     color: ${colors.WHITE};
     border-radius: 5px;
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    padding: 10px;
+    padding: 8px 10px;
     font-size: ${variables.FONT_SIZE.NORMAL};
     border: none;
     margin-left: 10px;
     cursor: pointer;
     width: 240px;
+
+    &:focus {
+        outline: 0;
+    }
 `;
 
 const InputWrapper = styled.div`
@@ -89,19 +93,18 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 const AddressModal = ({ children }: Props) => {
     const dispatch = useDispatch();
     const allAddresses: AllAddressesGlobal = useSelector(state => state.allAddresses);
+    const selectedAddress: string = useSelector(state => state.selectedAddress);
 
     const [address, setAddress] = useState('');
     const [isValidAddress, setIsValidAddress] = useState(false);
 
     const addNewAddress = address => {
-        // if (validationUtils.isValidEthereumAddress(address.trim().toLowerCase())) {
-        //     setIsValidAddress(true);
-        //     dispatch({ type: actionTypes.ADD_NEW_ADDRESS, address: address });
-        //     setAddress('');
-        // }
-
-        dispatch({ type: actionTypes.ADD_NEW_ADDRESS, address: address });
-        setAddress('');
+        const addressTrimmed = address.trim().toLowerCase();
+        if (validationUtils.isValidEthereumAddress(addressTrimmed)) {
+            setIsValidAddress(true);
+            dispatch({ type: actionTypes.ADD_NEW_ADDRESS, address: addressTrimmed });
+            setAddress('');
+        }
     };
 
     const setBundleAddress = address => {
@@ -109,6 +112,12 @@ const AddressModal = ({ children }: Props) => {
     };
 
     const deleteAddress = address => {
+        // if you deleted just selected address
+        if (address === selectedAddress) {
+            dispatch({ type: actionTypes.SET_ALL_POOLS, pools: {} });
+            dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: null });
+        }
+
         dispatch({ type: actionTypes.DELETE_ADDRESS, address: address });
     };
 
@@ -121,39 +130,49 @@ const AddressModal = ({ children }: Props) => {
                         setAddress(event.target.value);
                     }}
                     useWhiteBackground
+                    useDarkBorder
                     value={address}
                 />
                 <AddButton onClick={() => addNewAddress(address)}>Add to watchlist</AddButton>
             </NewAddressInputWrapper>
-            <WatchedHeadline>Watched addresses</WatchedHeadline>
-            {Object.keys(allAddresses).map(address => (
-                <InputWrapper key={address}>
-                    <Input value={address} disabled useWhiteBackground noBorder />
-                    <ButtonsWrapper>
-                        <BundleButton
-                            isBundled={allAddresses[address].bundled}
-                            onClick={() => setBundleAddress(address)}
-                        >
-                            {allAddresses[address].bundled ? (
-                                <>
-                                    Bundled
-                                    <CheckIcon icon="check" size={16} color={colors.WHITE} />
-                                </>
-                            ) : (
-                                'Bundle'
-                            )}
-                        </BundleButton>
-                        {/* <StyledIcon icon="edit" size={16} color={colors.FONT_LIGHT} /> */}
-                        {/* <StyledIcon icon="copy" size={20} color={colors.FONT_LIGHT} /> */}
-                        <StyledIcon
-                            icon="close"
-                            size={20}
-                            color={colors.FONT_LIGHT}
-                            onClick={() => deleteAddress(address)}
-                        />
-                    </ButtonsWrapper>
-                </InputWrapper>
-            ))}
+
+            {Object.keys(allAddresses).length > 0 && (
+                <>
+                    <WatchedHeadline>Watched addresses</WatchedHeadline>
+                    {Object.keys(allAddresses).map(address => (
+                        <InputWrapper key={address}>
+                            <Input value={address} disabled useWhiteBackground noBorder />
+                            <ButtonsWrapper>
+                                <BundleButton
+                                    isBundled={allAddresses[address].bundled}
+                                    onClick={() => setBundleAddress(address)}
+                                >
+                                    {allAddresses[address].bundled ? (
+                                        <>
+                                            Bundled
+                                            <CheckIcon
+                                                icon="check"
+                                                size={16}
+                                                color={colors.WHITE}
+                                            />
+                                        </>
+                                    ) : (
+                                        'Bundle'
+                                    )}
+                                </BundleButton>
+                                {/* <StyledIcon icon="edit" size={16} color={colors.FONT_LIGHT} /> */}
+                                {/* <StyledIcon icon="copy" size={20} color={colors.FONT_LIGHT} /> */}
+                                <StyledIcon
+                                    icon="close"
+                                    size={20}
+                                    color={colors.FONT_LIGHT}
+                                    onClick={() => deleteAddress(address)}
+                                />
+                            </ButtonsWrapper>
+                        </InputWrapper>
+                    ))}
+                </>
+            )}
         </Wrapper>
     );
 };

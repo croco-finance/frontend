@@ -6,18 +6,18 @@ import {
     Modal,
 } from '@components/layout';
 import { Input, LoadingBox, SocialButtonBubble, Icon, Select } from '@components/ui';
-import { AddressModal } from '@components/containers';
+import { AddressSelect } from '@components/containers';
 import { animations, colors, variables, styles } from '@config';
 import { validationUtils } from '@utils';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
-import { FetchSnapsForAddress } from '../../hooks';
 import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
 import { useDispatch, useSelector } from 'react-redux';
 import { AllAddressesGlobal } from '@types';
+import * as actionTypes from '@actionTypes';
 
 const Header = styled.div`
     width: 100%;
@@ -88,14 +88,9 @@ const AddressWrapper = styled.div`
     background-color: ${colors.BACKGROUND_DARK}; */
 `;
 
-const AddressLabel = styled.div`
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    padding-left: 5px;
-    color: ${colors.FONT_MEDIUM};
-`;
-
 const LeftSubHeaderContent = styled.div`
     margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -132,108 +127,26 @@ const PoolListWrapper = styled.div`
     max-width: 540px;
 `;
 
-const ManageAddressesButton = styled.button`
-    border: none;
-    background-color: ${colors.BACKGROUND_DARK};
-    padding: 12px 15px;
-    border-radius: 5px;
-    margin-left: 10px;
-    cursor: pointer;
-    /* border: 1px solid ${colors.STROKE_GREY}; */
-
-    &:focus {
-        border: none;
-        outline: none;
-    }
-
-    &:hover {
-        background-color: ${colors.STROKE_GREY};
-    }
-`;
-
-const buildAddressOptions = (addresses: string[]) => {
-    const addressesCount = addresses.length;
-    const addressOptions = new Array(addressesCount);
-
-    addresses.forEach((address, i) => {
-        addressOptions[i] = {
-            value: address,
-            label: address,
-        };
-    });
-
-    addressOptions.push({
-        value: 'bundled',
-        label: 'Bundled Wallets',
-    });
-
-    return addressOptions;
-
-    // if (addressesCount > 1) {
-    //     const addressOptions = new Array(addressesCount);
-
-    //     addresses.forEach((address, i) => {
-    //         addressOptions[i] = {
-    //             value: address,
-    //             label: address,
-    //         };
-    //     });
-
-    //     addressOptions.push({
-    //         value: 'bundled',
-    //         label: 'BUNDLED ADDRESSES',
-    //     });
-
-    //     return addressOptions;
-    // }
-
-    // return {
-    //     value: addresses[0],
-    //     label: addresses[0],
-    // };
-};
-
-interface AddressOption {
-    value: string | 'bundled';
-    label: string;
-}
-
 const Dashboard = (props: RouteComponentProps<any>) => {
     const dispatch = useDispatch();
-    const allAddresses: AllAddressesGlobal = useSelector(state => state.allAddresses);
-
-    const [inputAddress, setInputAddress] = useState(
-        props.match.params.address ? props.match.params.address : '',
-    );
-    const allPoolsGlobal = useSelector(state => state.allPools);
-    const [showAddressModal, setShowAddressModal] = useState(false);
-
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchSnapsForAddress(
-        props.match.params.address ? props.match.params.address : '',
-    );
-
-    const handleAddressChange = inputAddr => {
-        // show in the input whatever user typed in, even if it's not a valid ETH address
-        setInputAddress(inputAddr);
-
-        if (inputAddr === 'bundled') {
-            // fetchData(inputAddr);
-        } else if (validationUtils.isValidEthereumAddress(inputAddr)) {
-            fetchData(inputAddr);
-            // change the url so that the user fetches data for the same address when refreshing the page
-            props.history.push({
-                pathname: `/dashboard/${inputAddr}`,
-            });
-        }
-    };
+    const selectedAddress: string = useSelector(state => state.selectedAddress);
+    const allPoolsGlobal: AllAddressesGlobal = useSelector(state => state.allPools);
+    const isLoading = useSelector(state => state.loading);
+    const isFetchError = useSelector(state => state.error);
+    const noPoolsFound = selectedAddress && Object.keys(allPoolsGlobal).length === 0;
 
     let exceptionContent;
     let rightWrapperContent;
-    const noPoolsSavedInRedux = Object.keys(allPoolsGlobal).length === 0;
+    const noPoolsSavedInRedux = allPoolsGlobal ? Object.keys(allPoolsGlobal).length === 0 : true;
 
     const refreshPage = () => {
         window.location.reload();
     };
+
+    // if (!allPoolsGlobal) {
+    //     console.log('!allPoolsGlobal', allPoolsGlobal);
+    //     return null;
+    // }
 
     if (isFetchError) {
         exceptionContent = (
@@ -275,45 +188,7 @@ const Dashboard = (props: RouteComponentProps<any>) => {
                 </Header>
                 <LeftSubHeaderContent>
                     <AddressWrapper>
-                        <Select
-                            // textIndent={[70, 0]}
-                            // innerAddon={<AddressLabel>Address:</AddressLabel>}
-                            // addonAlign="left"
-                            // placeholder="Enter valid Ethereum address"
-                            // value={inputAddress}
-                            // onChange={event => {
-                            //     handleAddressChange(event.target.value);
-                            // }}
-                            // useWhiteBackground
-                            // useDarkBorder
-                            // noBorder
-
-                            options={buildAddressOptions(Object.keys(allAddresses))}
-                            onChange={(option: AddressOption) => {
-                                handleAddressChange(option.value);
-                            }}
-                            selected={['a']}
-                            useWhiteBackground
-                            useDarkBorder
-                        />
-
-                        <ManageAddressesButton
-                            onClick={() => {
-                                setShowAddressModal(true);
-                            }}
-                        >
-                            <Icon icon="edit" size={18} />
-                        </ManageAddressesButton>
-
-                        {showAddressModal && (
-                            <Modal
-                                cancelable
-                                onCancel={() => setShowAddressModal(false)}
-                                heading={'Manage addresses'}
-                            >
-                                <AddressModal />
-                            </Modal>
-                        )}
+                        <AddressSelect />
                     </AddressWrapper>
 
                     {exceptionContent

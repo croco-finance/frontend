@@ -41,10 +41,7 @@ const RightContainer = () => {
         return null;
     }
 
-    const tokenSymbolsArr =
-        selectedPoolId !== 'all'
-            ? formatUtils.getTokenSymbolArr(allPools[selectedPoolId].pooledTokens)
-            : [];
+    if (!selectedPoolId) return null;
 
     const headerHeadline =
         selectedPoolId === 'all' ? (
@@ -54,7 +51,7 @@ const RightContainer = () => {
             </SummaryHeadline>
         ) : (
             <PoolHeader
-                tokenSymbolsArr={tokenSymbolsArr}
+                tokenSymbolsArr={allPools[selectedPoolId].tokenSymbols}
                 exchange={allPools[selectedPoolId].exchange}
                 poolId={allPools[selectedPoolId].poolId}
             />

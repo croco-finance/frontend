@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Web3 from 'web3';
 import LandingPageText from './components/LandingPageText';
+import { useDispatch, useSelector } from 'react-redux';
+import * as actionTypes from '@actionTypes';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -229,12 +231,6 @@ const ExchangeLogosWrapper = styled.div`
 const ExchangeLogoWrapper = styled.div`
     margin: 10px 20px;
     display: flex;
-    /* box-shadow: 2px 2px 4px 0px rgba(215, 216, 222, 1); */
-    /* width: 28px;
-    height: 28px; */
-    /* border-radius: 200px; */
-    /* border: 1px solid ${colors.BACKGROUND_DARK}; */
-    /* background-color: white; */
     flex-direction: column;
     position: relative;
 `;
@@ -256,7 +252,9 @@ const web3 = new Web3(portis.provider);
 
 // props: RouteComponentProps<any>
 const LandingPage = (props: RouteComponentProps<any>) => {
+    const dispatch = useDispatch();
     const [inputAddress, setInputAddress] = useState('');
+    const [ensName, setEnsName] = useState('');
     const [linkAddress, setLinkAddress] = useState('');
     const [portisLoading, setPortisLoading] = useState(false);
     const [isValidAddress, setIsValidAddress] = useState(false);
@@ -287,6 +285,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                     setInputAddress(input);
                     setIsValidAddress(true);
                     setLinkAddress(ensAddress);
+                    setEnsName(ensAddress);
                     return;
                 }
             } catch (e) {
@@ -306,7 +305,15 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         try {
             const accounts = await web3.eth.getAccounts();
             setPortisLoading(false);
-            // TODO how Portis handles this in case the user have multiple accounts
+            let initialAddressesObj = {};
+            initialAddressesObj[accounts[0]] = { bundled: false, esn: null };
+
+            dispatch({
+                type: actionTypes.SET_ADDRESSES,
+                addresses: initialAddressesObj,
+            });
+
+            dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: accounts[0] });
             props.history.push({
                 pathname: `/dashboard/${accounts[0]}`,
             });
@@ -318,26 +325,16 @@ const LandingPage = (props: RouteComponentProps<any>) => {
 
     const handleButtonOnClick = () => {
         // fire custom Google Analytics event
+        let initialAddressesObj = {};
+        initialAddressesObj[inputAddress] = { bundled: false, esn: ensName ? ensName : null };
+
+        dispatch({
+            type: actionTypes.SET_ADDRESSES,
+            addresses: initialAddressesObj,
+        });
+        dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: inputAddress });
         analytics.Event('ADDRESS INPUT', "Landing Page let's go button pressed", inputAddress);
     };
-
-    // useEffect(() => {
-    // TODO run this function only
-    //     // check if there is any address stored in browser local storage
-    //     // local storage is not accessible in discreet mode
-    //     try {
-    //         const addressLocalStorage = localStorage.getItem('address');
-
-    //         // if there is some valid address, go directly to dashboard so that the user doesn't have to paste his address again
-    //         if (addressLocalStorage) {
-    //             props.history.push({
-    //                 pathname: `/dashboard/${addressLocalStorage}`,
-    //             });
-    //         }
-    //     } catch (e) {
-    //         console.log('Error while trying to access local storage');
-    //     }
-    // }, []);
 
     return (
         <MainWrapper>

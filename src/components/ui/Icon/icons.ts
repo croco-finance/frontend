@@ -28,4 +28,5 @@ export const ICONS: any = {
     support: require('../../../data/images/icons/support.svg'),
     close: require('../../../data/images/icons/close.svg'),
     copy: require('../../../data/images/icons/copy.svg'),
+    settings: require('../../../data/images/icons/settings.svg'),
 };

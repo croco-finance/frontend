@@ -97,7 +97,6 @@ const FetchSnapsForAddress = initialAddress => {
                         // Create new pool object
                         customPoolsObject[poolId] = {
                             exchange: exchange,
-                            userAddr: queryAddress,
                             poolId: poolId,
                             isActive: poolIsActive,
                             timestampEnd: snapshotsArr[snapshotsCount - 1].timestamp, // last sna
@@ -135,9 +134,6 @@ const FetchSnapsForAddress = initialAddress => {
                 });
                 dispatch({ type: actionTypes.SET_ADDRESS, address: queryAddress.trim() });
 
-                // save address to browser local storage
-                localStorage.setItem('address', queryAddress);
-
                 // fire Google Analytics event
                 analytics.Event('ADDRESS INPUT', 'Data fetching hook success', queryAddress);
             } catch (e) {
@@ -154,12 +150,8 @@ const FetchSnapsForAddress = initialAddress => {
             - is valid eth address
             - address is different from already loaded or no pools were found 
         */
-        const allPoolsGlobalCount = Object.keys(globalAllPools).length;
 
-        if (
-            validationUtils.isValidEthereumAddress(address.trim()) &&
-            (address !== globalAddress || allPoolsGlobalCount === 0)
-        ) {
+        if (validationUtils.isValidEthereumAddress(address.trim()) && address !== globalAddress) {
             fetchData(address);
         }
     }, [address]);
