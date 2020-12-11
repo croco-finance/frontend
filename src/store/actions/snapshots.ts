@@ -1,8 +1,6 @@
-import { analytics } from '@config';
-import { formatUtils, statsComputations, validationUtils } from '@utils';
+import { formatUtils, statsComputations, getSnaps } from '@utils';
 import exampleFirebaseData from '../../config/example-data-firebase';
 import * as actionTypes from '@actionTypes';
-import { getSnaps } from '@utils';
 import { AllPoolsGlobal, PoolToken, DexToPoolIdMap, Exchange, SnapStructure } from '@types';
 
 const getPooledTokensInfo = (tokens: Array<PoolToken>) => {
@@ -42,8 +40,9 @@ export const setIsLoading = (isLoading: boolean) => {
 const renameSnapKeys = (snaps: SnapStructure, address: string) => {
     const snapsWithNewKeys: SnapStructure | {} = {};
 
-    for (const [key, value] of Object.entries(snaps)) {
-        snapsWithNewKeys[key + address] = value;
+    for (const [poolId, value] of Object.entries(snaps)) {
+        const newKey = `${poolId}_${address}`;
+        snapsWithNewKeys[newKey] = value;
     }
 
     return snapsWithNewKeys;
@@ -53,6 +52,8 @@ export const fetchSnapshots = (addresses: string[] | string) => {
     // I can use dispatch here thanks to redux thunk
     return async dispatch => {
         dispatch(setIsLoading(true));
+
+        // if this is just single address, convert it to an array
         if (typeof addresses === 'string') {
             addresses = [addresses];
         }
@@ -107,7 +108,8 @@ export const fetchSnapshots = (addresses: string[] | string) => {
         let inactivePoolIds: Array<string> = [];
         const customPoolsObject: AllPoolsGlobal = {};
 
-        for (const [poolId, snapshotsArr] of Object.entries(fetchedSnapshotsBundled)) {
+        for (const [id, snapshotsArr] of Object.entries(fetchedSnapshotsBundled)) {
+            const poolId = id.split('_')[0];
             const snapshotsCount = snapshotsArr.length;
             const exchange: Exchange = snapshotsArr[0].exchange;
 
