@@ -3,7 +3,7 @@ import { ReactSVG } from 'react-svg';
 import styled, { css } from 'styled-components';
 import { ICONS } from './icons';
 
-const SvgWrapper = styled.div<{ size: number; color?: string }>`
+const SvgWrapper = styled.div<{ size: number; color?: string; hoverColor?: string }>`
     display: inline-block;
     height: ${props => props.size}px;
 
@@ -20,17 +20,34 @@ const SvgWrapper = styled.div<{ size: number; color?: string }>`
                   `
                 : null}
     }
+
+    &:hover > div > div > svg > path {
+        ${props =>
+            props.hoverColor
+                ? css`
+                      transition: 0.2s;
+                      fill: ${props.hoverColor};
+                  `
+                : null}
+    }
 `;
 
 interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
     icon: string; // add TokenType later
     size?: number;
     color?: string;
+    hoverColor?: string;
 }
 
-const Icon = ({ icon, className, size = 32, color, ...rest }: Props) => {
+const Icon = ({ icon, className, size = 32, color, hoverColor, ...rest }: Props) => {
     return (
-        <SvgWrapper className={className} size={size} color={color} {...rest}>
+        <SvgWrapper
+            className={className}
+            size={size}
+            color={color}
+            hoverColor={hoverColor}
+            {...rest}
+        >
             <ReactSVG
                 src={ICONS[icon]}
                 beforeInjection={(svg: any) => {

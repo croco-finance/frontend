@@ -38,6 +38,8 @@ const ItemsWrapper = styled.div``;
 const SummaryList = () => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const activePoolIds = useSelector(state => state.activePoolIds);
+
+    if (!allPools || Object.keys(allPools).length === 0) return null;
     const poolsSummaryInfo = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
     const { feesUsd, yieldUsd, txCostUsd, valueLockedUsd } = poolsSummaryInfo;
 

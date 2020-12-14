@@ -114,7 +114,6 @@ export interface Pool {
 export interface PoolItem {
     exchange: Exchange;
     poolId: string;
-    userAddr: string;
     isActive: boolean;
     pooledTokens: Array<GenericPooledTokenInfo>;
     yieldToken: Token | null;
@@ -140,8 +139,6 @@ export interface YieldTokenInfo {
 export interface GenericPooledTokenInfo extends Token {
     weight: number;
 }
-
-export type AllPoolsGlobal = { [key: string]: PoolItem };
 
 export interface GraphData {
     lastTimestamp: number;
@@ -178,3 +175,11 @@ export interface Deposit {
 }
 
 export interface Withdrawal extends Deposit {}
+
+export type AllPoolsGlobal = { [key: string]: PoolItem } | {};
+export interface AddressData {
+    bundled: boolean;
+    ens: string;
+}
+
+export type AllAddressesGlobal = { [key: string]: AddressData };

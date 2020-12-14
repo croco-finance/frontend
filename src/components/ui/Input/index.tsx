@@ -31,10 +31,18 @@ const StyledInput = styled.input<InputProps>`
     outline: none;
     box-sizing: border-box;
     width: 100%;
-    height: ${props => (props.variant === 'small' ? '38px' : '48px')};
+    height: ${props => (props.variant === 'small' ? '38px' : '50px')};
     background-color: ${props => (props.useWhiteBackground ? 'white' : colors.BACKGROUND)};
     transition: border 250ms ease-out;
     -moz-appearance: textfield;
+    text-overflow: ellipsis;
+
+    ${props =>
+        props.height
+            ? css`
+                  height: ${props.height}px;
+              `
+            : 'auto'};
 
     &:focus {
         border-color: ${colors.PASTEL_BLUE_MEDIUM};
@@ -113,6 +121,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
     onClear?: () => void;
     useWhiteBackground?: boolean;
     useDarkBorder?: boolean;
+    height?: number;
 }
 
 const Input = ({
@@ -121,6 +130,7 @@ const Input = ({
     innerRef,
     variant = 'large',
     width,
+    height,
     label,
     labelAddon,
     labelRight,

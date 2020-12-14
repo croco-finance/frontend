@@ -1,24 +1,29 @@
 import * as actionTypes from '@actionTypes';
 import { types } from '@config';
-
 interface InitialStateInterface {
-    allPools: types.AllPoolsGlobal | {};
+    allPools: types.AllPoolsGlobal;
     selectedPoolId: string;
-    exchangeToPoolMapping: { [key: string]: Array<string> } | {};
-    userAddress: string;
-    activePoolIds: Array<string>;
-    inactivePoolIds: Array<string>;
-    poolSnapshotsGrouped: { [key: string]: any } | {};
+    allAddresses: types.AllAddressesGlobal;
+    selectedAddress: string | 'bundled' | null;
+    exchangeToPoolMapping: { [key: string]: string[] } | null;
+    activePoolIds: string[];
+    inactivePoolIds: string[];
+    error: boolean;
+    loading: boolean;
+    noPoolsFound: boolean;
 }
 
 const initialState: InitialStateInterface = {
     allPools: {},
     selectedPoolId: '',
+    allAddresses: {},
+    selectedAddress: '',
     exchangeToPoolMapping: {},
-    userAddress: '',
     activePoolIds: [],
     inactivePoolIds: [],
-    poolSnapshotsGrouped: {},
+    error: false,
+    loading: false,
+    noPoolsFound: false,
 };
 
 // the argument is previous state. For the forst run it is initial state
@@ -29,6 +34,8 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 allPools: action.pools,
+                error: false,
+                noPoolsFound: false,
             };
         }
 
@@ -59,12 +66,87 @@ const reducer = (state = initialState, action) => {
                 exchangeToPoolMapping: action.exchangeToPoolMapping,
             };
         }
-        case actionTypes.SET_ADDRESS: {
+
+        case actionTypes.ADD_NEW_ADDRESS: {
+            // const stateCopy = { ...state };
+            // const addressesCopy = { ...stateCopy.allAddresses };
+            // addressesCopy[action.address] = { bundled: false };
             return {
                 ...state,
-                userAddress: action.address,
+                allAddresses: {
+                    ...state.allAddresses,
+                    [action.address]: { bundled: false, ens: action.ens },
+                },
             };
         }
+        case actionTypes.DELETE_ADDRESS: {
+            const { allAddresses, ...withoutAddress } = state;
+
+            const parentKey = 'allAddresses';
+            const childKey: string = action.address;
+
+            if (childKey) {
+                // Remove the parentKey element from original
+                const { [parentKey]: parentValue, ...noChild } = state;
+
+                // Remove the childKey from the parentKey element
+                const { [childKey]: removedValue, ...childWithout } = parentValue;
+
+                // Merge back together
+                const stateWithoutAddress = { ...noChild, [parentKey]: childWithout };
+
+                return stateWithoutAddress;
+            }
+            return state;
+        }
+
+        case actionTypes.SET_BUNDLED_ADDRESS: {
+            const { bundled, ens } = state.allAddresses[action.address];
+            return {
+                ...state,
+                allAddresses: {
+                    ...state.allAddresses,
+                    [action.address]: { bundled: !bundled, ens: ens },
+                },
+            };
+        }
+
+        case actionTypes.SET_ADDRESSES: {
+            return {
+                ...state,
+                allAddresses: { ...action.addresses },
+            };
+        }
+
+        case actionTypes.SET_SELECTED_ADDRESS: {
+            return {
+                ...state,
+                selectedAddress: action.address,
+            };
+        }
+
+        case actionTypes.FETCH_SNAPS_FAILED: {
+            return {
+                ...state,
+                error: true,
+                noPoolsFound: false,
+            };
+        }
+
+        case actionTypes.SET_IS_LOADING: {
+            return {
+                ...state,
+                loading: action.value,
+            };
+        }
+
+        case actionTypes.SET_NO_POOLS_FOUND: {
+            return {
+                ...state,
+                noPoolsFound: action.value,
+            };
+        }
+
         default:
             return state;
     }

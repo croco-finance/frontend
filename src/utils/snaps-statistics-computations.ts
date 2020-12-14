@@ -460,7 +460,6 @@ const getPoolsSummaryObject = (
     let totalValueLockedUsd = 0;
     let pooledTokenAmountsSum: { [key: string]: number } = {};
     let yieldTokenAmountsSum: { [key: string]: number } = {};
-
     filteredPoolIds.forEach(poolId => {
         const pool = allPools[poolId];
         const { cumulativeStats, pooledTokens, yieldToken } = pool;

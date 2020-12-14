@@ -91,6 +91,8 @@ const PoolItem = ({ poolId }: Props) => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
 
+    if (!allPools[poolId]) return null;
+
     const { pooledTokens, exchange } = allPools[poolId];
 
     if (allPools[poolId].cumulativeStats === null) return <p> No stats </p>;

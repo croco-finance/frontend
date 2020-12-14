@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Web3 from 'web3';
 import LandingPageText from './components/LandingPageText';
+import { useDispatch, useSelector } from 'react-redux';
+import * as actionTypes from '@actionTypes';
+import { portis, web3 } from '@config';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -229,12 +232,6 @@ const ExchangeLogosWrapper = styled.div`
 const ExchangeLogoWrapper = styled.div`
     margin: 10px 20px;
     display: flex;
-    /* box-shadow: 2px 2px 4px 0px rgba(215, 216, 222, 1); */
-    /* width: 28px;
-    height: 28px; */
-    /* border-radius: 200px; */
-    /* border: 1px solid ${colors.BACKGROUND_DARK}; */
-    /* background-color: white; */
     flex-direction: column;
     position: relative;
 `;
@@ -251,19 +248,15 @@ const StyledTextBadge = styled(TextBadge)`
     right: -8px;
 `;
 
-const portis = new Portis(constants.PORTIS_DAPP_KEY, 'mainnet');
-const web3 = new Web3(portis.provider);
-
 // props: RouteComponentProps<any>
 const LandingPage = (props: RouteComponentProps<any>) => {
+    const dispatch = useDispatch();
     const [inputAddress, setInputAddress] = useState('');
-    const [linkAddress, setLinkAddress] = useState('');
+    const [inputHexAddress, setInputHexAddress] = useState('');
+    const [ensName, setEnsName] = useState('');
     const [portisLoading, setPortisLoading] = useState(false);
     const [isValidAddress, setIsValidAddress] = useState(false);
     const [loadingEnsDomain, setLoadingEnsDomain] = useState(false);
-
-    // check if the address user typed in the input is valid Ethereum address
-    const linkPath = isValidAddress ? `/dashboard/${linkAddress}` : '';
 
     const handleAddressChange = async input => {
         setIsValidAddress(false);
@@ -272,8 +265,8 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         // check for ETH address validity
         if (validationUtils.isValidEthereumAddress(input)) {
             setInputAddress(input);
-            setLinkAddress(input);
             setIsValidAddress(true);
+            setInputHexAddress(input);
             return;
         }
 
@@ -281,12 +274,13 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         if (input.substring(input.length - 4) === '.eth') {
             try {
                 setLoadingEnsDomain(true);
-                const ensAddress = await web3.eth.ens.getAddress(input);
-                if (ensAddress) {
+                const ensHexAddress = await web3.eth.ens.getAddress(input);
+                if (ensHexAddress) {
                     setLoadingEnsDomain(false);
                     setInputAddress(input);
                     setIsValidAddress(true);
-                    setLinkAddress(ensAddress);
+                    setEnsName(input);
+                    setInputHexAddress(ensHexAddress);
                     return;
                 }
             } catch (e) {
@@ -297,8 +291,6 @@ const LandingPage = (props: RouteComponentProps<any>) => {
 
         setIsValidAddress(false);
         setLoadingEnsDomain(false);
-        setLinkAddress(input);
-        setLinkAddress('');
     };
 
     const handlePortisLogin = async () => {
@@ -306,9 +298,17 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         try {
             const accounts = await web3.eth.getAccounts();
             setPortisLoading(false);
-            // TODO how Portis handles this in case the user have multiple accounts
+            let initialAddressesObj = {};
+            initialAddressesObj[accounts[0]] = { bundled: false, ens: '' };
+
+            dispatch({
+                type: actionTypes.SET_ADDRESSES,
+                addresses: initialAddressesObj,
+            });
+
+            dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: accounts[0] });
             props.history.push({
-                pathname: `/dashboard/${accounts[0]}`,
+                pathname: `/dashboard`,
             });
         } catch (e) {
             console.log('Error when trying to log in using Portis');
@@ -318,26 +318,16 @@ const LandingPage = (props: RouteComponentProps<any>) => {
 
     const handleButtonOnClick = () => {
         // fire custom Google Analytics event
+        let initialAddressesObj = {};
+        initialAddressesObj[inputHexAddress] = { bundled: false, ens: ensName ? ensName : '' };
+
+        dispatch({
+            type: actionTypes.SET_ADDRESSES,
+            addresses: initialAddressesObj,
+        });
+        dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: inputAddress });
         analytics.Event('ADDRESS INPUT', "Landing Page let's go button pressed", inputAddress);
     };
-
-    // useEffect(() => {
-    // TODO run this function only
-    //     // check if there is any address stored in browser local storage
-    //     // local storage is not accessible in discreet mode
-    //     try {
-    //         const addressLocalStorage = localStorage.getItem('address');
-
-    //         // if there is some valid address, go directly to dashboard so that the user doesn't have to paste his address again
-    //         if (addressLocalStorage) {
-    //             props.history.push({
-    //                 pathname: `/dashboard/${addressLocalStorage}`,
-    //             });
-    //         }
-    //     } catch (e) {
-    //         console.log('Error while trying to access local storage');
-    //     }
-    // }, []);
 
     return (
         <MainWrapper>
@@ -392,7 +382,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                             }}
                             active={isValidAddress}
                             to={{
-                                pathname: linkPath,
+                                pathname: '/dashboard',
                             }}
                         >
                             {loadingEnsDomain ? (

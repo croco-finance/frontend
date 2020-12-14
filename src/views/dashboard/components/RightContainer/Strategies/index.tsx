@@ -100,7 +100,6 @@ const Strategies = () => {
         isActive,
         yieldToken,
         intervalStats,
-        userAddr,
         depositTimestamps,
         depositTokenAmounts,
         depositEthAmounts,
@@ -141,7 +140,7 @@ const Strategies = () => {
                 computed for current token prices. Try{' '}
                 <StyledLink
                     to={{
-                        pathname: `/simulator/${userAddr}`,
+                        pathname: `/simulator/`,
                     }}
                 >
                     simulator

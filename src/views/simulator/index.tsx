@@ -5,24 +5,18 @@ import {
     RightLayoutContainer,
     SimulatorContainer,
 } from '@components/layout';
-import {
-    InfoBox,
-    Input,
-    LoadingBox,
-    MultipleTokenSelect,
-    SocialButtonBubble,
-} from '@components/ui';
+import { InfoBox, LoadingBox, MultipleTokenSelect, SocialButtonBubble } from '@components/ui';
 import { animations, colors, styles, types, variables } from '@config';
 import { AllPoolsGlobal } from '@types';
-import { formatUtils, validationUtils } from '@utils';
+import { formatUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import styled from 'styled-components';
-import { FetchSnapsForAddress } from '../../hooks';
 import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
 import RightContainer from './components/RightContainer';
+import { AddressSelect } from '@components/containers';
 
 const Header = styled.div`
     padding: 0 20px;
@@ -47,7 +41,7 @@ const LeftSubHeaderContent = styled.div`
     align-self: center;
     ${styles.scrollBarStyles};
 
-    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
+    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
         // because choose pool options are not visible on mobile screen
         min-height: 60vh;
     }
@@ -101,12 +95,6 @@ const AddressWrapper = styled.div`
     /* border-radius: 8px;
     padding: 6px;
     background-color: ${colors.BACKGROUND_DARK}; */
-`;
-
-const AddressLabel = styled.div`
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    padding-left: 5px;
-    color: ${colors.FONT_MEDIUM};
 `;
 
 const CardInfoWrapper = styled.div`
@@ -199,34 +187,14 @@ const getInitialPriceCoeffs = (tokens: any) => {
 
 type TabOptions = 'overview' | 'strategies';
 
-const Simulator = (props: RouteComponentProps<any>) => {
+const Simulator = () => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const dispatch = useDispatch();
     const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
-
-    const [inputAddress, setInputAddress] = useState(
-        props.match.params.address ? props.match.params.address : '',
-    );
-
-    const handleAddressChange = inputAddr => {
-        // show in the input whatever user typed in, even if it's not a valid ETH address
-        setInputAddress(inputAddr);
-
-        // trim and lowercase the address
-        const formattedAddress = inputAddr.trim().toLowerCase();
-        if (validationUtils.isValidEthereumAddress(formattedAddress)) {
-            fetchData(formattedAddress);
-            // change the url so that the user fetches data for the same address when refreshing the page
-            props.history.push({
-                pathname: `/simulator/${formattedAddress}`,
-            });
-        }
-    };
-
-    const [{ isLoading, noPoolsFound, isFetchError }, fetchData] = FetchSnapsForAddress(
-        props.match.params.address ? props.match.params.address : '',
-    );
+    const isLoading = useSelector(state => state.loading);
+    const isFetchError = useSelector(state => state.error);
+    const noPoolsFound = useSelector(state => state.noPoolsFound);
 
     // SIMULATOR FUNCTIONS
     const [simulatedPriceCoefficients, setSimulatedPriceCoefficients]: any = useState(
@@ -319,18 +287,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                 </Header>
                 <LeftSubHeaderContent>
                     <AddressWrapper>
-                        <Input
-                            // noBorder
-                            textIndent={[70, 0]}
-                            innerAddon={<AddressLabel>Address:</AddressLabel>}
-                            addonAlign="left"
-                            placeholder="Enter valid Ethereum address"
-                            value={inputAddress}
-                            onChange={event => {
-                                handleAddressChange(event.target.value);
-                            }}
-                            useWhiteBackground
-                        />
+                        <AddressSelect />
                     </AddressWrapper>
 
                     {exceptionContent ? (
