@@ -99,6 +99,9 @@ interface Props {
     currentDepositTokenPricesArr: number[];
     depositTokenSymbolsArr: string[];
     poolIsActive: boolean;
+    yieldTokenSymbols: string[];
+    yieldTotalTokenAmounts: number[];
+    hasYieldReward: boolean;
 }
 
 const DifferentStrategy = ({
@@ -120,6 +123,9 @@ const DifferentStrategy = ({
     currentDepositTokenPricesArr,
     depositTokenSymbolsArr,
     poolIsActive,
+    yieldTokenSymbols,
+    yieldTotalTokenAmounts,
+    hasYieldReward,
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
@@ -153,19 +159,20 @@ const DifferentStrategy = ({
         />
     );
 
-    const yieldRow = yieldTokenSymbol ? (
-        <BoxRow
-            firstColumn="Yield reward"
-            secondColumn={
-                <VerticalCryptoAmounts
-                    tokenSymbols={[yieldTokenSymbol]}
-                    tokenAmounts={[yieldTotalTokenAmount]}
-                />
-            }
-            thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
-            columnColors={['medium', 'light', 'dark']}
-        />
-    ) : null;
+    const yieldRow =
+        hasYieldReward && yieldTokenSymbols && yieldTotalTokenAmounts ? (
+            <BoxRow
+                firstColumn="Yield reward"
+                secondColumn={
+                    <VerticalCryptoAmounts
+                        tokenSymbols={yieldTokenSymbols}
+                        tokenAmounts={yieldTotalTokenAmounts}
+                    />
+                }
+                thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+                columnColors={['medium', 'light', 'dark']}
+            />
+        ) : null;
 
     const txCostRow = (
         <BoxRow

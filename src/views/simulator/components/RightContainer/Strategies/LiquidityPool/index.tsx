@@ -88,14 +88,15 @@ interface Props {
     simulatedPoolValueUsd: number;
     withdrawalsTokenAmounts: number[];
     simulatedWithdrawalsUsd: number;
-    yieldTokenSymbol: string | undefined;
-    yieldTotalTokenAmount: number;
     simulatedTxCostUsd: number;
     simulatedPoolStrategyUsd: number;
     poolStrategyUsd: number;
     txCostEth: number;
     simulatedYieldUsd: number;
     lastSnapTimestampEnd: number;
+    yieldTokenSymbols: string[];
+    yieldTotalTokenAmounts: number[];
+    hasYieldReward: boolean;
 }
 
 const LiquidityPool = ({
@@ -105,14 +106,15 @@ const LiquidityPool = ({
     simulatedPoolValueUsd,
     withdrawalsTokenAmounts,
     simulatedWithdrawalsUsd,
-    yieldTokenSymbol,
-    yieldTotalTokenAmount,
     simulatedTxCostUsd,
     simulatedPoolStrategyUsd,
     poolStrategyUsd,
     txCostEth,
     simulatedYieldUsd,
     lastSnapTimestampEnd,
+    yieldTokenSymbols,
+    yieldTotalTokenAmounts,
+    hasYieldReward,
 }: Props) => {
     const [isOpened, setIsOpened] = useState(false);
 
@@ -154,19 +156,20 @@ const LiquidityPool = ({
         />
     );
 
-    const yieldRow = yieldTokenSymbol ? (
-        <BoxRow
-            firstColumn="Yield rewards"
-            secondColumn={
-                <VerticalCryptoAmounts
-                    tokenSymbols={[yieldTokenSymbol]}
-                    tokenAmounts={[yieldTotalTokenAmount]}
-                />
-            }
-            thirdColumn={<FiatValue value={simulatedYieldUsd} usePlusSymbol />}
-            columnColors={['medium', 'light', 'dark']}
-        />
-    ) : null;
+    const yieldRow =
+        hasYieldReward && yieldTokenSymbols && yieldTotalTokenAmounts ? (
+            <BoxRow
+                firstColumn="Yield rewards"
+                secondColumn={
+                    <VerticalCryptoAmounts
+                        tokenSymbols={yieldTokenSymbols}
+                        tokenAmounts={yieldTotalTokenAmounts}
+                    />
+                }
+                thirdColumn={<FiatValue value={simulatedYieldUsd} usePlusSymbol />}
+                columnColors={['medium', 'light', 'dark']}
+            />
+        ) : null;
 
     const txCostRow = (
         <BoxRow

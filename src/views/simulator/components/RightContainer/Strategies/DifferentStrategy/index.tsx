@@ -90,9 +90,7 @@ interface Props {
     txCostUsd: number;
     differentStrategyUsd: number;
     feesTokenAmounts: number[];
-    yieldTotalTokenAmount: number;
     tokenSymbols: string[];
-    yieldTokenSymbol: string | undefined;
     txCostEth: number;
     lastIntAvDailyRewardsUsd: number;
     depositTimestampsArr: number[];
@@ -107,6 +105,9 @@ interface Props {
     simulatedFeesTokenAmounts: number[];
     simulatedYieldUsd: number;
     lastIntSimulatedAverageRewards: number;
+    yieldTokenSymbols: string[];
+    yieldTotalTokenAmounts: number[];
+    hasYieldReward: boolean;
 }
 
 const DifferentStrategy = ({
@@ -114,9 +115,7 @@ const DifferentStrategy = ({
     poolStrategyUsd,
     yieldUsd,
     differentStrategyUsd,
-    yieldTotalTokenAmount,
     tokenSymbols,
-    yieldTokenSymbol,
     txCostEth,
     depositTimestampsArr,
     depositTokenAmountsArr,
@@ -130,6 +129,9 @@ const DifferentStrategy = ({
     simulatedFeesTokenAmounts,
     simulatedYieldUsd,
     lastIntSimulatedAverageRewards,
+    yieldTokenSymbols,
+    yieldTotalTokenAmounts,
+    hasYieldReward,
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
@@ -168,19 +170,20 @@ const DifferentStrategy = ({
         />
     );
 
-    const yieldRow = yieldTokenSymbol ? (
-        <BoxRow
-            firstColumn="Yield reward"
-            secondColumn={
-                <VerticalCryptoAmounts
-                    tokenSymbols={[yieldTokenSymbol]}
-                    tokenAmounts={[yieldTotalTokenAmount]}
-                />
-            }
-            thirdColumn={<FiatValue value={simulatedYieldUsd} usePlusSymbol />}
-            columnColors={['medium', 'light', 'dark']}
-        />
-    ) : null;
+    const yieldRow =
+        hasYieldReward && yieldTokenSymbols && yieldTotalTokenAmounts ? (
+            <BoxRow
+                firstColumn="Yield reward"
+                secondColumn={
+                    <VerticalCryptoAmounts
+                        tokenSymbols={yieldTokenSymbols}
+                        tokenAmounts={yieldTotalTokenAmounts}
+                    />
+                }
+                thirdColumn={<FiatValue value={simulatedYieldUsd} usePlusSymbol />}
+                columnColors={['medium', 'light', 'dark']}
+            />
+        ) : null;
 
     const txCostRow = (
         <BoxRow

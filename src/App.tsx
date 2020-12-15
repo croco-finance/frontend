@@ -23,9 +23,12 @@ const App = (props: RouteComponentProps<any>) => {
     useEffect(() => {
         if (typeof allAddresses === 'object' && allAddresses !== null) {
             if (Object.keys(allAddresses).length > 0) {
-                props.history.push({
-                    pathname: `/dashboard/`,
-                });
+                // If I am on landing page and some addresses in state are saved, go to dashboard
+                if (props.history.location.pathname === '/') {
+                    props.history.push({
+                        pathname: `/dashboard/`,
+                    });
+                }
 
                 if (selectedAddress) {
                     if (selectedAddress === 'bundled') {

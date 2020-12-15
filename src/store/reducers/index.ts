@@ -13,7 +13,7 @@ interface InitialStateInterface {
     noPoolsFound: boolean;
 }
 
-const initialState: InitialStateInterface = {
+export const initialState: InitialStateInterface = {
     allPools: {},
     selectedPoolId: '',
     allAddresses: {},
