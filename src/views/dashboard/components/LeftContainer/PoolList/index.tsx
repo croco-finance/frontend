@@ -4,6 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import PoolItem from '../PoolItem';
+import { Exchange } from '@types';
 
 const Wrapper = styled.div`
     padding-left: 0;
@@ -41,7 +42,7 @@ const HeaderChild = styled.div`
     align-items: center;
 `;
 
-const Exchange = styled(HeaderChild)`
+const ExchangeHeader = styled(HeaderChild)`
     justify-content: start;
     padding-left: 12px;
 `;
@@ -51,42 +52,57 @@ const Value = styled(HeaderChild)``;
 const Gains = styled(HeaderChild)``;
 
 const PoolList = () => {
-    const activePoolIds = useSelector(state => state.activePoolIds);
-    const inactivePoolIds = useSelector(state => state.inactivePoolIds);
+    const { activePoolIds, dexToPoolMap } = useSelector(state => state);
+    const dexRenderingOrder: Array<keyof typeof Exchange> = ['UNI_V2', 'SUSHI', 'BALANCER'];
+
+    const activePoolIdsOrdered: string[] = [];
+    const inactivePoolIdsOrdered: string[] = [];
+
+    dexRenderingOrder.forEach(dex => {
+        const dexPoolIds = dexToPoolMap[dex];
+
+        dexPoolIds.forEach(poolId => {
+            if (activePoolIds.includes(poolId)) {
+                activePoolIdsOrdered.push(poolId);
+            } else {
+                inactivePoolIdsOrdered.push(poolId);
+            }
+        });
+    });
 
     return (
         <Wrapper>
-            {activePoolIds.length > 0 ? (
+            {activePoolIdsOrdered.length > 0 ? (
                 <>
                     <Header>
-                        <Exchange>
+                        <ExchangeHeader>
                             <ActiveExchange>
                                 <InlineCircle size={26} color={colors.GREEN} />
                                 <ActiveHeadlineText>Active positions</ActiveHeadlineText>
                             </ActiveExchange>
-                        </Exchange>
+                        </ExchangeHeader>
                         <Value>Value</Value>
                         <Gains>Reward/Loss</Gains>
                     </Header>
-                    {activePoolIds.map(poolId => {
+                    {activePoolIdsOrdered.map(poolId => {
                         return <PoolItem key={poolId} poolId={poolId} />;
                     })}
                 </>
             ) : null}
 
-            {inactivePoolIds.length > 0 ? (
+            {inactivePoolIdsOrdered.length > 0 ? (
                 <>
                     <Header>
-                        <Exchange>
+                        <ExchangeHeader>
                             <InactiveHeadline noMarginTop={activePoolIds.length === 0}>
                                 Past positions
                             </InactiveHeadline>
-                        </Exchange>
+                        </ExchangeHeader>
                         <Value>{''}</Value>
                         <Gains>{activePoolIds.length === 0 ? 'Reward/Loss' : ''}</Gains>
                     </Header>
 
-                    {inactivePoolIds.map(poolId => {
+                    {inactivePoolIdsOrdered.map(poolId => {
                         return <PoolItem key={poolId} poolId={poolId} />;
                     })}
                 </>

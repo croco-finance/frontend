@@ -5,7 +5,7 @@ interface InitialStateInterface {
     selectedPoolId: string;
     allAddresses: types.AllAddressesGlobal;
     selectedAddress: string | 'bundled' | null;
-    exchangeToPoolMapping: { [key: string]: string[] };
+    dexToPoolMap: { [key: string]: string[] };
     activePoolIds: string[];
     inactivePoolIds: string[];
     error: boolean;
@@ -18,7 +18,7 @@ const initialState: InitialStateInterface = {
     selectedPoolId: '',
     allAddresses: {},
     selectedAddress: '',
-    exchangeToPoolMapping: {},
+    dexToPoolMap: { BALANCER: [], UNI_V2: [], SUSHI: [] },
     activePoolIds: [],
     inactivePoolIds: [],
     error: false,
@@ -36,7 +36,7 @@ const reducer = (state = initialState, action) => {
                 allPools: action.pools,
                 activePoolIds: action.activePoolIds,
                 inactivePoolIds: action.inactivePoolIds,
-                dexToPoolMapping: action.dexToPoolMapping,
+                dexToPoolMap: action.dexToPoolMap,
             };
         }
 
@@ -120,7 +120,7 @@ const reducer = (state = initialState, action) => {
                 allPools: action.pools,
                 activePoolIds: action.activePoolIds,
                 inactivePoolIds: action.inactivePoolIds,
-                dexToPoolMapping: action.dexToPoolMapping,
+                dexToPoolMap: action.dexToPoolMap,
                 loading: false,
                 error: false,
                 noPoolsFound: false,
@@ -148,7 +148,7 @@ const reducer = (state = initialState, action) => {
                 allPools: {},
                 activePoolIds: [],
                 inactivePoolIds: [],
-                dexToPoolMapping: [],
+                dexToPoolMap: [],
                 error: false,
                 loading: false,
                 noPoolsFound: true,

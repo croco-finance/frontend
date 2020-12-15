@@ -7,6 +7,7 @@ import { AllPoolsGlobal, PoolToken, DexToPoolIdMap, Exchange, SnapStructure, Sna
 import { ethersProvider } from '@config';
 import { setUnclaimed } from '@utils';
 
+// Helper functions
 const getPooledTokensInfo = (tokens: PoolToken[]) => {
     const tokensCount = tokens.length;
     let pooledTokensInfo = Array(tokensCount);
@@ -32,6 +33,18 @@ const getIfPoolHasYieldReward = (snapshots: Snap[]) => {
     return false;
 };
 
+const renameSnapKeys = (snaps: SnapStructure, address: string) => {
+    const snapsWithNewKeys: SnapStructure | {} = {};
+
+    for (const [poolId, value] of Object.entries(snaps)) {
+        const newKey = `${poolId}_${address}`;
+        snapsWithNewKeys[newKey] = value;
+    }
+
+    return snapsWithNewKeys;
+};
+
+// Action creators
 export const setPoolData = (
     pools: AllPoolsGlobal,
     dexToPoolMap: DexToPoolIdMap,
@@ -100,17 +113,6 @@ export const noPoolsFound = () => {
     };
 };
 
-const renameSnapKeys = (snaps: SnapStructure, address: string) => {
-    const snapsWithNewKeys: SnapStructure | {} = {};
-
-    for (const [poolId, value] of Object.entries(snaps)) {
-        const newKey = `${poolId}_${address}`;
-        snapsWithNewKeys[newKey] = value;
-    }
-
-    return snapsWithNewKeys;
-};
-
 export const fetchSnapshots = (addresses: string[] | string) => {
     // I can use dispatch here thanks to redux thunk
     return async dispatch => {
@@ -136,13 +138,13 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                     console.log(`Did not find any pools associated with: ${queryAddress}`);
                 } else {
                     // Set unclaimed yield rewards
-                    try {
-                        await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
-                    } catch (e) {
-                        console.log(
-                            `Could not fetch unclaimed yield rewards for address: ${address}`,
-                        );
-                    }
+                    // try {
+                    //     await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
+                    // } catch (e) {
+                    //     console.log(
+                    //         `Could not fetch unclaimed yield rewards for address: ${address}`,
+                    //     );
+                    // }
 
                     // Two addresses can have assets in the same pool. To create a unique iD for each pool, I combine user's address and pool ID
                     fetchedSnapshotsBundled = {
