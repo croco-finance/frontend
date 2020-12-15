@@ -89,7 +89,7 @@ interface Props {
     withdrawalsTokenAmounts: number[];
     simulatedWithdrawalsUsd: number;
     yieldTokenSymbol: string | undefined;
-    yieldTokenAmount: number;
+    yieldTotalTokenAmount: number;
     simulatedTxCostUsd: number;
     simulatedPoolStrategyUsd: number;
     poolStrategyUsd: number;
@@ -106,7 +106,7 @@ const LiquidityPool = ({
     withdrawalsTokenAmounts,
     simulatedWithdrawalsUsd,
     yieldTokenSymbol,
-    yieldTokenAmount,
+    yieldTotalTokenAmount,
     simulatedTxCostUsd,
     simulatedPoolStrategyUsd,
     poolStrategyUsd,
@@ -160,7 +160,7 @@ const LiquidityPool = ({
             secondColumn={
                 <VerticalCryptoAmounts
                     tokenSymbols={[yieldTokenSymbol]}
-                    tokenAmounts={[yieldTokenAmount]}
+                    tokenAmounts={[yieldTotalTokenAmount]}
                 />
             }
             thirdColumn={<FiatValue value={simulatedYieldUsd} usePlusSymbol />}

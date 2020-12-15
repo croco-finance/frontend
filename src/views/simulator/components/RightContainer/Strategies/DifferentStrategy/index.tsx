@@ -90,7 +90,7 @@ interface Props {
     txCostUsd: number;
     differentStrategyUsd: number;
     feesTokenAmounts: number[];
-    yieldTokenAmount: number;
+    yieldTotalTokenAmount: number;
     tokenSymbols: string[];
     yieldTokenSymbol: string | undefined;
     txCostEth: number;
@@ -114,7 +114,7 @@ const DifferentStrategy = ({
     poolStrategyUsd,
     yieldUsd,
     differentStrategyUsd,
-    yieldTokenAmount,
+    yieldTotalTokenAmount,
     tokenSymbols,
     yieldTokenSymbol,
     txCostEth,
@@ -174,7 +174,7 @@ const DifferentStrategy = ({
             secondColumn={
                 <VerticalCryptoAmounts
                     tokenSymbols={[yieldTokenSymbol]}
-                    tokenAmounts={[yieldTokenAmount]}
+                    tokenAmounts={[yieldTotalTokenAmount]}
                 />
             }
             thirdColumn={<FiatValue value={simulatedYieldUsd} usePlusSymbol />}

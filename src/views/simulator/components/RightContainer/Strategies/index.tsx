@@ -84,7 +84,7 @@ interface Props {
     yieldUsd: number;
     txCostUsd: number;
     feesTokenAmounts: number[];
-    yieldTokenAmount: number;
+    yieldTotalTokenAmount: number;
     tokenSymbols: string[];
     yieldTokenSymbol: string | undefined;
     txCostEth: number;
@@ -129,7 +129,7 @@ const Strategies = ({
     yieldUsd,
     txCostUsd,
     feesTokenAmounts,
-    yieldTokenAmount,
+    yieldTotalTokenAmount,
     tokenSymbols,
     yieldTokenSymbol,
     txCostEth,
@@ -207,7 +207,7 @@ const Strategies = ({
                     withdrawalsTokenAmounts={withdrawalsTokenAmounts}
                     simulatedWithdrawalsUsd={simulatedWithdrawalsUsd}
                     yieldTokenSymbol={yieldTokenSymbol}
-                    yieldTokenAmount={yieldTokenAmount}
+                    yieldTotalTokenAmount={yieldTotalTokenAmount}
                     simulatedTxCostUsd={simulatedTxCostUsd}
                     simulatedPoolStrategyUsd={simulatedPoolStrategyUsd}
                     poolStrategyUsd={poolStrategyUsd}
@@ -237,7 +237,7 @@ const Strategies = ({
                     differentStrategyUsd={tokensHodlStrategyUsd}
                     simulatedDifferentStrategyUsd={simulatedTokensHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
-                    yieldTokenAmount={yieldTokenAmount}
+                    yieldTotalTokenAmount={yieldTotalTokenAmount}
                     yieldTokenSymbol={yieldTokenSymbol}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
@@ -276,7 +276,7 @@ const Strategies = ({
                     differentStrategyUsd={ethHodlStrategyUsd}
                     simulatedDifferentStrategyUsd={simulatedEthHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
-                    yieldTokenAmount={yieldTokenAmount}
+                    yieldTotalTokenAmount={yieldTotalTokenAmount}
                     yieldTokenSymbol={yieldTokenSymbol}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}

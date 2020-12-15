@@ -121,7 +121,8 @@ const PoolOverview = () => {
         endPoolValueUsd,
         tokenBalances,
         feesTokenAmounts,
-        yieldTokenAmount,
+        yieldTotalTokenAmounts,
+        yieldTokenSymbols,
     } = pool.cumulativeStats;
 
     const endTimeText = isActive
@@ -136,14 +137,6 @@ const PoolOverview = () => {
 
     // Temporary check if to show unclaimed UNI yield rewards
     let showUnclaimedUni = false;
-
-    if (exchange === 'UNI_V2' && yieldTokenAmount === 0) {
-        intervalStats.forEach(stat => {
-            if (stat.staked === true) {
-                showUnclaimedUni = true;
-            }
-        });
-    }
 
     const feesRow = (
         <CardRow
@@ -160,13 +153,13 @@ const PoolOverview = () => {
     );
 
     const yieldRow =
-        hasYieldReward && yieldToken ? (
+        hasYieldReward && yieldTokenSymbols && yieldTotalTokenAmounts ? (
             <CardRow
                 firstColumn="Yield reward"
                 secondColumn={
                     <VerticalCryptoAmounts
-                        tokenSymbols={[yieldToken.symbol]}
-                        tokenAmounts={[yieldTokenAmount]}
+                        tokenSymbols={yieldTokenSymbols}
+                        tokenAmounts={yieldTotalTokenAmounts}
                     />
                 }
                 thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}

@@ -82,7 +82,7 @@ const PoolList = () => {
                                 Past positions
                             </InactiveHeadline>
                         </Exchange>
-                        <Value>{activePoolIds.length === 0 ? 'Value' : ''}</Value>
+                        <Value>{''}</Value>
                         <Gains>{activePoolIds.length === 0 ? 'Reward/Loss' : ''}</Gains>
                     </Header>
 

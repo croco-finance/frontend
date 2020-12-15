@@ -104,7 +104,7 @@ const LiquidityPool = () => {
         txCostUsd,
         currentPoolValueUsd,
         tokenBalances,
-        yieldTokenAmount,
+        yieldTotalTokenAmount,
         withdrawalsUsd,
         withdrawalsTokenAmounts,
         poolStrategyUsd,
@@ -159,7 +159,7 @@ const LiquidityPool = () => {
             secondColumn={
                 <VerticalCryptoAmounts
                     tokenSymbols={[yieldToken.symbol]}
-                    tokenAmounts={[yieldTokenAmount]}
+                    tokenAmounts={[yieldTotalTokenAmount]}
                 />
             }
             thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}

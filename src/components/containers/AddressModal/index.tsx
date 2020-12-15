@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actionTypes from '@actionTypes';
 import { validationUtils } from '@utils';
 import { AllAddressesGlobal } from '@types';
+import { resetPoolData } from '../../../store/actions/snapshots';
 
 const Wrapper = styled.div`
     position: relative;
@@ -141,7 +142,7 @@ const AddressModal = () => {
     const deleteAddress = address => {
         // if you deleted just selected address
         if (address === selectedAddress) {
-            dispatch({ type: actionTypes.SET_ALL_POOLS, pools: {} });
+            dispatch(resetPoolData());
             dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: null });
         }
 

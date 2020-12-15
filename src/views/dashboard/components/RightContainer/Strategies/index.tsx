@@ -112,7 +112,7 @@ const Strategies = () => {
         txCostUsd,
         ethPriceEnd,
         feesTokenAmounts,
-        yieldTokenAmount,
+        yieldTotalTokenAmount,
         poolStrategyUsd,
         tokensHodlStrategyTokenAmounts,
         ethHodlStrategyUsd,
@@ -180,7 +180,7 @@ const Strategies = () => {
                     txCostUsd={txCostUsd}
                     differentStrategyUsd={tokensHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
-                    yieldTokenAmount={yieldTokenAmount}
+                    yieldTotalTokenAmount={yieldTotalTokenAmount}
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
@@ -207,7 +207,7 @@ const Strategies = () => {
                     txCostUsd={txCostUsd}
                     differentStrategyUsd={ethHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
-                    yieldTokenAmount={yieldTokenAmount}
+                    yieldTotalTokenAmount={yieldTotalTokenAmount}
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}

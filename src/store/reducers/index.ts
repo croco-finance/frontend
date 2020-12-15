@@ -5,7 +5,7 @@ interface InitialStateInterface {
     selectedPoolId: string;
     allAddresses: types.AllAddressesGlobal;
     selectedAddress: string | 'bundled' | null;
-    exchangeToPoolMapping: { [key: string]: string[] } | null;
+    exchangeToPoolMapping: { [key: string]: string[] };
     activePoolIds: string[];
     inactivePoolIds: string[];
     error: boolean;
@@ -30,12 +30,13 @@ const initialState: InitialStateInterface = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         // NOTE: we do not need 'break' statements because we return in every case
-        case actionTypes.SET_ALL_POOLS: {
+        case actionTypes.SET_POOL_DATA: {
             return {
                 ...state,
                 allPools: action.pools,
-                error: false,
-                noPoolsFound: false,
+                activePoolIds: action.activePoolIds,
+                inactivePoolIds: action.inactivePoolIds,
+                dexToPoolMapping: action.dexToPoolMapping,
             };
         }
 
@@ -43,27 +44,6 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedPoolId: action.poolId,
-            };
-        }
-
-        case actionTypes.SET_ACTIVE_POOL_IDS: {
-            return {
-                ...state,
-                activePoolIds: action.activePoolIds,
-            };
-        }
-
-        case actionTypes.SET_INACTIVE_POOL_IDS: {
-            return {
-                ...state,
-                inactivePoolIds: action.inactivePoolIds,
-            };
-        }
-
-        case actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING: {
-            return {
-                ...state,
-                exchangeToPoolMapping: action.exchangeToPoolMapping,
             };
         }
 
@@ -130,6 +110,21 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 error: true,
                 noPoolsFound: false,
+                loading: false,
+            };
+        }
+
+        case actionTypes.FETCH_SNAPS_SUCCESS: {
+            return {
+                ...state,
+                allPools: action.pools,
+                activePoolIds: action.activePoolIds,
+                inactivePoolIds: action.inactivePoolIds,
+                dexToPoolMapping: action.dexToPoolMapping,
+                loading: false,
+                error: false,
+                noPoolsFound: false,
+                selectedPoolId: 'all',
             };
         }
 
@@ -144,6 +139,29 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 noPoolsFound: action.value,
+            };
+        }
+
+        case actionTypes.NO_POOLS_FOUND: {
+            return {
+                ...state,
+                allPools: {},
+                activePoolIds: [],
+                inactivePoolIds: [],
+                dexToPoolMapping: [],
+                error: false,
+                loading: false,
+                noPoolsFound: true,
+                selectedPoolId: 'all',
+            };
+        }
+
+        case actionTypes.FETCH_SNAPS_INIT: {
+            return {
+                ...state,
+                error: false,
+                loading: true,
+                noPoolsFound: false,
             };
         }
 

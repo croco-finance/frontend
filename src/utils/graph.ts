@@ -49,7 +49,9 @@ const getGraphData = (intervalStats: types.IntervalStats[]) => {
             timestamp: stat.timestampEnd,
             poolValues: poolValues,
             feesUsd: mathUtils.getTokenArrayValue(stat.feesTokenAmounts, stat.tokenPricesEnd),
-            yieldUsd: stat.yieldTokenPriceEnd ? stat.yieldTokenAmount * stat.yieldTokenPriceEnd : 0,
+            yieldUsd: stat.yieldTokenPriceEnd
+                ? stat.yieldTotalTokenAmount * stat.yieldTokenPriceEnd
+                : 0,
             txCostUsd: stat.txCostEthEnd * stat.ethPriceEnd,
             impLossUsd: stat.impLossUsd,
             poolValuePrev: stat.poolValueUsdStart,

@@ -105,9 +105,12 @@ export interface IntervalStats {
     ethPriceEnd: number;
     txCostEthStart: number;
     txCostEthEnd: number;
-    yieldTokenAmount: number;
+    yieldUnclaimedTokenAmount: number;
+    yieldClaimedTokenAmount: number;
+    yieldTotalTokenAmount: number;
     yieldTokenPriceStart: number | null;
     yieldTokenPriceEnd: number | null;
+    yieldTokenSymbol: string | null;
     impLossUsd: number;
     // strategies
     hodlValueUsd: number;
@@ -126,7 +129,11 @@ export interface CumulativeStats {
     tokenBalances: any;
     feesTokenAmounts: any;
     feesUsd: number;
-    yieldTokenAmount: number;
+    yieldUnclaimedTokenAmounts: number[];
+    yieldClaimedTokenAmounts: number[];
+    yieldTotalTokenAmounts: number[];
+    yieldTokenSymbols: string[];
+    yieldTokenPrices: Array<number | null>;
     yieldUsd: number;
     tokenPricesEnd: any;
     yieldTokenPriceEnd: number | null;
@@ -134,8 +141,8 @@ export interface CumulativeStats {
     txCostUsd: number;
     ethPriceEnd: number;
     timestampEnd: number;
-    depositsTokenAmounts: Array<number>;
-    withdrawalsTokenAmounts: Array<number>;
+    depositsTokenAmounts: number[];
+    withdrawalsTokenAmounts: number[];
     depositsUsd: number;
     withdrawalsUsd: number;
     poolStrategyUsd: number;
@@ -159,7 +166,7 @@ export interface PoolItem {
     exchange: Exchange;
     poolId: string;
     isActive: boolean;
-    pooledTokens: Array<GenericPooledTokenInfo>;
+    pooledTokens: GenericPooledTokenInfo[];
     yieldToken: Token | null;
     hasYieldReward: boolean;
     timestampEnd: number;
@@ -198,12 +205,12 @@ export interface GraphData {
 
 export interface SummaryStats {
     valueLockedUsd: any;
-    pooledTokenSymbols: Array<string>;
-    pooledTokenAmounts: Array<number>;
-    yieldTokenSymbols: Array<string>;
-    yieldTokenAmounts: Array<number>;
-    feesTokenSymbols: Array<string>;
-    feesTokenAmounts: Array<number>;
+    pooledTokenSymbols: string[];
+    pooledTokenAmounts: number[];
+    yieldTokenSymbols: string[];
+    yieldTotalTokenAmounts: number[];
+    feesTokenSymbols: string[];
+    feesTokenAmounts: number[];
     feesUsd: number;
     yieldUsd: number;
     txCostEth: number;
@@ -213,7 +220,7 @@ export interface SummaryStats {
 
 export interface Deposit {
     timestamp: number | undefined;
-    tokenAmounts: Array<number>;
+    tokenAmounts: number[];
     valueUsd: number;
     valueEth: number;
 }

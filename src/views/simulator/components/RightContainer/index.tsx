@@ -74,7 +74,7 @@ const RightContainer = ({
         txCostUsd,
         tokenBalances,
         feesTokenAmounts,
-        yieldTokenAmount,
+        yieldTotalTokenAmount,
         withdrawalsTokenAmounts,
         poolStrategyUsd,
         ethPriceEnd,
@@ -141,7 +141,7 @@ const RightContainer = ({
 
     // Get current usd value of fees and yield obtained in the last interval (not simulated)
     const lastIntYieldUsd = lastIntervalStat.yieldTokenPriceEnd
-        ? lastIntervalStat.yieldTokenAmount * lastIntervalStat.yieldTokenPriceEnd
+        ? lastIntervalStat.yieldTotalTokenAmount * lastIntervalStat.yieldTokenPriceEnd
         : 0;
 
     const simulatedWithdrawalsUsd = mathUtils.getTokenArrayValue(
@@ -150,7 +150,7 @@ const RightContainer = ({
     );
 
     // YIELD AND TX COST
-    const simulatedYieldUsd = yieldTokenAmount * simulatedYieldPrice; //TODO check if yield among pooled tokens
+    const simulatedYieldUsd = yieldTotalTokenAmount * simulatedYieldPrice; //TODO check if yield among pooled tokens
     const simulatedTxCostUsd = txCostEth * simulatedEthPrice;
 
     // STRATEGIES
@@ -220,7 +220,7 @@ const RightContainer = ({
                     feesTokenAmounts={feesTokenAmounts}
                     txCostUsd={txCostUsd}
                     txCostEth={txCostEth}
-                    yieldTokenAmount={yieldTokenAmount}
+                    yieldTotalTokenAmount={yieldTotalTokenAmount}
                     yieldUsd={yieldUsd}
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}

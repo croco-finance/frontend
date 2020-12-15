@@ -1,9 +1,13 @@
 import { formatUtils, statsComputations, getSnaps } from '@utils';
 import exampleFirebaseData from '../../config/example-data-firebase';
-import * as actionTypes from '@actionTypes';
-import { AllPoolsGlobal, PoolToken, DexToPoolIdMap, Exchange, SnapStructure } from '@types';
+import exampleFirebaseDataSmall from '../../config/example-data-bundled';
 
-const getPooledTokensInfo = (tokens: Array<PoolToken>) => {
+import * as actionTypes from '@actionTypes';
+import { AllPoolsGlobal, PoolToken, DexToPoolIdMap, Exchange, SnapStructure, Snap } from '@types';
+import { ethersProvider } from '@config';
+import { setUnclaimed } from '@utils';
+
+const getPooledTokensInfo = (tokens: PoolToken[]) => {
     const tokensCount = tokens.length;
     let pooledTokensInfo = Array(tokensCount);
 
@@ -15,12 +19,43 @@ const getPooledTokensInfo = (tokens: Array<PoolToken>) => {
     return pooledTokensInfo;
 };
 
-// I expect to receive pools as an argument and just return an action I want to dispatch
-// This is the action creator I want to dispatch eventually once the async code (fetchSnapshots() goes well)
-export const setPools = (pools: AllPoolsGlobal) => {
+const getIfPoolHasYieldReward = (snapshots: Snap[]) => {
+    for (let i = 0; i < snapshots.length; i++) {
+        if (snapshots[i].yieldReward !== null) {
+            const claimed = snapshots[i].yieldReward?.claimed;
+            const unclaimed = snapshots[i].yieldReward?.unclaimed;
+
+            if ((claimed && claimed > 0) || (unclaimed && unclaimed > 0)) return true;
+        }
+    }
+
+    return false;
+};
+
+export const setPoolData = (
+    pools: AllPoolsGlobal,
+    dexToPoolMap: DexToPoolIdMap,
+    activePoolIds: string[],
+    inactivePoolIds: string[],
+) => {
     return {
-        type: actionTypes.SET_ALL_POOLS,
+        type: actionTypes.SET_POOL_DATA,
         pools: pools,
+        dexToPoolMap: dexToPoolMap,
+        activePoolIds: activePoolIds,
+        inactivePoolIds: inactivePoolIds,
+    };
+};
+
+export const resetPoolData = () => {
+    return dispatch => {
+        dispatch(setPoolData({}, { BALANCER: [], UNI_V2: [], SUSHI: [] }, [], []));
+    };
+};
+
+export const fetchSnapsInit = () => {
+    return {
+        type: actionTypes.FETCH_SNAPS_INIT,
     };
 };
 
@@ -30,10 +65,38 @@ export const fetchSnapsFailed = () => {
     };
 };
 
+export const fetchSnapsSuccess = (
+    pools: AllPoolsGlobal,
+    dexToPoolMap: DexToPoolIdMap,
+    activePoolIds: string[],
+    inactivePoolIds: string[],
+) => {
+    return {
+        type: actionTypes.FETCH_SNAPS_SUCCESS,
+        pools: pools,
+        dexToPoolMap: dexToPoolMap,
+        activePoolIds: activePoolIds,
+        inactivePoolIds: inactivePoolIds,
+    };
+};
+
+export const setSelectedPoolId = (poolId: string) => {
+    return {
+        type: actionTypes.SET_SELECTED_POOL_ID,
+        poolId: poolId,
+    };
+};
+
 export const setIsLoading = (isLoading: boolean) => {
     return {
         type: actionTypes.SET_IS_LOADING,
         value: isLoading,
+    };
+};
+
+export const noPoolsFound = () => {
+    return {
+        type: actionTypes.NO_POOLS_FOUND,
     };
 };
 
@@ -51,7 +114,7 @@ const renameSnapKeys = (snaps: SnapStructure, address: string) => {
 export const fetchSnapshots = (addresses: string[] | string) => {
     // I can use dispatch here thanks to redux thunk
     return async dispatch => {
-        dispatch(setIsLoading(true));
+        dispatch(fetchSnapsInit());
 
         // if this is just single address, convert it to an array
         if (typeof addresses === 'string') {
@@ -62,50 +125,53 @@ export const fetchSnapshots = (addresses: string[] | string) => {
 
         for (const address of addresses) {
             const queryAddress = address.trim().toLowerCase();
-
-            // initialize variable containing snapshots for all addresses
-            let fetchedSnapshotsAddress;
+            console.log('Processing address: ', queryAddress);
 
             // try to fetch data for the given address
             try {
-                fetchedSnapshotsAddress = await getSnaps(queryAddress);
+                const fetchedSnapshotsAddress = await getSnaps(queryAddress);
 
                 // check if data was fetched. If yes, add it to pool
                 if (!fetchedSnapshotsAddress) {
                     console.log(`Did not find any pools associated with: ${queryAddress}`);
                 } else {
+                    // Set unclaimed yield rewards
+                    try {
+                        await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
+                    } catch (e) {
+                        console.log(
+                            `Could not fetch unclaimed yield rewards for address: ${address}`,
+                        );
+                    }
+
                     // Two addresses can have assets in the same pool. To create a unique iD for each pool, I combine user's address and pool ID
                     fetchedSnapshotsBundled = {
                         ...fetchedSnapshotsBundled,
                         ...renameSnapKeys(fetchedSnapshotsAddress, queryAddress),
                     };
                 }
+
+                console.log('fetchedSnapshotsAddress', fetchedSnapshotsAddress);
             } catch (e) {
                 dispatch(fetchSnapsFailed());
                 console.log("ERROR: Couldn't fetch data from database.");
             }
         }
 
+        // fetchedSnapshotsBundled = exampleFirebaseData;
+        console.log('fetchedSnapshotsBundled: ', fetchedSnapshotsBundled);
+
         // check if some pools were found
         if (Object.keys(fetchedSnapshotsBundled).length === 0) {
-            // setNoPoolsFound(true);
-            dispatch({ type: actionTypes.SET_ACTIVE_POOL_IDS, activePoolIds: [] });
-            dispatch({
-                type: actionTypes.SET_INACTIVE_POOL_IDS,
-                inactivePoolIds: [],
-            });
-            dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
-            dispatch(setPools({}));
-            dispatch(setIsLoading(false));
-            dispatch({ type: actionTypes.SET_NO_POOLS_FOUND, value: true });
+            dispatch(noPoolsFound());
             return;
         }
 
         // Process fetched snapshots
         // declare Redux variables
-        let exToPoolMap: DexToPoolIdMap = { BALANCER: [], UNI_V2: [], SUSHI: [] };
-        let activePoolIds: Array<string> = [];
-        let inactivePoolIds: Array<string> = [];
+        let dexToPoolMap: DexToPoolIdMap = { BALANCER: [], UNI_V2: [], SUSHI: [] };
+        let activePoolIds: string[] = [];
+        let inactivePoolIds: string[] = [];
         const customPoolsObject: AllPoolsGlobal = {};
 
         for (const [id, snapshotsArr] of Object.entries(fetchedSnapshotsBundled)) {
@@ -113,7 +179,7 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             const snapshotsCount = snapshotsArr.length;
             const exchange: Exchange = snapshotsArr[0].exchange;
 
-            if (snapshotsCount > 1 && exchange in exToPoolMap) {
+            if (snapshotsCount > 1 && exchange in dexToPoolMap) {
                 // compute interval and cumulative stats
                 const {
                     intervalStats,
@@ -129,22 +195,22 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                 const poolIsActive = snapshotsArr[snapshotsCount - 1].liquidityTokenBalance > 0;
 
                 if (poolIsActive) {
-                    activePoolIds.push(poolId);
+                    activePoolIds.push(id);
                 } else {
-                    inactivePoolIds.push(poolId);
+                    inactivePoolIds.push(id);
                 }
 
                 // Push PoolId to <Exchange, PoolId> mapping
                 const exchange: Exchange = snapshotsArr[0].exchange;
-                exToPoolMap[exchange].push(poolId);
+                dexToPoolMap[exchange].push(id);
 
                 // Create new pool object
-                customPoolsObject[poolId] = {
+                customPoolsObject[id] = {
                     exchange: exchange,
                     poolId: poolId,
                     isActive: poolIsActive,
                     timestampEnd: snapshotsArr[snapshotsCount - 1].timestamp, // last sna
-                    hasYieldReward: snapshotsArr[0].yieldReward !== null,
+                    hasYieldReward: getIfPoolHasYieldReward(snapshotsArr),
                     yieldToken: snapshotsArr[0].yieldReward
                         ? snapshotsArr[0].yieldReward.token
                         : null,
@@ -164,19 +230,9 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             }
         }
 
-        // The order here is important. TODO - change state structure and save all of these at once
-        dispatch({
-            type: actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING,
-            exchangeToPoolMapping: exToPoolMap,
-        });
-        dispatch({ type: actionTypes.SET_ACTIVE_POOL_IDS, activePoolIds: activePoolIds });
-        dispatch({
-            type: actionTypes.SET_INACTIVE_POOL_IDS,
-            inactivePoolIds: inactivePoolIds,
-        });
-        dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: 'all' });
-
-        dispatch(setPools(customPoolsObject));
-        dispatch(setIsLoading(false));
+        // console.log('customPoolsObject', customPoolsObject);
+        dispatch(
+            fetchSnapsSuccess(customPoolsObject, dexToPoolMap, activePoolIds, inactivePoolIds),
+        );
     };
 };
