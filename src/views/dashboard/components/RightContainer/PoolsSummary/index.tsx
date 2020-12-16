@@ -92,7 +92,7 @@ const PoolsSummary = () => {
         pooledTokenSymbols,
         pooledTokenAmounts,
         yieldTokenSymbols,
-        yieldTokenAmounts,
+        yieldTotalTokenAmounts,
         yieldUsd,
         txCostEth,
         txCostUsd,
@@ -121,7 +121,7 @@ const PoolsSummary = () => {
             secondColumn={
                 <VerticalCryptoAmounts
                     tokenSymbols={yieldTokenSymbols}
-                    tokenAmounts={yieldTokenAmounts}
+                    tokenAmounts={yieldTotalTokenAmounts}
                 />
             }
             thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}

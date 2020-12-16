@@ -1,6 +1,5 @@
 import { analytics, animations, colors, variables, types } from '@config';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PoolOverview from './PoolOverview';
@@ -10,6 +9,8 @@ import { graphUtils, formatUtils } from '@utils';
 import { InlineCircle, TabSelectHeader, PoolHeader } from '@components/ui';
 import Overview from './Overview';
 import Strategies from './Strategies';
+import { AppStateInterface } from '@types';
+import { useSelector } from '../../../../store/reducers';
 
 const Wrapper = styled.div`
     display: flex;
@@ -32,9 +33,7 @@ const SummaryHeadlineText = styled.div`
 type TabOptions = 'overview' | 'strategies';
 
 const RightContainer = () => {
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    const activePoolIds = useSelector(state => state.activePoolIds);
+    const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state);
     const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
 
     if (activePoolIds.length <= 0 && selectedPoolId === 'all') {

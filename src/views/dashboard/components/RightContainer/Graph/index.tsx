@@ -36,6 +36,32 @@ const getYAxisMaxValue = data => {
     return maxValue;
 };
 
+const getFormattedXAxisLabel = (value: string) => {
+    const values = value.split('_');
+    const timestamp = values[0];
+    const label = values[1];
+
+    return label;
+};
+
+const TickText = styled.text`
+    font-size: 12px;
+    color: ${colors.FONT_LIGHT};
+`;
+class CustomizedAxisTick extends PureComponent<any, any> {
+    render() {
+        const { x, y, stroke, payload } = this.props;
+
+        return (
+            <g transform={`translate(${x},${10})`}>
+                <TickText x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-40)">
+                    {getFormattedXAxisLabel(payload.value)}
+                </TickText>
+            </g>
+        );
+    }
+}
+
 interface Props {
     height?: number;
     referenceX?: number;
@@ -77,13 +103,13 @@ class Graph extends PureComponent<Props, State> {
         }
 
         return (
-            <ResponsiveContainer width="100%" height={270}>
+            <ResponsiveContainer width="100%" height={350}>
                 <AreaChart
                     width={800}
-                    height={260}
+                    height={320}
                     data={data}
                     margin={{
-                        top: 10,
+                        top: 40,
                         right: 10,
                         bottom: 10,
                         left: 70,
@@ -120,6 +146,25 @@ class Graph extends PureComponent<Props, State> {
                     })}
 
                     <XAxis
+                        xAxisId={0}
+                        dataKey="label"
+                        tick={
+                            data.length > 20 ? (
+                                {
+                                    display: 'none',
+                                }
+                            ) : (
+                                <CustomizedAxisTick />
+                            )
+                        }
+                        tickFormatter={value => getFormattedXAxisLabel(value)}
+                        orientation={'top'}
+                        interval={data.length > 20 ? 2 : 0}
+                        stroke={colors.WHITE}
+                    ></XAxis>
+
+                    <XAxis
+                        xAxisId={1}
                         dataKey="timestamp"
                         tick={{
                             fontSize: variables.FONT_SIZE.SMALL,
@@ -142,6 +187,7 @@ class Graph extends PureComponent<Props, State> {
                             }}
                         /> */}
                     </XAxis>
+
                     <YAxis
                         tick={{ fontSize: variables.FONT_SIZE.SMALL }}
                         domain={[0, maxValue]}

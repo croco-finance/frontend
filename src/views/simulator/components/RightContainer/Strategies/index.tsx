@@ -84,9 +84,7 @@ interface Props {
     yieldUsd: number;
     txCostUsd: number;
     feesTokenAmounts: number[];
-    yieldTokenAmount: number;
     tokenSymbols: string[];
-    yieldTokenSymbol: string | undefined;
     txCostEth: number;
     lastIntAvDailyRewardsUsd: number;
     depositTimestampsArr: number[];
@@ -112,6 +110,9 @@ interface Props {
     tokensHodlStrategyTokenAmounts: number[];
     ethHodlStrategyEth: number;
     lastIntSimulatedAverageRewards: number;
+    yieldTokenSymbols: string[];
+    yieldTotalTokenAmounts: number[];
+    hasYieldReward: boolean;
     // slider
     sliderDefaultCoeffs: number[];
     sliderDefaultEthCoeff: number;
@@ -129,9 +130,7 @@ const Strategies = ({
     yieldUsd,
     txCostUsd,
     feesTokenAmounts,
-    yieldTokenAmount,
     tokenSymbols,
-    yieldTokenSymbol,
     txCostEth,
     lastIntAvDailyRewardsUsd,
     lastSnapTimestampEnd,
@@ -156,6 +155,9 @@ const Strategies = ({
     sliderDefaultCoeffs,
     sliderDefaultEthCoeff,
     lastIntSimulatedAverageRewards,
+    yieldTokenSymbols,
+    yieldTotalTokenAmounts,
+    hasYieldReward,
 }: Props) => {
     const graphData = graphUtils.getStrategiesGraphData(
         poolStrategyUsd,
@@ -206,14 +208,15 @@ const Strategies = ({
                     simulatedPoolValueUsd={poolIsActive ? simulatedPoolValueUsd : 0}
                     withdrawalsTokenAmounts={withdrawalsTokenAmounts}
                     simulatedWithdrawalsUsd={simulatedWithdrawalsUsd}
-                    yieldTokenSymbol={yieldTokenSymbol}
-                    yieldTokenAmount={yieldTokenAmount}
                     simulatedTxCostUsd={simulatedTxCostUsd}
                     simulatedPoolStrategyUsd={simulatedPoolStrategyUsd}
                     poolStrategyUsd={poolStrategyUsd}
                     txCostEth={txCostEth}
                     simulatedYieldUsd={simulatedYieldUsd}
                     lastSnapTimestampEnd={lastSnapTimestampEnd}
+                    hasYieldReward={hasYieldReward}
+                    yieldTokenSymbols={yieldTokenSymbols}
+                    yieldTotalTokenAmounts={yieldTotalTokenAmounts}
                 />
             </StrategyItemWrapper>
 
@@ -237,8 +240,6 @@ const Strategies = ({
                     differentStrategyUsd={tokensHodlStrategyUsd}
                     simulatedDifferentStrategyUsd={simulatedTokensHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
-                    yieldTokenAmount={yieldTokenAmount}
-                    yieldTokenSymbol={yieldTokenSymbol}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
                     depositTimestampsArr={depositTimestampsArr}
@@ -252,6 +253,9 @@ const Strategies = ({
                     simulatedFeesTokenAmounts={simulatedFeesTokenAmounts}
                     simulatedYieldUsd={simulatedYieldUsd}
                     lastIntSimulatedAverageRewards={lastIntSimulatedAverageRewards}
+                    hasYieldReward={hasYieldReward}
+                    yieldTokenSymbols={yieldTokenSymbols}
+                    yieldTotalTokenAmounts={yieldTotalTokenAmounts}
                 />
             </StrategyItemWrapper>
 
@@ -276,8 +280,6 @@ const Strategies = ({
                     differentStrategyUsd={ethHodlStrategyUsd}
                     simulatedDifferentStrategyUsd={simulatedEthHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
-                    yieldTokenAmount={yieldTokenAmount}
-                    yieldTokenSymbol={yieldTokenSymbol}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
                     depositTimestampsArr={depositTimestampsArr}
@@ -291,6 +293,9 @@ const Strategies = ({
                     simulatedFeesTokenAmounts={simulatedFeesTokenAmounts}
                     simulatedYieldUsd={simulatedYieldUsd}
                     lastIntSimulatedAverageRewards={lastIntSimulatedAverageRewards}
+                    hasYieldReward={hasYieldReward}
+                    yieldTokenSymbols={yieldTokenSymbols}
+                    yieldTotalTokenAmounts={yieldTotalTokenAmounts}
                 />
             </StrategyItemWrapper>
             {/* <SubHeadline>Strategy values</SubHeadline> */}

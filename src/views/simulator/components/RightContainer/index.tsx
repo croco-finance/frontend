@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Overview from './Overview';
 import { TabSelectHeader, PoolHeader } from '@components/ui';
 import { formatUtils, graphUtils, simulatorUtils, mathUtils } from '@utils';
-import { AllPoolsGlobal } from '@types';
+import { AllPoolsGlobal, PoolItem } from '@types';
 import Strategies from './Strategies';
 import { getTokenArrayValue } from 'src/utils/math';
 
@@ -36,7 +36,7 @@ const RightContainer = ({
     selectedTab,
 }: Props) => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const selectedPoolId: string = useSelector(state => state.selectedPoolId);
     // const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
 
     // TODO make the following checks and computations cleaner
@@ -51,21 +51,19 @@ const RightContainer = ({
         return null;
     }
 
-    let pool = allPools[selectedPoolId];
+    const pool: PoolItem = allPools[selectedPoolId];
 
     let {
         poolId,
-        pooledTokens,
         isActive,
         yieldToken,
-        intervalStats,
         exchange,
         tokenWeights,
-        deposits,
         depositTimestamps,
         depositTokenAmounts,
         depositEthAmounts,
         tokenSymbols,
+        hasYieldReward,
     } = pool;
 
     const {
@@ -74,7 +72,6 @@ const RightContainer = ({
         txCostUsd,
         tokenBalances,
         feesTokenAmounts,
-        yieldTokenAmount,
         withdrawalsTokenAmounts,
         poolStrategyUsd,
         ethPriceEnd,
@@ -89,6 +86,8 @@ const RightContainer = ({
         yieldTokenPriceEnd,
         currentTokenBalances,
         feesTokenAmountsExceptLastInt,
+        yieldTokenSymbols,
+        yieldTotalTokenAmounts,
     } = pool.cumulativeStats;
 
     // Get simulated prices of pooled tokens and ETH
@@ -141,7 +140,7 @@ const RightContainer = ({
 
     // Get current usd value of fees and yield obtained in the last interval (not simulated)
     const lastIntYieldUsd = lastIntervalStat.yieldTokenPriceEnd
-        ? lastIntervalStat.yieldTokenAmount * lastIntervalStat.yieldTokenPriceEnd
+        ? lastIntervalStat.yieldTotalTokenAmount * lastIntervalStat.yieldTokenPriceEnd
         : 0;
 
     const simulatedWithdrawalsUsd = mathUtils.getTokenArrayValue(
@@ -150,7 +149,10 @@ const RightContainer = ({
     );
 
     // YIELD AND TX COST
-    const simulatedYieldUsd = yieldTokenAmount * simulatedYieldPrice; //TODO check if yield among pooled tokens
+    // TODO support simualted yield price for multiple tokens
+    let simulatedYieldUsd = yieldTotalTokenAmounts[0] * simulatedYieldPrice; //TODO check if yield among pooled tokens
+    // if (!simulatedYieldUsd) simulatedYieldUsd = 0;
+
     const simulatedTxCostUsd = txCostEth * simulatedEthPrice;
 
     // STRATEGIES
@@ -220,9 +222,7 @@ const RightContainer = ({
                     feesTokenAmounts={feesTokenAmounts}
                     txCostUsd={txCostUsd}
                     txCostEth={txCostEth}
-                    yieldTokenAmount={yieldTokenAmount}
                     yieldUsd={yieldUsd}
-                    yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
                     depositTimestampsArr={depositTimestamps}
                     depositTokenAmountsArr={depositTokenAmounts}
@@ -230,6 +230,10 @@ const RightContainer = ({
                     withdrawalsTokenAmounts={withdrawalsTokenAmounts}
                     lastIntSimulatedAverageRewards={lastIntSimulatedAverageRewards}
                     lastSnapTimestampEnd={lastSnapTimestampEnd}
+                    hasYieldReward={hasYieldReward}
+                    yieldTokenSymbols={yieldTokenSymbols}
+                    yieldTotalTokenAmounts={yieldTotalTokenAmounts}
+                    // simulated values
                     simulatedPooledTokenPrices={simulatedPooledTokenPrices}
                     simulatedEthPrice={simulatedEthPrice}
                     simulatedPooledTokenBalances={simulatedTokenBalances}

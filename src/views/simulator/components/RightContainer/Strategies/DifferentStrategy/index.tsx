@@ -90,9 +90,7 @@ interface Props {
     txCostUsd: number;
     differentStrategyUsd: number;
     feesTokenAmounts: number[];
-    yieldTokenAmount: number;
     tokenSymbols: string[];
-    yieldTokenSymbol: string | undefined;
     txCostEth: number;
     lastIntAvDailyRewardsUsd: number;
     depositTimestampsArr: number[];
@@ -107,6 +105,9 @@ interface Props {
     simulatedFeesTokenAmounts: number[];
     simulatedYieldUsd: number;
     lastIntSimulatedAverageRewards: number;
+    yieldTokenSymbols: string[];
+    yieldTotalTokenAmounts: number[];
+    hasYieldReward: boolean;
 }
 
 const DifferentStrategy = ({
@@ -114,9 +115,7 @@ const DifferentStrategy = ({
     poolStrategyUsd,
     yieldUsd,
     differentStrategyUsd,
-    yieldTokenAmount,
     tokenSymbols,
-    yieldTokenSymbol,
     txCostEth,
     depositTimestampsArr,
     depositTokenAmountsArr,
@@ -130,6 +129,9 @@ const DifferentStrategy = ({
     simulatedFeesTokenAmounts,
     simulatedYieldUsd,
     lastIntSimulatedAverageRewards,
+    yieldTokenSymbols,
+    yieldTotalTokenAmounts,
+    hasYieldReward,
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
@@ -138,7 +140,7 @@ const DifferentStrategy = ({
         simulatedPoolStrategyUsd -
         simulatedDifferentStrategyUsd -
         simulatedFeesUsd -
-        yieldUsd +
+        simulatedYieldUsd +
         simulatedTxCostUsd;
 
     const estDaysLeft = getEstDaysLeft(
@@ -146,8 +148,8 @@ const DifferentStrategy = ({
         lastIntSimulatedAverageRewards,
     );
 
-    let divergenceLossTExt = 'Price divergence loss';
-    if (divergenceLoss > 0) divergenceLossTExt = 'Price divergence gain';
+    let divergenceLossText = 'Price divergence loss';
+    if (divergenceLoss > 0) divergenceLossText = 'Price divergence gain';
 
     const gainLossText =
         simulatedDifferentStrategyUsd > simulatedPoolStrategyUsd
@@ -168,19 +170,20 @@ const DifferentStrategy = ({
         />
     );
 
-    const yieldRow = yieldTokenSymbol ? (
-        <BoxRow
-            firstColumn="Yield reward"
-            secondColumn={
-                <VerticalCryptoAmounts
-                    tokenSymbols={[yieldTokenSymbol]}
-                    tokenAmounts={[yieldTokenAmount]}
-                />
-            }
-            thirdColumn={<FiatValue value={simulatedYieldUsd} usePlusSymbol />}
-            columnColors={['medium', 'light', 'dark']}
-        />
-    ) : null;
+    const yieldRow =
+        hasYieldReward && yieldTokenSymbols && yieldTotalTokenAmounts ? (
+            <BoxRow
+                firstColumn="Yield reward"
+                secondColumn={
+                    <VerticalCryptoAmounts
+                        tokenSymbols={yieldTokenSymbols}
+                        tokenAmounts={yieldTotalTokenAmounts}
+                    />
+                }
+                thirdColumn={<FiatValue value={simulatedYieldUsd} usePlusSymbol />}
+                columnColors={['medium', 'light', 'dark']}
+            />
+        ) : null;
 
     const txCostRow = (
         <BoxRow
@@ -195,7 +198,7 @@ const DifferentStrategy = ({
 
     const divergenceLossRow = (
         <BoxRow
-            firstColumn={divergenceLossTExt}
+            firstColumn={divergenceLossText}
             secondColumn={<></>}
             thirdColumn={<FiatValue value={divergenceLoss} usePlusSymbol />}
             columnColors={['medium', 'light', 'dark']}
@@ -372,14 +375,14 @@ const DifferentStrategy = ({
                                                 }
                                             />
                                         </BottomBarRow>
-                                        {estDaysLeft > 0 && poolIsActive && (
+                                        {/* {estDaysLeft > 0 && poolIsActive && (
                                             <BottomBarRow>
                                                 <BoxRow
                                                     firstColumn="Est. days left to compensate loss*"
                                                     secondColumn={estDaysLeft}
                                                 />
                                             </BottomBarRow>
-                                        )}
+                                        )} */}
                                     </>
                                 }
                             >

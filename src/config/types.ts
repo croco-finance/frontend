@@ -1,32 +1,3 @@
-export enum Exchange {
-    UNI_V2 = 'UNI_V2',
-    BALANCER = 'BALANCER',
-    SUSHI = 'SUSHI',
-}
-
-export type DexBaseUrls = { [key in keyof typeof Exchange]: string };
-export type DexToPoolIdMap = { [key in keyof typeof Exchange]: Array<string> };
-
-export interface Token {
-    symbol: string;
-    name: string;
-    contractAddress: string;
-    platform: string;
-}
-
-export interface PoolToken {
-    priceUsd: number;
-    reserve: number;
-    weight: number;
-    token: Token;
-}
-
-export interface YieldReward {
-    token: Token;
-    amount: number;
-    price: number;
-}
-
 export interface Snap {
     block: number;
     ethPrice: number;
@@ -38,12 +9,85 @@ export interface Snap {
     tokens: PoolToken[];
     txHash: string | null;
     yieldReward: YieldReward | null;
-    staked: boolean;
+    stakingService: StakingService | null;
+    idWithinStakingContract: number | null;
 }
+
+export enum Exchange {
+    UNI_V2 = 'UNI_V2',
+    BALANCER = 'BALANCER',
+    SUSHI = 'SUSHI',
+}
+
+export enum StakingService {
+    UNI_V2 = 'UNI_V2',
+    SUSHI = 'SUSHI',
+    INDEX = 'INDEX',
+}
+
+export enum RewardContracts {
+    UNI_V2 = 'UNI_V2',
+    BALANCER = 'BALANCER',
+    SUSHI = 'SUSHI',
+    INDEX = 'INDEX',
+}
+
+export interface PoolToken {
+    priceUsd: number;
+    reserve: number;
+    weight: number;
+    token: Token;
+}
+
+export interface Token {
+    symbol: string;
+    name: string;
+    contractAddress: string;
+    platform: string;
+}
+
+export interface YieldReward {
+    token: Token;
+    price: number | null;
+    claimed: number;
+    unclaimed: number;
+}
+
+export const tokens: { [key in RewardContracts]: Token } = {
+    UNI_V2: {
+        symbol: 'UNI',
+        name: 'Uniswap',
+        contractAddress: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+        platform: 'ethereum',
+    },
+    BALANCER: {
+        symbol: 'BAL',
+        name: 'Balancer',
+        contractAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
+        platform: 'ethereum',
+    },
+    SUSHI: {
+        symbol: 'SUSHI',
+        name: 'SushiToken',
+        contractAddress: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+        platform: 'ethereum',
+    },
+    INDEX: {
+        symbol: 'INDEX',
+        name: 'Index',
+        contractAddress: '0x0954906da0Bf32d5479e25f46056d22f08464cab',
+        platform: 'ethereum',
+    },
+};
 
 export interface SnapStructure {
     [key: string]: Snap[];
 }
+
+// Types from above are used in firebase-loader
+
+export type DexBaseUrls = { [key in keyof typeof Exchange]: string };
+export type DexToPoolIdMap = { [key in keyof typeof Exchange]: Array<string> };
 
 export interface IntervalStats {
     timestampStart: number;
@@ -61,9 +105,12 @@ export interface IntervalStats {
     ethPriceEnd: number;
     txCostEthStart: number;
     txCostEthEnd: number;
-    yieldTokenAmount: number;
+    yieldUnclaimedTokenAmount: number;
+    yieldClaimedTokenAmount: number;
+    yieldTotalTokenAmount: number;
     yieldTokenPriceStart: number | null;
     yieldTokenPriceEnd: number | null;
+    yieldTokenSymbol: string | null;
     impLossUsd: number;
     // strategies
     hodlValueUsd: number;
@@ -82,7 +129,11 @@ export interface CumulativeStats {
     tokenBalances: any;
     feesTokenAmounts: any;
     feesUsd: number;
-    yieldTokenAmount: number;
+    yieldUnclaimedTokenAmounts: number[];
+    yieldClaimedTokenAmounts: number[];
+    yieldTotalTokenAmounts: number[];
+    yieldTokenSymbols: string[];
+    yieldTokenPrices: Array<number | null>;
     yieldUsd: number;
     tokenPricesEnd: any;
     yieldTokenPriceEnd: number | null;
@@ -90,8 +141,8 @@ export interface CumulativeStats {
     txCostUsd: number;
     ethPriceEnd: number;
     timestampEnd: number;
-    depositsTokenAmounts: Array<number>;
-    withdrawalsTokenAmounts: Array<number>;
+    depositsTokenAmounts: number[];
+    withdrawalsTokenAmounts: number[];
     depositsUsd: number;
     withdrawalsUsd: number;
     poolStrategyUsd: number;
@@ -115,7 +166,7 @@ export interface PoolItem {
     exchange: Exchange;
     poolId: string;
     isActive: boolean;
-    pooledTokens: Array<GenericPooledTokenInfo>;
+    pooledTokens: GenericPooledTokenInfo[];
     yieldToken: Token | null;
     hasYieldReward: boolean;
     timestampEnd: number;
@@ -141,6 +192,7 @@ export interface GenericPooledTokenInfo extends Token {
 }
 
 export interface GraphData {
+    label: string;
     lastTimestamp: number;
     timestampPrev: number | null;
     timestamp: number;
@@ -154,12 +206,12 @@ export interface GraphData {
 
 export interface SummaryStats {
     valueLockedUsd: any;
-    pooledTokenSymbols: Array<string>;
-    pooledTokenAmounts: Array<number>;
-    yieldTokenSymbols: Array<string>;
-    yieldTokenAmounts: Array<number>;
-    feesTokenSymbols: Array<string>;
-    feesTokenAmounts: Array<number>;
+    pooledTokenSymbols: string[];
+    pooledTokenAmounts: number[];
+    yieldTokenSymbols: string[];
+    yieldTotalTokenAmounts: number[];
+    feesTokenSymbols: string[];
+    feesTokenAmounts: number[];
     feesUsd: number;
     yieldUsd: number;
     txCostEth: number;
@@ -169,7 +221,7 @@ export interface SummaryStats {
 
 export interface Deposit {
     timestamp: number | undefined;
-    tokenAmounts: Array<number>;
+    tokenAmounts: number[];
     valueUsd: number;
     valueEth: number;
 }
@@ -183,3 +235,16 @@ export interface AddressData {
 }
 
 export type AllAddressesGlobal = { [key: string]: AddressData };
+
+export interface AppStateInterface {
+    allPools: AllPoolsGlobal;
+    selectedPoolId: string;
+    allAddresses: AllAddressesGlobal;
+    selectedAddress: string | 'bundled' | null;
+    dexToPoolMap: { [key: string]: string[] };
+    activePoolIds: string[];
+    inactivePoolIds: string[];
+    error: boolean;
+    loading: boolean;
+    noPoolsFound: boolean;
+}

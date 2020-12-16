@@ -103,6 +103,7 @@ const Strategies = () => {
         depositTimestamps,
         depositTokenAmounts,
         depositEthAmounts,
+        hasYieldReward,
     } = pool;
 
     const {
@@ -112,13 +113,15 @@ const Strategies = () => {
         txCostUsd,
         ethPriceEnd,
         feesTokenAmounts,
-        yieldTokenAmount,
+        yieldTotalTokenAmount,
         poolStrategyUsd,
         tokensHodlStrategyTokenAmounts,
         ethHodlStrategyUsd,
         lastIntAvDailyRewardsUsd,
         tokenPricesEnd,
         tokensHodlStrategyUsd,
+        yieldTokenSymbols,
+        yieldTotalTokenAmounts,
     } = pool.cumulativeStats;
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
@@ -146,18 +149,6 @@ const Strategies = () => {
                     simulator
                 </StyledLink>{' '}
                 to see estimates for different prices.
-                {/* <InfoBox>
-                    <RememberNote>Remember</RememberNote> that these values are computed for current
-                    ETH and tokens prices. Try{' '}
-                    <StyledLink
-                        to={{
-                            pathname: '/simulator',
-                        }}
-                    >
-                        simulator
-                    </StyledLink>{' '}
-                    to see estimates for different prices.
-                </InfoBox> */}
             </Description>
 
             <SectionHeader marginTop={0}>Being liquidity provider</SectionHeader>
@@ -180,7 +171,7 @@ const Strategies = () => {
                     txCostUsd={txCostUsd}
                     differentStrategyUsd={tokensHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
-                    yieldTokenAmount={yieldTokenAmount}
+                    yieldTotalTokenAmount={yieldTotalTokenAmount}
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
@@ -189,6 +180,9 @@ const Strategies = () => {
                     currentDepositTokenPricesArr={tokenPricesEnd}
                     depositTokenSymbolsArr={tokenSymbolsArr}
                     poolIsActive={isActive}
+                    yieldTokenSymbols={yieldTokenSymbols}
+                    yieldTotalTokenAmounts={yieldTotalTokenAmounts}
+                    hasYieldReward={hasYieldReward}
                 />
             </StrategyItemWrapper>
 
@@ -207,7 +201,7 @@ const Strategies = () => {
                     txCostUsd={txCostUsd}
                     differentStrategyUsd={ethHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
-                    yieldTokenAmount={yieldTokenAmount}
+                    yieldTotalTokenAmount={yieldTotalTokenAmount}
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
                     lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
@@ -216,6 +210,9 @@ const Strategies = () => {
                     currentDepositTokenPricesArr={[ethPriceEnd]}
                     depositTokenSymbolsArr={['ETH']}
                     poolIsActive={isActive}
+                    yieldTokenSymbols={yieldTokenSymbols}
+                    yieldTotalTokenAmounts={yieldTotalTokenAmounts}
+                    hasYieldReward={hasYieldReward}
                 />
             </StrategyItemWrapper>
         </Wrapper>

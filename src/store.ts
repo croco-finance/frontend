@@ -12,6 +12,7 @@ const persistedState = loadState();
 // const store = createStore(reducer, persistedState);
 const store = createStore(reducer, persistedState, composedEnhancer);
 
+// subscribe() is a method that is natively present on state and is called when the state changes
 store.subscribe(() => {
     saveState({
         allAddresses: store.getState().allAddresses,

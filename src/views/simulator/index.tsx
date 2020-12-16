@@ -145,10 +145,11 @@ const SimulationBoxWrapper = styled.div`
     /* border: 1px solid ${colors.STROKE_GREY}; */
 `;
 
-const buildPoolOption = (pool: types.PoolItem) => {
-    if (pool) {
-        const tokens: any = pool.pooledTokens;
-        let value = { poolId: pool.poolId, tokens: new Array(tokens.length) };
+const buildPoolOption = (poolData: types.PoolItem, uniquePoolId: string) => {
+    if (poolData) {
+        // pool.poolId is not unique in case there are more addresses with deposits in the same pool
+        const tokens = poolData.pooledTokens;
+        let value = { poolId: uniquePoolId, tokens: new Array(tokens.length) };
         let label = '';
 
         tokens.forEach((token, i) => {
@@ -165,13 +166,13 @@ const buildPoolOption = (pool: types.PoolItem) => {
     return null;
 };
 
-const buildPoolOptions = (pools: any) => {
+const buildPoolOptions = (pools: AllPoolsGlobal) => {
     const poolKeys = Object.keys(pools);
     const poolsCount = poolKeys.length;
     const poolOptions = new Array(poolsCount);
 
     poolKeys.forEach((poolId, i) => {
-        poolOptions[i] = buildPoolOption(pools[poolId]);
+        poolOptions[i] = buildPoolOption(pools[poolId], poolId);
     });
 
     return poolOptions;
@@ -189,16 +190,16 @@ type TabOptions = 'overview' | 'strategies';
 
 const Simulator = () => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const selectedPoolId: string = useSelector(state => state.selectedPoolId);
     const dispatch = useDispatch();
     const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
-    const isLoading = useSelector(state => state.loading);
-    const isFetchError = useSelector(state => state.error);
-    const noPoolsFound = useSelector(state => state.noPoolsFound);
+    const isLoading: boolean = useSelector(state => state.loading);
+    const isFetchError: boolean = useSelector(state => state.error);
+    const noPoolsFound: boolean = useSelector(state => state.noPoolsFound);
 
     // SIMULATOR FUNCTIONS
-    const [simulatedPriceCoefficients, setSimulatedPriceCoefficients]: any = useState(
-        allPools[selectedPoolId]
+    const [simulatedPriceCoefficients, setSimulatedPriceCoefficients] = useState<number[]>(
+        allPools && allPools[selectedPoolId]
             ? getInitialPriceCoeffs(allPools[selectedPoolId].pooledTokens)
             : [],
     );
@@ -207,7 +208,7 @@ const Simulator = () => {
     const [simulatedYieldPriceCoefficient, setSimulatedYieldPriceCoefficient] = useState(1);
 
     const [sliderDefaultCoeffs, setSliderDefaultCoeffs]: any = useState(
-        allPools[selectedPoolId]
+        allPools && allPools[selectedPoolId]
             ? getInitialPriceCoeffs(allPools[selectedPoolId].pooledTokens)
             : [],
     );
@@ -235,7 +236,7 @@ const Simulator = () => {
     };
 
     useEffect(() => {
-        if (allPools[selectedPoolId]) {
+        if (allPools && allPools[selectedPoolId]) {
             const newPool = allPools[selectedPoolId];
             setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.pooledTokens));
             setSliderDefaultCoeffs(getInitialPriceCoeffs(newPool.pooledTokens));
@@ -245,13 +246,15 @@ const Simulator = () => {
         }
     }, [selectedPoolId]);
 
-    const poolOptions = buildPoolOptions(allPools);
-
     let exceptionContent;
 
     const refreshPage = () => {
         window.location.reload();
     };
+
+    if (!allPools) {
+        exceptionContent = <ErrorTextWrapper>No pools found :(</ErrorTextWrapper>;
+    }
 
     if (isFetchError) {
         exceptionContent = (
@@ -292,22 +295,23 @@ const Simulator = () => {
 
                     {exceptionContent ? (
                         exceptionContent
-                    ) : Object.keys(allPools).length > 0 ? (
+                    ) : allPools && Object.keys(allPools).length > 0 ? (
                         <ChoosePoolWrapper>
-                            {/* TODO add Exchange icon (Balancer/Uniswap) */}
                             <PoolSelectLabel>Choose pool:</PoolSelectLabel>
                             <MultipleSelectWrapper>
                                 <MultipleTokenSelect
-                                    options={poolOptions}
+                                    options={buildPoolOptions(allPools)}
                                     onChange={(option: PoolOption) => {
-                                        // setIsFetchingPrices(true);
                                         option &&
                                             dispatch({
                                                 type: actionTypes.SET_SELECTED_POOL_ID,
                                                 poolId: option.value.poolId,
                                             });
                                     }}
-                                    selected={buildPoolOption(allPools[selectedPoolId])}
+                                    selected={buildPoolOption(
+                                        allPools[selectedPoolId],
+                                        selectedPoolId,
+                                    )}
                                     useWhiteBackground
                                     useDarkBorder
                                 ></MultipleTokenSelect>
@@ -315,7 +319,7 @@ const Simulator = () => {
                         </ChoosePoolWrapper>
                     ) : null}
 
-                    {allPools[selectedPoolId] && (
+                    {allPools && allPools[selectedPoolId] && (
                         <>
                             {!allPools[selectedPoolId].isActive ? (
                                 <InfoBox>
@@ -326,7 +330,7 @@ const Simulator = () => {
                         </>
                     )}
 
-                    {allPools[selectedPoolId] && !exceptionContent && (
+                    {allPools && allPools[selectedPoolId] && !exceptionContent && (
                         <>
                             <OverviewWrapper>
                                 <BalanceOverview />

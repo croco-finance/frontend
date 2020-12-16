@@ -104,10 +104,12 @@ const LiquidityPool = () => {
         txCostUsd,
         currentPoolValueUsd,
         tokenBalances,
-        yieldTokenAmount,
+        yieldTotalTokenAmount,
         withdrawalsUsd,
         withdrawalsTokenAmounts,
         poolStrategyUsd,
+        yieldTokenSymbols,
+        yieldTotalTokenAmounts,
     } = pool.cumulativeStats;
 
     const endTimeText = isActive
@@ -153,19 +155,20 @@ const LiquidityPool = () => {
         />
     );
 
-    const yieldRow = yieldToken ? (
-        <BoxRow
-            firstColumn="Yield rewards"
-            secondColumn={
-                <VerticalCryptoAmounts
-                    tokenSymbols={[yieldToken.symbol]}
-                    tokenAmounts={[yieldTokenAmount]}
-                />
-            }
-            thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
-            columnColors={['medium', 'light', 'dark']}
-        />
-    ) : null;
+    const yieldRow =
+        hasYieldReward && yieldTokenSymbols && yieldTotalTokenAmounts ? (
+            <BoxRow
+                firstColumn="Yield rewards"
+                secondColumn={
+                    <VerticalCryptoAmounts
+                        tokenSymbols={yieldTokenSymbols}
+                        tokenAmounts={yieldTotalTokenAmounts}
+                    />
+                }
+                thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+                columnColors={['medium', 'light', 'dark']}
+            />
+        ) : null;
 
     const txCostRow = (
         <BoxRow

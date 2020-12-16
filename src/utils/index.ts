@@ -6,6 +6,7 @@ import * as simulatorUtils from './simulator';
 import * as formatUtils from './format';
 import * as graphUtils from './graph';
 import { getSnaps } from './firebase-loader';
+import { setUnclaimed } from './unclaimed-loader';
 import { loadState, saveState } from './local-storage';
 
 export {
@@ -14,6 +15,7 @@ export {
     lossUtils,
     statsComputations,
     getSnaps,
+    setUnclaimed,
     simulatorUtils,
     formatUtils,
     graphUtils,

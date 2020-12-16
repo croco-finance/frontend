@@ -64,7 +64,7 @@ const IntervalsDateHeader = styled(DateHeader)`
 `;
 
 const PoolValuesWrapper = styled.div`
-    border-bottom: 1px solid #4b5c79;
+    /* border-bottom: 1px solid #4b5c79; */
     margin-bottom: 5px;
     padding-bottom: 5px;
 `;
@@ -121,11 +121,12 @@ const CustomTooltip = (props: Props) => {
                             &nbsp;-&nbsp;
                             {formatUtils.getFormattedDateFromTimestamp(timestamp, 'MONTH_DAY')}
                         </IntervalsDateHeader>
-                        <IntervalValuesWrapper roundedBottom={isHoveredLast && !txCostUsd}>
+                        {/* <IntervalValuesWrapper roundedBottom={isHoveredLast && !txCostUsd}> */}
+                        <IntervalValuesWrapper roundedBottom={true}>
                             <PoolValuesWrapper>
                                 <GridWrapper>
                                     <TooltipRow
-                                        firstColumn="Value start"
+                                        firstColumn={`Value start`}
                                         secondColumn={
                                             <FiatValue value={poolValuePrev ? poolValuePrev : 0} />
                                         }
@@ -155,37 +156,37 @@ const CustomTooltip = (props: Props) => {
                             </PoolValuesWrapper>
                             <RewardsExpensesWrapper>
                                 <GridWrapper>
-                                    {feesUsd ? (
+                                    {/* {feesUsd ? (
                                         <TooltipRow
                                             firstColumn="Fees"
                                             secondColumn={
                                                 <FiatValue value={feesUsd} usePlusSymbol />
                                             }
                                         />
-                                    ) : null}
+                                    ) : null} */}
 
-                                    {yieldUsd ? (
+                                    {/* {yieldUsd ? (
                                         <TooltipRow
                                             firstColumn="Yield"
                                             secondColumn={
                                                 <FiatValue value={yieldUsd} usePlusSymbol />
                                             }
                                         />
-                                    ) : null}
+                                    ) : null} */}
 
-                                    <TooltipRow
+                                    {/* <TooltipRow
                                         firstColumn="Imp. loss"
                                         secondColumn={
                                             <FiatValue value={-impLossUsd} usePlusSymbol />
                                         }
-                                    />
+                                    /> */}
                                 </GridWrapper>
                             </RewardsExpensesWrapper>
                         </IntervalValuesWrapper>
                     </>
                 )}
 
-                {txCostUsd ? (
+                {/* {txCostUsd ? (
                     <DateValuesWrapper roundedBorderAll={ifHoveredFirst}>
                         <DateHeader>
                             {formatUtils.getFormattedDateFromTimestamp(timestamp, 'MONTH_DAY')}
@@ -204,7 +205,7 @@ const CustomTooltip = (props: Props) => {
                             />
                         </GridWrapper>
                     </DateValuesWrapper>
-                ) : null}
+                ) : null} */}
             </CustomTooltipWrapper>
         );
     }

@@ -1,24 +1,13 @@
 import * as actionTypes from '@actionTypes';
-import { types } from '@config';
-interface InitialStateInterface {
-    allPools: types.AllPoolsGlobal;
-    selectedPoolId: string;
-    allAddresses: types.AllAddressesGlobal;
-    selectedAddress: string | 'bundled' | null;
-    exchangeToPoolMapping: { [key: string]: string[] } | null;
-    activePoolIds: string[];
-    inactivePoolIds: string[];
-    error: boolean;
-    loading: boolean;
-    noPoolsFound: boolean;
-}
+import { AppStateInterface } from '@types';
+import { useDispatch as _useDispatch, useSelector as _useSelector } from 'react-redux';
 
-const initialState: InitialStateInterface = {
+export const initialState: AppStateInterface = {
     allPools: {},
     selectedPoolId: '',
     allAddresses: {},
     selectedAddress: '',
-    exchangeToPoolMapping: {},
+    dexToPoolMap: { BALANCER: [], UNI_V2: [], SUSHI: [] },
     activePoolIds: [],
     inactivePoolIds: [],
     error: false,
@@ -30,12 +19,13 @@ const initialState: InitialStateInterface = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         // NOTE: we do not need 'break' statements because we return in every case
-        case actionTypes.SET_ALL_POOLS: {
+        case actionTypes.SET_POOL_DATA: {
             return {
                 ...state,
                 allPools: action.pools,
-                error: false,
-                noPoolsFound: false,
+                activePoolIds: action.activePoolIds,
+                inactivePoolIds: action.inactivePoolIds,
+                dexToPoolMap: action.dexToPoolMap,
             };
         }
 
@@ -43,27 +33,6 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedPoolId: action.poolId,
-            };
-        }
-
-        case actionTypes.SET_ACTIVE_POOL_IDS: {
-            return {
-                ...state,
-                activePoolIds: action.activePoolIds,
-            };
-        }
-
-        case actionTypes.SET_INACTIVE_POOL_IDS: {
-            return {
-                ...state,
-                inactivePoolIds: action.inactivePoolIds,
-            };
-        }
-
-        case actionTypes.SET_EXCHANGE_TO_POOLS_MAPPING: {
-            return {
-                ...state,
-                exchangeToPoolMapping: action.exchangeToPoolMapping,
             };
         }
 
@@ -130,6 +99,21 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 error: true,
                 noPoolsFound: false,
+                loading: false,
+            };
+        }
+
+        case actionTypes.FETCH_SNAPS_SUCCESS: {
+            return {
+                ...state,
+                allPools: action.pools,
+                activePoolIds: action.activePoolIds,
+                inactivePoolIds: action.inactivePoolIds,
+                dexToPoolMap: action.dexToPoolMap,
+                loading: false,
+                error: false,
+                noPoolsFound: false,
+                selectedPoolId: 'all',
             };
         }
 
@@ -147,9 +131,36 @@ const reducer = (state = initialState, action) => {
             };
         }
 
+        case actionTypes.NO_POOLS_FOUND: {
+            return {
+                ...state,
+                allPools: {},
+                activePoolIds: [],
+                inactivePoolIds: [],
+                dexToPoolMap: [],
+                error: false,
+                loading: false,
+                noPoolsFound: true,
+                selectedPoolId: 'all',
+            };
+        }
+
+        case actionTypes.FETCH_SNAPS_INIT: {
+            return {
+                ...state,
+                error: false,
+                loading: true,
+                noPoolsFound: false,
+            };
+        }
+
         default:
             return state;
     }
 };
+
+export function useSelector<T>(fn: (store: AppStateInterface) => T): T {
+    return fn(_useSelector(x => x));
+}
 
 export default reducer;

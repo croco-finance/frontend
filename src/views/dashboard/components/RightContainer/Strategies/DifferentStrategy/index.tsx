@@ -89,7 +89,7 @@ interface Props {
     txCostUsd: number;
     differentStrategyUsd: number;
     feesTokenAmounts: number[];
-    yieldTokenAmount: number;
+    yieldTotalTokenAmount: number;
     tokenSymbols: string[];
     yieldTokenSymbol: string | undefined;
     txCostEth: number;
@@ -99,6 +99,9 @@ interface Props {
     currentDepositTokenPricesArr: number[];
     depositTokenSymbolsArr: string[];
     poolIsActive: boolean;
+    yieldTokenSymbols: string[];
+    yieldTotalTokenAmounts: number[];
+    hasYieldReward: boolean;
 }
 
 const DifferentStrategy = ({
@@ -109,7 +112,7 @@ const DifferentStrategy = ({
     txCostUsd,
     differentStrategyUsd,
     feesTokenAmounts,
-    yieldTokenAmount,
+    yieldTotalTokenAmount,
     tokenSymbols,
     yieldTokenSymbol,
     txCostEth,
@@ -120,6 +123,9 @@ const DifferentStrategy = ({
     currentDepositTokenPricesArr,
     depositTokenSymbolsArr,
     poolIsActive,
+    yieldTokenSymbols,
+    yieldTotalTokenAmounts,
+    hasYieldReward,
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
@@ -153,19 +159,20 @@ const DifferentStrategy = ({
         />
     );
 
-    const yieldRow = yieldTokenSymbol ? (
-        <BoxRow
-            firstColumn="Yield reward"
-            secondColumn={
-                <VerticalCryptoAmounts
-                    tokenSymbols={[yieldTokenSymbol]}
-                    tokenAmounts={[yieldTokenAmount]}
-                />
-            }
-            thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
-            columnColors={['medium', 'light', 'dark']}
-        />
-    ) : null;
+    const yieldRow =
+        hasYieldReward && yieldTokenSymbols && yieldTotalTokenAmounts ? (
+            <BoxRow
+                firstColumn="Yield reward"
+                secondColumn={
+                    <VerticalCryptoAmounts
+                        tokenSymbols={yieldTokenSymbols}
+                        tokenAmounts={yieldTotalTokenAmounts}
+                    />
+                }
+                thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+                columnColors={['medium', 'light', 'dark']}
+            />
+        ) : null;
 
     const txCostRow = (
         <BoxRow
@@ -335,7 +342,7 @@ const DifferentStrategy = ({
                                                 }
                                             />
                                         </BottomBarRow>
-                                        {estDaysLeft > 0 && poolIsActive && (
+                                        {/* {estDaysLeft > 0 && poolIsActive && (
                                             <BottomBarRow>
                                                 <BoxRow
                                                     firstColumn="Est. days left to compensate loss*"
@@ -343,7 +350,7 @@ const DifferentStrategy = ({
                                                     // columnColors={['medium', 'medium']}
                                                 />
                                             </BottomBarRow>
-                                        )}
+                                        )} */}
                                     </>
                                 }
                             >
