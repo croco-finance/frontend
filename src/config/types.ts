@@ -234,3 +234,16 @@ export interface AddressData {
 }
 
 export type AllAddressesGlobal = { [key: string]: AddressData };
+
+export interface AppStateInterface {
+    allPools: AllPoolsGlobal;
+    selectedPoolId: string;
+    allAddresses: AllAddressesGlobal;
+    selectedAddress: string | 'bundled' | null;
+    dexToPoolMap: { [key: string]: string[] };
+    activePoolIds: string[];
+    inactivePoolIds: string[];
+    error: boolean;
+    loading: boolean;
+    noPoolsFound: boolean;
+}

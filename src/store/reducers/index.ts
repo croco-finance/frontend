@@ -1,19 +1,8 @@
 import * as actionTypes from '@actionTypes';
-import { types } from '@config';
-interface InitialStateInterface {
-    allPools: types.AllPoolsGlobal;
-    selectedPoolId: string;
-    allAddresses: types.AllAddressesGlobal;
-    selectedAddress: string | 'bundled' | null;
-    dexToPoolMap: { [key: string]: string[] };
-    activePoolIds: string[];
-    inactivePoolIds: string[];
-    error: boolean;
-    loading: boolean;
-    noPoolsFound: boolean;
-}
+import { AppStateInterface } from '@types';
+import { useDispatch as _useDispatch, useSelector as _useSelector } from 'react-redux';
 
-export const initialState: InitialStateInterface = {
+export const initialState: AppStateInterface = {
     allPools: {},
     selectedPoolId: '',
     allAddresses: {},
@@ -169,5 +158,9 @@ const reducer = (state = initialState, action) => {
             return state;
     }
 };
+
+export function useSelector<T>(fn: (store: AppStateInterface) => T): T {
+    return fn(_useSelector(x => x));
+}
 
 export default reducer;

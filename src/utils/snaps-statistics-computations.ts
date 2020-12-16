@@ -106,6 +106,14 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
         newBalancesNoFees,
     );
 
+    // Workaround - if the fees are negative (which is WRONG!), set NaN fees
+    for (let i = 0; i < feesTokenAmounts.length; i++) {
+        if (feesTokenAmounts[i] < 0) {
+            feesTokenAmounts.fill(NaN);
+            break;
+        }
+    }
+
     // yield rewards
     const yieldUnclaimedTokenAmount = snapshotT0.yieldReward ? snapshotT0.yieldReward.unclaimed : 0;
     const yieldClaimedTokenAmount = snapshotT0.yieldReward ? snapshotT0.yieldReward.claimed : 0;
@@ -237,29 +245,41 @@ const getDepositsAndWithdrawals = (intervalStats: Array<IntervalStats>, poolIsAc
         const endUsdValuePrev = intervalStats[i].poolValueUsdEnd;
         const startUsdValueNext = intervalStats[i + 1].poolValueUsdStart;
 
-        const valueEth = getEthValueOfTokenArray(
-            startBalanceNext,
-            startTokenPricesNext,
-            startEthPriceNext,
-        );
-
         // deposit
         if (endUsdValuePrev < startUsdValueNext) {
+            const tokenAmountDeposited = mathUtils.subtractArraysElementWise(
+                startBalanceNext,
+                endBalancePrev,
+            );
+
             deposits.push({
                 timestamp: intervalStats[i].timestampEnd,
-                tokenAmounts: mathUtils.subtractArraysElementWise(startBalanceNext, endBalancePrev),
+                tokenAmounts: tokenAmountDeposited,
                 valueUsd: endUsdValuePrev - startUsdValueNext,
-                valueEth: valueEth,
+                valueEth: getEthValueOfTokenArray(
+                    tokenAmountDeposited,
+                    startTokenPricesNext,
+                    startEthPriceNext,
+                ),
             });
         }
 
         // withdrawal
         if (endUsdValuePrev > startUsdValueNext) {
+            const tokenAmountWithdrawn = mathUtils.subtractArraysElementWise(
+                endBalancePrev,
+                startBalanceNext,
+            );
+
             withdrawals.push({
                 timestamp: intervalStats[i].timestampEnd,
-                tokenAmounts: mathUtils.subtractArraysElementWise(endBalancePrev, startBalanceNext),
+                tokenAmounts: tokenAmountWithdrawn,
                 valueUsd: startUsdValueNext - endUsdValuePrev,
-                valueEth: valueEth,
+                valueEth: getEthValueOfTokenArray(
+                    tokenAmountWithdrawn,
+                    startTokenPricesNext,
+                    startEthPriceNext,
+                ),
             });
         }
     }

@@ -132,19 +132,20 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             // try to fetch data for the given address
             try {
                 const fetchedSnapshotsAddress = await getSnaps(queryAddress);
+                console.log('fetchedSnapshotsAddress', fetchedSnapshotsAddress);
 
                 // check if data was fetched. If yes, add it to pool
                 if (!fetchedSnapshotsAddress) {
                     console.log(`Did not find any pools associated with: ${queryAddress}`);
                 } else {
                     // Set unclaimed yield rewards
-                    try {
-                        await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
-                    } catch (e) {
-                        console.log(
-                            `Could not fetch unclaimed yield rewards for address: ${address}`,
-                        );
-                    }
+                    // try {
+                    //     await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
+                    // } catch (e) {
+                    //     console.log(
+                    //         `Could not fetch unclaimed yield rewards for address: ${address}`,
+                    //     );
+                    // }
 
                     // Two addresses can have assets in the same pool. To create a unique iD for each pool, I combine user's address and pool ID
                     fetchedSnapshotsBundled = {
@@ -152,8 +153,6 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                         ...renameSnapKeys(fetchedSnapshotsAddress, queryAddress),
                     };
                 }
-
-                console.log('fetchedSnapshotsAddress', fetchedSnapshotsAddress);
             } catch (e) {
                 dispatch(fetchSnapsFailed());
                 console.log("ERROR: Couldn't fetch data from database.");
@@ -161,7 +160,7 @@ export const fetchSnapshots = (addresses: string[] | string) => {
         }
 
         // fetchedSnapshotsBundled = exampleFirebaseData;
-        console.log('fetchedSnapshotsBundled: ', fetchedSnapshotsBundled);
+        // console.log('fetchedSnapshotsBundled: ', fetchedSnapshotsBundled);
 
         // check if some pools were found
         if (Object.keys(fetchedSnapshotsBundled).length === 0) {
@@ -232,7 +231,7 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             }
         }
 
-        // console.log('customPoolsObject', customPoolsObject);
+        console.log('customPoolsObject', customPoolsObject);
         dispatch(
             fetchSnapsSuccess(customPoolsObject, dexToPoolMap, activePoolIds, inactivePoolIds),
         );

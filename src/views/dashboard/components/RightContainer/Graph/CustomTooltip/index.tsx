@@ -173,12 +173,12 @@ const CustomTooltip = (props: Props) => {
                                         />
                                     ) : null}
 
-                                    <TooltipRow
+                                    {/* <TooltipRow
                                         firstColumn="Imp. loss"
                                         secondColumn={
                                             <FiatValue value={-impLossUsd} usePlusSymbol />
                                         }
-                                    />
+                                    /> */}
                                 </GridWrapper>
                             </RewardsExpensesWrapper>
                         </IntervalValuesWrapper>

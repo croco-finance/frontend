@@ -133,6 +133,7 @@ const Strategies = () => {
               'MONTH_DAY_YEAR',
           )}`;
 
+    console.log('depositEthAmounts', depositEthAmounts);
     return (
         <Wrapper>
             <Headline>
