@@ -127,12 +127,11 @@ export const fetchSnapshots = (addresses: string[] | string) => {
 
         for (const address of addresses) {
             const queryAddress = address.trim().toLowerCase();
-            console.log('Processing address: ', queryAddress);
 
             // try to fetch data for the given address
             try {
                 const fetchedSnapshotsAddress = await getSnaps(queryAddress);
-                console.log('fetchedSnapshotsAddress', fetchedSnapshotsAddress);
+                // console.log('fetchedSnapshotsAddress', fetchedSnapshotsAddress);
 
                 // check if data was fetched. If yes, add it to pool
                 if (!fetchedSnapshotsAddress) {
@@ -231,7 +230,7 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             }
         }
 
-        console.log('customPoolsObject', customPoolsObject);
+        // console.log('customPoolsObject', customPoolsObject);
         dispatch(
             fetchSnapsSuccess(customPoolsObject, dexToPoolMap, activePoolIds, inactivePoolIds),
         );

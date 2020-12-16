@@ -375,14 +375,14 @@ const DifferentStrategy = ({
                                                 }
                                             />
                                         </BottomBarRow>
-                                        {estDaysLeft > 0 && poolIsActive && (
+                                        {/* {estDaysLeft > 0 && poolIsActive && (
                                             <BottomBarRow>
                                                 <BoxRow
                                                     firstColumn="Est. days left to compensate loss*"
                                                     secondColumn={estDaysLeft}
                                                 />
                                             </BottomBarRow>
-                                        )}
+                                        )} */}
                                     </>
                                 }
                             >

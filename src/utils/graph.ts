@@ -91,8 +91,6 @@ const getGraphData = (intervalStats: IntervalStats[]) => {
         };
     });
 
-    console.log('graphData', graphData);
-
     return graphData;
 };
 

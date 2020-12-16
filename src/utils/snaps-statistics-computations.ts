@@ -438,6 +438,7 @@ const getCumulativeStats = (
 
         // yield rewards
         const yieldTokenSymbol = stat['yieldTokenSymbol'];
+
         if (yieldTokenSymbol) {
             // initialize object for not-yet-seen symbol
             if (!yieldTokenRewards[yieldTokenSymbol]) {
@@ -447,8 +448,9 @@ const getCumulativeStats = (
             yieldTokenRewards[yieldTokenSymbol].claimed += stat['yieldClaimedTokenAmount'];
             yieldTokenRewards[yieldTokenSymbol].unclaimed += stat['yieldUnclaimedTokenAmount'];
             // always overwrite the price, so at the end you get the latest one (not current, but latest)
-            if (stat['yieldTokenPriceEnd'])
-                yieldTokenRewards[yieldTokenSymbol].price = stat['yieldTokenPriceEnd'];
+            // TODO here should be end, but there is a bug in data that I do not have end price for past positions
+            if (stat['yieldTokenPriceStart'] && stat['yieldTokenPriceStart'] !== null)
+                yieldTokenRewards[yieldTokenSymbol].price = stat['yieldTokenPriceStart'];
         }
     });
 
