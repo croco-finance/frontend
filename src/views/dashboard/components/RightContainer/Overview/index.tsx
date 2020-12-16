@@ -75,7 +75,7 @@ const Overview = () => {
         <Wrapper>
             <PoolOverview />
             <GraphWrapper>
-                <GraphTitle>History of your pool share value</GraphTitle>
+                <GraphTitle>History of your interactions with the pool</GraphTitle>
                 <Graph data={graphData} />
             </GraphWrapper>
             {activePoolIds.includes(selectedPoolId) ? (

@@ -26,6 +26,9 @@ const selectStyle = (
         '&:hover': {
             cursor: usePointerCursor || !isSearchable ? 'pointer' : 'text',
         },
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     }),
     control: (
         base: Record<string, any>,

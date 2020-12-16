@@ -192,6 +192,7 @@ export interface GenericPooledTokenInfo extends Token {
 }
 
 export interface GraphData {
+    label: string;
     lastTimestamp: number;
     timestampPrev: number | null;
     timestamp: number;

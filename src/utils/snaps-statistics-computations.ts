@@ -109,7 +109,7 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
     // Workaround - if the fees are negative (which is WRONG!), set NaN fees
     for (let i = 0; i < feesTokenAmounts.length; i++) {
         if (feesTokenAmounts[i] < 0) {
-            feesTokenAmounts.fill(NaN);
+            feesTokenAmounts.fill(0);
             break;
         }
     }

@@ -1,10 +1,10 @@
 import { mathUtils, lossUtils } from '.';
-import { types } from '@config';
+import { GraphData, IntervalStats } from '@types';
 
-const getGraphData = (intervalStats: types.IntervalStats[]) => {
+const getGraphData = (intervalStats: IntervalStats[]) => {
     const statsCount = intervalStats.length;
     const lastTimestamp = intervalStats[intervalStats.length - 1].timestampEnd;
-    let graphData: types.GraphData[] = new Array(statsCount + 1);
+    let graphData: GraphData[] = new Array(statsCount + 1);
 
     // Get first element of graph data. The rest will be computed using loop
     const initialPoolValues = new Array(statsCount).fill(undefined);
@@ -13,6 +13,7 @@ const getGraphData = (intervalStats: types.IntervalStats[]) => {
     initialPoolValues[0] = intervalStats[0].poolValueUsdStart;
 
     graphData[0] = {
+        label: `${intervalStats[0].timestampStart}_Deposit`,
         lastTimestamp: lastTimestamp,
         timestampPrev: null,
         timestamp: intervalStats[0].timestampStart,
@@ -43,7 +44,38 @@ const getGraphData = (intervalStats: types.IntervalStats[]) => {
         // previous pool Value
         // const poolValuePrev = graphData[i].poolValues[i];
 
+        // Get label (deposit/withdraw)
+        let label;
+        if (i === statsCount - 1) {
+            // if last stat, withdraw label
+            if (stat.liquidityTokenBalanceEnd === 0) {
+                label = 'Withdraw';
+            } else {
+                label = 'Today';
+            }
+        } else {
+            if (intervalStats[i + 1].poolValueUsdStart < stat.poolValueUsdEnd) {
+                label = 'Withdraw';
+            } else if (intervalStats[i + 1].poolValueUsdStart > stat.poolValueUsdEnd) {
+                label = 'Deposit';
+            } else {
+                // the USD value did not change. Check if the user staked or un-staked
+
+                if (i > 0) {
+                    // if the previous snap was staked
+                    if (stat.staked === false) {
+                        label = 'Yield start';
+                    } else {
+                        label = 'Yield end';
+                    }
+                } else {
+                    label = 'Yield start';
+                }
+            }
+        }
+
         graphData[i + 1] = {
+            label: `${stat.timestampEnd}_${label}`,
             lastTimestamp: lastTimestamp,
             timestampPrev: stat.timestampStart,
             timestamp: stat.timestampEnd,
@@ -58,6 +90,8 @@ const getGraphData = (intervalStats: types.IntervalStats[]) => {
             // poolValuePrev: poolValuePrev,
         };
     });
+
+    console.log('graphData', graphData);
 
     return graphData;
 };

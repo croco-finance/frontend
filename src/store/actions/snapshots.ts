@@ -139,13 +139,13 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                     console.log(`Did not find any pools associated with: ${queryAddress}`);
                 } else {
                     // Set unclaimed yield rewards
-                    // try {
-                    //     await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
-                    // } catch (e) {
-                    //     console.log(
-                    //         `Could not fetch unclaimed yield rewards for address: ${address}`,
-                    //     );
-                    // }
+                    try {
+                        await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
+                    } catch (e) {
+                        console.log(
+                            `Could not fetch unclaimed yield rewards for address: ${address}`,
+                        );
+                    }
 
                     // Two addresses can have assets in the same pool. To create a unique iD for each pool, I combine user's address and pool ID
                     fetchedSnapshotsBundled = {
