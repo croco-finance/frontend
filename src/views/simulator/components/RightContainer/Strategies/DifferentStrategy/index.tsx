@@ -140,7 +140,7 @@ const DifferentStrategy = ({
         simulatedPoolStrategyUsd -
         simulatedDifferentStrategyUsd -
         simulatedFeesUsd -
-        yieldUsd +
+        simulatedYieldUsd +
         simulatedTxCostUsd;
 
     const estDaysLeft = getEstDaysLeft(
@@ -148,8 +148,8 @@ const DifferentStrategy = ({
         lastIntSimulatedAverageRewards,
     );
 
-    let divergenceLossTExt = 'Price divergence loss';
-    if (divergenceLoss > 0) divergenceLossTExt = 'Price divergence gain';
+    let divergenceLossText = 'Price divergence loss';
+    if (divergenceLoss > 0) divergenceLossText = 'Price divergence gain';
 
     const gainLossText =
         simulatedDifferentStrategyUsd > simulatedPoolStrategyUsd
@@ -198,7 +198,7 @@ const DifferentStrategy = ({
 
     const divergenceLossRow = (
         <BoxRow
-            firstColumn={divergenceLossTExt}
+            firstColumn={divergenceLossText}
             secondColumn={<></>}
             thirdColumn={<FiatValue value={divergenceLoss} usePlusSymbol />}
             columnColors={['medium', 'light', 'dark']}
