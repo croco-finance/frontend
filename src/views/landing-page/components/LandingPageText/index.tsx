@@ -2,7 +2,7 @@ import { variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
 import LandingPage from '../..';
-import image from '../../../../data/images/landing-page-text.svg';
+import image from '../../../../data/images/landing-page-text-christmas.svg';
 
 const SvgWrapper = styled.img`
     display: inline-block;
@@ -14,16 +14,16 @@ const SvgWrapper = styled.img`
     }
 
     @media (max-width: ${variables.SCREEN_SIZE.MD}) {
-        max-height: 100px;
+        max-height: 110px;
     }
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        max-height: 70px;
+        max-height: 75px;
     }
 `;
 
 const LandingPageText = () => {
-    return <SvgWrapper height={150} src={image} />;
+    return <SvgWrapper height={160} src={image} />;
 };
 
 export default LandingPageText;
