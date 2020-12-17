@@ -212,6 +212,7 @@ const RightContainer = ({
 
             {selectedTab === 'strategies' && (
                 <Strategies
+                    exchange={exchange}
                     poolStrategyUsd={poolStrategyUsd}
                     currentTokenBalances={currentTokenBalances}
                     currentEthPrice={ethPriceEnd}

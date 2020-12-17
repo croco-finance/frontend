@@ -47,7 +47,7 @@ const getFormattedXAxisLabel = (value: string) => {
 
 const TickText = styled.text<{ isPurple: boolean }>`
     font-size: 12px;
-    fill: ${props => (props.isPurple ? '#c752f1' : colors.FONT_MEDIUM)};
+    fill: ${props => (props.isPurple ? colors.BLUE : colors.FONT_MEDIUM)};
 `;
 class CustomizedAxisTick extends PureComponent<any, any> {
     render() {
@@ -77,38 +77,45 @@ const isYieldArea = (data: GraphData) => {
 };
 
 const getBarColor = (data: GraphData, highlightedAreaId, dataKeyName) => {
+    const lightPurple = '#e9bcf9';
+    const darkPurple = '#c752f1';
+
     // is hovered
     if (highlightedAreaId === dataKeyName) {
-        if (isYieldArea(data)) {
-            return '#c752f1';
-        } else {
-            return colors.GRAPH_1_DARK;
-        }
+        // if (isYieldArea(data)) {
+        //     return '#c752f1';
+        // } else {
+        //     return colors.GRAPH_1_DARK;
+        // }
+        return colors.GRAPH_1_DARK;
     } else {
         // not highlighted
-        if (isYieldArea(data)) {
-            return '#e9bcf9';
-        } else {
-            return colors.GRAPH_1_LIGHT;
-        }
+        // if (isYieldArea(data)) {
+        //     return '#e9bcf9';
+        // } else {
+        //     return colors.GRAPH_1_LIGHT;
+        // }
+        return colors.GRAPH_1_LIGHT;
     }
 };
 
 const getBarStrokeColor = (data: GraphData, highlightedAreaId, dataKeyName) => {
     // is hovered
     if (highlightedAreaId === dataKeyName) {
-        if (isYieldArea(data)) {
-            return '#af3ada';
-        } else {
-            return colors.GRAPH_1_DARK;
-        }
+        // if (isYieldArea(data)) {
+        //     return '#af3ada';
+        // } else {
+        //     return colors.GRAPH_1_DARK;
+        // }
+        return colors.GRAPH_1_DARK;
     } else {
         // not highlighted
-        if (isYieldArea(data)) {
-            return '#dca7f0';
-        } else {
-            return colors.GRAPH_1_STROKE_LIGHT;
-        }
+        // if (isYieldArea(data)) {
+        //     return '#dca7f0';
+        // } else {
+        //     return colors.GRAPH_1_STROKE_LIGHT;
+        // }
+        return colors.GRAPH_1_STROKE_LIGHT;
     }
 };
 
@@ -238,7 +245,7 @@ class Graph extends PureComponent<Props, State> {
                         stroke={colors.FONT_MEDIUM}
                         tickFormatter={this.valueToUsd}
                         label={{
-                            value: 'Pool value',
+                            value: 'Your pool share value',
                             angle: -90,
                             offset: 460,
                             position: 'center',

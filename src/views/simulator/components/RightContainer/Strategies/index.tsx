@@ -75,6 +75,9 @@ const GraphTitle = styled.div`
     padding-left: 50px;
 `;
 
+const BalancerBanner = styled.div`
+    margin-bottom: 20px;
+`;
 interface Props {
     poolStrategyUsd: number;
     currentTokenBalances: number[];
@@ -113,6 +116,7 @@ interface Props {
     yieldTokenSymbols: string[];
     yieldTotalTokenAmounts: number[];
     hasYieldReward: boolean;
+    exchange: string;
     // slider
     sliderDefaultCoeffs: number[];
     sliderDefaultEthCoeff: number;
@@ -158,6 +162,7 @@ const Strategies = ({
     yieldTokenSymbols,
     yieldTotalTokenAmounts,
     hasYieldReward,
+    exchange,
 }: Props) => {
     const graphData = graphUtils.getStrategiesGraphData(
         poolStrategyUsd,
@@ -221,6 +226,15 @@ const Strategies = ({
             </StrategyItemWrapper>
 
             <SubHeadline>Comparison to other strategies</SubHeadline>
+
+            {exchange === 'BALANCER' ? (
+                <BalancerBanner>
+                    <InfoBox>
+                        We show you only a rough estimate of the fees you gained on Balancer. We
+                        will provide you with more accurate fee estimates soon.
+                    </InfoBox>
+                </BalancerBanner>
+            ) : null}
 
             <SectionHeader marginTop={25}>
                 <Left>If you HODL'd pooled tokens</Left>

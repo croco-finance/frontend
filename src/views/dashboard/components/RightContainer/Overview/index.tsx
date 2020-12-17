@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import PoolOverview from '../PoolOverview';
 import Graph from '../Graph';
 import { graphUtils } from '@utils';
+import { InfoBox } from '@components/ui';
 
 const Wrapper = styled.div`
     display: flex;
@@ -56,6 +57,10 @@ const StyledLink = styled(Link)`
     }
 `;
 
+const BalancerBanner = styled.div`
+    margin-bottom: 20px;
+`;
+
 const Overview = () => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
@@ -71,8 +76,22 @@ const Overview = () => {
             ? []
             : graphUtils.getGraphData(allPools[selectedPoolId].intervalStats);
 
+    let exchange;
+    if (allPools && allPools[selectedPoolId]) {
+        exchange = allPools[selectedPoolId].exchange;
+    }
     return (
         <Wrapper>
+            {/* </BalancerBanner> */}
+            {exchange === 'BALANCER' ? (
+                <BalancerBanner>
+                    <InfoBox>
+                        We show you only a rough estimate of the fees you gained on Balancer. We
+                        will provide you with more accurate fee estimates soon.
+                    </InfoBox>
+                </BalancerBanner>
+            ) : null}
+
             <PoolOverview />
             <GraphWrapper>
                 <GraphTitle>History of your interactions with the pool</GraphTitle>
