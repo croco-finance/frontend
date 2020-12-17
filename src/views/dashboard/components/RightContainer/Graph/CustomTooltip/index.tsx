@@ -71,6 +71,12 @@ const PoolValuesWrapper = styled.div`
 
 const RewardsExpensesWrapper = styled.div``;
 
+const PoolShareValueWrapper = styled.div`
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    margin-bottom: 6px;
+    color: #b1bac5;
+`;
+
 interface Props extends TooltipProps {
     onShow?: (index: number) => void;
     feesUsd?: number;
@@ -129,16 +135,18 @@ const CustomTooltip = (props: Props) => {
                         {/* <IntervalValuesWrapper roundedBottom={isHoveredLast && !txCostUsd}> */}
                         <IntervalValuesWrapper roundedBottom={true}>
                             <PoolValuesWrapper>
+                                <PoolShareValueWrapper>Pool share value</PoolShareValueWrapper>
                                 <GridWrapper>
+                                    {/* <TooltipRow firstColumn={`Pool value`} secondColumn={''} /> */}
                                     <TooltipRow
-                                        firstColumn={`Value ${startDayString}`}
+                                        firstColumn={`${startDayString} `}
                                         secondColumn={
                                             <FiatValue value={poolValuePrev ? poolValuePrev : 0} />
                                         }
                                     />
 
                                     <TooltipRow
-                                        firstColumn={`Value ${endDayString}`}
+                                        firstColumn={`${endDayString} `}
                                         secondColumn={
                                             <FiatValue value={poolValue ? poolValue : 0} />
                                         }
@@ -170,14 +178,14 @@ const CustomTooltip = (props: Props) => {
                                         />
                                     ) : null} */}
 
-                                    {/* {yieldUsd ? (
+                                    {yieldUsd ? (
                                         <TooltipRow
                                             firstColumn="Yield"
                                             secondColumn={
                                                 <FiatValue value={yieldUsd} usePlusSymbol />
                                             }
                                         />
-                                    ) : null} */}
+                                    ) : null}
 
                                     {/* <TooltipRow
                                         firstColumn="Imp. loss"

@@ -59,17 +59,21 @@ const getGraphData = (intervalStats: IntervalStats[]) => {
             } else if (intervalStats[i + 1].poolValueUsdStart > stat.poolValueUsdEnd) {
                 label = 'Deposit';
             } else {
-                // the USD value did not change. Check if the user staked or un-staked
-
-                if (i > 0) {
-                    // if the previous snap was staked
-                    if (stat.staked === false) {
-                        label = 'Yield start';
-                    } else {
-                        label = 'Yield end';
-                    }
+                if (intervalStats[i + 1].poolValueUsdStart === 0) {
+                    label = '';
                 } else {
-                    label = 'Yield start';
+                    // the USD value did not change. Check if the user staked or un-staked
+
+                    if (i > 0) {
+                        // if the previous snap was staked
+                        if (stat.staked === false) {
+                            label = 'Yield start';
+                        } else {
+                            label = 'Yield end';
+                        }
+                    } else {
+                        label = 'Yield start';
+                    }
                 }
             }
         }

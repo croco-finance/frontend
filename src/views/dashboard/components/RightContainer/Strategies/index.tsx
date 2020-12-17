@@ -85,6 +85,10 @@ const StyledLink = styled(Link)`
     }
 `;
 
+const BalancerBanner = styled.div`
+    margin-bottom: 20px;
+`;
+
 const Strategies = () => {
     const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
@@ -133,6 +137,11 @@ const Strategies = () => {
               'MONTH_DAY_YEAR',
           )}`;
 
+    let exchange;
+    if (allPools && allPools[selectedPoolId]) {
+        exchange = allPools[selectedPoolId].exchange;
+    }
+
     return (
         <Wrapper>
             <Headline>
@@ -157,6 +166,15 @@ const Strategies = () => {
             </StrategyItemWrapper>
 
             <SubHeadline>Comparison to other strategies</SubHeadline>
+
+            {exchange === 'BALANCER' ? (
+                <BalancerBanner>
+                    <InfoBox>
+                        We show you only a rough estimate of the fees you gained on Balancer. We
+                        will provide you with more accurate fee estimates soon.
+                    </InfoBox>
+                </BalancerBanner>
+            ) : null}
 
             <SectionHeader marginTop={25}>If you HODL'd pooled tokens</SectionHeader>
 
