@@ -135,6 +135,9 @@ function filter0SameBlockSnaps(snaps: Snap[]) {
             snaps[i].stakingService !== snaps[i + 1].stakingService
         ) {
             if (snaps[i].liquidityTokenBalance === 0) {
+                if (snaps[i].stakingService !== null) {
+                    snaps[i + 1].yieldReward = snaps[i].yieldReward;
+                }
                 snaps.splice(i, 1);
             } else if (snaps[i + 1].liquidityTokenBalance === 0) {
                 snaps.splice(i + 1, 1);
