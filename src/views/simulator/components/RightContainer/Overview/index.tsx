@@ -255,33 +255,35 @@ const Overview = ({
                     borderRadius={[10, 10, 0, 0]}
                     bottomBarBorderRadius={[0, 0, 10, 10]}
                     bottomBar={
-                        <>
-                            <DaysLeftGridWrapper>
-                                <BoxRow
-                                    columnAlignment={['left', 'right', 'left']}
-                                    firstColumn={
-                                        <EstDaysLeftWrapper>
-                                            <div>Est. days left to compensate loss*</div>
-                                        </EstDaysLeftWrapper>
-                                    }
-                                    secondColumn={
-                                        <RightPaddingWrapper>
-                                            {estDaysLeftStaking}
-                                        </RightPaddingWrapper>
-                                    }
-                                    thirdColumn={<></>}
-                                />
-                            </DaysLeftGridWrapper>
-                            <SubNoteDaysLeft>
-                                *According to your average rewards since{' '}
-                                {formatUtils.getFormattedDateFromTimestamp(
-                                    lastSnapTimestampStart,
-                                    'MONTH_DAY_YEAR',
-                                )}
-                                <br></br>
-                                (date of your last interaction with the pool)
-                            </SubNoteDaysLeft>
-                        </>
+                        !isNaN(estDaysLeftStaking) && estDaysLeftStaking !== Infinity ? (
+                            <>
+                                <DaysLeftGridWrapper>
+                                    <BoxRow
+                                        columnAlignment={['left', 'right', 'left']}
+                                        firstColumn={
+                                            <EstDaysLeftWrapper>
+                                                <div>Est. days left to compensate loss*</div>
+                                            </EstDaysLeftWrapper>
+                                        }
+                                        secondColumn={
+                                            <RightPaddingWrapper>
+                                                {estDaysLeftStaking}
+                                            </RightPaddingWrapper>
+                                        }
+                                        thirdColumn={<></>}
+                                    />
+                                </DaysLeftGridWrapper>
+                                <SubNoteDaysLeft>
+                                    *According to your average rewards since{' '}
+                                    {formatUtils.getFormattedDateFromTimestamp(
+                                        lastSnapTimestampStart,
+                                        'MONTH_DAY_YEAR',
+                                    )}
+                                    <br></br>
+                                    (date of your last interaction with the pool)
+                                </SubNoteDaysLeft>
+                            </>
+                        ) : null
                     }
                 >
                     <ImpLossGridWrapper>

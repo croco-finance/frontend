@@ -29,7 +29,7 @@ const FeedbackIconWrapper = styled.div`
     justify-content: center;
     z-index: 9999;
     padding: 20px;
-    background-color: #7c56f7;
+    background-color: ${colors.BLUE};
     border-radius: 100px;
     height: 46px;
     width: 46px;

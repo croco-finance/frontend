@@ -131,7 +131,6 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             // try to fetch data for the given address
             try {
                 const fetchedSnapshotsAddress = await getSnaps(queryAddress);
-                // console.log('fetchedSnapshotsAddress', fetchedSnapshotsAddress);
 
                 // check if data was fetched. If yes, add it to pool
                 if (!fetchedSnapshotsAddress) {
