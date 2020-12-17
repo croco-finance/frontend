@@ -149,7 +149,7 @@ const RightContainer = ({
     );
 
     // YIELD AND TX COST
-    // TODO support simualted yield price for multiple tokens
+    // TODO support simulated yield price for multiple tokens
     let simulatedYieldUsd = yieldTotalTokenAmounts[0] * simulatedYieldPrice; //TODO check if yield among pooled tokens
     // if (!simulatedYieldUsd) simulatedYieldUsd = 0;
 

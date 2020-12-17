@@ -112,28 +112,33 @@ const CustomTooltip = (props: Props) => {
         const ifHoveredFirst = timestampPrev === null;
         const isHoveredLast = lastTimestamp === timestamp;
 
+        const startDayString = timestampPrev
+            ? formatUtils.getFormattedDateFromTimestamp(timestampPrev, 'MONTH_DAY')
+            : '';
+        const endDayString = formatUtils.getFormattedDateFromTimestamp(timestamp, 'MONTH_DAY');
+
         return (
             <CustomTooltipWrapper>
                 {timestampPrev && (
                     <>
                         <IntervalsDateHeader>
-                            {formatUtils.getFormattedDateFromTimestamp(timestampPrev, 'MONTH_DAY')}
+                            {startDayString}
                             &nbsp;-&nbsp;
-                            {formatUtils.getFormattedDateFromTimestamp(timestamp, 'MONTH_DAY')}
+                            {endDayString}
                         </IntervalsDateHeader>
                         {/* <IntervalValuesWrapper roundedBottom={isHoveredLast && !txCostUsd}> */}
                         <IntervalValuesWrapper roundedBottom={true}>
                             <PoolValuesWrapper>
                                 <GridWrapper>
                                     <TooltipRow
-                                        firstColumn={`Value start`}
+                                        firstColumn={`Value ${startDayString}`}
                                         secondColumn={
                                             <FiatValue value={poolValuePrev ? poolValuePrev : 0} />
                                         }
                                     />
 
                                     <TooltipRow
-                                        firstColumn="Value end"
+                                        firstColumn={`Value ${endDayString}`}
                                         secondColumn={
                                             <FiatValue value={poolValue ? poolValue : 0} />
                                         }

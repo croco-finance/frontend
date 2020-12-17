@@ -13,6 +13,7 @@ import {
     ResponsiveContainer,
 } from 'recharts';
 
+import { GraphData } from '@types';
 import CustomTooltip from './CustomTooltip';
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -44,23 +45,72 @@ const getFormattedXAxisLabel = (value: string) => {
     return label;
 };
 
-const TickText = styled.text`
+const TickText = styled.text<{ isPurple: boolean }>`
     font-size: 12px;
-    color: ${colors.FONT_LIGHT};
+    fill: ${props => (props.isPurple ? '#c752f1' : colors.FONT_MEDIUM)};
 `;
 class CustomizedAxisTick extends PureComponent<any, any> {
     render() {
         const { x, y, stroke, payload } = this.props;
-
+        // console.log('payload.value'
         return (
             <g transform={`translate(${x},${10})`}>
-                <TickText x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-40)">
+                <TickText
+                    x={0}
+                    y={0}
+                    dy={16}
+                    textAnchor="end"
+                    transform="rotate(-40)"
+                    isPurple={payload.value.includes('Yield')}
+                >
                     {getFormattedXAxisLabel(payload.value)}
                 </TickText>
             </g>
         );
     }
 }
+
+const isYieldArea = (data: GraphData) => {
+    const actionLabel = getFormattedXAxisLabel(data.label);
+    if (actionLabel === 'Yield start') return true;
+    return false;
+};
+
+const getBarColor = (data: GraphData, highlightedAreaId, dataKeyName) => {
+    // is hovered
+    if (highlightedAreaId === dataKeyName) {
+        if (isYieldArea(data)) {
+            return '#c752f1';
+        } else {
+            return colors.GRAPH_1_DARK;
+        }
+    } else {
+        // not highlighted
+        if (isYieldArea(data)) {
+            return '#e9bcf9';
+        } else {
+            return colors.GRAPH_1_LIGHT;
+        }
+    }
+};
+
+const getBarStrokeColor = (data: GraphData, highlightedAreaId, dataKeyName) => {
+    // is hovered
+    if (highlightedAreaId === dataKeyName) {
+        if (isYieldArea(data)) {
+            return '#af3ada';
+        } else {
+            return colors.GRAPH_1_DARK;
+        }
+    } else {
+        // not highlighted
+        if (isYieldArea(data)) {
+            return '#dca7f0';
+        } else {
+            return colors.GRAPH_1_STROKE_LIGHT;
+        }
+    }
+};
 
 interface Props {
     height?: number;
@@ -120,24 +170,18 @@ class Graph extends PureComponent<Props, State> {
                         cursor={{ stroke: '#4366b1ff', strokeWidth: 1 }}
                         content={<CustomTooltip setHighlightedAreaId={this.setHighlightedAreaId} />}
                     />
-                    {data.map((data, i) => {
+                    {data.map((_data, i) => {
                         const dataKeyName = `poolValues[${i}]`;
+                        console.log('_data', _data);
+                        console.log('dataKeyName', dataKeyName);
                         return (
                             <Area
                                 key={dataKeyName}
                                 isAnimationActive={false}
                                 dataKey={dataKeyName}
                                 name={`${i}`}
-                                fill={
-                                    highlightedAreaId === dataKeyName
-                                        ? colors.GRAPH_1_DARK
-                                        : colors.GRAPH_1_LIGHT
-                                }
-                                stroke={
-                                    highlightedAreaId === dataKeyName
-                                        ? colors.GRAPH_1_DARK
-                                        : colors.GRAPH_1_STROKE_LIGHT
-                                }
+                                fill={getBarColor(_data, highlightedAreaId, dataKeyName)}
+                                stroke={getBarStrokeColor(_data, highlightedAreaId, dataKeyName)}
                                 strokeWidth={1.5}
                                 fillOpacity={0.8}
                                 activeDot={highlightedAreaId === dataKeyName ? { r: 5 } : { r: 0 }}
@@ -160,7 +204,7 @@ class Graph extends PureComponent<Props, State> {
                         tickFormatter={value => getFormattedXAxisLabel(value)}
                         orientation={'top'}
                         interval={data.length > 20 ? 2 : 0}
-                        stroke={colors.WHITE}
+                        stroke={colors.STROKE_GREY}
                     ></XAxis>
 
                     <XAxis

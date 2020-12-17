@@ -448,9 +448,8 @@ const getCumulativeStats = (
             yieldTokenRewards[yieldTokenSymbol].claimed += stat['yieldClaimedTokenAmount'];
             yieldTokenRewards[yieldTokenSymbol].unclaimed += stat['yieldUnclaimedTokenAmount'];
             // always overwrite the price, so at the end you get the latest one (not current, but latest)
-            // TODO here should be end, but there is a bug in data that I do not have end price for past positions
-            if (stat['yieldTokenPriceStart'] && stat['yieldTokenPriceStart'] !== null)
-                yieldTokenRewards[yieldTokenSymbol].price = stat['yieldTokenPriceStart'];
+            if (stat['yieldTokenPriceEnd'] && stat['yieldTokenPriceEnd'] !== null)
+                yieldTokenRewards[yieldTokenSymbol].price = stat['yieldTokenPriceEnd'];
         }
     });
 
@@ -519,7 +518,7 @@ const getCumulativeStats = (
         feesTokenAmounts: feesTokenAmounts,
         ethPriceEnd: lastInterval.ethPriceEnd,
         tokenPricesEnd: pooledTokenPricesEnd,
-        yieldTokenPriceEnd: yieldTokenPriceEnd,
+        yieldTokenPriceEnd: yieldTokenPrices[0], // TODO take into account there might be more yield tokens
         currentPoolValueUsd: currentPoolValueUsd,
         endPoolValueUsd: endPoolValueUsd,
         timestampEnd: lastInterval.timestampEnd,
