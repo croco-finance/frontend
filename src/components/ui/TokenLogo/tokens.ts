@@ -22,6 +22,13 @@ export const TOKENS: any = {
     yfv: require('../../../data/images/tokens/yfv.svg'),
     renbtc: require('../../../data/images/tokens/renbtc.svg'),
     dpi: require('../../../data/images/tokens/dpi.svg'),
+    farm: require('../../../data/images/tokens/farm.svg'),
+    fil: require('../../../data/images/tokens/fil.svg'),
+    grt: require('../../../data/images/tokens/grt.svg'),
+    lrc: require('../../../data/images/tokens/lrc.svg'),
+    omg: require('../../../data/images/tokens/omg.svg'),
+    pickle: require('../../../data/images/tokens/pickle.svg'),
+    zrx: require('../../../data/images/tokens/zrx.svg'),
 
     // unknown token
     unknown: require('../../../data/images/tokens/unknown.svg'),
