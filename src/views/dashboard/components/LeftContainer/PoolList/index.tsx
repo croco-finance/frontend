@@ -1,7 +1,7 @@
 import { InlineCircle } from '@components/ui';
 import { colors, variables } from '@config';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '@reducers';
 import styled from 'styled-components';
 import PoolItem from '../PoolItem';
 import { Exchange } from '@types';
@@ -30,7 +30,7 @@ const Header = styled.div`
     display: flex;
     align-items: center;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     /* use the same sside padding as in <OverviewItem> so that the items are aligned */
     padding: 10px 10px 15px 10px;
 `;

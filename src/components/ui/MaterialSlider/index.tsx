@@ -1,5 +1,6 @@
 import Slider from '@material-ui/core/Slider';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from '@reducers';
 import React from 'react';
 import styled from 'styled-components';
 import { colors } from '../../../config';
@@ -7,8 +8,7 @@ import { colors } from '../../../config';
 const Wrapper = styled.div<{ width: number }>`
     width: ${props => props.width}px;
 `;
-
-const MySlider = withStyles({
+const useStyles = makeStyles({
     root: {
         color: colors.PASTEL_BLUE_DARK,
         height: 0,
@@ -17,6 +17,16 @@ const MySlider = withStyles({
         height: 20,
         width: 20,
         backgroundColor: colors.FONT_DARK,
+        marginTop: -8,
+        marginLeft: -8,
+        '&:focus, &:hover, &$active': {
+            boxShadow: 'inherit',
+        },
+    },
+    thumbNight: {
+        height: 20,
+        width: 20,
+        backgroundColor: '#0d0e0e',
         marginTop: -8,
         marginLeft: -8,
         '&:focus, &:hover, &$active': {
@@ -39,7 +49,18 @@ const MySlider = withStyles({
         backgroundColor: '#dadee2',
         opacity: 1,
     },
-})(Slider);
+    trackNight: {
+        height: 6,
+        borderRadius: 6,
+        backgroundColor: '#3f464b',
+    },
+    railNight: {
+        height: 6,
+        borderRadius: 6,
+        backgroundColor: '#3f464b',
+        opacity: 1,
+    },
+});
 
 interface Props extends React.ImgHTMLAttributes<HTMLDivElement> {
     min: number;
@@ -52,7 +73,7 @@ interface Props extends React.ImgHTMLAttributes<HTMLDivElement> {
     value?: number;
 }
 
-export default function MaterialSlider({
+const MaterialSlider = ({
     min,
     max,
     step,
@@ -61,10 +82,14 @@ export default function MaterialSlider({
     onChange,
     value,
     ...rest
-}: Props) {
+}: Props) => {
+    // const theme: any = useTheme();
+    const theme = useSelector(state => state.theme);
+    const classes = useStyles();
+
     return (
         <Wrapper width={width}>
-            <MySlider
+            <Slider
                 min={min}
                 max={max}
                 step={step}
@@ -73,7 +98,26 @@ export default function MaterialSlider({
                 defaultValue={defaultValue}
                 onChange={onChange}
                 value={value}
+                classes={
+                    theme === 'light'
+                        ? {
+                              root: classes.root, // class name, e.g. `classes-nesting-root-x`
+                              thumb: classes.thumb,
+                              track: classes.track, // class name, e.g. `classes-nesting-label-x`
+                              rail: classes.rail,
+                              valueLabel: classes.valueLabel,
+                          }
+                        : {
+                              root: classes.root, // class name, e.g. `classes-nesting-root-x`
+                              track: classes.trackNight, // class name, e.g. `classes-nesting-label-x`
+                              thumb: classes.thumbNight,
+                              rail: classes.railNight,
+                              valueLabel: classes.valueLabel,
+                          }
+                }
             />
         </Wrapper>
     );
-}
+};
+
+export default MaterialSlider;

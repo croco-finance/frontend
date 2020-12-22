@@ -34,15 +34,15 @@ const Col = styled.div<RowContentProps>`
         switch (props.color) {
             case 'light':
                 return css`
-                    color: ${colors.FONT_LIGHT};
+                    color: ${props.theme.FONT_LIGHT};
                 `;
             case 'medium':
                 return css`
-                    color: ${colors.FONT_MEDIUM};
+                    color: ${props.theme.FONT_MEDIUM};
                 `;
             case 'dark':
                 return css`
-                    color: ${colors.FONT_DARK};
+                    color: ${props.theme.FONT_DARK};
                 `;
         }
     }}

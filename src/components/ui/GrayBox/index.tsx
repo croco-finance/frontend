@@ -28,7 +28,7 @@ const Content = styled.div<{
 
 const BottomBar = styled.div<{ padding: Array<number>; borderRadius: Array<number> }>`
     border-radius: 0 0 10px 10px;
-    background-color: ${colors.BACKGROUND_DARK};
+    background-color: ${props => props.theme.BACKGROUND_DARK};
     padding: ${props => `${props.padding[0]}px 
     ${props.padding[1]}px
     ${props.padding[2]}px

@@ -25,7 +25,7 @@ const Headline = styled.h3`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     display: flex;
     text-align: left;
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     padding-left: 15px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -37,18 +37,18 @@ const SubHeadline = styled.h3`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     display: flex;
     text-align: left;
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     padding-left: 15px;
     margin-top: 35px;
     margin-bottom: 10px;
     padding-bottom: 10px;
-    border-bottom: 1px solid ${colors.STROKE_GREY};
+    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
 `;
 
 const Description = styled.p`
     width: 100%;
     padding-left: 15px;
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     margin-top: 0;
     margin-bottom: 30px;
 `;
@@ -64,7 +64,7 @@ const SectionHeader = styled.div<{ marginTop: number }>`
     width: 100%;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 const Note = styled.div`
@@ -77,7 +77,7 @@ const RememberNote = styled.span`
 
 const StyledLink = styled(Link)`
     text-decoration: none;
-    color: ${colors.PASTEL_BLUE_DARK};
+    color: ${props => props.theme.BLUE};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 
     &:hover {
@@ -170,8 +170,8 @@ const Strategies = () => {
             {exchange === 'BALANCER' ? (
                 <BalancerBanner>
                     <InfoBox>
-                        We show you only a rough estimate of the fees you gained on Balancer. We
-                        will provide you with more accurate fee estimates soon.
+                        We show you only a rough estimate of the fees you gained on Balancer. We are
+                        working on better Balancer integration.
                     </InfoBox>
                 </BalancerBanner>
             ) : null}

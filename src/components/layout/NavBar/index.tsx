@@ -1,14 +1,12 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { variables, colors } from '@config';
 import { PageLogo, NoTextLogo } from '@components/ui';
 import { useSelector } from 'react-redux';
+import { AppThemeColors } from '@types';
+import { useTheme } from '@hooks';
 
-const linkActiveStyles = {
-    color: colors.FONT_DARK,
-    backgroundColor: colors.BACKGROUND_DARK,
-};
 const Wrapper = styled.div`
     /* position: absolute; */
     display: flex;
@@ -19,8 +17,12 @@ const Wrapper = styled.div`
     height: 80px;
     align-items: center;
 
+    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
+        padding-right: 40px;
+    }
+
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        padding: 10px 0;
+        padding: 10px 30px 10px 0;
         height: auto;
     }
 `;
@@ -48,7 +50,7 @@ const NavItemsWrapper = styled.div`
 `;
 
 const StyledLink = styled(NavLink)`
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     padding: 10px 15px;
     text-decoration: none;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
@@ -58,6 +60,7 @@ const StyledLink = styled(NavLink)`
 const NavBar = () => {
     const addressGlobal = useSelector(state => state.userAddress);
     const addressPath = addressGlobal ? addressGlobal : '';
+    const theme: any = useTheme();
 
     return (
         <Wrapper>
@@ -78,7 +81,10 @@ const NavBar = () => {
                     to={{
                         pathname: `/dashboard/${addressPath}`,
                     }}
-                    activeStyle={linkActiveStyles}
+                    activeStyle={{
+                        color: theme.NAV_ACTIVE_FONT,
+                        backgroundColor: theme.NAV_ACTIVE_BG,
+                    }}
                 >
                     Dashboard
                 </StyledLink>
@@ -86,7 +92,10 @@ const NavBar = () => {
                     to={{
                         pathname: `/simulator/${addressPath}`,
                     }}
-                    activeStyle={linkActiveStyles}
+                    activeStyle={{
+                        color: theme.NAV_ACTIVE_FONT,
+                        backgroundColor: theme.NAV_ACTIVE_BG,
+                    }}
                 >
                     Simulator
                 </StyledLink>

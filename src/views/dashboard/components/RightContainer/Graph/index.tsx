@@ -13,8 +13,10 @@ import {
     ResponsiveContainer,
 } from 'recharts';
 
-import { GraphData } from '@types';
+import { GraphData, AppThemeColors } from '@types';
 import CustomTooltip from './CustomTooltip';
+
+import { useTheme } from '@hooks';
 
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -47,7 +49,7 @@ const getFormattedXAxisLabel = (value: string) => {
 
 const TickText = styled.text<{ isPurple: boolean }>`
     font-size: 12px;
-    fill: ${props => (props.isPurple ? colors.BLUE : colors.FONT_MEDIUM)};
+    fill: ${props => (props.isPurple ? props.theme.BLUE : props.theme.FONT_MEDIUM)};
 `;
 class CustomizedAxisTick extends PureComponent<any, any> {
     render() {
@@ -76,7 +78,7 @@ const isYieldArea = (data: GraphData) => {
     return false;
 };
 
-const getBarColor = (data: GraphData, highlightedAreaId, dataKeyName) => {
+const getBarColor = (data: GraphData, highlightedAreaId, dataKeyName, theme: AppThemeColors) => {
     const lightPurple = '#e9bcf9';
     const darkPurple = '#c752f1';
 
@@ -87,7 +89,7 @@ const getBarColor = (data: GraphData, highlightedAreaId, dataKeyName) => {
         // } else {
         //     return colors.GRAPH_1_DARK;
         // }
-        return colors.GRAPH_1_DARK;
+        return theme.GRAPH_1_DARK;
     } else {
         // not highlighted
         // if (isYieldArea(data)) {
@@ -95,11 +97,16 @@ const getBarColor = (data: GraphData, highlightedAreaId, dataKeyName) => {
         // } else {
         //     return colors.GRAPH_1_LIGHT;
         // }
-        return colors.GRAPH_1_LIGHT;
+        return theme.GRAPH_1_LIGHT;
     }
 };
 
-const getBarStrokeColor = (data: GraphData, highlightedAreaId, dataKeyName) => {
+const getBarStrokeColor = (
+    data: GraphData,
+    highlightedAreaId,
+    dataKeyName,
+    theme: AppThemeColors,
+) => {
     // is hovered
     if (highlightedAreaId === dataKeyName) {
         // if (isYieldArea(data)) {
@@ -107,7 +114,7 @@ const getBarStrokeColor = (data: GraphData, highlightedAreaId, dataKeyName) => {
         // } else {
         //     return colors.GRAPH_1_DARK;
         // }
-        return colors.GRAPH_1_DARK;
+        return theme.GRAPH_1_STROKE_DARK;
     } else {
         // not highlighted
         // if (isYieldArea(data)) {
@@ -115,7 +122,7 @@ const getBarStrokeColor = (data: GraphData, highlightedAreaId, dataKeyName) => {
         // } else {
         //     return colors.GRAPH_1_STROKE_LIGHT;
         // }
-        return colors.GRAPH_1_STROKE_LIGHT;
+        return theme.GRAPH_1_STROKE_LIGHT;
     }
 };
 
@@ -124,6 +131,7 @@ interface Props {
     referenceX?: number;
     referenceY?: number;
     data?: any;
+    theme: AppThemeColors;
 }
 
 interface State {
@@ -151,7 +159,7 @@ class Graph extends PureComponent<Props, State> {
 
     render() {
         const { highlightedAreaId } = this.state;
-        const { data } = this.props;
+        const { data, theme } = this.props;
 
         let maxValue = 0;
 
@@ -172,23 +180,26 @@ class Graph extends PureComponent<Props, State> {
                         left: 70,
                     }}
                 >
-                    <CartesianGrid strokeDasharray="2 2" />
+                    <CartesianGrid strokeDasharray="2 2" stroke={theme.STROKE_GREY} />
                     <Tooltip
                         cursor={{ stroke: '#4366b1ff', strokeWidth: 1 }}
                         content={<CustomTooltip setHighlightedAreaId={this.setHighlightedAreaId} />}
                     />
                     {data.map((_data, i) => {
                         const dataKeyName = `poolValues[${i}]`;
-                        console.log('_data', _data);
-                        console.log('dataKeyName', dataKeyName);
                         return (
                             <Area
                                 key={dataKeyName}
                                 isAnimationActive={false}
                                 dataKey={dataKeyName}
                                 name={`${i}`}
-                                fill={getBarColor(_data, highlightedAreaId, dataKeyName)}
-                                stroke={getBarStrokeColor(_data, highlightedAreaId, dataKeyName)}
+                                fill={getBarColor(_data, highlightedAreaId, dataKeyName, theme)}
+                                stroke={getBarStrokeColor(
+                                    _data,
+                                    highlightedAreaId,
+                                    dataKeyName,
+                                    theme,
+                                )}
                                 strokeWidth={1.5}
                                 fillOpacity={0.8}
                                 activeDot={highlightedAreaId === dataKeyName ? { r: 5 } : { r: 0 }}
@@ -211,7 +222,7 @@ class Graph extends PureComponent<Props, State> {
                         tickFormatter={value => getFormattedXAxisLabel(value)}
                         orientation={'top'}
                         interval={data.length > 20 ? 2 : 0}
-                        stroke={colors.STROKE_GREY}
+                        stroke={theme.STROKE_GREY}
                     ></XAxis>
 
                     <XAxis
@@ -224,7 +235,7 @@ class Graph extends PureComponent<Props, State> {
                         tickFormatter={value =>
                             formatUtils.getFormattedDateFromTimestamp(value, 'MONTH_DAY_YEAR', true)
                         }
-                        stroke={colors.FONT_MEDIUM}
+                        stroke={theme.FONT_MEDIUM}
                         // padding={{ left: 2 }}
                     >
                         {/* <Label
@@ -242,7 +253,7 @@ class Graph extends PureComponent<Props, State> {
                     <YAxis
                         tick={{ fontSize: variables.FONT_SIZE.SMALL }}
                         domain={[0, maxValue]}
-                        stroke={colors.FONT_MEDIUM}
+                        stroke={theme.FONT_MEDIUM}
                         tickFormatter={this.valueToUsd}
                         label={{
                             value: 'Your pool share value',
@@ -253,7 +264,7 @@ class Graph extends PureComponent<Props, State> {
                             style: {
                                 textAnchor: 'middle',
                                 fontSize: variables.FONT_SIZE.SMALL,
-                                fill: colors.FONT_MEDIUM,
+                                fill: theme.FONT_MEDIUM,
                             },
                         }}
                     ></YAxis>

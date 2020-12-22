@@ -12,6 +12,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { AllPoolsGlobal } from '@types';
+import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -44,7 +45,7 @@ const RewardsExpensesHeader = styled(GridWrapper)`
     margin-bottom: 18px;
     padding: 0;
     font-size: ${variables.FONT_SIZE.TINY};
-    border-bottom: 1px solid ${colors.STROKE_GREY};
+    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
 `;
 
 const TotalLossRow = styled(GridWrapper)`
@@ -84,6 +85,7 @@ const LiquidityPool = () => {
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     let pool = allPools[selectedPoolId];
     const [isOpened, setIsOpened] = useState(false);
+    const theme: any = useTheme();
 
     // Compute imp loss, fees, hold, ETH hold, token hold fo each snapshot
 
@@ -189,7 +191,7 @@ const LiquidityPool = () => {
                 }}
                 header={
                     <GrayBox
-                        backgroundColor={colors.BACKGROUND_BLUE}
+                        backgroundColor={theme.BACKGROUND_BLUE}
                         borderRadius={isOpened ? [10, 10, 0, 0] : [10, 10, 10, 10]}
                     >
                         <StrategyHeaderGridWrapper>
@@ -201,11 +203,11 @@ const LiquidityPool = () => {
                                         <Icon
                                             icon={isOpened ? 'arrow_up' : 'arrow_down'}
                                             size={16}
-                                            color={colors.BLUE}
+                                            color={theme.BLUE}
                                         />
                                     </ExpandButton>
                                 }
-                                customColor={colors.BLUE}
+                                customColor={theme.BLUE}
                             />
                         </StrategyHeaderGridWrapper>
                     </GrayBox>
@@ -217,6 +219,7 @@ const LiquidityPool = () => {
                             borderRadius={[0, 0, 0, 0]}
                             bottomBarBorderRadius={[0, 0, 10, 10]}
                             bottomBarPadding={[10, 50, 10, 15]}
+                            backgroundColor={theme.BACKGROUND}
                             bottomBar={
                                 <TotalLossRow>
                                     <BoxRow

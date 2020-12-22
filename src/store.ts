@@ -17,6 +17,7 @@ store.subscribe(() => {
     saveState({
         allAddresses: store.getState().allAddresses,
         selectedAddress: store.getState().selectedAddress,
+        theme: store.getState().theme,
     });
 });
 

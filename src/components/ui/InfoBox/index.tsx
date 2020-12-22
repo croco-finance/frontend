@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { colors, variables } from '@config';
 import { Icon } from '@components/ui';
+import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -9,9 +10,9 @@ const Wrapper = styled.div`
     padding: 10px;
     border-radius: 10px;
     font-weight: ${variables.FONT_WEIGHT.REGULAR};
-    background-color: ${colors.BACKGROUND_PURPLE};
-    border: 1px solid ${colors.STROKE_PURPLE};
-    color: ${colors.PURPLE};
+    background-color: ${props => props.theme.BACKGROUND_PURPLE};
+    border: 1px solid ${props => props.theme.STROKE_PURPLE};
+    color: ${props => props.theme.PURPLE};
     display: flex;
 `;
 
@@ -24,9 +25,10 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const InfoBox = ({ children }: Props) => {
+    const theme: any = useTheme();
     return (
         <Wrapper>
-            <Icon icon="info" color={colors.PURPLE} size={18} />
+            <Icon icon="info" color={theme.PURPLE} size={18} />
             <Text>{children}</Text>
         </Wrapper>
     );

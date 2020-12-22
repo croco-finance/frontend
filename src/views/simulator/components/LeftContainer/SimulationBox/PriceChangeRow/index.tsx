@@ -20,7 +20,7 @@ const SliderWrapper = styled.div`
 `;
 
 const SliderLabel = styled.div`
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     font-weight: ${variables.FONT_WEIGHT.REGULAR};
 `;
 const SliderLeftLabel = styled(SliderLabel)`
@@ -44,7 +44,8 @@ const Col = styled.div<RowContentProps>`
     display: flex;
     align-items: center;
     /* height: 36px; */
-    color: ${props => (props.color === 'light' ? `${colors.FONT_MEDIUM}` : `${colors.FONT_DARK}`)};
+    color: ${props =>
+        props.color === 'light' ? `${props.theme.FONT_MEDIUM}` : `${props.theme.FONT_DARK}`};
 
     /* content alignment styles */
     ${props =>

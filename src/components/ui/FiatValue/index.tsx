@@ -15,7 +15,7 @@ const Wrapper = styled.div<{
         props.value < 0 &&
         !props.useBadgeStyle &&
         css`
-            color: ${props.useLightRed ? colors.RED_LIGHT : colors.RED};
+            color: ${props.useLightRed ? colors.RED_LIGHT : props.theme.RED};
         `}
 
     ${props =>
@@ -23,7 +23,7 @@ const Wrapper = styled.div<{
         props.value > 0 &&
         !props.useBadgeStyle &&
         css`
-            color: ${colors.GREEN};
+            color: ${props.theme.GREEN};
         `}
 
     ${props =>
@@ -31,7 +31,7 @@ const Wrapper = styled.div<{
         props.value < 0 &&
         props.useBadgeStyle &&
         css`
-            background-color: ${colors.RED};
+            background-color: ${props.theme.RED};
             color: white;
             padding: 5px;
             border-radius: 5px;
@@ -43,7 +43,7 @@ const Wrapper = styled.div<{
         props.value > 0 &&
         props.useBadgeStyle &&
         css`
-            background-color: ${colors.GREEN};
+            background-color: ${props.theme.GREEN};
             color: white;
             padding: 5px;
             margin: -5px;
@@ -56,7 +56,7 @@ const Wrapper = styled.div<{
         props.useBadgeStyle &&
         props.value &&
         css`
-            background-color: ${colors.FONT_DARK};
+            background-color: ${props.theme.FIAT_BADGE_BG_NEUTRAl};
             color: white;
             padding: 5px;
             margin: -5px;
@@ -71,7 +71,7 @@ const Wrapper = styled.div<{
 `;
 
 const Nan = styled.div`
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {

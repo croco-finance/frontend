@@ -1,10 +1,10 @@
-import { FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
+import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow } from '@components/ui';
 import { colors, variables } from '@config';
 import { statsComputations } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import CardRow from '../CardRow';
+import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -37,7 +37,7 @@ const HeaderWrapper = styled.div`
     margin-top: 10px;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 const RewardsExpensesHeader = styled(GridWrapper)`
@@ -46,7 +46,7 @@ const RewardsExpensesHeader = styled(GridWrapper)`
     margin-top: 8px;
     padding: 0;
     font-size: ${variables.FONT_SIZE.TINY};
-    border-bottom: 1px solid ${colors.STROKE_GREY};
+    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
 `;
 
 const PoolValueGridWrapper = styled(GridWrapper)`
@@ -66,13 +66,13 @@ const TotalWrapper = styled.div`
 
 const TotalSubNote = styled.div`
     font-size: ${variables.FONT_SIZE.TINY};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 const PoolsSummary = () => {
     const allPools = useSelector(state => state.allPools);
     const activePoolIds = useSelector(state => state.activePoolIds);
-    const inactivePoolIds = useSelector(state => state.inactivePoolIds);
+    const theme: any = useTheme();
 
     if (!allPools) {
         return (
@@ -102,7 +102,7 @@ const PoolsSummary = () => {
     } = activePoolsSummaryObject;
 
     const feesRow = (
-        <CardRow
+        <BoxRow
             firstColumn="Fees earned"
             secondColumn={
                 <VerticalCryptoAmounts
@@ -116,7 +116,7 @@ const PoolsSummary = () => {
     );
 
     const yieldRow = (
-        <CardRow
+        <BoxRow
             firstColumn="Yield reward"
             secondColumn={
                 <VerticalCryptoAmounts
@@ -130,7 +130,7 @@ const PoolsSummary = () => {
     );
 
     const txCostRow = (
-        <CardRow
+        <BoxRow
             firstColumn="Transaction expenses"
             secondColumn={
                 <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
@@ -150,7 +150,7 @@ const PoolsSummary = () => {
         <Wrapper>
             <HeaderWrapper>
                 <GridWrapper>
-                    <CardRow
+                    <BoxRow
                         firstColumn="Overview"
                         secondColumn="Crypto "
                         thirdColumn="Value today"
@@ -162,9 +162,10 @@ const PoolsSummary = () => {
                 padding={[15, 20, 15, 20]}
                 borderRadius={[10, 10, 0, 0]}
                 bottomBarBorderRadius={[0, 0, 10, 10]}
+                backgroundColor={theme.BACKGROUND}
                 bottomBar={
                     <TotalLossRow>
-                        <CardRow
+                        <BoxRow
                             firstColumn={totalText}
                             secondColumn={<></>}
                             thirdColumn={
@@ -175,13 +176,13 @@ const PoolsSummary = () => {
                                     colorized
                                 />
                             }
-                            color="dark"
+                            columnColors={['medium', 'dark', 'dark']}
                         />
                     </TotalLossRow>
                 }
             >
                 <PoolValueGridWrapper>
-                    <CardRow
+                    <BoxRow
                         firstColumn="Value locked in pools"
                         secondColumn={
                             <VerticalCryptoAmounts
@@ -195,7 +196,7 @@ const PoolsSummary = () => {
                 </PoolValueGridWrapper>
 
                 <RewardsExpensesHeader>
-                    <CardRow
+                    <BoxRow
                         firstColumn="Rewards & Expenses"
                         secondColumn=""
                         thirdColumn=""

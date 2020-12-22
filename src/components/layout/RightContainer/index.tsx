@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import RightContentWrapper from '../RightContentWrapper';
 import { styles } from '@config';
 
-const Wrapper = styled.div<Props>`
+const Wrapper = styled.div`
     width: 60%;
     padding: 0;
     max-height: 100vh;
@@ -12,7 +12,7 @@ const Wrapper = styled.div<Props>`
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    background-color: ${props => props.backgroundColor};
+    background-color: ${props => props.theme.BG_WHITE};
     ${styles.scrollBarStyles};
 
     @media (max-width: ${variables.SCREEN_SIZE.LG}) {
@@ -48,8 +48,8 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     backgroundColor?: string;
 }
 
-const RightContainer = ({ children, backgroundColor = colors.WHITE }: Props) => (
-    <Wrapper backgroundColor={backgroundColor}>
+const RightContainer = ({ children }: Props) => (
+    <Wrapper>
         <RightLayout>
             <LeftFillContainer />
             <RightContentWrapper> {children}</RightContentWrapper>

@@ -27,16 +27,18 @@ const StyledInput = styled.input<InputProps>`
 
     border-radius: 5px;
     border: ${props => (props.noBorder ? 'none' : '2px solid')};
-    border-color: ${props => (props.useDarkBorder ? colors.STROKE_GREY : colors.BACKGROUND_DARK)};
+    border-color: ${props =>
+        props.useDarkBorder ? props.theme.STROKE_GREY : props.theme.BACKGROUND_DARK};
     outline: none;
     box-sizing: border-box;
     width: 100%;
     height: ${props => (props.variant === 'small' ? '38px' : '50px')};
-    background-color: ${props => (props.useWhiteBackground ? 'white' : colors.BACKGROUND)};
-    transition: border 250ms ease-out;
+    background-color: ${props =>
+        props.useWhiteBackground ? props.theme.BG_WHITE : props.theme.BACKGROUND};
+    transition: border 150ms ease-out;
     -moz-appearance: textfield;
     text-overflow: ellipsis;
-
+    color: ${props => props.theme.FONT_DARK};
     ${props =>
         props.height
             ? css`
@@ -47,11 +49,11 @@ const StyledInput = styled.input<InputProps>`
     &:focus {
         border-color: ${colors.PASTEL_BLUE_MEDIUM};
         border-color: #96b7ff;
-        background-color: #f9faff;
+        /* background-color: #f9faff; */
     }
 
     &::placeholder {
-        color: ${colors.FONT_LIGHT};
+        color: ${props => props.theme.FONT_LIGHT};
         font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     }
 `;

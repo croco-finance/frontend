@@ -34,7 +34,11 @@ export const TOKENS: any = {
     unknown: require('../../../data/images/tokens/unknown.svg'),
     // exchanges
     uniswap: require('../../../data/images/exchanges/uniswap.svg'),
+    uniswapdark: require('../../../data/images/exchanges/uniswap-dark.svg'),
     uni_v1: require('../../../data/images/exchanges/uniswap.svg'),
     uni_v2: require('../../../data/images/exchanges/uniswap.svg'),
+    uni_v2dark: require('../../../data/images/exchanges/uniswap-dark.svg'),
     balancer: require('../../../data/images/exchanges/balancer.svg'),
+    balancerdark: require('../../../data/images/exchanges/balancer-dark.svg'),
+    sushidark: require('../../../data/images/exchanges/sushi-dark.svg'),
 };

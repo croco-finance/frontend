@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { colors } from '../../../config';
 import Spinner from '../Spinner';
 import Illustration from '../../../data/images/loading-illustration.svg';
+import IllustrationDark from '../../../data/images/loading-illustration-dark.svg';
+import { useSelector } from '@reducers';
 
 const Wrapper = styled.div<{ height: number }>`
     display: flex;
@@ -11,14 +13,13 @@ const Wrapper = styled.div<{ height: number }>`
     justify-content: center;
     align-items: center;
     flex-direction: column-reverse;
-    /* background-color: ${colors.BACKGROUND}; */
     border-radius: 5px;
     margin-top: 44px;
     padding: 40px;
 `;
 
 const SpinnerDescription = styled.div`
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     margin: 40px auto 0 auto;
     display: flex;
     align-items: center;
@@ -45,16 +46,20 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     height?: number;
 }
 
-const LoadingBox = ({ spinnerSize = 16, height = 260, children }: Props) => (
-    <Wrapper height={height}>
-        <SpinnerDescription>
-            <SpinnerWrapper>
-                <Spinner size={spinnerSize} />
-            </SpinnerWrapper>
-            {children}
-        </SpinnerDescription>
-        <SvgWrapper height={140} src={Illustration} />
-    </Wrapper>
-);
+const LoadingBox = ({ spinnerSize = 16, height = 260, children }: Props) => {
+    const theme = useSelector(state => state.theme);
+
+    return (
+        <Wrapper height={height}>
+            <SpinnerDescription>
+                <SpinnerWrapper>
+                    <Spinner size={spinnerSize} />
+                </SpinnerWrapper>
+                {children}
+            </SpinnerDescription>
+            <SvgWrapper height={140} src={theme === 'light' ? Illustration : IllustrationDark} />
+        </Wrapper>
+    );
+};
 
 export default LoadingBox;

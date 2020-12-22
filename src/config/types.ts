@@ -1,3 +1,4 @@
+import { THEME } from '@config';
 export interface Snap {
     block: number;
     ethPrice: number;
@@ -247,4 +248,23 @@ export interface AppStateInterface {
     error: boolean;
     loading: boolean;
     noPoolsFound: boolean;
+    theme: AppThemeVariant;
 }
+
+export type AppThemeVariant = 'light' | 'dark';
+
+type LightThemeProps = typeof THEME.light;
+type DarkThemeProps = typeof THEME.dark;
+
+// extracts values for common props
+type CommonThemeProps = {
+    [K in keyof LightThemeProps & keyof DarkThemeProps]: LightThemeProps[K] | DarkThemeProps[K];
+};
+
+type PropsOnlyInLightTheme = Omit<LightThemeProps, keyof DarkThemeProps>;
+type PropsOnlyInDarkTheme = Omit<DarkThemeProps, keyof LightThemeProps>;
+
+// all common theme props and their values are nicely listed, props that are specific to given theme are marked optional
+export type AppThemeColors = CommonThemeProps &
+    Partial<PropsOnlyInDarkTheme> &
+    Partial<PropsOnlyInLightTheme>;

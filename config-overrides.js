@@ -8,6 +8,9 @@ module.exports = function override(config) {
         '@utils': 'src/utils',
         '@views': 'src/views',
         '@actionTypes': 'src/store/actions/actionTypes',
+        "@hooks": "src/hooks",
+        "@actions": "src/store/actions",
+        "@reducers": "src/store/reducers",
     })(config);
 
     return config;

@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-    color: ${colors.GREEN};
+    color: ${props => props.theme.GREEN};
     background-color: #e9ffeb;
     font-size: ${variables.FONT_SIZE.TINY};
     padding: 3px 5px;

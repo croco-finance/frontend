@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { colors, variables } from '@config';
+import { AppThemeColors } from '@types';
 import { formatUtils } from '@utils';
 import React, { PureComponent } from 'react';
 import {
@@ -38,6 +39,7 @@ interface Props {
     referenceY?: number;
     data?: any;
     maxPossibleValue: number;
+    theme: AppThemeColors;
 }
 
 interface State {
@@ -59,7 +61,7 @@ class Graph extends PureComponent<Props, State> {
         return formatter.format(value);
     }
     render() {
-        const { data, maxPossibleValue } = this.props;
+        const { data, maxPossibleValue, theme } = this.props;
 
         return (
             <ResponsiveContainer width="100%" height={300}>
@@ -74,7 +76,7 @@ class Graph extends PureComponent<Props, State> {
                         left: 55,
                     }}
                 >
-                    <CartesianGrid strokeDasharray="2 2" />
+                    <CartesianGrid strokeDasharray="2 2" stroke={theme.STROKE_GREY} />
 
                     <Tooltip
                         cursor={{ stroke: '#4366b1ff', strokeWidth: 1 }}
@@ -96,8 +98,8 @@ class Graph extends PureComponent<Props, State> {
                         dataKey={'poolValue'}
                         strokeWidth={1}
                         fillOpacity={0.65}
-                        fill={colors.GRAPH_1_DARK}
-                        stroke={colors.GRAPH_1_DARK}
+                        fill={theme.GRAPH_1_DARK}
+                        stroke={theme.GRAPH_1_DARK}
                     />
                     <Area
                         key={'hodlValue'}
@@ -105,7 +107,7 @@ class Graph extends PureComponent<Props, State> {
                         dataKey={'hodlValue'}
                         strokeWidth={2.5}
                         fillOpacity={0}
-                        fill={colors.BLUE}
+                        fill={theme.BLUE}
                         stroke={'#a600ffff'}
                         // stroke={colors.BLUE}
                         strokeDasharray="6 3"
@@ -117,7 +119,7 @@ class Graph extends PureComponent<Props, State> {
                             fontSize: variables.FONT_SIZE.NORMAL,
                             transform: 'translate(0, 12)',
                         }}
-                        stroke={colors.FONT_MEDIUM}
+                        stroke={theme.FONT_MEDIUM}
                         // padding={{ left: 2 }}
                     >
                         {/* <Label
@@ -137,7 +139,7 @@ class Graph extends PureComponent<Props, State> {
                             transform: 'translate(-8, 0)',
                         }}
                         domain={[0, getYAxisMaxValue(maxPossibleValue)]}
-                        stroke={colors.FONT_MEDIUM}
+                        stroke={theme.FONT_MEDIUM}
                         tickFormatter={this.valueToUsd}
                     ></YAxis>
                 </AreaChart>

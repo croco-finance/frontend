@@ -13,6 +13,7 @@ export const initialState: AppStateInterface = {
     error: false,
     loading: false,
     noPoolsFound: false,
+    theme: 'light',
 };
 
 // the argument is previous state. For the forst run it is initial state
@@ -154,6 +155,12 @@ const reducer = (state = initialState, action) => {
             };
         }
 
+        case actionTypes.SET_THEME: {
+            return {
+                ...state,
+                theme: action.variant,
+            };
+        }
         default:
             return state;
     }

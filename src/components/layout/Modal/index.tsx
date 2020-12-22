@@ -3,6 +3,7 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 import { Icon } from '@components/ui';
 import { variables, colors } from '@config';
+import { useTheme } from '@hooks';
 
 // each item in array corresponds to a screen size  [SM, MD, LG, XL]
 const ZERO_PADDING: [string, string, string, string] = ['0px', '0px', '0px', '0px'];
@@ -92,7 +93,7 @@ const ModalWindow = styled.div<ModalWindowProps>`
     ${props =>
         !props.noBackground &&
         css`
-            background: ${colors.WHITE};
+            background: ${props.theme.BG_WHITE};
             box-shadow: 0 10px 80px 0 {props => props.theme.BOX_SHADOW_MODAL};
         `}
 
@@ -164,9 +165,8 @@ const ModalWindow = styled.div<ModalWindowProps>`
 const Heading = styled.h2<{
     cancelable: boolean;
     showHeaderBorder: boolean;
-    showProgressBar: boolean;
-    hiddenProgressBar: boolean;
 }>`
+    color: ${props => props.theme.FONT_DARK};
     display: flex;
     align-items: flex-start;
     word-break: break-word;
@@ -177,12 +177,6 @@ const Heading = styled.h2<{
 
     border-bottom: ${props =>
         props.showHeaderBorder ? `1px solid ${props.theme.STROKE_GREY}` : 'none'};
-
-    /* if progress bar with green bar is being showed, do not show header border (set color to white) */
-    border-color: ${props =>
-        props.showProgressBar && !props.hiddenProgressBar
-            ? 'transparent'
-            : props.theme.STROKE_GREY};
 
     /* align content based on the 'cancelable' prop */
     text-align: ${props => (props.cancelable ? 'left' : 'center')};
@@ -224,7 +218,7 @@ const SidePaddingWrapper = styled.div<{ sidePadding: [string, string, string, st
 `;
 
 const Description = styled(SidePaddingWrapper)`
-    color: ${props => props.theme.TYPE_LIGHT_GREY};
+    color: ${props => props.theme.FONT_LIGHT};
     font-size: ${variables.FONT_SIZE.SMALL};
     margin-bottom: 10px;
     text-align: center;
@@ -232,7 +226,7 @@ const Description = styled(SidePaddingWrapper)`
 
 const Content = styled(SidePaddingWrapper)<{ centerContent: boolean }>`
     display: flex;
-    color: ${props => props.theme.TYPE_DARK_GREY};
+    color: ${props => props.theme.FONT_DARK};
     flex-direction: column;
     width: 100%;
     height: 100%;
@@ -332,9 +326,6 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     noBackground?: boolean;
     onCancel?: () => void;
     showHeaderBorder?: boolean;
-    hiddenProgressBar?: boolean;
-    totalProgressBarSteps?: number;
-    currentProgressBarStep?: number;
     centerContent?: boolean;
 }
 
@@ -359,16 +350,10 @@ const Modal = ({
     modalPaddingSide = ZERO_PADDING, // default value is zero padding on sides for Modal container
     contentPaddingSide = getContentPaddingSide(size, noPadding),
     showHeaderBorder = true,
-    hiddenProgressBar = false, // reserves the space for progress bar (4px under the heading), but not showing the green bar
-    totalProgressBarSteps,
-    currentProgressBarStep,
     centerContent = false,
     ...rest
 }: Props) => {
-    // check if progress bar placeholder should be rendered
-    const showProgressBarPlaceholder: boolean =
-        hiddenProgressBar ||
-        (totalProgressBarSteps !== undefined && currentProgressBarStep !== undefined);
+    const theme: any = useTheme();
 
     const modalWindow = (
         <ModalWindow
@@ -389,16 +374,11 @@ const Modal = ({
             {...rest}
         >
             {heading && (
-                <Heading
-                    cancelable={cancelable}
-                    showHeaderBorder={showHeaderBorder}
-                    hiddenProgressBar={hiddenProgressBar}
-                    showProgressBar={showProgressBarPlaceholder}
-                >
+                <Heading cancelable={cancelable} showHeaderBorder={showHeaderBorder}>
                     {heading}
                     {cancelable && (
                         <CancelIconWrapper data-test="@modal/close-button" onClick={onCancel}>
-                            <Icon size={24} color={colors.FONT_DARK} icon="close" />
+                            <Icon size={24} color={theme.FONT_DARK} icon="close" />
                         </CancelIconWrapper>
                     )}
                 </Heading>

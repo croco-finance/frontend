@@ -1,11 +1,11 @@
-import { FiatValue, GrayBox, VerticalCryptoAmounts, Icon } from '@components/ui';
+import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow } from '@components/ui';
 import { colors, variables } from '@config';
 import { formatUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import CardRow from '../CardRow';
 import { AllPoolsGlobal } from '@types';
+import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -38,7 +38,7 @@ const HeaderWrapper = styled.div`
     margin-top: 10px;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 const RewardsExpensesHeader = styled(GridWrapper)`
@@ -47,7 +47,7 @@ const RewardsExpensesHeader = styled(GridWrapper)`
     margin-top: 8px;
     padding: 0;
     font-size: ${variables.FONT_SIZE.TINY};
-    border-bottom: 1px solid ${colors.STROKE_GREY};
+    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
 `;
 
 const PoolValueGridWrapper = styled(GridWrapper)`
@@ -67,38 +67,14 @@ const TotalWrapper = styled.div`
 
 const TotalSubNote = styled.div`
     font-size: ${variables.FONT_SIZE.TINY};
-    color: ${colors.FONT_LIGHT};
-`;
-
-const UnclaimedTokenWarning = styled.div`
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 10px;
-    font-weight: ${variables.FONT_WEIGHT.REGULAR};
-    background-color: #f7f4ff;
-    border: 1px solid #baa6f9;
-    color: #673df1;
-    display: flex;
-`;
-
-const WarningText = styled.div`
-    margin-left: 5px;
-`;
-
-const UniYieldLink = styled.a`
-    text-decoration: none;
-    color: #673df1;
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-
-    &:hover {
-        text-decoration: underline;
-    }
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 const PoolOverview = () => {
     const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     let pool = allPools[selectedPoolId];
+    const theme: any = useTheme();
 
     // Compute imp loss, fees, hold, ETH hold, token hold fo each snapshot
 
@@ -135,11 +111,8 @@ const PoolOverview = () => {
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
 
-    // Temporary check if to show unclaimed UNI yield rewards
-    let showUnclaimedUni = false;
-
     const feesRow = (
-        <CardRow
+        <BoxRow
             firstColumn="Fees earned"
             secondColumn={
                 <VerticalCryptoAmounts
@@ -154,7 +127,7 @@ const PoolOverview = () => {
 
     const yieldRow =
         hasYieldReward && yieldTokenSymbols && yieldTotalTokenAmounts ? (
-            <CardRow
+            <BoxRow
                 firstColumn="Yield reward"
                 secondColumn={
                     <VerticalCryptoAmounts
@@ -168,7 +141,7 @@ const PoolOverview = () => {
         ) : null;
 
     const txCostRow = (
-        <CardRow
+        <BoxRow
             firstColumn="Transaction expenses"
             secondColumn={
                 <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
@@ -188,7 +161,7 @@ const PoolOverview = () => {
         <Wrapper>
             <HeaderWrapper>
                 <GridWrapper>
-                    <CardRow
+                    <BoxRow
                         firstColumn="Pool overview"
                         secondColumn="Crypto "
                         thirdColumn={endTimeText}
@@ -201,9 +174,10 @@ const PoolOverview = () => {
                 borderRadius={[10, 10, 0, 0]}
                 bottomBarBorderRadius={[0, 0, 10, 10]}
                 bottomBarPadding={[10, 20, 10, 20]}
+                backgroundColor={theme.BACKGROUND}
                 bottomBar={
                     <TotalLossRow>
-                        <CardRow
+                        <BoxRow
                             firstColumn={totalText}
                             secondColumn={<></>}
                             thirdColumn={
@@ -214,13 +188,13 @@ const PoolOverview = () => {
                                     colorized
                                 />
                             }
-                            color="dark"
+                            columnColors={['medium', 'dark', 'dark']}
                         />
                     </TotalLossRow>
                 }
             >
                 <PoolValueGridWrapper>
-                    <CardRow
+                    <BoxRow
                         firstColumn={poolShareValueText}
                         secondColumn={
                             <VerticalCryptoAmounts
@@ -234,7 +208,7 @@ const PoolOverview = () => {
                 </PoolValueGridWrapper>
 
                 <RewardsExpensesHeader>
-                    <CardRow
+                    <BoxRow
                         firstColumn="Rewards & Expenses"
                         secondColumn=""
                         thirdColumn=""
@@ -248,19 +222,6 @@ const PoolOverview = () => {
                     {txCostRow}
                 </GridWrapper>
             </GrayBox>
-
-            {showUnclaimedUni && (
-                <UnclaimedTokenWarning>
-                    <Icon icon="info" color={'#673df1'} size={18} />
-                    <WarningText>
-                        It looks like you might have some unclaimed yield rewards. Check it on{' '}
-                        <UniYieldLink href="https://app.uniswap.org/#/uni" target="__blank">
-                            Uniswap
-                        </UniYieldLink>
-                        .
-                    </WarningText>
-                </UnclaimedTokenWarning>
-            )}
         </Wrapper>
     );
 };

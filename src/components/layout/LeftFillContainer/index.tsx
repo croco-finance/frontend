@@ -7,10 +7,10 @@ const Wrapper = styled.div`
     flex: 1 1 0px;
     -webkit-box-flex: 1;
     padding-left: 15px;
-    background-color: ${colors.BACKGROUND_DARK};
+    background-color: ${props => props.theme.BACKGROUND_DARK};
 
     @media (max-width: 1100px) {
-        background-color: ${colors.BACKGROUND_DARK};
+        background-color: ${props => props.theme.BACKGROUND_DARK};
     }
 
     @media (max-width: 520px) {

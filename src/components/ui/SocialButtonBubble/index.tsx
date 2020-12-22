@@ -29,7 +29,7 @@ const FeedbackIconWrapper = styled.div`
     justify-content: center;
     z-index: 9999;
     padding: 20px;
-    background-color: ${colors.BLUE};
+    background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
     border-radius: 100px;
     height: 46px;
     width: 46px;
@@ -44,7 +44,7 @@ const SocialIconsWrapper = styled.div<{ isHovered: boolean }>`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: ${colors.BACKGROUND};
+    background-color: ${props => props.theme.BACKGROUND};
     border-radius: 100px;
     padding-bottom: 56px;
     padding-top: 8px;

@@ -2,7 +2,11 @@ import { variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
 import LandingPage from '../..';
-import image from '../../../../data/images/landing-page-text-christmas.svg';
+import dayModeImage from '../../../../data/images/landing-page-text-christmas.svg';
+import nightModeImage from '../../../../data/images/landing-page-text-christmas-dark.svg';
+import { useSelector } from '@reducers';
+
+import { AppThemeVariant } from '@types';
 
 const SvgWrapper = styled.img`
     display: inline-block;
@@ -23,7 +27,10 @@ const SvgWrapper = styled.img`
 `;
 
 const LandingPageText = () => {
-    return <SvgWrapper height={160} src={image} />;
+    const themeVariant = useSelector(state => state.theme);
+    return (
+        <SvgWrapper height={160} src={themeVariant === 'light' ? dayModeImage : nightModeImage} />
+    );
 };
 
 export default LandingPageText;

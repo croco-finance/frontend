@@ -30,7 +30,7 @@ const GridWrapper = styled.div`
 `;
 
 const Title = styled.div`
-    color: ${colors.FONT_DARK};
+    color: ${props => props.theme.FONT_DARK};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     margin-bottom: 16px;
 `;
@@ -39,7 +39,7 @@ const SubTitlesWrapper = styled.div`
     display: flex;
     margin-bottom: 12px;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     font-size: ${variables.FONT_SIZE.NORMAL};
     align-items: center;
 `;
@@ -50,7 +50,7 @@ const SubTitleLeft = styled.div`
 
 const SubTitleRight = styled.div`
     justify-content: flex-end;
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 const TokenWrapper = styled.div`
