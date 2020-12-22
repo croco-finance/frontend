@@ -24,6 +24,7 @@ import SimulationBox from './components/LeftContainer/SimulationBox';
 import RightContainer from './components/RightContainer';
 import { AddressSelect } from '@components/containers';
 import { useTheme } from '@hooks';
+import { setSelectedPoolId } from '@actions';
 
 const Header = styled.div`
     padding: 0 20px;
@@ -259,11 +260,11 @@ const Simulator = () => {
         }
     }, [selectedPoolId]);
 
-    let exceptionContent;
-
     const refreshPage = () => {
         window.location.reload();
     };
+
+    let exceptionContent;
 
     if (!allPools) {
         exceptionContent = <ErrorTextWrapper>No pools found :(</ErrorTextWrapper>;
@@ -280,9 +281,7 @@ const Simulator = () => {
 
     if (isLoading) {
         exceptionContent = <LoadingBox>Wait a moment. We are getting pool data...</LoadingBox>;
-    }
-
-    if (noPoolsFound) {
+    } else if (noPoolsFound) {
         // TODO tell the user he cat try simulator in this case, once the simulator work for manual inputs
         exceptionContent = (
             <NoPoolFoundInfo>
@@ -319,11 +318,8 @@ const Simulator = () => {
                                     <MultipleTokenSelect
                                         options={buildPoolOptions(allPools)}
                                         onChange={(option: PoolOption) => {
-                                            option &&
-                                                dispatch({
-                                                    type: actionTypes.SET_SELECTED_POOL_ID,
-                                                    poolId: option.value.poolId,
-                                                });
+                                            if (option)
+                                                dispatch(setSelectedPoolId(option.value.poolId));
                                         }}
                                         selected={buildPoolOption(
                                             allPools[selectedPoolId],

@@ -57,7 +57,7 @@ const SummaryList = () => {
             </Header>
             <ItemsWrapper>
                 <SummaryItem
-                    headline="All active pools"
+                    headline="All active positions"
                     value={valueLockedUsd}
                     gainsAbsolute={feesUsd + yieldUsd - txCostUsd}
                     roi={5}

@@ -18,6 +18,7 @@
         "coingecko-api": "^1.0.10",
         "ethers": "^5.0.17",
         "firebase": "^8.0.2",
+        "immer": "^8.0.0",
         "react": "^16.14.0",
         "react-collapse": "^5.0.1",
         "react-dom": "^16.14.0",
