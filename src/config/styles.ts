@@ -3,7 +3,7 @@ import { colors } from '@config';
 
 export const scrollBarStyles = css`
     ::-webkit-scrollbar {
-        background-color: #e0e1e8;
+        background-color: ${props => props.theme.SCROLLBAR_BACKGROUND};
         width: 8px;
         border-radius: 8px;
     }
@@ -14,15 +14,15 @@ export const scrollBarStyles = css`
     /* scrollbar itself */
     ::-webkit-scrollbar-thumb {
         /* 7F7F7F for mac-like color */
-        background-color: #cbd1dc;
+        background-color: ${props => props.theme.SCROLLBAR_THUMB};
         border-radius: 10px;
-        border: 1px solid #cbd1dc;
+        border: 1px solid ${props => props.theme.SCROLLBAR_THUMB};
     }
 
     ::-webkit-scrollbar-thumb:hover {
         /* 7F7F7F for mac-like color */
-        background-color: #bfc7d6;
-        border: 1px solid #bec8da;
+        background-color: ${props => props.theme.SCROLLBAR_THUMB_HOVER};
+        border: 1px solid ${props => props.theme.SCROLLBAR_THUMB_HOVER_BORDER};
     }
 
     /* set button(top and bottom of the scrollbar) */
@@ -35,9 +35,9 @@ export const tinyScrollBarStyles = css`
     ::-webkit-scrollbar {
         width: 14px;
         height: 28px;
-        background-color: #e0e1e8;
-        border-left: 5px solid ${colors.BACKGROUND};
-        border-right: 5px solid ${colors.BACKGROUND};
+        background-color: ${props => props.theme.SCROLLBAR_BACKGROUND};
+        border-left: 5px solid ${props => props.theme.BACKGROUND};
+        border-right: 5px solid ${props => props.theme.BACKGROUND};
     }
     ::-webkit-scrollbar-thumb {
         height: 6px;
@@ -45,7 +45,7 @@ export const tinyScrollBarStyles = css`
         border-right: 5px solid rgba(0, 0, 0, 0);
         background-clip: padding-box;
         -webkit-border-radius: 7px;
-        background-color: #bec8da;
+        background-color: ${props => props.theme.SCROLLBAR_THUMB_HOVER_BORDER};
     }
     ::-webkit-scrollbar-button {
         width: 0;

@@ -16,7 +16,7 @@ const Header = styled.div`
     display: flex;
     align-items: center;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     /* use the same side padding as in <OverviewItem> so that the items are aligned */
     padding: 10px;
 `;

@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactSelect, { Props as SelectProps } from 'react-select';
 import styled from 'styled-components';
-import { colors, variables } from '../../../config';
+import { colors, variables } from '@config';
+import { useTheme } from '@hooks';
 
 const selectStyle = (
     isSearchable: boolean,
@@ -12,13 +13,14 @@ const selectStyle = (
     noBorder: boolean,
     useWhiteBackground: boolean,
     useDarkBorder: boolean,
+    theme: any,
 ) => ({
     singleValue: (base: Record<string, any>) => ({
         ...base,
         display: 'flex',
         alignItems: 'center',
         width: '100%',
-        color: colors.FONT_DARK,
+        color: theme.FONT_DARK,
         fontWeight: variables.FONT_WEIGHT.DEMI_BOLD,
         fontSize: variables.FONT_SIZE.NORMAL,
         // explicitly define font-family because elements in <ReactSelect/> can inherit some other fonts unexpectedly
@@ -43,16 +45,16 @@ const selectStyle = (
             height: variant === 'small' ? '36px' : '48px',
             borderRadius: '4px',
             borderWidth: noBorder ? 0 : '2px',
-            borderColor: useDarkBorder ? colors.BACKGROUND_DARK : colors.BACKGROUND,
+            borderColor: useDarkBorder ? theme.STROKE_GREY : theme.BACKGROUND,
             boxShadow: 'none',
-            backgroundColor: useWhiteBackground ? 'white' : colors.BACKGROUND,
-            transition: 'border 500ms ease-out',
+            backgroundColor: useWhiteBackground ? theme.BG_WHITE : theme.BACKGROUND,
+            // transition: 'border 250ms ease-out',
             '&:hover, &:focus': {
                 cursor: 'pointer',
                 borderRadius: '4px',
                 // borderColor: colors.PASTEL_BLUE_MEDIUM,
                 borderColor: '#96b7ff',
-                backgroundColor: ' #f7f9ff',
+                // backgroundColor: ' #f7f9ff',
             },
         };
     },
@@ -63,11 +65,11 @@ const selectStyle = (
         ...base,
         display: !withDropdownIndicator || isDisabled ? 'none' : 'flex',
         alignItems: 'center',
-        color: colors.FONT_LIGHT,
+        color: theme.FONT_LIGHT,
         path: '',
         '&:hover': {
             // color: colors.FONT_DARK,
-            color: '#96b7ff',
+            color: theme.BLUE,
         },
     }),
     menu: (base: Record<string, any>) => ({
@@ -80,15 +82,15 @@ const selectStyle = (
         ...base,
         padding: 0,
         boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.2)',
-        background: colors.WHITE,
+        background: theme.BG_WHITE,
         // border: `1px solid ${colors.BLACK80}`,
         borderRadius: '4px',
     }),
     option: (base: Record<string, any>, { isFocused }: { isFocused: boolean }) => ({
         ...base,
-        color: colors.FONT_MEDIUM,
+        color: theme.FONT_MEDIUM,
         fontWeight: variables.FONT_WEIGHT.MEDIUM,
-        background: isFocused ? colors.BACKGROUND : colors.WHITE,
+        background: isFocused ? theme.BACKGROUND : theme.BG_WHITE,
         borderRadius: 0,
         fontSize: variables.FONT_SIZE.NORMAL,
         fontFamily: `${fontFamily} !important`,
@@ -99,14 +101,14 @@ const selectStyle = (
     input: (base: Record<string, any>) => ({
         ...base,
         fontSize: variables.FONT_SIZE.NORMAL,
-        color: colors.FONT_DARK,
+        color: theme.FONT_DARK,
         '& input': {
             fontFamily: `${fontFamily} !important`,
         },
     }),
     placeholder: (base: Record<string, any>) => ({
         ...base,
-        color: colors.FONT_LIGHT,
+        color: theme.FONT_LIGHT,
         fontWeight: variables.FONT_WEIGHT.MEDIUM,
         fontSize: variables.FONT_SIZE.NORMAL,
     }),
@@ -145,6 +147,7 @@ const Select = ({
     useDarkBorder = false,
     ...props
 }: Props) => {
+    const theme = useTheme();
     return (
         <Wrapper width={width} {...wrapperProps}>
             <ReactSelect
@@ -157,6 +160,7 @@ const Select = ({
                     noBorder,
                     useWhiteBackground,
                     useDarkBorder,
+                    theme,
                 )}
                 isSearchable={isSearchable}
                 {...props}

@@ -5,6 +5,7 @@ import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow } from '@components/u
 import { colors, variables, types } from '@config';
 import { mathUtils, lossUtils, formatUtils, simulatorUtils, graphUtils } from '@utils';
 import ILGraph from '../ILGraph';
+import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -39,7 +40,7 @@ const HeaderWrapper = styled.div`
     margin-top: 10px;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 const ImpLossHeader = styled(HeaderWrapper)`
@@ -62,7 +63,7 @@ const PoolValueCryptoFiatWrapper = styled.div`
 `;
 
 const PoolValueCryptoFiatWrapperBorder = styled(PoolValueCryptoFiatWrapper)`
-    border-right: 1px solid ${colors.STROKE_GREY};
+    border-right: 1px solid ${props => props.theme.STROKE_GREY};
     padding-right: 10px;
 `;
 
@@ -75,7 +76,7 @@ const ColorizedFiatValueWrapper = styled(StyledFiatValueWrapper)`
 `;
 
 const ImpLossRel = styled.div`
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 const RightPaddingWrapper = styled.div`
@@ -88,7 +89,7 @@ const GraphWrapper = styled.div`
 `;
 
 const GraphTitle = styled.div`
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     text-align: center;
     padding-bottom: 15px;
     padding-left: 50px;
@@ -97,7 +98,7 @@ const GraphTitle = styled.div`
 const DaysLeftGridWrapper = styled(ImpLossGridWrapper)`
     gap: 5px 10px;
     font-size: ${variables.FONT_SIZE.NORMAL};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 const EstDaysLeftWrapper = styled.div`
@@ -109,7 +110,7 @@ const EstDaysLeftWrapper = styled.div`
 const SubNoteDaysLeft = styled.div`
     margin-top: 15px;
     font-size: ${variables.FONT_SIZE.SMALL};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
@@ -152,6 +153,8 @@ const Overview = ({
     impLossRel,
     isActive,
 }: Props) => {
+    const theme: any = useTheme();
+
     const tokenBalancesDiff = mathUtils.subtractArraysElementWise(
         simulatedPooledTokenBalances,
         tokenBalances,
@@ -201,7 +204,7 @@ const Overview = ({
                         />
                     </GridWrapper>
                 </HeaderWrapper>
-                <GrayBox padding={[15, 20, 18, 20]}>
+                <GrayBox padding={[15, 20, 18, 20]} backgroundColor={theme.BACKGROUND}>
                     <PoolValueGridWrapper>
                         <BoxRow
                             columnAlignment={['left', 'right', 'right', 'left']}
@@ -254,6 +257,7 @@ const Overview = ({
                     padding={[15, 20, 15, 20]}
                     borderRadius={[10, 10, 0, 0]}
                     bottomBarBorderRadius={[0, 0, 10, 10]}
+                    backgroundColor={theme.BACKGROUND}
                     bottomBar={
                         !isNaN(estDaysLeftStaking) && estDaysLeftStaking !== Infinity ? (
                             <>
@@ -310,7 +314,11 @@ const Overview = ({
 
             <GraphWrapper>
                 <GraphTitle>Pool vs HODL value comparison</GraphTitle>
-                <ILGraph data={graphData} maxPossibleValue={maxPossibleSimulationValue} />
+                <ILGraph
+                    data={graphData}
+                    theme={theme}
+                    maxPossibleValue={maxPossibleSimulationValue}
+                />
             </GraphWrapper>
         </Wrapper>
     );

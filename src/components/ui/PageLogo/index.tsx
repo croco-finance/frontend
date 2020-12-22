@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Logo from '../../../data/images/logo.svg';
+import LogoNight from '../../../data/images/logo-night.svg';
+import { useSelector } from '@reducers';
 
 const SvgWrapper = styled.img`
     display: inline-block;
@@ -17,7 +19,8 @@ interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
 }
 
 const PageLogo = ({ height = 32 }: Props) => {
-    return <SvgWrapper height={height} src={Logo} />;
+    const theme = useSelector(state => state.theme);
+    return <SvgWrapper height={height} src={theme === 'light' ? Logo : LogoNight} />;
 };
 
 export default PageLogo;

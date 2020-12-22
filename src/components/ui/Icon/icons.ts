@@ -29,4 +29,8 @@ export const ICONS: any = {
     close: require('../../../data/images/icons/close.svg'),
     copy: require('../../../data/images/icons/copy.svg'),
     settings: require('../../../data/images/icons/settings.svg'),
+
+    // themes
+    dayMode: require('../../../data/images/icons/day-mode.svg'),
+    darkMode: require('../../../data/images/icons/dark-mode.svg'),
 };

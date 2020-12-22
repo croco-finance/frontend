@@ -1,12 +1,13 @@
 import { analytics, colors, variables, types } from '@config';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PoolOverview from '../PoolOverview';
 import Graph from '../Graph';
 import { graphUtils } from '@utils';
 import { InfoBox } from '@components/ui';
+import { useTheme } from '@hooks';
+import { useSelector } from '@reducers';
 
 const Wrapper = styled.div`
     display: flex;
@@ -21,7 +22,7 @@ const GraphWrapper = styled.div`
 `;
 
 const GraphTitle = styled.div`
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     text-align: center;
     padding-bottom: 15px;
     padding-left: 40px;
@@ -35,7 +36,7 @@ const SimulatorButtonWrapper = styled.div`
     margin: 16px auto 0 auto;
     padding: 4px 20px;
     flex-direction: column;
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     font-size: ${variables.FONT_SIZE.NORMAL};
 `;
 
@@ -43,16 +44,15 @@ const StyledLink = styled(Link)`
     display: flex;
     text-decoration: none;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.PASTEL_BLUE_DARK};
-    background-color: ${colors.PASTEL_BLUE_LIGHT};
+    color: ${props => props.theme.BUTTON_SECONDARY_FONT};
+    background-color: ${props => props.theme.BUTTON_SECONDARY_BG};
     border-radius: 4px;
     margin-top: 16px;
     padding: 8px 10px;
     transition: 0.12s;
 
     &:hover {
-        /* text-decoration: underline; */
-        color: white;
+        color: ${props => props.theme.BUTTON_SECONDARY_FONT_HOVER};
         background-color: ${colors.PASTEL_BLUE_DARK};
     }
 `;
@@ -62,10 +62,9 @@ const BalancerBanner = styled.div`
 `;
 
 const Overview = () => {
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    const userAddress = useSelector(state => state.userAddress);
-    const activePoolIds = useSelector(state => state.activePoolIds);
+    const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state);
+
+    const theme: any = useTheme();
 
     if (activePoolIds.length <= 0 && selectedPoolId === 'all') {
         return null;
@@ -80,14 +79,15 @@ const Overview = () => {
     if (allPools && allPools[selectedPoolId]) {
         exchange = allPools[selectedPoolId].exchange;
     }
+
     return (
         <Wrapper>
             {/* </BalancerBanner> */}
             {exchange === 'BALANCER' ? (
                 <BalancerBanner>
                     <InfoBox>
-                        We show you only a rough estimate of the fees you gained on Balancer. We
-                        will provide you with more accurate fee estimates soon.
+                        We show you only a rough estimate of the fees you gained on Balancer. We are
+                        working on better Balancer integration.
                     </InfoBox>
                 </BalancerBanner>
             ) : null}
@@ -95,20 +95,20 @@ const Overview = () => {
             <PoolOverview />
             <GraphWrapper>
                 <GraphTitle>History of your interactions with the pool</GraphTitle>
-                <Graph data={graphData} />
+                <Graph data={graphData} theme={theme} />
             </GraphWrapper>
             {activePoolIds.includes(selectedPoolId) ? (
                 <SimulatorButtonWrapper>
                     <StyledLink
-                        onClick={e => {
-                            analytics.Event(
-                                'SIMULATOR',
-                                'Went to simulator from pool card',
-                                userAddress,
-                            );
-                        }}
+                        // onClick={e => {
+                        //     analytics.Event(
+                        //         'SIMULATOR',
+                        //         'Went to simulator from pool card',
+                        //         userAddress,
+                        //     );
+                        // }}
                         to={{
-                            pathname: `/simulator/${userAddress}`,
+                            pathname: `/simulator`,
                         }}
                     >
                         Open in simulator

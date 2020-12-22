@@ -8,6 +8,7 @@ import DifferentStrategy from './DifferentStrategy';
 import { BoxRow, GrayBox, Icon, InfoBox } from '@components/ui';
 import { Link } from 'react-router-dom';
 import Graph from './Graph';
+import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     display: flex;
@@ -23,12 +24,12 @@ const SubHeadline = styled.h3`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     display: flex;
     text-align: left;
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     padding-left: 15px;
     margin-top: 35px;
     margin-bottom: 10px;
     padding-bottom: 10px;
-    border-bottom: 1px solid ${colors.STROKE_GREY};
+    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
 `;
 
 const StrategyItemWrapper = styled.div`
@@ -42,7 +43,7 @@ const SectionHeader = styled.div<{ marginTop: number }>`
     width: 100%;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     display: flex;
 `;
 
@@ -56,11 +57,11 @@ const Right = styled.div`
 
 const Current = styled.span``;
 const Simulated = styled.span`
-    color: ${colors.FONT_DARK};
+    color: ${props => props.theme.FONT_DARK};
 `;
 
 const SimulatedBlue = styled.span`
-    color: ${colors.BLUE};
+    color: ${props => props.theme.BLUE};
 `;
 
 const GraphWrapper = styled.div`
@@ -69,7 +70,7 @@ const GraphWrapper = styled.div`
 `;
 
 const GraphTitle = styled.div`
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     text-align: center;
     padding-bottom: 15px;
     padding-left: 50px;
@@ -164,6 +165,8 @@ const Strategies = ({
     hasYieldReward,
     exchange,
 }: Props) => {
+    const theme: any = useTheme();
+
     const graphData = graphUtils.getStrategiesGraphData(
         poolStrategyUsd,
         tokensHodlStrategyUsd,
@@ -230,8 +233,8 @@ const Strategies = ({
             {exchange === 'BALANCER' ? (
                 <BalancerBanner>
                     <InfoBox>
-                        We show you only a rough estimate of the fees you gained on Balancer. We
-                        will provide you with more accurate fee estimates soon.
+                        We show you only a rough estimate of the fees you gained on Balancer. We are
+                        working on better Balancer integration.
                     </InfoBox>
                 </BalancerBanner>
             ) : null}
@@ -315,7 +318,7 @@ const Strategies = ({
             {/* <SubHeadline>Strategy values</SubHeadline> */}
             <GraphWrapper>
                 <GraphTitle>Value of different strategies</GraphTitle>
-                <Graph data={graphData} maxPossibleValue={maxPossibleGraphValue} />
+                <Graph data={graphData} maxPossibleValue={maxPossibleGraphValue} theme={theme} />
             </GraphWrapper>
         </Wrapper>
     );

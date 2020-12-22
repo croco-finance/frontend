@@ -10,6 +10,7 @@ import { colors, variables } from '@config';
 import { formatUtils, mathUtils } from '@utils';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -42,7 +43,7 @@ const RewardsExpensesHeader = styled(GridWrapper)`
     margin-bottom: 18px;
     padding: 0;
     font-size: ${variables.FONT_SIZE.SMALL};
-    border-bottom: 1px solid ${colors.STROKE_GREY};
+    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
 `;
 
 const BottomBarRow = styled(GridWrapper)`
@@ -76,7 +77,7 @@ const ExpandButton = styled.div`
 `;
 
 const ValueDifferenceWrapper = styled.div<{ thickBorder: boolean }>`
-    border-top: 1px solid ${colors.STROKE_GREY};
+    border-top: 1px solid ${props => props.theme.STROKE_GREY};
     border-width: ${props => (props.thickBorder ? '5px' : '1px')};
 `;
 
@@ -129,6 +130,7 @@ const DifferentStrategy = ({
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
+    const theme: any = useTheme();
 
     const divergenceLoss = poolStrategyUsd - differentStrategyUsd - feesUsd - yieldUsd + txCostUsd;
 
@@ -230,7 +232,7 @@ const DifferentStrategy = ({
                     setValueOpened(isOpened);
                 }}
                 header={
-                    <GrayBox borderRadius={[10, 10, 0, 0]}>
+                    <GrayBox borderRadius={[10, 10, 0, 0]} backgroundColor={theme.BACKGROUND}>
                         <StrategyHeaderGridWrapper>
                             <BoxRow
                                 firstColumn="You would have"
@@ -240,7 +242,7 @@ const DifferentStrategy = ({
                                         <Icon
                                             icon={valueOpened ? 'arrow_up' : 'arrow_down'}
                                             size={16}
-                                            color={colors.FONT_MEDIUM}
+                                            color={theme.FONT_MEDIUM}
                                         />
                                     </ExpandButton>
                                 }
@@ -255,6 +257,7 @@ const DifferentStrategy = ({
                             borderRadius={[0, 0, 0, 0]}
                             bottomBarPadding={[10, 50, 10, 15]}
                             bottomBarBorderRadius={[0, 0, 0, 0]}
+                            backgroundColor={theme.BACKGROUND}
                             bottomBar={
                                 <>
                                     <BottomBarRow>
@@ -290,7 +293,10 @@ const DifferentStrategy = ({
                         setDiffOpened(isOpened);
                     }}
                     header={
-                        <GrayBox borderRadius={diffOpened ? [0, 0, 0, 0] : [0, 0, 10, 10]}>
+                        <GrayBox
+                            borderRadius={diffOpened ? [0, 0, 0, 0] : [0, 0, 10, 10]}
+                            backgroundColor={theme.BACKGROUND}
+                        >
                             <StrategyHeaderGridWrapper>
                                 <BoxRow
                                     firstColumn={gainLossText}
@@ -306,7 +312,7 @@ const DifferentStrategy = ({
                                             <Icon
                                                 icon={diffOpened ? 'arrow_up' : 'arrow_down'}
                                                 size={16}
-                                                color={colors.FONT_MEDIUM}
+                                                color={theme.FONT_MEDIUM}
                                             />
                                         </ExpandButton>
                                     }
@@ -321,6 +327,7 @@ const DifferentStrategy = ({
                                 borderRadius={[0, 0, 0, 0]}
                                 bottomBarPadding={[10, 50, 10, 15]}
                                 bottomBarBorderRadius={[0, 0, 10, 10]}
+                                backgroundColor={theme.BACKGROUND}
                                 bottomBar={
                                     <>
                                         <BottomBarRow>

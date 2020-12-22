@@ -7,7 +7,10 @@
             "@types": ["src/config/types.ts"],
             "@utils": ["src/utils"],
             "@views/*": ["src/views/*"],
-            "@actionTypes": ["src/store/actions/actionTypes"]
+            "@actionTypes": ["src/store/actions/actionTypes"],
+            "@hooks": ["src/hooks"],
+            "@actions": ["src/store/actions"],
+            "@reducers": ["src/store/reducers"],
         }
     }
 }

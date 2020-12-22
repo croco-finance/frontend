@@ -1,4 +1,4 @@
-import { Icon, PageLogo, Spinner, TokenLogo, TextBadge } from '@components/ui';
+import { Icon, PageLogo, Spinner, TokenLogo, TextBadge, DarkModeSwitch } from '@components/ui';
 import { analytics, colors, constants, variables } from '@config';
 import Portis from '@portis/web3';
 import { validationUtils } from '@utils';
@@ -8,9 +8,13 @@ import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Web3 from 'web3';
 import LandingPageText from './components/LandingPageText';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as actionTypes from '@actionTypes';
 import { portis, web3 } from '@config';
+import { useTheme } from '@hooks';
+import { useSelector } from '@reducers';
+
+const CONTENT_WIDTH = 1000;
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -20,10 +24,23 @@ const MainWrapper = styled.div`
     align-items: center;
     text-align: center;
     padding: 0 20px;
-    background-color: #fbfbfc;
+    background-color: ${props => props.theme.BACKGROUND_LIGHT};
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         padding: 0 10px;
+    }
+`;
+
+const DarkModeSwitchWrapper = styled.div`
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 8px;
+    right: 10px;
+
+    @media (max-width: ${CONTENT_WIDTH + 100}px) {
+        position: static;
     }
 `;
 
@@ -49,7 +66,7 @@ const AnimatedWrapper = styled.div`
     }
 `;
 const ContentWrapper = styled.div`
-    max-width: 1000px;
+    max-width: ${CONTENT_WIDTH}px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -96,15 +113,13 @@ const IllustrationWrapper = styled.h1`
     }
 `;
 
-const AddressInputWrapper = styled.div`
-    background-color: white;
+const AddressInputWrapper = styled.div<{ isDark: boolean }>`
+    background-color: ${props => props.theme.BG_WHITE};
     margin: 0 30px;
     display: flex;
     justify-content: center;
-    border: 1px solid ${colors.BACKGROUND};
-    /* border: 7px solid ${colors.FONT_DARK}; */
+    border: 1px solid ${props => (props.isDark ? props.theme.STROKE_GREY : props.theme.BACKGROUND)};
     padding: 8px;
-
     border-radius: 18px;
     box-shadow: rgb(12 22 53 / 11%) 0px 8px 40px;
 
@@ -123,8 +138,9 @@ const AddressInput = styled.input`
     font-size: 20px;
     cursor: text;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_DARK};
+    color: ${props => props.theme.FONT_DARK};
     letter-spacing: 0.4px;
+    background-color: inherit;
 
     &:focus {
         border: none;
@@ -132,7 +148,7 @@ const AddressInput = styled.input`
     }
 
     &::placeholder {
-        color: ${colors.FONT_LIGHT};
+        color: ${props => props.theme.FONT_LIGHT};
         /* color: #c4c4c8; */
     }
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
@@ -148,7 +164,7 @@ const DashboardButton = styled(Link)<{ active: boolean }>`
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    background-color: ${colors.BLUE};
+    background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
     color: white;
     font-weight: ${variables.FONT_WEIGHT.BOLD};
     font-size: 20px;
@@ -160,17 +176,19 @@ const DashboardButton = styled(Link)<{ active: boolean }>`
     height: 66px;
 
     &:hover {
-        background-color: #075cda;
+        background-color: ${props => props.theme.BUTTON_PRIMARY_BG_HOVER};
     }
 
     ${props =>
         !props.active &&
         css`
             cursor: not-allowed;
-            background-color: ${colors.BACKGROUND_DARK};
+            background-color: ${props => props.theme.BUTTON_PRIMARY_BG_DISABLED};
+            color: ${props => props.theme.BUTTON_PRIMARY_FONT_DISABLED};
 
             &:hover {
-                background-color: ${colors.BACKGROUND_DARK};
+                background-color: ${props => props.theme.BUTTON_PRIMARY_BG_DISABLED};
+                color: ${props => props.theme.BUTTON_PRIMARY_FONT_DISABLED};
             }
         `}
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
@@ -186,7 +204,7 @@ const DashboardButton = styled(Link)<{ active: boolean }>`
 const PortisButtonWrapper = styled.div`
     display: flex;
     align-items: center;
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     margin: 50px auto 10px auto;
     justify-content: center;
 `;
@@ -198,7 +216,7 @@ const PortisButton = styled.button`
     padding: 6px 8px;
     color: #4b6b9aff;
     outline: none;
-    background-color: #def3ff;
+    background-color: ${props => props.theme.BUTTON_PORTIS_BG};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     font-size: ${variables.FONT_SIZE.SMALL};
     border-radius: 5px;
@@ -206,7 +224,7 @@ const PortisButton = styled.button`
     cursor: pointer;
 
     &:hover {
-        background-color: #caecff;
+        background-color: ${props => props.theme.BUTTON_PORTIS_BG_HOVER};
     }
 `;
 
@@ -215,10 +233,10 @@ const PortisButtonText = styled.div`
 `;
 
 const SupportedExchangesWrapper = styled.div`
-    border-top: 1px solid ${colors.STROKE_GREY};
+    border-top: 1px solid ${props => props.theme.STROKE_GREY};
     padding-top: 35px;
     margin-top: 46px;
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     /* display: flex; */
 `;
@@ -238,7 +256,7 @@ const ExchangeLogoWrapper = styled.div`
 
 const ExchangeName = styled.div`
     margin-top: 10px;
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     font-weight: ${variables.FONT_WEIGHT.REGULAR};
     /* font-size: ${variables.FONT_SIZE.TINY}; */
 `;
@@ -257,6 +275,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
     const [portisLoading, setPortisLoading] = useState(false);
     const [isValidAddress, setIsValidAddress] = useState(false);
     const [loadingEnsDomain, setLoadingEnsDomain] = useState(false);
+    const theme = useSelector(state => state.theme);
 
     const handleAddressChange = async input => {
         setIsValidAddress(false);
@@ -358,6 +377,9 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                         >
                             <Icon icon="twitter" size={20} />
                         </IconLinkWrapper>
+                        <DarkModeSwitchWrapper>
+                            <DarkModeSwitch />
+                        </DarkModeSwitchWrapper>
                     </CommunityIconsWrapper>
                 </TopBar>
 
@@ -365,7 +387,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                     <IllustrationWrapper>
                         <LandingPageText />
                     </IllustrationWrapper>
-                    <AddressInputWrapper>
+                    <AddressInputWrapper isDark={theme === 'dark'}>
                         <AddressInput
                             type="text"
                             spellCheck={false}
@@ -407,17 +429,26 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                         <div>We support</div>
                         <ExchangeLogosWrapper>
                             <ExchangeLogoWrapper>
-                                <TokenLogo symbol="uni" size={38} />
+                                <TokenLogo
+                                    symbol={theme === 'light' ? 'uniswap' : 'uni_v2dark'}
+                                    size={38}
+                                />
                                 <ExchangeName>Uniswap</ExchangeName>
                             </ExchangeLogoWrapper>
                             <ExchangeLogoWrapper>
-                                <TokenLogo symbol="bal" size={38} />
+                                <TokenLogo
+                                    symbol={theme === 'light' ? 'balancer' : 'balancerdark'}
+                                    size={38}
+                                />
                                 <ExchangeName>Balancer</ExchangeName>
                             </ExchangeLogoWrapper>
                             <ExchangeLogoWrapper>
                                 {/* <StyledTextBadge>SOON</StyledTextBadge> */}
-                                <TokenLogo symbol="sushi" size={38} />
-                                <ExchangeName>Sushiswap</ExchangeName>
+                                <TokenLogo
+                                    symbol={theme === 'light' ? 'sushiswap' : 'sushidark'}
+                                    size={38}
+                                />
+                                <ExchangeName>SushiSwap</ExchangeName>
                             </ExchangeLogoWrapper>
                         </ExchangeLogosWrapper>
                     </SupportedExchangesWrapper>

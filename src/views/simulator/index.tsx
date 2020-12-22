@@ -5,7 +5,13 @@ import {
     RightLayoutContainer,
     SimulatorContainer,
 } from '@components/layout';
-import { InfoBox, LoadingBox, MultipleTokenSelect, SocialButtonBubble } from '@components/ui';
+import {
+    InfoBox,
+    LoadingBox,
+    MultipleTokenSelect,
+    SocialButtonBubble,
+    DarkModeSwitch,
+} from '@components/ui';
 import { animations, colors, styles, types, variables } from '@config';
 import { AllPoolsGlobal } from '@types';
 import { formatUtils } from '@utils';
@@ -17,14 +23,33 @@ import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
 import RightContainer from './components/RightContainer';
 import { AddressSelect } from '@components/containers';
+import { useTheme } from '@hooks';
 
 const Header = styled.div`
     padding: 0 20px;
     width: 100%;
     display: flex;
     justify-content: center;
-    background-color: ${colors.BACKGROUND};
-    // border-bottom: 1px solid ${colors.STROKE_GREY};
+    background-color: ${props => props.theme.BACKGROUND};
+`;
+
+const DarkModeSwitchWrapper = styled.div`
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 8px;
+    right: 10px;
+
+    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
+        top: 17px;
+        right: 10px;
+    }
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        top: 7px;
+        right: 5px;
+    }
 `;
 
 const LeftSubHeaderContent = styled.div`
@@ -50,7 +75,7 @@ const LeftSubHeaderContent = styled.div`
 const HeaderContent = styled.div`
     width: 100%;
     max-width: 620px;
-    border-bottom: 1px solid ${colors.STROKE_GREY};
+    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
 `;
 
 const ExceptionWrapper = styled.div`
@@ -60,7 +85,7 @@ const ExceptionWrapper = styled.div`
     justify-content: center;
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     flex-direction: column;
-    background-color: ${colors.BACKGROUND};
+    background-color: ${props => props.theme.BACKGROUND};
     margin-top: 24px;
     text-align: center;
     padding: 20px;
@@ -68,13 +93,13 @@ const ExceptionWrapper = styled.div`
 `;
 
 const NoPoolFoundInfo = styled(ExceptionWrapper)`
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
 `;
 
 const ErrorTextWrapper = styled(ExceptionWrapper)`
     & > button {
         color: white;
-        background-color: ${colors.BLUE};
+        background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
         font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
         padding: 10px;
         border: none;
@@ -92,13 +117,6 @@ const AddressWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
-    /* border-radius: 8px;
-    padding: 6px;
-    background-color: ${colors.BACKGROUND_DARK}; */
-`;
-
-const CardInfoWrapper = styled.div`
-    /* animation: ${animations.SHOW_UP} 1.5s; */
 `;
 
 const Section = styled.div`
@@ -128,7 +146,9 @@ const MultipleSelectWrapper = styled.div`
     flex-grow: 1;
 `;
 
-const PoolSelectLabel = styled(SectionLabel)``;
+const PoolSelectLabel = styled(SectionLabel)`
+    color: ${props => props.theme.FONT_DARK};
+`;
 
 const OverviewWrapper = styled.div`
     margin: 20px 0 30px 0;
@@ -137,12 +157,10 @@ const OverviewWrapper = styled.div`
 `;
 
 const SimulationBoxWrapper = styled.div`
-    /* background-color: ${colors.WHITE}; */
-    background-color: ${colors.BACKGROUND_DARK};
+    background-color: ${props => props.theme.BACKGROUND_DARK};
     padding: 28px;
     border-radius: 10px;
     width: 100%;
-    /* border: 1px solid ${colors.STROKE_GREY}; */
 `;
 
 const buildPoolOption = (poolData: types.PoolItem, uniquePoolId: string) => {
@@ -196,6 +214,7 @@ const Simulator = () => {
     const isLoading: boolean = useSelector(state => state.loading);
     const isFetchError: boolean = useSelector(state => state.error);
     const noPoolsFound: boolean = useSelector(state => state.noPoolsFound);
+    const theme: any = useTheme();
 
     // SIMULATOR FUNCTIONS
     const [simulatedPriceCoefficients, setSimulatedPriceCoefficients] = useState<number[]>(
@@ -281,91 +300,96 @@ const Simulator = () => {
     }
 
     return (
-        <SimulatorContainer>
-            <LeftLayoutContainer backgroundColor={colors.BACKGROUND}>
-                <Header>
-                    <HeaderContent>
-                        <NavBar></NavBar>
-                    </HeaderContent>
-                </Header>
-                <LeftSubHeaderContent>
-                    <AddressWrapper>
-                        <AddressSelect />
-                    </AddressWrapper>
+        <>
+            <DarkModeSwitchWrapper>
+                <DarkModeSwitch />
+            </DarkModeSwitchWrapper>
+            <SimulatorContainer>
+                <LeftLayoutContainer backgroundColor={theme.BACKGROUND}>
+                    <Header>
+                        <HeaderContent>
+                            <NavBar></NavBar>
+                        </HeaderContent>
+                    </Header>
+                    <LeftSubHeaderContent>
+                        <AddressWrapper>
+                            <AddressSelect />
+                        </AddressWrapper>
 
-                    {exceptionContent ? (
-                        exceptionContent
-                    ) : allPools && Object.keys(allPools).length > 0 ? (
-                        <ChoosePoolWrapper>
-                            <PoolSelectLabel>Choose pool:</PoolSelectLabel>
-                            <MultipleSelectWrapper>
-                                <MultipleTokenSelect
-                                    options={buildPoolOptions(allPools)}
-                                    onChange={(option: PoolOption) => {
-                                        option &&
-                                            dispatch({
-                                                type: actionTypes.SET_SELECTED_POOL_ID,
-                                                poolId: option.value.poolId,
-                                            });
-                                    }}
-                                    selected={buildPoolOption(
-                                        allPools[selectedPoolId],
-                                        selectedPoolId,
-                                    )}
-                                    useWhiteBackground
-                                    useDarkBorder
-                                ></MultipleTokenSelect>
-                            </MultipleSelectWrapper>
-                        </ChoosePoolWrapper>
-                    ) : null}
+                        {exceptionContent ? (
+                            exceptionContent
+                        ) : allPools && Object.keys(allPools).length > 0 ? (
+                            <ChoosePoolWrapper>
+                                <PoolSelectLabel>Choose pool:</PoolSelectLabel>
+                                <MultipleSelectWrapper>
+                                    <MultipleTokenSelect
+                                        options={buildPoolOptions(allPools)}
+                                        onChange={(option: PoolOption) => {
+                                            option &&
+                                                dispatch({
+                                                    type: actionTypes.SET_SELECTED_POOL_ID,
+                                                    poolId: option.value.poolId,
+                                                });
+                                        }}
+                                        selected={buildPoolOption(
+                                            allPools[selectedPoolId],
+                                            selectedPoolId,
+                                        )}
+                                        useWhiteBackground
+                                        useDarkBorder
+                                    ></MultipleTokenSelect>
+                                </MultipleSelectWrapper>
+                            </ChoosePoolWrapper>
+                        ) : null}
 
-                    {allPools && allPools[selectedPoolId] && (
-                        <>
-                            {!allPools[selectedPoolId].isActive ? (
-                                <InfoBox>
-                                    You have already withdrawn all funds from this pool. Below you
-                                    see prices and balances at the time of your withdrawal.
-                                </InfoBox>
-                            ) : null}
-                        </>
-                    )}
+                        {allPools && allPools[selectedPoolId] && !exceptionContent && (
+                            <>
+                                {!allPools[selectedPoolId].isActive ? (
+                                    <InfoBox>
+                                        You have already withdrawn all funds from this pool. Below
+                                        you see prices and balances at the time of your withdrawal.
+                                    </InfoBox>
+                                ) : null}
+                            </>
+                        )}
 
-                    {allPools && allPools[selectedPoolId] && !exceptionContent && (
-                        <>
-                            <OverviewWrapper>
-                                <BalanceOverview />
-                            </OverviewWrapper>
-                            <SimulationBoxWrapper>
-                                <SimulationBox
-                                    selectedTab={selectedTab}
-                                    onChange={setNewPrices}
-                                    onEthChange={setNewEthPrice}
-                                    onYieldChange={setNewYieldPrice}
-                                    onNewDefaultValue={setNewDefaultCoeffs}
-                                    onNewDefaultEthValue={newValue =>
-                                        setSliderDefaultEthPriceCoefficient(newValue)
-                                    }
-                                    simulatedCoefficients={simulatedPriceCoefficients}
-                                    simulatedEthCoefficient={simulatedEthPriceCoefficient}
-                                />
-                            </SimulationBoxWrapper>
-                        </>
-                    )}
-                </LeftSubHeaderContent>
-            </LeftLayoutContainer>
-            <RightLayoutContainer>
-                <RightContainer
-                    onTabChanged={tab => setSelectedTab(tab)}
-                    selectedTab={selectedTab}
-                    simulatedPooledTokensCoeffs={simulatedPriceCoefficients}
-                    sliderDefaultCoeffs={sliderDefaultCoeffs}
-                    simulatedEthCoeff={simulatedEthPriceCoefficient}
-                    simulatedYieldCoeff={simulatedYieldPriceCoefficient}
-                    sliderDefaultEthCoeff={sliderDefaultEthPriceCoefficient}
-                />
-            </RightLayoutContainer>
-            <SocialButtonBubble />
-        </SimulatorContainer>
+                        {allPools && allPools[selectedPoolId] && !exceptionContent && (
+                            <>
+                                <OverviewWrapper>
+                                    <BalanceOverview />
+                                </OverviewWrapper>
+                                <SimulationBoxWrapper>
+                                    <SimulationBox
+                                        selectedTab={selectedTab}
+                                        onChange={setNewPrices}
+                                        onEthChange={setNewEthPrice}
+                                        onYieldChange={setNewYieldPrice}
+                                        onNewDefaultValue={setNewDefaultCoeffs}
+                                        onNewDefaultEthValue={newValue =>
+                                            setSliderDefaultEthPriceCoefficient(newValue)
+                                        }
+                                        simulatedCoefficients={simulatedPriceCoefficients}
+                                        simulatedEthCoefficient={simulatedEthPriceCoefficient}
+                                    />
+                                </SimulationBoxWrapper>
+                            </>
+                        )}
+                    </LeftSubHeaderContent>
+                </LeftLayoutContainer>
+                <RightLayoutContainer>
+                    <RightContainer
+                        onTabChanged={tab => setSelectedTab(tab)}
+                        selectedTab={selectedTab}
+                        simulatedPooledTokensCoeffs={simulatedPriceCoefficients}
+                        sliderDefaultCoeffs={sliderDefaultCoeffs}
+                        simulatedEthCoeff={simulatedEthPriceCoefficient}
+                        simulatedYieldCoeff={simulatedYieldPriceCoefficient}
+                        sliderDefaultEthCoeff={sliderDefaultEthPriceCoefficient}
+                    />
+                </RightLayoutContainer>
+                <SocialButtonBubble />
+            </SimulatorContainer>
+        </>
     );
 };
 export default withRouter(Simulator);

@@ -8,10 +8,11 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
     align-items: center;
     background-color: inherit;
     border-radius: 5px;
-    background-color: ${props => (props.isSelected ? colors.BACKGROUND_BLUE : colors.WHITE)};
-    color: ${props => (props.isSelected ? colors.BLUE : colors.FONT_DARK)};
+    background-color: ${props =>
+        props.isSelected ? props.theme.BACKGROUND_BLUE : props.theme.BG_WHITE};
+    color: ${props => (props.isSelected ? props.theme.BLUE : props.theme.FONT_DARK)};
     border: 1px solid white;
-    border-color: ${props => (props.isSelected ? colors.STROKE_BLUE : colors.WHITE)};
+    border-color: ${props => (props.isSelected ? props.theme.STROKE_BLUE : props.theme.BG_WHITE)};
     padding: 10px;
     flex: 0 0 10em 25em;
     min-height: 70px;
@@ -24,9 +25,10 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
 
     &:hover {
         background-color: ${props =>
-            props.isSelected ? colors.BACKGROUND_BLUE : colors.BACKGROUND_LIGHT};
+            props.isSelected ? props.theme.BACKGROUND_BLUE : props.theme.BACKGROUND_DARK};
 
-        border-color: ${props => (props.isSelected ? colors.STROKE_BLUE : colors.STROKE_GREY)};
+        border-color: ${props =>
+            props.isSelected ? props.theme.STROKE_BLUE : props.theme.STROKE_GREY};
     }
 
     @media (max-width: ${variables.SCREEN_SIZE.MD}) {

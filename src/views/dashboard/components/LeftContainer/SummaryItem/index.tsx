@@ -34,20 +34,22 @@ const ExchangeTitle = styled.div<{ isSelected: boolean }>`
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     margin-left: 5px;
-    color: ${props => (props.isSelected ? colors.BLUE : colors.FONT_DARK)};
+    color: ${props => (props.isSelected ? props.theme.BLUE : props.theme.FONT_DARK)};
 `;
 
 const StyledPoolItemCard = styled(PoolItemCard)<{ isSelected: boolean }>`
     background-color: ${props =>
-        props.isSelected ? colors.BACKGROUND_BLUE : colors.BACKGROUND_DARK};
+        props.isSelected ? props.theme.BACKGROUND_BLUE : props.theme.BACKGROUND_DARK};
     border: 1px solid;
-    border-color: ${props => (props.isSelected ? colors.STROKE_BLUE : colors.BACKGROUND_DARK)};
+    border-color: ${props =>
+        props.isSelected ? props.theme.STROKE_BLUE : props.theme.BACKGROUND_DARK};
 
     &:hover {
         background-color: ${props =>
-            props.isSelected ? colors.BACKGROUND_BLUE : colors.STROKE_GREY};
+            props.isSelected ? props.theme.BACKGROUND_BLUE : props.theme.STROKE_GREY};
 
-        border-color: ${props => (props.isSelected ? colors.STROKE_BLUE : colors.STROKE_GREY)};
+        border-color: ${props =>
+            props.isSelected ? props.theme.STROKE_BLUE : props.theme.STROKE_GREY};
     }
 `;
 

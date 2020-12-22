@@ -14,7 +14,7 @@ const GridWrapper = styled.div`
     flex-grow: 1;
     display: grid;
     grid-gap: ${GRID_GAP}px;
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     grid-template-columns: 140px minmax(70px, auto) minmax(130px, auto) minmax(140px, auto);
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
@@ -31,14 +31,12 @@ const GridWrapper = styled.div`
 
 const HeaderWrapper = styled(GridWrapper)`
     grid-template-rows: repeat(1, 50px);
-    /* font-size: ${variables.FONT_SIZE.SMALL}; */
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
 const TokenInfoWrapper = styled(GridWrapper)<{ rowsCount: number }>`
     grid-template-rows: ${props => `repeat(${props.rowsCount}, 45px)`};
-    border-top: 1px solid ${colors.STROKE_GREY};
-    /* border-bottom: 1px solid ${colors.STROKE_GREY}; */
+    border-top: 1px solid ${props => props.theme.STROKE_GREY};
     padding-top: 10px;
 `;
 

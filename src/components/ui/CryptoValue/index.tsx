@@ -9,7 +9,7 @@ const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: b
         props.value < 0 &&
         !props.useBadgeStyle &&
         css`
-            color: ${colors.RED};
+            color: ${props.theme.RED};
         `}
 
     ${props =>
@@ -17,7 +17,7 @@ const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: b
         props.value > 0 &&
         !props.useBadgeStyle &&
         css`
-            color: ${colors.GREEN};
+            color: ${props.theme.GREEN};
         `}
 
     ${props =>
@@ -25,7 +25,7 @@ const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: b
         props.value < 0 &&
         props.useBadgeStyle &&
         css`
-            background-color: ${colors.RED};
+            background-color: ${props.theme.RED};
             color: white;
             padding: 5px;
             border-radius: 5px;
@@ -37,7 +37,7 @@ const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: b
         props.value > 0 &&
         props.useBadgeStyle &&
         css`
-            background-color: ${colors.GREEN};
+            background-color: ${props.theme.GREEN};
             color: white;
             padding: 5px;
             margin: -5px;
@@ -47,7 +47,7 @@ const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: b
 `;
 
 const Nan = styled.div`
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {

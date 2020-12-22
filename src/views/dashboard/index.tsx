@@ -5,7 +5,14 @@ import {
     NavBar,
     Modal,
 } from '@components/layout';
-import { Input, LoadingBox, SocialButtonBubble, Icon, Select } from '@components/ui';
+import {
+    Input,
+    LoadingBox,
+    SocialButtonBubble,
+    Icon,
+    Select,
+    DarkModeSwitch,
+} from '@components/ui';
 import { AddressSelect } from '@components/containers';
 import { animations, colors, variables, styles } from '@config';
 import { validationUtils } from '@utils';
@@ -16,8 +23,9 @@ import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
 import { useDispatch, useSelector } from 'react-redux';
-import { AllAddressesGlobal } from '@types';
+import { AllAddressesGlobal, AppThemeColors } from '@types';
 import * as actionTypes from '@actionTypes';
+import { useTheme } from '@hooks';
 
 const Header = styled.div`
     width: 100%;
@@ -25,14 +33,33 @@ const Header = styled.div`
     /* max-width: 540px; */
     display: flex;
     justify-content: center;
-    background-color: ${colors.BACKGROUND};
+    background-color: ${props => props.theme.BACKGROUND};
     padding: 0 20px;
+`;
+
+const DarkModeSwitchWrapper = styled.div`
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 8px;
+    right: 10px;
+
+    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
+        top: 17px;
+        right: 10px;
+    }
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        top: 7px;
+        right: 5px;
+    }
 `;
 
 const HeaderContent = styled.div`
     width: 100%;
     max-width: 620px;
-    border-bottom: 1px solid ${colors.STROKE_GREY};
+    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
 
     /* padding: 0 20px 40px 20px; */
     /* border-bottom: 2px solid ${colors.BACKGROUND_DARK}; */
@@ -52,13 +79,13 @@ const ExceptionWrapper = styled.div`
 `;
 
 const NoPoolFoundInfo = styled(ExceptionWrapper)`
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
 `;
 
 const ErrorTextWrapper = styled(ExceptionWrapper)`
     & > button {
         color: white;
-        background-color: ${colors.BLUE};
+        background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
         font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
         padding: 10px;
         border: none;
@@ -70,7 +97,7 @@ const ErrorTextWrapper = styled(ExceptionWrapper)`
 `;
 
 const NoAddressNoPool = styled(ExceptionWrapper)`
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     font-size: ${variables.FONT_SIZE.H2};
 `;
 
@@ -109,7 +136,7 @@ const Headline = styled.div`
     padding-top: 0px;
     margin-bottom: 50px;
     padding-left: 20px;
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     font-size: ${variables.FONT_SIZE.H3};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
 
@@ -132,6 +159,7 @@ const Dashboard = () => {
     const isLoading = useSelector(state => state.loading);
     const isFetchError = useSelector(state => state.error);
     const noPoolsFound = useSelector(state => state.noPoolsFound);
+    const theme = useTheme();
 
     let exceptionContent;
     let rightWrapperContent;
@@ -172,39 +200,45 @@ const Dashboard = () => {
     }
 
     return (
-        <DashboardContainer>
-            <LeftLayoutContainer backgroundColor={colors.BACKGROUND}>
-                <Header>
-                    <HeaderContent>
-                        <NavBar />
-                    </HeaderContent>
-                </Header>
-                <LeftSubHeaderContent>
-                    <AddressWrapper>
-                        <AddressSelect />
-                    </AddressWrapper>
+        <>
+            <DarkModeSwitchWrapper>
+                <DarkModeSwitch />
+            </DarkModeSwitchWrapper>
 
-                    {exceptionContent
-                        ? exceptionContent
-                        : !noPoolsSavedInRedux && (
-                              <PoolListWrapper>
-                                  <Headline>Your liquidity pools</Headline>
-                                  <SummaryList />
-                                  <PoolList />
-                              </PoolListWrapper>
-                          )}
-                </LeftSubHeaderContent>
-            </LeftLayoutContainer>
-            <RightLayoutContainer>
-                {rightWrapperContent}
-                {!exceptionContent && !noPoolsSavedInRedux && (
-                    <RightNonExceptionContentWrapper>
-                        <RightContainer />
-                    </RightNonExceptionContentWrapper>
-                )}
-            </RightLayoutContainer>
-            <SocialButtonBubble />
-        </DashboardContainer>
+            <DashboardContainer>
+                <LeftLayoutContainer backgroundColor={'red'}>
+                    <Header>
+                        <HeaderContent>
+                            <NavBar />
+                        </HeaderContent>
+                    </Header>
+                    <LeftSubHeaderContent>
+                        <AddressWrapper>
+                            <AddressSelect />
+                        </AddressWrapper>
+
+                        {exceptionContent
+                            ? exceptionContent
+                            : !noPoolsSavedInRedux && (
+                                  <PoolListWrapper>
+                                      <Headline>Your liquidity pools</Headline>
+                                      <SummaryList />
+                                      <PoolList />
+                                  </PoolListWrapper>
+                              )}
+                    </LeftSubHeaderContent>
+                </LeftLayoutContainer>
+                <RightLayoutContainer>
+                    {rightWrapperContent}
+                    {!exceptionContent && !noPoolsSavedInRedux && (
+                        <RightNonExceptionContentWrapper>
+                            <RightContainer />
+                        </RightNonExceptionContentWrapper>
+                    )}
+                </RightLayoutContainer>
+                <SocialButtonBubble />
+            </DashboardContainer>
+        </>
     );
 };
 

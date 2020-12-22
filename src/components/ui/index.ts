@@ -27,6 +27,7 @@ import TextBadge from './TextBadge';
 import CollapsibleContainer from './CollapsibleContainer';
 import InfoBox from './InfoBox';
 import SocialButtonBubble from './SocialButtonBubble';
+import DarkModeSwitch from './DarkModeSwitch';
 
 export {
     TokenLogo,
@@ -58,4 +59,5 @@ export {
     CollapsibleContainer,
     InfoBox,
     SocialButtonBubble,
+    DarkModeSwitch,
 };

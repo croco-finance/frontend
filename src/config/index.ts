@@ -1,4 +1,4 @@
-import colors from './colors';
+import colors, { THEME } from './colors';
 import * as variables from './variables';
 import * as animations from './animations';
 import * as constants from './constants';
@@ -18,4 +18,5 @@ export {
     portis,
     web3,
     ethersProvider,
+    THEME,
 };

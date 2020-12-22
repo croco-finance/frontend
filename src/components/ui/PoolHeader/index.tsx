@@ -5,6 +5,7 @@ import { MultipleTokenLogo, CustomLink, Icon } from '@components/ui';
 import { formatUtils } from '@utils';
 import { Exchange } from '@types';
 import { constants } from '@config';
+import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     display: flex;
@@ -38,7 +39,7 @@ const IconWrapper = styled.div`
     display: flex;
 
     &:hover {
-        background-color: ${colors.BACKGROUND_DARK};
+        background-color: ${props => props.theme.BACKGROUND_DARK};
     }
 `;
 
@@ -49,14 +50,15 @@ interface Props {
 }
 const PoolHeader = ({ tokenSymbolsArr, exchange, poolId }: Props) => {
     const poolUrl = constants.DEX_POOL_BASE_URLS[exchange] + poolId;
+    const theme: any = useTheme();
 
     return (
         <Wrapper>
             <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />
             <Text>{formatUtils.tokenArrToCommaSeparatedString(tokenSymbolsArr)}</Text>
-            <CustomLink url={poolUrl} iconSize={16} color={colors.FONT_MEDIUM}>
+            <CustomLink url={poolUrl} iconSize={16} color={theme.FONT_MEDIUM}>
                 <IconWrapper>
-                    <Icon icon="external_link" size={16} color={colors.FONT_MEDIUM} />
+                    <Icon icon="external_link" size={16} color={theme.FONT_MEDIUM} />
                 </IconWrapper>
             </CustomLink>
         </Wrapper>

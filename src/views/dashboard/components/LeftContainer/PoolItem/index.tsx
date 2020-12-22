@@ -2,9 +2,10 @@ import * as actionTypes from '@actionTypes';
 import { FiatValue, TokenLogo } from '@components/ui';
 import { colors, variables, types } from '@config';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import PoolItemCard from '../PoolItemCard';
+import { useSelector } from '@reducers';
 
 const Item = styled.div`
     display: flex;
@@ -36,9 +37,10 @@ const TokenItem = styled.div`
 
 const TokenWeight = styled.div<{ isSelected: boolean }>`
     font-weight: ${variables.FONT_WEIGHT.REGULAR};
-    color: ${props => (props.isSelected ? colors.BLUE : colors.FONT_MEDIUM)};
-    border-left: 1px solid ${colors.STROKE_GREY};
-    border-color: ${props => (props.isSelected ? colors.PASTEL_BLUE_LIGHT : colors.STROKE_GREY)};
+    color: ${props => (props.isSelected ? props.theme.BLUE : props.theme.FONT_MEDIUM)};
+    border-left: 1px solid ${props => props.theme.STROKE_GREY};
+    border-color: ${props =>
+        props.isSelected ? props.theme.STROKE_BLUE : props.theme.STROKE_GREY};
     padding-left: 10px;
     margin-left: 10px;
     font-size: ${variables.FONT_SIZE.TINY};
@@ -55,13 +57,6 @@ const TokenSymbol = styled.div`
     text-overflow: ellipsis;
 `;
 
-const Circle = styled.div`
-    display: inline-flex;
-    margin-left: 5px;
-    margin-right: 5px;
-    color: ${colors.FONT_LIGHT};
-`;
-
 const ExchangeLogoWrapper = styled.div`
     display: flex;
     align-items: center;
@@ -72,9 +67,9 @@ const ExchangeLogoWrapper = styled.div`
     width: 20px;
     height: 20px;
     border-radius: 200px;
-    border: 1px solid ${colors.BACKGROUND_DARK};
-    background-color: white;
-    box-shadow: 2px 2px 4px 0px rgba(215, 216, 222, 1);
+    border: 1px solid ${props => props.theme.BACKGROUND_DARK};
+    /* background-color: white; */
+    box-shadow: ${props => props.theme.BOX_SHADOW_ICON};
 `;
 
 interface PoolItem {
@@ -88,8 +83,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const PoolItem = ({ poolId }: Props) => {
     const dispatch = useDispatch();
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const { allPools, selectedPoolId, theme } = useSelector(state => state);
 
     if (!allPools[poolId]) return null;
 
@@ -108,7 +102,10 @@ const PoolItem = ({ poolId }: Props) => {
         <div onClick={event => handleOnClick(event, poolId)}>
             <PoolItemCard isSelected={isSelected}>
                 <ExchangeLogoWrapper>
-                    <TokenLogo symbol={exchange} size={17} />
+                    <TokenLogo
+                        symbol={theme === 'light' ? exchange : `${exchange}dark`}
+                        size={17}
+                    />
                 </ExchangeLogoWrapper>
                 <PoolWrapper>
                     {pooledTokens.map((token, i) => {

@@ -9,6 +9,7 @@ import { validationUtils, formatUtils, mathUtils } from '@utils';
 import * as actionTypes from '@actionTypes';
 import { AddressModal } from '@components/containers';
 import { fetchSnapshots } from '../../../store/actions/index';
+import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -26,12 +27,11 @@ const Wrapper = styled.div`
 
 const ManageAddressesButton = styled.button`
     border: none;
-    background-color: ${colors.BACKGROUND_DARK};
+    background-color: ${props => props.theme.BUTTON_TERTIARY_BG};
     padding: 12px 15px;
     border-radius: 5px;
     margin-left: 10px;
     cursor: pointer;
-    /* border: 1px solid ${colors.STROKE_GREY}; */
 
     &:focus {
         border: none;
@@ -39,7 +39,7 @@ const ManageAddressesButton = styled.button`
     }
 
     &:hover {
-        background-color: ${colors.STROKE_GREY};
+        background-color: ${props => props.theme.BUTTON_TERTIARY_BG_HOVER};
     }
 `;
 
@@ -87,6 +87,7 @@ const AddressSelect = () => {
     const dispatch = useDispatch();
     const allAddresses: AllAddressesGlobal = useSelector(state => state.allAddresses);
     const selectedAddress: string = useSelector(state => state.selectedAddress);
+    const theme: any = useTheme();
 
     // save setting before the "Manage addresses" modal is opened
     const bundledAddressesSnapBeforeModalOpened = useRef<string[]>([]);
@@ -172,7 +173,7 @@ const AddressSelect = () => {
                     setShowAddressModal(true);
                 }}
             >
-                <Icon icon="settings" size={20} />
+                <Icon icon="settings" size={20} color={theme.FONT_DARK} />
             </ManageAddressesButton>
 
             {showAddressModal && (
@@ -180,6 +181,7 @@ const AddressSelect = () => {
                     cancelable
                     onCancel={() => setShowAddressModal(false)}
                     heading={'Manage addresses'}
+                    showHeaderBorder={false}
                 >
                     <AddressModal />
                 </Modal>

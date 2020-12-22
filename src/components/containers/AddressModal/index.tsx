@@ -7,12 +7,13 @@ import * as actionTypes from '@actionTypes';
 import { validationUtils } from '@utils';
 import { AllAddressesGlobal } from '@types';
 import { resetPoolData } from '../../../store/actions/snapshots';
+import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    color: ${colors.FONT_DARK};
+    color: ${props => props.theme.FONT_DARK};
 `;
 
 const NewAddressInputWrapper = styled.div`
@@ -23,8 +24,9 @@ const NewAddressInputWrapper = styled.div`
 `;
 
 const AddButton = styled.button<{ disabled: boolean }>`
-    background-color: ${props => (props.disabled ? colors.BACKGROUND : colors.BLUE)};
-    color: ${props => (props.disabled ? colors.FONT_LIGHT : colors.WHITE)};
+    background-color: ${props =>
+        props.disabled ? props.theme.BUTTON_PRIMARY_BG_DISABLED : props.theme.BUTTON_PRIMARY_BG};
+    color: ${props => (props.disabled ? props.theme.BUTTON_PRIMARY_FONT_DISABLED : colors.WHITE)};
     border-radius: 5px;
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
     padding: 8px 10px;
@@ -47,7 +49,7 @@ const InputWrapper = styled.div`
     margin: 5px 0;
     padding: 4px 10px 4px 0;
     display: flex;
-    border: 1px solid ${colors.STROKE_GREY};
+    border: 1px solid ${props => props.theme.STROKE_GREY};
     border-radius: 5px;
     flex-direction: column;
 `;
@@ -57,7 +59,7 @@ const MainRowWrapper = styled.div`
 `;
 
 const EnsName = styled.div`
-    color: ${colors.FONT_MEDIUM};
+    color: ${props => props.theme.FONT_MEDIUM};
     text-align: left;
     padding-left: 20px;
     padding-bottom: 10px;
@@ -76,10 +78,12 @@ const StyledIcon = styled(Icon)`
 const BundleButton = styled.button<{ isBundled: boolean }>`
     display: flex;
     align-items: center;
-    border: 1px solid ${colors.BLUE};
-    color: ${props => (props.isBundled ? colors.WHITE : colors.BLUE)};
+    border: 1px solid;
+    border-color: ${props => props.theme.BUTTON_PRIMARY_BG};
+    color: ${props => (props.isBundled ? colors.WHITE : props.theme.BLUE)};
     padding: 5px 8px;
-    background-color: ${props => (props.isBundled ? colors.BLUE : colors.WHITE)};
+    background-color: ${props =>
+        props.isBundled ? props.theme.BUTTON_PRIMARY_BG : props.theme.BG_WHITE};
     border-radius: 5px;
     margin-left: 20px;
     margin-right: 20px;
@@ -126,6 +130,8 @@ const AddressModal = () => {
     const [inputHexAddress, setInputHexAddress] = useState('');
     const [address, setAddress] = useState('');
     const [isValidAddress, setIsValidAddress] = useState(false);
+
+    const theme: any = useTheme();
 
     const addNewAddress = () => {
         const hexAddressProcessed = inputHexAddress.trim().toLowerCase();
@@ -243,7 +249,7 @@ const AddressModal = () => {
                                     <StyledIcon
                                         icon="close"
                                         size={20}
-                                        color={colors.FONT_LIGHT}
+                                        color={theme.FONT_LIGHT}
                                         hoverColor={colors.RED}
                                         onClick={() => deleteAddress(address)}
                                     />

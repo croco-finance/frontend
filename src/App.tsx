@@ -7,17 +7,19 @@ import './App.css';
 import Dashboard from './views/dashboard';
 import LandingPage from './views/landing-page';
 import Simulator from './views/simulator';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AllAddressesGlobal } from '@types';
 import { fetchSnapshots } from './store/actions/index';
 import { formatUtils } from '@utils';
-
+import { useSelector } from '@reducers';
+import { setTheme } from '@actions';
+import { ThemeProvider } from 'styled-components';
+import { THEME } from '@config';
 // this is still not working properly. I am using GA script in index.html to track basic traffic
 ReactGA.initialize(constants.GOOGLE_ANALYTICS_TRACKING_ID);
 
 const App = (props: RouteComponentProps<any>) => {
-    const allAddresses: AllAddressesGlobal = useSelector(state => state.allAddresses);
-    const selectedAddress = useSelector(state => state.selectedAddress);
+    const { theme, selectedAddress, allAddresses } = useSelector(state => state);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -39,17 +41,23 @@ const App = (props: RouteComponentProps<any>) => {
                 }
             }
         }
+
+        if (!theme) {
+            dispatch(setTheme('light'));
+        }
         // enable Google Analytics
         // ReactGA.pageview(window.location.pathname + window.location.search);
     }, []);
 
     return (
-        <Switch>
-            {/* address is an optional parameter */}
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/simulator" component={Simulator} />
-            <Route path="/" component={LandingPage} />
-        </Switch>
+        <ThemeProvider theme={theme === 'light' ? THEME.light : THEME.dark}>
+            <Switch>
+                {/* address is an optional parameter */}
+                <Route path="/dashboard" component={Dashboard} />
+                <Route path="/simulator" component={Simulator} />
+                <Route path="/" component={LandingPage} />
+            </Switch>
+        </ThemeProvider>
     );
 };
 

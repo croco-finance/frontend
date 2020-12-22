@@ -13,9 +13,9 @@ const Header = styled.div`
     align-items: center;
     /* padding: 0 10px 10px 10px; */
     align-items: center;
-    border-bottom: 1px solid ${colors.BACKGROUND_DARK};
+    border-bottom: 1px solid ${props => props.theme.BACKGROUND_DARK};
     margin-bottom: 30px;
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     height: 60px;
 `;
@@ -33,7 +33,7 @@ const ButtonsWrapper = styled.div`
 const Button = styled.div<{ selected: boolean; disabled?: boolean }>`
     display: flex;
     flex-grow: 1;
-    color: ${props => (props.selected ? colors.GREEN : colors.FONT_LIGHT)};
+    color: ${props => (props.selected ? colors.GREEN : props.theme.FONT_LIGHT)};
     border-bottom: 2px solid;
     border-color: ${props => (props.selected ? colors.GREEN : 'transparent')};
     cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};

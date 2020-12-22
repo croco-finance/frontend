@@ -9,7 +9,7 @@ const Wrapper = styled.div`
     min-height: 100vh;
     flex: 1000 1 0%;
     -webkit-box-flex: 1000;
-    color: ${colors.FONT_DARK};
+    color: ${props => props.theme.FONT_DARK};
 
     @media (max-width: 1100px) {
         flex-direction: column;

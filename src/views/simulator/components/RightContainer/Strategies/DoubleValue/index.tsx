@@ -1,14 +1,5 @@
-import {
-    FiatValue,
-    GrayBox,
-    VerticalCryptoAmounts,
-    CollapsibleContainer,
-    BoxRow,
-    Icon,
-} from '@components/ui';
-import { colors, variables } from '@config';
-import { formatUtils, mathUtils } from '@utils';
-import React, { useState } from 'react';
+import { variables } from '@config';
+import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -18,12 +9,12 @@ const Wrapper = styled.div`
 
 const Top = styled.div`
     font-size: ${variables.FONT_SIZE.SMALL};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
 `;
 
 const Bottom = styled.div`
     font-size: ${variables.FONT_SIZE.NORMAL};
-    color: ${colors.FONT_DARK};
+    color: ${props => props.theme.FONT_DARK};
 `;
 
 interface Props {

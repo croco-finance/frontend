@@ -19,7 +19,7 @@ const Wrapper = styled.div<{ textAlign: 'left' | 'right'; maxHeight: number }>`
     flex-direction: column;
     font-size: 12px;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    color: ${colors.FONT_LIGHT};
+    color: ${props => props.theme.FONT_LIGHT};
     letter-spacing: 0.3px;
     overflow-y: auto;
     max-height: ${props => props.maxHeight}px;
