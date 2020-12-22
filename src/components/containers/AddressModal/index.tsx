@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { colors, variables, web3 } from '@config';
 import { Icon, Input, Spinner } from '@components/ui';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as actionTypes from '@actionTypes';
 import { validationUtils } from '@utils';
 import { AllAddressesGlobal } from '@types';
 import { resetPoolData } from '../../../store/actions/snapshots';
 import { useTheme } from '@hooks';
+import { useSelector } from '@reducers';
 
 const Wrapper = styled.div`
     position: relative;
@@ -122,8 +123,7 @@ const MainInputWrapper = styled.div`
 
 const AddressModal = () => {
     const dispatch = useDispatch();
-    const allAddresses: AllAddressesGlobal = useSelector(state => state.allAddresses);
-    const selectedAddress: string = useSelector(state => state.selectedAddress);
+    const { allAddresses, selectedAddress } = useSelector(state => state);
 
     const [ensName, setEnsName] = useState('');
     const [loadingEnsDomain, setLoadingEnsDomain] = useState(false);
@@ -175,7 +175,7 @@ const AddressModal = () => {
                 if (ensHexAddress) {
                     setAddress(input);
                     setEnsName(input);
-                    setInputHexAddress(ensHexAddress);
+                    setInputHexAddress(ensHexAddress.toLocaleLowerCase());
                     setIsValidAddress(true);
                     setLoadingEnsDomain(false);
                     return;
