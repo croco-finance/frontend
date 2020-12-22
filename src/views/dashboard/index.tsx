@@ -46,13 +46,7 @@ const DarkModeSwitchWrapper = styled.div`
     right: 10px;
 
     @media (max-width: ${variables.SCREEN_SIZE.LG}) {
-        top: 17px;
-        right: 10px;
-    }
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        top: 7px;
-        right: 5px;
+        display: none;
     }
 `;
 

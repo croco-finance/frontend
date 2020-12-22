@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { variables, colors } from '@config';
-import { PageLogo, NoTextLogo } from '@components/ui';
+import { PageLogo, NoTextLogo, DarkModeSwitch } from '@components/ui';
 import { useSelector } from 'react-redux';
 import { AppThemeColors } from '@types';
 import { useTheme } from '@hooks';
@@ -17,12 +17,8 @@ const Wrapper = styled.div`
     height: 80px;
     align-items: center;
 
-    @media (max-width: ${variables.SCREEN_SIZE.MD}) {
-        padding-right: 40px;
-    }
-
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        padding: 10px 30px 10px 0;
+        padding: 10px 0px;
         height: auto;
     }
 `;
@@ -55,6 +51,13 @@ const StyledLink = styled(NavLink)`
     text-decoration: none;
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     border-radius: 5px;
+`;
+
+const DarkModeSwitchWrapper = styled.div`
+    margin-left: 10px;
+    @media (min-width: ${variables.SCREEN_SIZE.LG}) {
+        display: none;
+    }
 `;
 
 const NavBar = () => {
@@ -99,6 +102,9 @@ const NavBar = () => {
                 >
                     Simulator
                 </StyledLink>
+                <DarkModeSwitchWrapper>
+                    <DarkModeSwitch />
+                </DarkModeSwitchWrapper>
             </NavItemsWrapper>
         </Wrapper>
     );

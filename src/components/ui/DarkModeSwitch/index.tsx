@@ -13,13 +13,12 @@ const IconWrapper = styled.div`
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    padding: 20px;
     border-radius: 100px;
-    height: 46px;
-    width: 46px;
+    height: 40px;
+    width: 40px;
     cursor: pointer;
 
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+    @media (min-width: ${variables.SCREEN_SIZE.SM}) {
         padding: 10px;
     }
 `;
