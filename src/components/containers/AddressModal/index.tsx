@@ -5,7 +5,6 @@ import { Icon, Input, Spinner } from '@components/ui';
 import { useDispatch } from 'react-redux';
 import * as actionTypes from '@actionTypes';
 import { validationUtils } from '@utils';
-import { AllAddressesGlobal } from '@types';
 import { resetPoolData } from '../../../store/actions/snapshots';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
@@ -222,45 +221,55 @@ const AddressModal = () => {
             {Object.keys(allAddresses).length > 0 && (
                 <>
                     <WatchedHeadline>Watched addresses</WatchedHeadline>
-                    {Object.keys(allAddresses).map(address => (
-                        <InputWrapper key={address}>
-                            <MainRowWrapper>
-                                <Input value={address} disabled useWhiteBackground noBorder />
-                                <ButtonsWrapper>
-                                    <BundleButton
-                                        isBundled={allAddresses[address].bundled}
-                                        onClick={() => setBundleAddress(address)}
-                                    >
-                                        {allAddresses[address].bundled ? (
-                                            <>
-                                                Bundled
-                                                <CheckIcon
-                                                    icon="check"
-                                                    size={16}
-                                                    color={colors.WHITE}
-                                                />
-                                            </>
-                                        ) : (
-                                            'Bundle'
-                                        )}
-                                    </BundleButton>
-                                    {/* <StyledIcon icon="edit" size={16} color={colors.FONT_LIGHT} /> */}
-                                    {/* <StyledIcon icon="copy" size={20} color={colors.FONT_LIGHT} /> */}
-                                    <StyledIcon
-                                        icon="close"
-                                        size={20}
-                                        color={theme.FONT_LIGHT}
-                                        hoverColor={colors.RED}
-                                        onClick={() => deleteAddress(address)}
-                                    />
-                                </ButtonsWrapper>
-                            </MainRowWrapper>
+                    {Object.keys(allAddresses).map(address => {
+                        // just double check the address is valid
+                        if (address) {
+                            return (
+                                <InputWrapper key={address}>
+                                    <MainRowWrapper>
+                                        <Input
+                                            value={address}
+                                            disabled
+                                            useWhiteBackground
+                                            noBorder
+                                        />
+                                        <ButtonsWrapper>
+                                            <BundleButton
+                                                isBundled={allAddresses[address].bundled}
+                                                onClick={() => setBundleAddress(address)}
+                                            >
+                                                {allAddresses[address].bundled ? (
+                                                    <>
+                                                        Bundled
+                                                        <CheckIcon
+                                                            icon="check"
+                                                            size={16}
+                                                            color={colors.WHITE}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    'Bundle'
+                                                )}
+                                            </BundleButton>
+                                            {/* <StyledIcon icon="edit" size={16} color={colors.FONT_LIGHT} /> */}
+                                            {/* <StyledIcon icon="copy" size={20} color={colors.FONT_LIGHT} /> */}
+                                            <StyledIcon
+                                                icon="close"
+                                                size={20}
+                                                color={theme.FONT_LIGHT}
+                                                hoverColor={colors.RED}
+                                                onClick={() => deleteAddress(address)}
+                                            />
+                                        </ButtonsWrapper>
+                                    </MainRowWrapper>
 
-                            {allAddresses[address].ens && (
-                                <EnsName>{allAddresses[address].ens}</EnsName>
-                            )}
-                        </InputWrapper>
-                    ))}
+                                    {allAddresses[address].ens && (
+                                        <EnsName>{allAddresses[address].ens}</EnsName>
+                                    )}
+                                </InputWrapper>
+                            );
+                        } else return null;
+                    })}
                 </>
             )}
         </Wrapper>

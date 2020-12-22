@@ -174,15 +174,12 @@ const Dashboard = () => {
 
     if (isLoading) {
         exceptionContent = <LoadingBox>Wait a moment. We are getting pool data...</LoadingBox>;
-    }
-
-    if (noPoolsFound) {
-        // TODO tell the user he cat try simulator in this case, once the simulator work for manual inputs
+    } else if (noPoolsFound) {
         exceptionContent = (
             <NoPoolFoundInfo>
                 We didn't find any pools associated with this address.
                 <br />
-                Don't forget that we support only Uniswap and Balancer at this time.
+                Don't forget that we support only Uniswap, SushiSwap and Balancer at this time.
             </NoPoolFoundInfo>
         );
     }

@@ -445,7 +445,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                             <ExchangeLogoWrapper>
                                 {/* <StyledTextBadge>SOON</StyledTextBadge> */}
                                 <TokenLogo
-                                    symbol={theme === 'light' ? 'sushiswap' : 'sushidark'}
+                                    symbol={theme === 'light' ? 'sushi' : 'sushidark'}
                                     size={38}
                                 />
                                 <ExchangeName>SushiSwap</ExchangeName>

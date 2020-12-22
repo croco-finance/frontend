@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import { Select, Icon } from '@components/ui';
 import { Modal } from '@components/layout';
 import { colors } from '@config';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AllAddressesGlobal, AddressData } from '@types';
 import { validationUtils, formatUtils, mathUtils } from '@utils';
 import * as actionTypes from '@actionTypes';
 import { AddressModal } from '@components/containers';
-import { fetchSnapshots } from '../../../store/actions/index';
+import { fetchSnapshots, setSelectedPoolId, setSelectedAddress } from '@actions';
 import { useTheme } from '@hooks';
+import { useSelector } from '@reducers';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -85,8 +86,7 @@ interface AddressOption {
 
 const AddressSelect = () => {
     const dispatch = useDispatch();
-    const allAddresses: AllAddressesGlobal = useSelector(state => state.allAddresses);
-    const selectedAddress: string = useSelector(state => state.selectedAddress);
+    const { allAddresses, selectedAddress } = useSelector(state => state);
     const theme: any = useTheme();
 
     // save setting before the "Manage addresses" modal is opened
@@ -96,11 +96,15 @@ const AddressSelect = () => {
     const [showAddressModal, setShowAddressModal] = useState(false);
 
     const handleAddressChange = inputAddr => {
-        dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: inputAddr.trim() });
+        dispatch(setSelectedAddress(inputAddr));
 
         if (inputAddr === 'bundled') {
             dispatch(fetchSnapshots(formatUtils.getBundledAddresses(allAddresses)));
-        } else if (validationUtils.isValidEthereumAddress(inputAddr)) {
+        } else if (
+            // fetch data for a new address if it's different from just selected
+            validationUtils.isValidEthereumAddress(inputAddr) &&
+            inputAddr !== selectedAddress
+        ) {
             dispatch(fetchSnapshots(inputAddr));
         }
     };
@@ -131,7 +135,7 @@ const AddressSelect = () => {
                         selectedAddress === null)
                 ) {
                     const addressToSelect = Object.keys(allAddresses)[0];
-                    dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: addressToSelect });
+                    dispatch(setSelectedAddress(addressToSelect));
                     dispatch(fetchSnapshots(addressToSelect));
                 }
             }

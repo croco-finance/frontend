@@ -241,7 +241,7 @@ export interface AppStateInterface {
     allPools: AllPoolsGlobal;
     selectedPoolId: string;
     allAddresses: AllAddressesGlobal;
-    selectedAddress: string | 'bundled' | null;
+    selectedAddress: string | 'bundled';
     dexToPoolMap: { [key: string]: string[] };
     activePoolIds: string[];
     inactivePoolIds: string[];
