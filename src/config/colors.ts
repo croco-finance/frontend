@@ -12,7 +12,7 @@ export const THEME = {
         // Primary
         BUTTON_PRIMARY_BG: '#0264f7',
         BUTTON_PRIMARY_BG_HOVER: '#075cda',
-        BUTTON_PRIMARY_BG_DISABLED: '#ebebf0',
+        BUTTON_PRIMARY_BG_DISABLED: '#e7e9ed',
         BUTTON_PRIMARY_FONT_DISABLED: '#ffffff',
 
         //Secondary
