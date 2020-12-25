@@ -1,20 +1,8 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
 import { PoolToken, Snap, SnapStructure, StakingService, Token, tokens, YieldReward } from '@types';
+import { firebase } from '@config';
 
 async function getSnaps(address: string): Promise<SnapStructure | null> {
-    const firebaseConfig = {
-        authDomain: 'croco-finance.firebaseapp.com',
-        databaseURL: 'https://croco-finance-a02aa.firebaseio.com/',
-        // databaseURL: 'https://croco-finance.firebaseio.com',
-        projectId: 'croco-finance',
-    };
-
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
-    let ref = firebase.database().ref(`users/${address}`);
+    let ref = firebase.snaps(address);
     let snaps: SnapStructure | null = null;
     const payload = await ref.once('value');
     if (payload.exists()) {
@@ -150,8 +138,7 @@ function filter0SameBlockSnaps(snaps: Snap[]) {
 }
 
 async function getCurrentSnap(poolId: string, lastSnap: Snap): Promise<Snap | null> {
-    const db = firebase.database();
-    let ref = db.ref(`pools/${poolId}`);
+    let ref = firebase.pool(poolId);
     const payload = await ref.once('value');
     if (payload.exists()) {
         let pool = payload.val();

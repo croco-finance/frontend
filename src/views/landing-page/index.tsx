@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Features from './components/Features';
 import LandingPageText from './components/LandingPageText';
-
+import { setAddresses, setSelectedAddress } from '@actions';
 const CONTENT_WIDTH = 1100;
 const INPUT_HEIGHT = '66px';
 const INPUT_HEIGHT_SMALL = '50px';
@@ -308,12 +308,20 @@ const LandingPage = (props: RouteComponentProps<any>) => {
             let initialAddressesObj = {};
             initialAddressesObj[inputHexAddress] = { bundled: false, ens: ensName ? ensName : '' };
 
+            // dispatch(setAddresses(initialAddressesObj));
+            // dispatch(setSelectedAddress(inputHexAddress));
             dispatch({
                 type: actionTypes.SET_ADDRESSES,
                 addresses: initialAddressesObj,
             });
             dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: inputAddress });
-            analytics.Event('ADDRESS INPUT', "Landing Page let's go button pressed", inputAddress);
+            analytics.logEvent('select_content', {
+                content_type: 'image',
+                content_id: 'P12453',
+                items: [{ name: 'Kittens' }],
+            });
+
+            analytics.logEvent('landing_page_go_button', { address: inputHexAddress });
         }
     };
 
