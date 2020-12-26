@@ -6,7 +6,7 @@ import {
     BoxRow,
     Icon,
 } from '@components/ui';
-import { colors, variables } from '@config';
+import { analytics, variables } from '@config';
 import { formatUtils, mathUtils } from '@utils';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -82,6 +82,7 @@ const ValueDifferenceWrapper = styled.div<{ thickBorder: boolean }>`
 `;
 
 interface Props {
+    strategyName: string;
     depositsHeadline: string;
     endTimeText: string;
     poolStrategyUsd: number;
@@ -106,6 +107,7 @@ interface Props {
 }
 
 const DifferentStrategy = ({
+    strategyName,
     depositsHeadline,
     poolStrategyUsd,
     feesUsd,
@@ -138,6 +140,24 @@ const DifferentStrategy = ({
         poolStrategyUsd - differentStrategyUsd,
         lastIntAvDailyRewardsUsd,
     );
+
+    const handleExpandValue = (isOpened: boolean) => {
+        setValueOpened(isOpened);
+        if (isOpened)
+            analytics.logEvent('dashboard_strategy_detail', {
+                strategy: strategyName,
+                detail: 'value',
+            });
+    };
+
+    const handleExpandDifference = (isOpened: boolean) => {
+        setDiffOpened(isOpened);
+        if (isOpened)
+            analytics.logEvent('dashboard_strategy_detail', {
+                strategy: strategyName,
+                detail: 'difference',
+            });
+    };
 
     let divergenceLossTExt = 'Price divergence loss';
     if (divergenceLoss > 0) divergenceLossTExt = 'Price divergence gain';
@@ -229,7 +249,7 @@ const DifferentStrategy = ({
         <Wrapper>
             <CollapsibleContainer
                 onChange={isOpened => {
-                    setValueOpened(isOpened);
+                    handleExpandValue(isOpened);
                 }}
                 header={
                     <GrayBox borderRadius={[10, 10, 0, 0]} backgroundColor={theme.BACKGROUND}>
@@ -290,7 +310,7 @@ const DifferentStrategy = ({
             <ValueDifferenceWrapper thickBorder={valueOpened}>
                 <CollapsibleContainer
                     onChange={isOpened => {
-                        setDiffOpened(isOpened);
+                        handleExpandDifference(isOpened);
                     }}
                     header={
                         <GrayBox

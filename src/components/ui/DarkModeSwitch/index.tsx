@@ -1,6 +1,6 @@
 import { setTheme } from '@actions';
 import { Icon } from '@components/ui';
-import { variables } from '@config';
+import { variables, analytics } from '@config';
 import { useSelector } from '@reducers';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -32,6 +32,7 @@ const DarkModeSwitch = () => {
             {theme === 'light' ? (
                 <IconWrapper
                     onClick={() => {
+                        analytics.logEvent('theme_switched', { switchedTo: 'dark' });
                         dispatch(setTheme('dark'));
                     }}
                 >
@@ -40,6 +41,7 @@ const DarkModeSwitch = () => {
             ) : (
                 <IconWrapper
                     onClick={() => {
+                        analytics.logEvent('theme_switched', { switchedTo: 'light' });
                         dispatch(setTheme('light'));
                     }}
                 >

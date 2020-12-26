@@ -6,7 +6,7 @@ import {
     BoxRow,
     Icon,
 } from '@components/ui';
-import { colors, variables } from '@config';
+import { analytics, variables } from '@config';
 import { formatUtils } from '@utils';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -86,6 +86,16 @@ const LiquidityPool = () => {
     let pool = allPools[selectedPoolId];
     const [isOpened, setIsOpened] = useState(false);
     const theme: any = useTheme();
+
+    const handleExpand = (opened: boolean) => {
+        setIsOpened(opened);
+        if (opened) {
+            analytics.logEvent('dashboard_strategy_detail', {
+                strategy: 'liquidity_provider',
+                detail: 'value',
+            });
+        }
+    };
 
     // Compute imp loss, fees, hold, ETH hold, token hold fo each snapshot
 
@@ -187,7 +197,7 @@ const LiquidityPool = () => {
         <Wrapper>
             <CollapsibleContainer
                 onChange={isOpened => {
-                    setIsOpened(isOpened);
+                    handleExpand(isOpened);
                 }}
                 header={
                     <GrayBox

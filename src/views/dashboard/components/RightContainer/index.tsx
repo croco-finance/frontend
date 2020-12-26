@@ -42,6 +42,11 @@ const RightContainer = () => {
 
     if (!selectedPoolId) return null;
 
+    const handleTabChange = (tab: TabOptions) => {
+        analytics.logEvent(`dashboard_${tab}_view`);
+        setSelectedTab(tab);
+    };
+
     const headerHeadline =
         selectedPoolId === 'all' ? (
             <SummaryHeadline>
@@ -70,7 +75,7 @@ const RightContainer = () => {
         <Wrapper>
             <TabSelectHeader
                 headline={headerHeadline}
-                onSelectTab={tabName => setSelectedTab(tabName)}
+                onSelectTab={tab => handleTabChange(tab)}
                 hideTabs={selectedPoolId === 'all'}
             />
 

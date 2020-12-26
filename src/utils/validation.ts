@@ -9,4 +9,9 @@ const isValidEthereumAddress = (address: string) => {
     return true;
 };
 
-export { isValidEthereumAddress };
+// check if value ix hex (if starts with 0x)
+const isHex = num => {
+    return Boolean(num.match(/^0x[0-9a-f]+$/i));
+};
+
+export { isValidEthereumAddress, isHex };

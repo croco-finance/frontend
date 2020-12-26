@@ -248,6 +248,7 @@ const Strategies = ({
 
             <StrategyItemWrapper>
                 <DifferentStrategy
+                    strategyName="tokens_hodl"
                     depositsHeadline={'Tokens'}
                     tokenSymbols={tokenSymbols}
                     poolStrategyUsd={poolStrategyUsd}
@@ -288,6 +289,7 @@ const Strategies = ({
 
             <StrategyItemWrapper>
                 <DifferentStrategy
+                    strategyName="eth_hodl"
                     depositsHeadline={'ETH value'}
                     tokenSymbols={tokenSymbols}
                     poolStrategyUsd={poolStrategyUsd}

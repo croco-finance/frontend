@@ -1,4 +1,5 @@
-import * as actionTypes from '@actionTypes';
+import { setSelectedPoolId } from '@actions';
+import { AddressSelect } from '@components/containers';
 import {
     LeftLayoutContainer,
     NavBar,
@@ -6,13 +7,14 @@ import {
     SimulatorContainer,
 } from '@components/layout';
 import {
+    DarkModeSwitch,
     InfoBox,
     LoadingBox,
     MultipleTokenSelect,
     SocialButtonBubble,
-    DarkModeSwitch,
 } from '@components/ui';
-import { animations, colors, styles, types, variables } from '@config';
+import { styles, types, variables, analytics } from '@config';
+import { useTheme } from '@hooks';
 import { AllPoolsGlobal } from '@types';
 import { formatUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
@@ -22,9 +24,6 @@ import styled from 'styled-components';
 import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
 import RightContainer from './components/RightContainer';
-import { AddressSelect } from '@components/containers';
-import { useTheme } from '@hooks';
-import { setSelectedPoolId } from '@actions';
 
 const Header = styled.div`
     padding: 0 20px;
@@ -260,6 +259,14 @@ const Simulator = () => {
         }
     }, [selectedPoolId]);
 
+    const handleTabChange = (tab: TabOptions) => {
+        // analytics.logEvent(`simulator_${tab}_view`, {
+        //     screen_name: tab,
+        // });
+        analytics.logEvent(`simulator_${tab}_view`);
+        setSelectedTab(tab);
+    };
+
     const refreshPage = () => {
         window.location.reload();
     };
@@ -368,7 +375,7 @@ const Simulator = () => {
                 </LeftLayoutContainer>
                 <RightLayoutContainer>
                     <RightContainer
-                        onTabChanged={tab => setSelectedTab(tab)}
+                        onTabChanged={tab => handleTabChange(tab)}
                         selectedTab={selectedTab}
                         simulatedPooledTokensCoeffs={simulatedPriceCoefficients}
                         sliderDefaultCoeffs={sliderDefaultCoeffs}

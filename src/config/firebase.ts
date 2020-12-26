@@ -11,7 +11,7 @@ const firebaseConfig = {
     projectId: 'croco-finance',
     messagingSenderId: '619222403105',
     appId: '1:619222403105:web:bffcce3986234e73a5bb60',
-    // measurementId: 'G-Z20W1K81CF',
+    measurementId: 'G-Z20W1K81CF',
 };
 
 // firebase.initializeApp(firebaseConfig);

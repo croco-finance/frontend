@@ -315,13 +315,11 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                 addresses: initialAddressesObj,
             });
             dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: inputAddress });
-            analytics.logEvent('select_content', {
-                content_type: 'image',
-                content_id: 'P12453',
-                items: [{ name: 'Kittens' }],
-            });
 
-            analytics.logEvent('landing_page_go_button', { address: inputHexAddress });
+            let addressWithout0x = validationUtils.isHex(inputHexAddress)
+                ? inputHexAddress.substring(2)
+                : inputHexAddress;
+            analytics.logEvent('landing_page_go_button', { address: addressWithout0x });
         }
     };
 

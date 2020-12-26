@@ -1,18 +1,14 @@
-import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
-import styled, { css } from 'styled-components';
-import { variables, colors } from '@config';
-import { PageLogo, NoTextLogo, DarkModeSwitch } from '@components/ui';
-import { useSelector } from 'react-redux';
-import { AppThemeColors } from '@types';
+import { DarkModeSwitch, NoTextLogo, PageLogo } from '@components/ui';
+import { analytics, variables } from '@config';
 import { useTheme } from '@hooks';
+import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
-    /* position: absolute; */
     display: flex;
     flex-direction: row;
     border-radius: 3px;
-    /* border-bottom: 1px solid ${colors.STROKE_GREY}; */
     width: 100%;
     height: 80px;
     align-items: center;
@@ -61,13 +57,16 @@ const DarkModeSwitchWrapper = styled.div`
 `;
 
 const NavBar = () => {
-    const addressGlobal = useSelector(state => state.userAddress);
-    const addressPath = addressGlobal ? addressGlobal : '';
     const theme: any = useTheme();
 
     return (
         <Wrapper>
             <Link
+                onClick={() => {
+                    analytics.logEvent('navbar_view_change', {
+                        changedTo: 'landing_page',
+                    });
+                }}
                 to={{
                     pathname: '/',
                 }}
@@ -81,8 +80,13 @@ const NavBar = () => {
             </Link>
             <NavItemsWrapper>
                 <StyledLink
+                    onClick={() => {
+                        analytics.logEvent('navbar_view_change', {
+                            changedTo: 'dashboard',
+                        });
+                    }}
                     to={{
-                        pathname: `/dashboard/${addressPath}`,
+                        pathname: `/dashboard`,
                     }}
                     activeStyle={{
                         color: theme.NAV_ACTIVE_FONT,
@@ -92,8 +96,13 @@ const NavBar = () => {
                     Dashboard
                 </StyledLink>
                 <StyledLink
+                    onClick={() => {
+                        analytics.logEvent('navbar_view_change', {
+                            changedTo: 'simulator',
+                        });
+                    }}
                     to={{
-                        pathname: `/simulator/${addressPath}`,
+                        pathname: `/simulator`,
                     }}
                     activeStyle={{
                         color: theme.NAV_ACTIVE_FONT,
