@@ -1,19 +1,17 @@
 import {
+    BoxRow,
+    CollapsibleContainer,
     FiatValue,
     GrayBox,
-    VerticalCryptoAmounts,
-    CollapsibleContainer,
-    BoxRow,
     Icon,
+    VerticalCryptoAmounts,
 } from '@components/ui';
-import { colors, variables } from '@config';
-import { formatUtils, mathUtils, simulatorUtils } from '@utils';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { AllPoolsGlobal } from '@types';
-import DoubleValue from '../DoubleValue';
+import { analytics, variables } from '@config';
 import { useTheme } from '@hooks';
+import { formatUtils } from '@utils';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import DoubleValue from '../DoubleValue';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -126,6 +124,17 @@ const LiquidityPool = ({
               lastSnapTimestampEnd,
               'MONTH_DAY_YEAR',
           )}`;
+
+    const handleExpand = (opened: boolean) => {
+        setIsOpened(opened);
+        if (opened) {
+            analytics.logEvent('simulator_strategy_detail', {
+                strategy: 'liquidity_provider',
+                detail: 'value',
+            });
+        }
+    };
+
     const poolShareRow = (
         <BoxRow
             firstColumn={
@@ -188,7 +197,7 @@ const LiquidityPool = ({
         <Wrapper>
             <CollapsibleContainer
                 onChange={isOpened => {
-                    setIsOpened(isOpened);
+                    handleExpand(isOpened);
                 }}
                 header={
                     <GrayBox

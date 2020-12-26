@@ -5,7 +5,8 @@ import exampleFirebaseDataSmall from '../../config/example-data-bundled';
 import * as actionTypes from '@actionTypes';
 import { AllPoolsGlobal, PoolToken, DexToPoolIdMap, Exchange, SnapStructure, Snap } from '@types';
 import { ethersProvider } from '@config';
-import { setUnclaimed } from '@utils';
+import { setUnclaimed, validationUtils } from '@utils';
+import { analytics } from '@config';
 
 // Helper functions
 const getPooledTokensInfo = (tokens: PoolToken[]) => {
@@ -128,6 +129,11 @@ export const fetchSnapshots = (addresses: string[] | string) => {
         for (const address of addresses) {
             const queryAddress = address.trim().toLowerCase();
 
+            // convert address to without 0x format for Firebase Analytics purposes
+            let addressWithout0x = validationUtils.isHex(queryAddress)
+                ? queryAddress.substring(2)
+                : queryAddress;
+
             // try to fetch data for the given address
             try {
                 const fetchedSnapshotsAddress = await getSnaps(queryAddress);
@@ -143,6 +149,9 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                         console.log(
                             `Could not fetch unclaimed yield rewards for address: ${address}`,
                         );
+                        analytics.logEvent('fetch_unclaimed_yield_failed', {
+                            address: addressWithout0x,
+                        });
                     }
 
                     // Two addresses can have assets in the same pool. To create a unique iD for each pool, I combine user's address and pool ID
@@ -154,6 +163,7 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             } catch (e) {
                 dispatch(fetchSnapsFailed());
                 console.log("ERROR: Couldn't fetch data from database.");
+                analytics.logEvent('fetch_snaps_failed', { address: addressWithout0x });
             }
         }
 

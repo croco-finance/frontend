@@ -180,6 +180,7 @@ const Strategies = () => {
 
             <StrategyItemWrapper>
                 <DifferentStrategy
+                    strategyName="tokens_hodl"
                     depositsHeadline={'Crypto'}
                     endTimeText={endTimeText}
                     tokenSymbols={tokenSymbolsArr}
@@ -210,6 +211,7 @@ const Strategies = () => {
 
             <StrategyItemWrapper>
                 <DifferentStrategy
+                    strategyName="eth_hodl"
                     depositsHeadline={'ETH value'}
                     endTimeText={endTimeText}
                     tokenSymbols={tokenSymbolsArr}

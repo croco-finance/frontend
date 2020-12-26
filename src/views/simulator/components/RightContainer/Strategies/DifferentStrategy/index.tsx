@@ -6,7 +6,7 @@ import {
     BoxRow,
     Icon,
 } from '@components/ui';
-import { colors, variables } from '@config';
+import { analytics, variables } from '@config';
 import { formatUtils, mathUtils } from '@utils';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -84,6 +84,7 @@ const ValueDifferenceWrapper = styled.div<{ thickBorder: boolean }>`
 `;
 
 interface Props {
+    strategyName: string;
     depositsHeadline: string;
     poolStrategyUsd: number;
     feesUsd: number;
@@ -112,6 +113,7 @@ interface Props {
 }
 
 const DifferentStrategy = ({
+    strategyName,
     depositsHeadline,
     poolStrategyUsd,
     yieldUsd,
@@ -137,6 +139,26 @@ const DifferentStrategy = ({
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
     const theme: any = useTheme();
+
+    const handleExpandValue = (isOpened: boolean) => {
+        setValueOpened(isOpened);
+        if (isOpened) {
+            analytics.logEvent('simulator_strategy_detail', {
+                strategy: strategyName,
+                detail: 'value',
+            });
+        }
+    };
+
+    const handleExpandDifference = (isOpened: boolean) => {
+        setDiffOpened(isOpened);
+        if (isOpened) {
+            analytics.logEvent('simulator_strategy_detail', {
+                strategy: strategyName,
+                detail: 'difference',
+            });
+        }
+    };
 
     const divergenceLoss =
         simulatedPoolStrategyUsd -
@@ -240,7 +262,7 @@ const DifferentStrategy = ({
         <Wrapper>
             <CollapsibleContainer
                 onChange={isOpened => {
-                    setValueOpened(isOpened);
+                    handleExpandValue(isOpened);
                 }}
                 header={
                     <GrayBox borderRadius={[10, 10, 0, 0]} backgroundColor={theme.BACKGROUND}>
@@ -306,7 +328,7 @@ const DifferentStrategy = ({
             <ValueDifferenceWrapper thickBorder={valueOpened}>
                 <CollapsibleContainer
                     onChange={isOpened => {
-                        setDiffOpened(isOpened);
+                        handleExpandDifference(isOpened);
                     }}
                     header={
                         <GrayBox
