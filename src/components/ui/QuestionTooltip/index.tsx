@@ -30,7 +30,7 @@ const QuestionTooltip = ({
     return (
         <Tippy duration={duration} content={content}>
             <IconWrapper>
-                <Icon icon="question_active" color={theme.FONT_MEDIUM} size={16} />
+                <Icon icon="question_active" color={theme.FONT_LIGHT} size={16} />
             </IconWrapper>
         </Tippy>
     );
