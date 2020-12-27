@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import SummaryItem from '../SummaryItem';
 import { AllPoolsGlobal } from '@types';
+import { QuestionTooltip } from '@components/ui';
 
 const Wrapper = styled.div`
     padding-left: 0;
@@ -53,7 +54,9 @@ const SummaryList = () => {
             <Header>
                 <Exchange>Pools</Exchange>
                 <Value>Value</Value>
-                <Gains>Reward/Loss</Gains>
+                <Gains>
+                    Reward <QuestionTooltip content={'fees + yield'} />
+                </Gains>
             </Header>
             <ItemsWrapper>
                 <SummaryItem

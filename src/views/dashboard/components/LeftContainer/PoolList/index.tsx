@@ -1,4 +1,4 @@
-import { InlineCircle } from '@components/ui';
+import { InlineCircle, QuestionTooltip } from '@components/ui';
 import { colors, variables } from '@config';
 import React from 'react';
 import { useSelector } from '@reducers';
@@ -82,7 +82,10 @@ const PoolList = () => {
                             </ActiveExchange>
                         </ExchangeHeader>
                         <Value>Value</Value>
-                        <Gains>Reward/Loss</Gains>
+                        <Gains>
+                            Reward
+                            <QuestionTooltip content={'fees + yield'} />
+                        </Gains>
                     </Header>
                     {activePoolIdsOrdered.map(poolId => {
                         return <PoolItem key={poolId} poolId={poolId} />;

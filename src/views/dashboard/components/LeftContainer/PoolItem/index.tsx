@@ -124,7 +124,7 @@ const PoolItem = ({ poolId }: Props) => {
                 <Value>{isActive ? <FiatValue value={endPoolValueUsd}></FiatValue> : ''}</Value>
                 <Gains>
                     <FiatValue
-                        value={feesUsd + yieldUsd - txCostUsd}
+                        value={feesUsd + yieldUsd}
                         usePlusSymbol
                         // colorized={!isSelected}
                     ></FiatValue>

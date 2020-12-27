@@ -88,7 +88,7 @@ const SummaryItem = ({ headline }: Props) => {
                     <FiatValue value={valueLockedUsd} />
                 </Value>
                 <Gains>
-                    <FiatValue value={feesUsd + yieldUsd - txCostUsd} usePlusSymbol />
+                    <FiatValue value={feesUsd + yieldUsd} usePlusSymbol />
                 </Gains>
             </StyledPoolItemCard>
         </div>
