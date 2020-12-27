@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { AllPoolsGlobal } from '@types';
 import { useTheme } from '@hooks';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css'; // optional
 
 const Wrapper = styled.div`
     width: 100%;

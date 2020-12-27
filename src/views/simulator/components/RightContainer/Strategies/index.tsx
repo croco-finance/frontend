@@ -1,14 +1,12 @@
-import { colors, variables, types } from '@config';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { graphUtils, formatUtils, mathUtils } from '@utils';
-import LiquidityPool from './LiquidityPool';
-import DifferentStrategy from './DifferentStrategy';
-import { BoxRow, GrayBox, Icon, InfoBox } from '@components/ui';
-import { Link } from 'react-router-dom';
-import Graph from './Graph';
+import { InfoBox, QuestionTooltip } from '@components/ui';
+import { variables } from '@config';
 import { useTheme } from '@hooks';
+import { graphUtils } from '@utils';
+import React from 'react';
+import styled from 'styled-components';
+import DifferentStrategy from './DifferentStrategy';
+import Graph from './Graph';
+import LiquidityPool from './LiquidityPool';
 
 const Wrapper = styled.div`
     display: flex;
@@ -49,6 +47,7 @@ const SectionHeader = styled.div<{ marginTop: number }>`
 
 const Left = styled.div`
     flex-grow: 1;
+    display: flex;
 `;
 
 const Right = styled.div`
@@ -78,6 +77,15 @@ const GraphTitle = styled.div`
 
 const BalancerBanner = styled.div`
     margin-bottom: 20px;
+`;
+
+const B = styled.span`
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    font-style: italic;
+`;
+
+const TooltipHeadline = styled.div`
+    margin-bottom: 8px;
 `;
 interface Props {
     poolStrategyUsd: number;
@@ -199,7 +207,23 @@ const Strategies = ({
 
             {/* <SectionHeader marginTop={0}>Being liquidity provider</SectionHeader> */}
             <SectionHeader marginTop={0}>
-                <Left>Being liquidity provider</Left>
+                <Left>
+                    Being liquidity provider
+                    <QuestionTooltip
+                        content={
+                            <span>
+                                <TooltipHeadline>
+                                    You decided to be a liquidity provider. We value this strategy
+                                    as follows:{' '}
+                                </TooltipHeadline>
+                                <B>
+                                    value = what you have in the pool + what you withdrew from the
+                                    pool + yield - tx.costs
+                                </B>{' '}
+                            </span>
+                        }
+                    />
+                </Left>
                 <Right>
                     <Current>Current</Current> | <SimulatedBlue>Simulated</SimulatedBlue>
                 </Right>
@@ -240,7 +264,19 @@ const Strategies = ({
             ) : null}
 
             <SectionHeader marginTop={25}>
-                <Left>If you HODL'd pooled tokens</Left>
+                <Left>
+                    If you HODL'd pooled tokens
+                    <QuestionTooltip
+                        content={
+                            <span>
+                                <TooltipHeadline>
+                                    This is how much money you would have if you haven't deposited{' '}
+                                    anything to the pool and you held deposited tokens instead.
+                                </TooltipHeadline>
+                            </span>
+                        }
+                    />
+                </Left>
                 <Right>
                     <Current>Current</Current> | <Simulated>Simulated</Simulated>
                 </Right>
@@ -281,7 +317,21 @@ const Strategies = ({
                 If you exchanged all pooled tokens for ETH and HODL'd
             </SectionHeader> */}
             <SectionHeader marginTop={25}>
-                <Left> If you exchanged all pooled tokens for ETH and HODL'd</Left>
+                <Left>
+                    {' '}
+                    If you exchanged all pooled tokens for ETH and HODL'd
+                    <QuestionTooltip
+                        content={
+                            <span>
+                                <TooltipHeadline>
+                                    This is how much money you would have if you haven't deposited{' '}
+                                    anything to the pool and you exchanged all deposited tokens for
+                                    ETH instead.
+                                </TooltipHeadline>
+                            </span>
+                        }
+                    />
+                </Left>
                 {/* <Right>
                     <Current>Current</Current> | <Simulated>Simulated</Simulated>
                 </Right> */}
