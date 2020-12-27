@@ -28,6 +28,8 @@ import CollapsibleContainer from './CollapsibleContainer';
 import InfoBox from './InfoBox';
 import SocialButtonBubble from './SocialButtonBubble';
 import DarkModeSwitch from './DarkModeSwitch';
+import Tooltip from './Tooltip';
+import QuestionTooltip from './QuestionTooltip';
 
 export {
     TokenLogo,
@@ -60,4 +62,6 @@ export {
     InfoBox,
     SocialButtonBubble,
     DarkModeSwitch,
+    Tooltip,
+    QuestionTooltip,
 };

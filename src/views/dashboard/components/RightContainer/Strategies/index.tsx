@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { graphUtils, formatUtils } from '@utils';
 import LiquidityPool from './LiquidityPool';
 import DifferentStrategy from './DifferentStrategy';
-import { BoxRow, GrayBox, Icon, InfoBox } from '@components/ui';
+import { QuestionTooltip, InfoBox } from '@components/ui';
 import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
@@ -59,20 +59,13 @@ const StrategyItemWrapper = styled.div`
 `;
 
 const SectionHeader = styled.div<{ marginTop: number }>`
+    display: flex;
     padding: 0 50px 10px 15px;
     margin-top: ${props => props.marginTop}px;
     width: 100%;
     font-size: ${variables.FONT_SIZE.SMALL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     color: ${props => props.theme.FONT_LIGHT};
-`;
-
-const Note = styled.div`
-    margin-top: 18px;
-`;
-
-const RememberNote = styled.span`
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
 const StyledLink = styled(Link)`
@@ -87,6 +80,15 @@ const StyledLink = styled(Link)`
 
 const BalancerBanner = styled.div`
     margin-bottom: 20px;
+`;
+
+const B = styled.span`
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    font-style: italic;
+`;
+
+const TooltipHeadline = styled.div`
+    margin-bottom: 8px;
 `;
 
 const Strategies = () => {
@@ -160,7 +162,23 @@ const Strategies = () => {
                 to see estimates for different prices.
             </Description>
 
-            <SectionHeader marginTop={0}>Being liquidity provider</SectionHeader>
+            <SectionHeader marginTop={0}>
+                Being liquidity provider
+                <QuestionTooltip
+                    content={
+                        <span>
+                            <TooltipHeadline>
+                                You decided to be a liquidity provider. We value this strategy as
+                                follows:{' '}
+                            </TooltipHeadline>
+                            <B>
+                                value = what you have in the pool + what you withdrew from the pool
+                                + yield - tx.costs
+                            </B>{' '}
+                        </span>
+                    }
+                />
+            </SectionHeader>
             <StrategyItemWrapper>
                 <LiquidityPool />
             </StrategyItemWrapper>
@@ -176,7 +194,19 @@ const Strategies = () => {
                 </BalancerBanner>
             ) : null}
 
-            <SectionHeader marginTop={25}>If you HODL'd pooled tokens</SectionHeader>
+            <SectionHeader marginTop={25}>
+                If you HODL'd pooled tokens
+                <QuestionTooltip
+                    content={
+                        <span>
+                            <TooltipHeadline>
+                                This is how much money you would have if you haven't deposited{' '}
+                                anything to the pool and you held deposited tokens instead.
+                            </TooltipHeadline>
+                        </span>
+                    }
+                />
+            </SectionHeader>
 
             <StrategyItemWrapper>
                 <DifferentStrategy
@@ -207,6 +237,17 @@ const Strategies = () => {
 
             <SectionHeader marginTop={30}>
                 If you exchanged all pooled tokens for ETH and HODL'd
+                <QuestionTooltip
+                    content={
+                        <span>
+                            <TooltipHeadline>
+                                This is how much money you would have if you haven't deposited{' '}
+                                anything to the pool and you exchanged all deposited tokens for ETH
+                                instead.
+                            </TooltipHeadline>
+                        </span>
+                    }
+                />
             </SectionHeader>
 
             <StrategyItemWrapper>

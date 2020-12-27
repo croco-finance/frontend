@@ -5,6 +5,7 @@ import {
     CollapsibleContainer,
     BoxRow,
     Icon,
+    QuestionTooltip,
 } from '@components/ui';
 import { analytics, variables } from '@config';
 import { formatUtils, mathUtils } from '@utils';
@@ -407,7 +408,16 @@ const DifferentStrategy = ({
                                         {/* {estDaysLeft > 0 && poolIsActive && (
                                             <BottomBarRow>
                                                 <BoxRow
-                                                    firstColumn="Est. days left to compensate loss*"
+                                                    firstColumn={
+                                                        <>
+                                                            Est. days left to compensate loss
+                                                            <QuestionTooltip
+                                                                content={
+                                                                    'Based on your average rewards during the last week'
+                                                                }
+                                                            />
+                                                        </>
+                                                    }
                                                     secondColumn={estDaysLeft}
                                                 />
                                             </BottomBarRow>

@@ -7,6 +7,7 @@ export const THEME = {
         BACKGROUND_BLUE: '#f0f5ff',
         BACKGROUND_PURPLE: '#f7f4ff',
         BG_WHITE: '#fff',
+        BG_TOOLTIP: '#f6f6f9',
 
         // Buttons
         // Primary
@@ -92,6 +93,7 @@ export const THEME = {
         BACKGROUND_BLUE: '#1c1f20',
         BACKGROUND_PURPLE: '#1d1c1e',
         BG_WHITE: '#151718',
+        BG_TOOLTIP: '#1c1f20',
 
         BUTTON_PRIMARY_BG: '#034ab7',
         BUTTON_PRIMARY_BG_HOVER: '#05419e',

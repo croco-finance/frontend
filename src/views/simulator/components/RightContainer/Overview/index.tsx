@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow } from '@components/ui';
+import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow, QuestionTooltip } from '@components/ui';
 import { colors, variables, types } from '@config';
 import { mathUtils, lossUtils, formatUtils, simulatorUtils, graphUtils } from '@utils';
 import ILGraph from '../ILGraph';
@@ -99,19 +99,6 @@ const DaysLeftGridWrapper = styled(ImpLossGridWrapper)`
     gap: 5px 10px;
     font-size: ${variables.FONT_SIZE.NORMAL};
     color: ${props => props.theme.FONT_LIGHT};
-`;
-
-const EstDaysLeftWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    word-break: break-word;
-`;
-
-const SubNoteDaysLeft = styled.div`
-    margin-top: 15px;
-    font-size: ${variables.FONT_SIZE.SMALL};
-    color: ${props => props.theme.FONT_LIGHT};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
 const XScrollWrapper = styled.div`
@@ -265,9 +252,23 @@ const Overview = ({
                                     <BoxRow
                                         columnAlignment={['left', 'right', 'left']}
                                         firstColumn={
-                                            <EstDaysLeftWrapper>
-                                                <div>Est. days left to compensate loss*</div>
-                                            </EstDaysLeftWrapper>
+                                            <>
+                                                Est. days left to compensate loss
+                                                <QuestionTooltip
+                                                    content={
+                                                        <>
+                                                            Based on your average rewards since{' '}
+                                                            {formatUtils.getFormattedDateFromTimestamp(
+                                                                lastSnapTimestampStart,
+                                                                'MONTH_DAY_YEAR',
+                                                            )}
+                                                            <br></br>
+                                                            (date of your last interaction with the
+                                                            pool)
+                                                        </>
+                                                    }
+                                                />
+                                            </>
                                         }
                                         secondColumn={
                                             <RightPaddingWrapper>
@@ -277,15 +278,6 @@ const Overview = ({
                                         thirdColumn={<></>}
                                     />
                                 </DaysLeftGridWrapper>
-                                <SubNoteDaysLeft>
-                                    *According to your average rewards since{' '}
-                                    {formatUtils.getFormattedDateFromTimestamp(
-                                        lastSnapTimestampStart,
-                                        'MONTH_DAY_YEAR',
-                                    )}
-                                    <br></br>
-                                    (date of your last interaction with the pool)
-                                </SubNoteDaysLeft>
                             </>
                         ) : null
                     }
