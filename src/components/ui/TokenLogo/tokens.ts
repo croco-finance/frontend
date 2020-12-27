@@ -29,6 +29,10 @@ export const TOKENS: any = {
     omg: require('../../../data/images/tokens/omg.svg'),
     pickle: require('../../../data/images/tokens/pickle.svg'),
     zrx: require('../../../data/images/tokens/zrx.svg'),
+    knc: require('../../../data/images/tokens/knc.svg'),
+    ren: require('../../../data/images/tokens/ren.svg'),
+    '1inch': require('../../../data/images/tokens/1inch.svg'),
+    meme: require('../../../data/images/tokens/meme.svg'),
 
     // unknown token
     unknown: require('../../../data/images/tokens/unknown.svg'),
