@@ -1,4 +1,13 @@
-import { PoolToken, Snap, SnapStructure, StakingService, Token, tokens, YieldReward } from '@types';
+import {
+    Exchange,
+    PoolToken,
+    Snap,
+    SnapStructure,
+    StakingService,
+    Token,
+    tokens,
+    YieldReward,
+} from '@types';
 import { firebase } from '@config';
 
 async function getSnaps(address: string): Promise<SnapStructure | null> {
@@ -18,11 +27,17 @@ async function getSnaps(address: string): Promise<SnapStructure | null> {
             distributeStakedYields(userData['SUSHI']['yields'], snaps);
         }
 
+        const dayIds: { [key in Exchange]?: number } = {};
         for (const [poolId, poolSnaps] of Object.entries(snaps)) {
             filter0SameBlockSnaps(poolSnaps);
             let lastSnap = poolSnaps[poolSnaps.length - 1];
             if (lastSnap.liquidityTokenBalance !== 0) {
-                let currentSnap = await getCurrentSnap(poolId, lastSnap);
+                if (!dayIds.hasOwnProperty(lastSnap.exchange)) {
+                    const ref = firebase.exchangeDayId(lastSnap.exchange);
+                    dayIds[lastSnap.exchange] = (await ref.once('value')).val();
+                }
+                const dayId = <number>dayIds[lastSnap.exchange];
+                let currentSnap = await getCurrentSnap(poolId, lastSnap, dayId);
                 if (currentSnap !== null) {
                     poolSnaps.push(currentSnap);
                 }
@@ -137,8 +152,8 @@ function filter0SameBlockSnaps(snaps: Snap[]) {
     }
 }
 
-async function getCurrentSnap(poolId: string, lastSnap: Snap): Promise<Snap | null> {
-    let ref = firebase.pool(poolId);
+async function getCurrentSnap(poolId: string, lastSnap: Snap, dayId: number): Promise<Snap | null> {
+    let ref = firebase.poolSnap(poolId, dayId);
     const payload = await ref.once('value');
     if (payload.exists()) {
         let pool = payload.val();
