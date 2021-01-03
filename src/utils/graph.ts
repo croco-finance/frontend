@@ -1,5 +1,151 @@
 import { mathUtils, lossUtils } from '.';
-import { GraphData, IntervalStats } from '@types';
+import {
+    GraphData,
+    IntervalStats,
+    SnapStructure,
+    Exchange,
+    DailyData,
+    PoolToken,
+    PoolItem,
+} from '@types';
+
+const getPooledTokenBalancesAsArr = (userPoolShare: number, tokens: PoolToken[]) => {
+    const tokenBalances = new Array();
+    tokens.forEach(token => {
+        tokenBalances.push(token.reserve * userPoolShare);
+    });
+
+    return tokenBalances;
+};
+
+const getPooledTokenPricesAsArr = (tokens: PoolToken[]) => {
+    const tokenPrices = new Array();
+    tokens.forEach(token => {
+        tokenPrices.push(token.priceUsd);
+    });
+
+    return tokenPrices;
+};
+
+const getIntervalFees = (
+    startTokenBalances: number[],
+    endTokenBalances: number[],
+    endTokenPrices: number[],
+    tokenWeights: number[],
+    exchange: Exchange,
+) => {
+    let tokenBalancesNoFees;
+    if (exchange === 'UNI_V2' || exchange === 'SUSHI') {
+        tokenBalancesNoFees = lossUtils.getNewBalancesUniswap(startTokenBalances, endTokenPrices);
+    } else if (exchange === 'BALANCER') {
+        tokenBalancesNoFees = lossUtils.getNewBalancesBalancer(
+            startTokenBalances,
+            endTokenPrices,
+            tokenWeights,
+        );
+    }
+
+    const feesTokenAmounts = mathUtils.subtractArraysElementWise(
+        endTokenBalances,
+        tokenBalancesNoFees,
+    );
+
+    const feesUsd = mathUtils.getTokenArrayValue(feesTokenAmounts, endTokenPrices);
+
+    return { feesTokenAmounts, feesUsd };
+};
+
+const getDailyFeesGraphData = (dailyData: { [key: number]: DailyData }, poolItem: PoolItem) => {
+    const { exchange, snapshots, tokenWeights } = poolItem;
+
+    const daysCount = Object.keys(dailyData).length;
+    const userLiquidityTokenBalancesDaily = new Array();
+    const userTokenBalancesDaily = new Array();
+    const tokenPricesDaily = new Array();
+    const tokenFeesArr = new Array();
+    const usdFeesArr = new Array();
+    const dayTimestamps = new Array();
+    const timestampsForGraph = new Array();
+    const pooledTokenSymbols = new Array();
+    let indexOfLastSnapChecked = 0; // index of snapshot which lp tokens a
+
+    // Iterate day by day
+    for (const [dayId, poolDayData] of Object.entries(dailyData)) {
+        // get day timestamp
+        const dayTimestamp = parseFloat(dayId) * 86400 * 1000;
+        let newerSnapFound = false;
+
+        dayTimestamps.push(dayTimestamp);
+        tokenPricesDaily.push(getPooledTokenPricesAsArr(poolDayData.tokens));
+        console.log('dayTimestamp', dayTimestamp);
+
+        // get how much tokens did the user have at this day
+        for (let i = indexOfLastSnapChecked; i < snapshots.length; i++) {
+            const snap = snapshots[i];
+            console.log('snap.timestamp ', snap.timestamp);
+
+            // if there is a snapshot newer than this day
+            if (snap.timestamp > dayTimestamp && i > 0) {
+                // push token balances based on data from the previous snap
+                const userLPTokenBalance = snapshots[i - 1].liquidityTokenBalance;
+                const userPoolShare = userLPTokenBalance / poolDayData.liquidityTokenTotalSupply;
+                const pooledTokenBalances = getPooledTokenBalancesAsArr(
+                    userPoolShare,
+                    poolDayData.tokens,
+                );
+
+                console.log('pushing: ', pooledTokenBalances);
+                userTokenBalancesDaily.push(pooledTokenBalances);
+
+                newerSnapFound = true;
+                indexOfLastSnapChecked = i - 1;
+                break;
+            }
+        }
+
+        // if no snap newer than the day was found, add LP token balances from the last checked snap
+        if (!newerSnapFound) {
+            const userLPTokenBalance = snapshots[indexOfLastSnapChecked].liquidityTokenBalance;
+            const userPoolShare = userLPTokenBalance / poolDayData.liquidityTokenTotalSupply;
+            const pooledTokenBalances = getPooledTokenBalancesAsArr(
+                userPoolShare,
+                poolDayData.tokens,
+            );
+
+            userTokenBalancesDaily.push(pooledTokenBalances);
+            console.log('pushing: ', pooledTokenBalances);
+        }
+    }
+
+    // get array of fees collected
+    for (let i = 0; i < userTokenBalancesDaily.length - 1; i++) {
+        const { feesTokenAmounts, feesUsd } = getIntervalFees(
+            userTokenBalancesDaily[i],
+            userTokenBalancesDaily[i + 1],
+            tokenPricesDaily[i + 1],
+            tokenWeights,
+            exchange,
+        );
+        tokenFeesArr.push(feesTokenAmounts);
+        usdFeesArr.push(feesUsd);
+
+        timestampsForGraph.push(dayTimestamps[i + 1]);
+    }
+
+    // return data in graph-ready format
+    let graphData = new Array();
+    for (let i = 0; i < timestampsForGraph.length; i++) {
+        graphData[i] = {
+            timestamp: timestampsForGraph[i],
+            feesTokenAmounts: tokenFeesArr[i],
+            feesUsd: usdFeesArr[i],
+        };
+    }
+
+    console.log('graphData', graphData);
+
+    return graphData;
+};
 
 const getGraphData = (intervalStats: IntervalStats[]) => {
     const statsCount = intervalStats.length;
@@ -225,6 +371,7 @@ export {
     getMaxPossiblePoolValue,
     getStrategiesGraphData,
     getStrategiesMaxPossiblePoolValues,
+    getDailyFeesGraphData,
 };
 
 const exampleGraphData = [

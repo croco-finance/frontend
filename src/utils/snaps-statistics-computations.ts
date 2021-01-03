@@ -1,4 +1,4 @@
-import { lossUtils, mathUtils } from '.';
+import { lossUtils, mathUtils, formatUtils } from '.';
 import {
     Snap,
     IntervalStats,
@@ -7,6 +7,8 @@ import {
     SummaryStats,
     Deposit,
     Withdrawal,
+    DailyData,
+    PoolItem,
 } from '@types';
 
 const getPoolStatsFromSnapshots = (poolSnapshots: Snap[]) => {
@@ -611,6 +613,181 @@ const getPoolsSummaryObject = (
         feesTokenAmounts: Object.values(feesTokenAmountsSum),
         feesUsd: feesUsdSum,
     };
+};
+
+const getDailyRewards = (
+    dailyData: { [key: number]: DailyData },
+    intervalStats: IntervalStats[],
+    poolItem: PoolItem,
+) => {
+    const { exchange, snapshots, tokenWeights } = poolItem;
+
+    const daysCount = Object.keys(dailyData).length;
+    const userLiquidityTokenBalancesDaily = new Array();
+    const userTokenBalancesDaily = new Array();
+    const tokenPricesDaily = new Array();
+    const tokenFeesArr = new Array();
+    const usdFeesArr = new Array();
+    const dayTimestamps = new Array();
+    const timestampsForGraph = new Array();
+    const pooledTokenSymbols = new Array();
+    let yieldRewardSum = 0;
+    let indexOfLastSnapChecked = 0; // index of snapshot which lp tokens a
+    let firstNewerSnapFound = false;
+
+    // Iterate day by day
+    for (const [dayId, poolDayData] of Object.entries(dailyData)) {
+        // get day timestamp
+        const dayTimestamp = parseFloat(dayId) * 86400 * 1000;
+        let newerSnapFound = false;
+
+        dayTimestamps.push(dayTimestamp);
+        tokenPricesDaily.push(formatUtils.getPooledTokenPricesAsArr(poolDayData.tokens));
+        console.log('dayTimestamp', dayTimestamp);
+
+        // get how much tokens did the user have at this day
+        for (let i = indexOfLastSnapChecked; i < snapshots.length; i++) {
+            const snap = snapshots[i];
+            console.log('snap.timestamp ', snap.timestamp);
+
+            // if there is a snapshot newer than this day
+            if (snap.timestamp > dayTimestamp && i > 0) {
+                // push token balances based on data from the previous snap
+                const userLPTokenBalance = snapshots[i - 1].liquidityTokenBalance;
+                const userPoolShare = userLPTokenBalance / poolDayData.liquidityTokenTotalSupply;
+                const pooledTokenBalances = formatUtils.getPooledTokenBalancesAsArr(
+                    userPoolShare,
+                    poolDayData.tokens,
+                );
+
+                console.log('pushing: ', pooledTokenBalances);
+                userTokenBalancesDaily.push(pooledTokenBalances);
+
+                // check if this snap has yield reward
+                if (!firstNewerSnapFound) {
+                }
+                if (snapshots[i - 1].yieldReward) {
+                    const claimed = snapshots[i - 1].yieldReward?.claimed;
+                    const unclaimed = snapshots[i - 1].yieldReward?.unclaimed;
+
+                    if (claimed) yieldRewardSum += claimed;
+                    if (unclaimed) yieldRewardSum += unclaimed;
+                }
+
+                newerSnapFound = true;
+                firstNewerSnapFound = true;
+                indexOfLastSnapChecked = i - 1;
+                break;
+            }
+        }
+
+        // if no snap newer than the day was found, add LP token balances from the last checked snap
+        if (!newerSnapFound) {
+            const userLPTokenBalance = snapshots[indexOfLastSnapChecked].liquidityTokenBalance;
+            const userPoolShare = userLPTokenBalance / poolDayData.liquidityTokenTotalSupply;
+            const pooledTokenBalances = formatUtils.getPooledTokenBalancesAsArr(
+                userPoolShare,
+                poolDayData.tokens,
+            );
+
+            userTokenBalancesDaily.push(pooledTokenBalances);
+            console.log('pushing: ', pooledTokenBalances);
+        }
+    }
+
+    // get array of fees collected
+    for (let i = 0; i < userTokenBalancesDaily.length - 1; i++) {
+        const { feesTokenAmounts, feesUsd } = lossUtils.getIntervalFees(
+            userTokenBalancesDaily[i],
+            userTokenBalancesDaily[i + 1],
+            tokenPricesDaily[i + 1],
+            tokenWeights,
+            exchange,
+        );
+        tokenFeesArr.push(feesTokenAmounts);
+        usdFeesArr.push(feesUsd);
+
+        timestampsForGraph.push(dayTimestamps[i + 1]);
+    }
+
+    // return data in graph-ready format
+    let graphData = new Array();
+    for (let i = 0; i < timestampsForGraph.length; i++) {
+        graphData[i] = {
+            timestamp: timestampsForGraph[i],
+            feesTokenAmounts: tokenFeesArr[i],
+            feesUsd: usdFeesArr[i],
+        };
+    }
+
+    console.log('graphData', graphData);
+
+    // compute average rewards of from last N samples (N included)
+    const N = 5;
+    const averageFees = mathUtils.getArrayAverage(
+        tokenFeesArr.slice(Math.max(tokenFeesArr.length - N, 0)),
+    );
+
+    // compute average yield reward
+    // sum yield rewards in all snapshots since
+    // const averageYield = getAverageYieldRewardsSinceTimestamp();
+
+    return graphData;
+};
+
+const getAverageYieldRewardsSinceTimestamp = (timestamp: number, snapshots: Snap[]) => {
+    let yieldRewardSum = 0;
+    let newerSnapFound = false;
+
+    // go through all snapshots and find the first one that is newer than timestamp
+    for (let i = 0; i < snapshots.length; i++) {
+        const snap = snapshots[i];
+
+        // if there is a snapshot newer than this day
+        if (snap.timestamp > timestamp && i > 0) {
+            if (snapshots[i].yieldReward) {
+                const claimed = snapshots[i].yieldReward?.claimed;
+                const unclaimed = snapshots[i].yieldReward?.unclaimed;
+
+                if (claimed) yieldRewardSum += claimed;
+                if (unclaimed) yieldRewardSum += unclaimed;
+            }
+
+            // if this is the first time I found newer snapshot, check if I was gaining yield reward in since the previous snap as well
+            if (!newerSnapFound && i > 0) {
+                if (snapshots[i - 1].yieldReward) {
+                    // get snapshot timestamp
+                    const snapTimestamp = snapshots[i - 1].timestamp;
+                    const nextSnapTimestamp = snapshots[i].timestamp;
+
+                    // how much time by percentage passed since timestamp to nextSnapTimestamp
+                    const percentagePassedSinceTimestamp =
+                        (nextSnapTimestamp - timestamp) / (nextSnapTimestamp - snapTimestamp);
+
+                    // get how of the total time is
+                    const claimed = snapshots[i - 1].yieldReward?.claimed;
+                    const unclaimed = snapshots[i - 1].yieldReward?.unclaimed;
+
+                    if (claimed) yieldRewardSum += percentagePassedSinceTimestamp * claimed;
+                    if (unclaimed) yieldRewardSum += percentagePassedSinceTimestamp * unclaimed;
+                }
+            }
+
+            newerSnapFound = true;
+            break;
+        }
+    }
+
+    // compute average daily yield reward since timestamp
+    const lastSnapTimestamp = snapshots[snapshots.length - 1];
+
+    const averageDailyYield = mathUtils.getAverageDailyRewards(
+        timestamp,
+        lastSnapTimestamp,
+        yieldRewardSum,
+    );
+
+    return averageDailyYield;
 };
 
 export {

@@ -16,8 +16,6 @@ import {
 import { GraphData, AppThemeColors } from '@types';
 import CustomTooltip from './CustomTooltip';
 
-import { useTheme } from '@hooks';
-
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'Usd',

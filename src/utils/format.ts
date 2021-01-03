@@ -126,7 +126,27 @@ const getBundledAddresses = (addresses: AllAddressesGlobal) => {
     return addressesArr;
 };
 
+const getPooledTokenBalancesAsArr = (userPoolShare: number, tokens: PoolToken[]) => {
+    const tokenBalances = new Array();
+    tokens.forEach(token => {
+        tokenBalances.push(token.reserve * userPoolShare);
+    });
+
+    return tokenBalances;
+};
+
+const getPooledTokenPricesAsArr = (tokens: PoolToken[]) => {
+    const tokenPrices = new Array();
+    tokens.forEach(token => {
+        tokenPrices.push(token.priceUsd);
+    });
+
+    return tokenPrices;
+};
+
 export {
+    getPooledTokenBalancesAsArr,
+    getPooledTokenPricesAsArr,
     getFormattedDateFromTimestamp,
     getFormattedPercentageValue,
     getFormattedCryptoValue,

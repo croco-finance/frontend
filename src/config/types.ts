@@ -180,6 +180,7 @@ export interface PoolItem {
     depositTokenAmounts: number[][];
     depositEthAmounts: number[][];
     tokenSymbols: string[];
+    snapshots: Snap[];
 }
 
 export interface YieldTokenInfo {
@@ -228,6 +229,16 @@ export interface Deposit {
 }
 
 export interface Withdrawal extends Deposit {}
+export interface DailyData {
+    block: number;
+    ethPrice: number;
+    exchange: Exchange;
+    liquidityTokenTotalSupply: number;
+    relevantYieldTokenPrices: { [key: string]: string };
+    timestamp: number;
+    txCostEth: number;
+    tokens: PoolToken[];
+}
 
 export type AllPoolsGlobal = { [key: string]: PoolItem } | {};
 export interface AddressData {

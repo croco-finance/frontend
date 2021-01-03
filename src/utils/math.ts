@@ -22,10 +22,10 @@ const roundToNDecimals = (value: number, nDecimals: number) => {
     return Math.round(value * coeff) / coeff;
 };
 
-const getAverageDailyRewards = (timeStampStartMillis, timeStampEndMillis, totalFeesUsd) => {
+const getAverageDailyRewards = (timeStampStartMillis, timeStampEndMillis, totalReward) => {
     const differenceMillis = timeStampEndMillis - timeStampStartMillis;
     const differenceDays = differenceMillis / (3600 * 24 * 1000);
-    return totalFeesUsd / differenceDays;
+    return totalReward / differenceDays;
 };
 
 const getTokenArrayValue = (tokenBalances: Array<number>, tokenPrices: Array<number>) => {
@@ -55,7 +55,7 @@ const arrangeArray = (start, end, step) => {
     return arr;
 };
 
-const sumArr = (arr: Array<number>) => {
+const sumArr = (arr: number[]) => {
     // default value is 0
     return arr.reduce((a, b) => a + b, 0);
 };
@@ -69,6 +69,12 @@ const multiplyArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => 
     });
 
     return result;
+};
+
+const getArrayAverage = (arr: number[]) => {
+    const arraySum = sumArr(arr);
+
+    return arraySum / arr.length;
 };
 
 const divideArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
@@ -170,4 +176,5 @@ export {
     sumArrayOfTokenArrays,
     divideArraysElementWise,
     arraysContainEqualElements,
+    getArrayAverage,
 };

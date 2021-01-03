@@ -143,16 +143,16 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                     console.log(`Did not find any pools associated with: ${queryAddress}`);
                 } else {
                     // Set unclaimed yield rewards
-                    try {
-                        await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
-                    } catch (e) {
-                        console.log(
-                            `Could not fetch unclaimed yield rewards for address: ${address}`,
-                        );
-                        analytics.logEvent('fetch_unclaimed_yield_failed', {
-                            address: addressWithout0x,
-                        });
-                    }
+                    // try {
+                    //     await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
+                    // } catch (e) {
+                    //     console.log(
+                    //         `Could not fetch unclaimed yield rewards for address: ${address}`,
+                    //     );
+                    //     analytics.logEvent('fetch_unclaimed_yield_failed', {
+                    //         address: addressWithout0x,
+                    //     });
+                    // }
 
                     // Two addresses can have assets in the same pool. To create a unique iD for each pool, I combine user's address and pool ID
                     fetchedSnapshotsBundled = {
@@ -184,6 +184,8 @@ export const fetchSnapshots = (addresses: string[] | string) => {
         const customPoolsObject: AllPoolsGlobal = {};
 
         for (const [id, snapshotsArr] of Object.entries(fetchedSnapshotsBundled)) {
+            console.log('snapshotsArr', snapshotsArr);
+
             const poolId = id.split('_')[0];
             const snapshotsCount = snapshotsArr.length;
             const exchange: Exchange = snapshotsArr[0].exchange;
@@ -235,11 +237,12 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                     tokenSymbols: formatUtils.getTokenSymbolArr(
                         getPooledTokensInfo(snapshotsArr[0].tokens),
                     ),
+                    snapshots: snapshotsArr,
                 };
             }
         }
 
-        // console.log('customPoolsObject', customPoolsObject);
+        console.log('customPoolsObject', customPoolsObject);
         dispatch(
             fetchSnapsSuccess(customPoolsObject, dexToPoolMap, activePoolIds, inactivePoolIds),
         );
