@@ -615,11 +615,7 @@ const getPoolsSummaryObject = (
     };
 };
 
-const getDailyRewards = (
-    dailyData: { [key: number]: DailyData },
-    intervalStats: IntervalStats[],
-    poolItem: PoolItem,
-) => {
+const getDailyRewards = (dailyData: { [key: number]: DailyData }, poolItem: PoolItem) => {
     const { exchange, snapshots, tokenWeights } = poolItem;
 
     const daysCount = Object.keys(dailyData).length;
@@ -635,10 +631,18 @@ const getDailyRewards = (
     let indexOfLastSnapChecked = 0; // index of snapshot which lp tokens a
     let firstNewerSnapFound = false;
 
+    // Convert dayIds to number and make sure the dayIds are sorted
+    let dayIdsString = Object.keys(dailyData);
+    let dayIdsNumbers = dayIdsString.map(dayId => parseFloat(dayId));
+    dayIdsNumbers.sort();
+
+    const firstDayId = dayIdsNumbers[0];
+
     // Iterate day by day
-    for (const [dayId, poolDayData] of Object.entries(dailyData)) {
+    dayIdsNumbers.forEach((dayId, i) => {
+        const poolDayData = dailyData[dayId.toString()];
         // get day timestamp
-        const dayTimestamp = parseFloat(dayId) * 86400 * 1000;
+        const dayTimestamp = dayId * 86400 * 1000;
         let newerSnapFound = false;
 
         dayTimestamps.push(dayTimestamp);
@@ -693,7 +697,7 @@ const getDailyRewards = (
             userTokenBalancesDaily.push(pooledTokenBalances);
             console.log('pushing: ', pooledTokenBalances);
         }
-    }
+    });
 
     // get array of fees collected
     for (let i = 0; i < userTokenBalancesDaily.length - 1; i++) {
@@ -710,18 +714,6 @@ const getDailyRewards = (
         timestampsForGraph.push(dayTimestamps[i + 1]);
     }
 
-    // return data in graph-ready format
-    let graphData = new Array();
-    for (let i = 0; i < timestampsForGraph.length; i++) {
-        graphData[i] = {
-            timestamp: timestampsForGraph[i],
-            feesTokenAmounts: tokenFeesArr[i],
-            feesUsd: usdFeesArr[i],
-        };
-    }
-
-    console.log('graphData', graphData);
-
     // compute average rewards of from last N samples (N included)
     const N = 5;
     const averageFees = mathUtils.getArrayAverage(
@@ -730,9 +722,17 @@ const getDailyRewards = (
 
     // compute average yield reward
     // sum yield rewards in all snapshots since
-    // const averageYield = getAverageYieldRewardsSinceTimestamp();
+    const averageYield = getAverageYieldRewardsSinceTimestamp(firstDayId * 86400 * 1000, snapshots);
 
-    return graphData;
+    // set new data
+    poolItem['dailyData'] = {};
+    poolItem['dailyData']['timestamps'] = timestampsForGraph;
+    poolItem['dailyData']['feesTokenAmounts'] = tokenFeesArr;
+    poolItem['dailyData']['feesUsd'] = usdFeesArr;
+    poolItem['dailyData']['averageFees'] = averageFees;
+    poolItem['dailyData']['averageYield'] = averageYield;
+
+    console.log('getDailyRewards', poolItem['dailyData']);
 };
 
 const getAverageYieldRewardsSinceTimestamp = (timestamp: number, snapshots: Snap[]) => {
@@ -795,4 +795,5 @@ export {
     getCumulativeStats,
     getPoolsSummaryObject,
     getDepositsAndWithdrawals,
+    getDailyRewards,
 };
