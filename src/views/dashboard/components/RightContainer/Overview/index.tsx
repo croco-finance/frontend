@@ -96,7 +96,7 @@ const Overview = () => {
             ) : null}
 
             <PoolOverview />
-            <DailyFees poolId={poolId} selectedPool={allPools[selectedPoolId]} />
+            <DailyFees selectedPool={allPools[selectedPoolId]} />
             <GraphWrapper>
                 <GraphTitle>History of your interactions with the pool</GraphTitle>
                 <Graph data={graphData} theme={theme} />
@@ -104,13 +104,6 @@ const Overview = () => {
             {activePoolIds.includes(selectedPoolId) ? (
                 <SimulatorButtonWrapper>
                     <StyledLink
-                        // onClick={e => {
-                        //     analytics.Event(
-                        //         'SIMULATOR',
-                        //         'Went to simulator from pool card',
-                        //         userAddress,
-                        //     );
-                        // }}
                         to={{
                             pathname: `/simulator`,
                         }}

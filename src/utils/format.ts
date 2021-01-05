@@ -1,6 +1,16 @@
 import { mathUtils } from '.';
 import { AllAddressesGlobal, PoolToken } from '@types';
 
+const getFormattedUsdValue = (value: number) => {
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'Usd',
+        minimumFractionDigits: 2,
+    });
+
+    return formatter.format(value);
+};
+
 type DateFormats = 'MONTH_DAY_YEAR' | 'MONTH_DAY';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -154,4 +164,5 @@ export {
     getTokenWeightsArr,
     tokenArrToCommaSeparatedString,
     getBundledAddresses,
+    getFormattedUsdValue,
 };

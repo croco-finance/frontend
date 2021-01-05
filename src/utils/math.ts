@@ -23,6 +23,7 @@ const roundToNDecimals = (value: number, nDecimals: number) => {
 };
 
 const getAverageDailyRewards = (timeStampStartMillis, timeStampEndMillis, totalReward) => {
+    if (totalReward === 0) return 0;
     const differenceMillis = timeStampEndMillis - timeStampStartMillis;
     const differenceDays = differenceMillis / (3600 * 24 * 1000);
     return totalReward / differenceDays;

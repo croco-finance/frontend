@@ -32,7 +32,7 @@ const ExchangeWrapper = styled(Item)`
 
 const ExchangeTitle = styled.div<{ isSelected: boolean }>`
     font-size: ${variables.FONT_SIZE.NORMAL};
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     margin-left: 5px;
     color: ${props => (props.isSelected ? props.theme.BLUE : props.theme.FONT_DARK)};
 `;

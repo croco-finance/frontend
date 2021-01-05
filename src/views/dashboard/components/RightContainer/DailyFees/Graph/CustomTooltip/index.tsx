@@ -48,6 +48,11 @@ const GridWrapper = styled.div`
     /* padding: 0px 10px; */
 `;
 
+const TooltipGridWrapper = styled(GridWrapper)`
+    border-bottom: ${props => `1px solid ${props.theme.FONT_MEDIUM}`};
+    padding-bottom: 5px;
+    margin-bottom: 8px;
+`;
 interface Props extends TooltipProps {
     // inherited from TooltipProps
     payload?: any;
@@ -57,19 +62,26 @@ interface Props extends TooltipProps {
 const CustomTooltip = (props: Props) => {
     if (props.active && props.payload) {
         const graphData: any = props.payload[0].payload;
-        const { feesUsd, timestamp } = graphData;
-
+        const { feesUsd, timestamp, feesTokenAmounts, tokenSymbols } = graphData;
         const dayString = formatUtils.getFormattedDateFromTimestamp(timestamp, 'MONTH_DAY');
 
         return (
             <CustomTooltipWrapper>
                 <DateHeader>{dayString}</DateHeader>
                 <ValueWrapper>
-                    <GridWrapper>
+                    <TooltipGridWrapper>
                         <TooltipRow
-                            firstColumn="Fees earned"
+                            firstColumn="Fees USD"
                             secondColumn={<FiatValue value={feesUsd ? feesUsd : 0} />}
                         />
+                    </TooltipGridWrapper>
+                    <GridWrapper>
+                        {feesTokenAmounts.map((amount, i) => (
+                            <TooltipRow
+                                firstColumn={`Fees ${tokenSymbols[i]}`}
+                                secondColumn={amount ? amount.toFixed(5) : 0}
+                            />
+                        ))}
                     </GridWrapper>
                 </ValueWrapper>
             </CustomTooltipWrapper>

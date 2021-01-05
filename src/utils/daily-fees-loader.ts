@@ -1,6 +1,6 @@
 import { firebase } from '@config';
 
-const fetchDailyFees = async poolId => {
+const getDailyFees = async poolId => {
     const ref = firebase.dailyFees(poolId);
     const payload = await ref.once('value');
 
@@ -10,4 +10,4 @@ const fetchDailyFees = async poolId => {
     return null;
 };
 
-export { fetchDailyFees };
+export { getDailyFees };

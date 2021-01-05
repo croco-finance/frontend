@@ -1,6 +1,6 @@
 import { colors, variables, types } from '@config';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '@reducers';
 import styled from 'styled-components';
 import { graphUtils, formatUtils } from '@utils';
 import LiquidityPool from './LiquidityPool';
@@ -92,7 +92,7 @@ const TooltipHeadline = styled.div`
 `;
 
 const Strategies = () => {
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
+    const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     const activePoolIds = useSelector(state => state.activePoolIds);
     let pool = allPools[selectedPoolId];
@@ -110,6 +110,7 @@ const Strategies = () => {
         depositTokenAmounts,
         depositEthAmounts,
         hasYieldReward,
+        dailyStats,
     } = pool;
 
     const {
@@ -123,7 +124,6 @@ const Strategies = () => {
         poolStrategyUsd,
         tokensHodlStrategyTokenAmounts,
         ethHodlStrategyUsd,
-        lastIntAvDailyRewardsUsd,
         tokenPricesEnd,
         tokensHodlStrategyUsd,
         yieldTokenSymbols,
@@ -143,6 +143,10 @@ const Strategies = () => {
     if (allPools && allPools[selectedPoolId]) {
         exchange = allPools[selectedPoolId].exchange;
     }
+
+    const lastWeekAverageDailyRewardsUsd = dailyStats
+        ? dailyStats.averageDailyFeesUsd + dailyStats.averageDailyYieldUsd
+        : 0;
 
     return (
         <Wrapper>
@@ -223,7 +227,7 @@ const Strategies = () => {
                     yieldTotalTokenAmount={yieldTotalTokenAmount}
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
-                    lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
+                    lastWeekAverageDailyRewardsUsd={lastWeekAverageDailyRewardsUsd}
                     depositTimestampsArr={depositTimestamps}
                     depositTokenAmountsArr={depositTokenAmounts}
                     currentDepositTokenPricesArr={tokenPricesEnd}
@@ -265,7 +269,7 @@ const Strategies = () => {
                     yieldTotalTokenAmount={yieldTotalTokenAmount}
                     yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
-                    lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
+                    lastWeekAverageDailyRewardsUsd={lastWeekAverageDailyRewardsUsd}
                     depositTimestampsArr={depositTimestamps}
                     depositTokenAmountsArr={depositEthAmounts}
                     currentDepositTokenPricesArr={[ethPriceEnd]}

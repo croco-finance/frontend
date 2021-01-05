@@ -52,7 +52,6 @@ const TickText = styled.text<{ isPurple: boolean }>`
 class CustomizedAxisTick extends PureComponent<any, any> {
     render() {
         const { x, y, stroke, payload } = this.props;
-        // console.log('payload.value'
         return (
             <g transform={`translate(${x},${10})`}>
                 <TickText

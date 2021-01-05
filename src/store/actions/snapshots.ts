@@ -1,9 +1,19 @@
-import { formatUtils, statsComputations, getSnaps } from '@utils';
+import { formatUtils, statsComputations, getSnaps, getDailyFees } from '@utils';
 import exampleFirebaseData from '../../config/example-data-firebase';
 import exampleFirebaseDataSmall from '../../config/example-data-bundled';
+import store from '../../store';
 
 import * as actionTypes from '@actionTypes';
-import { AllPoolsGlobal, PoolToken, DexToPoolIdMap, Exchange, SnapStructure, Snap } from '@types';
+import {
+    AllPoolsGlobal,
+    PoolToken,
+    DexToPoolIdMap,
+    Exchange,
+    SnapStructure,
+    Snap,
+    DailyStats,
+    PoolItem,
+} from '@types';
 import { ethersProvider } from '@config';
 import { setUnclaimed, validationUtils } from '@utils';
 import { analytics } from '@config';
@@ -79,6 +89,26 @@ export const fetchSnapsFailed = () => {
     };
 };
 
+export const fetchDailyInit = () => {
+    return {
+        type: actionTypes.FETCH_DAILY_INIT,
+    };
+};
+
+export const fetchDailyFailed = () => {
+    return {
+        type: actionTypes.FETCH_DAILY_FAILED,
+    };
+};
+
+export const fetchDailySuccess = (poolId: string, payload: DailyStats | undefined) => {
+    return {
+        type: actionTypes.FETCH_DAILY_SUCCESS,
+        poolId: poolId,
+        payload: payload,
+    };
+};
+
 export const fetchSnapsSuccess = (
     pools: AllPoolsGlobal,
     dexToPoolMap: DexToPoolIdMap,
@@ -114,6 +144,46 @@ export const noPoolsFound = () => {
     };
 };
 
+export const changeSelectedPool = (poolId: string) => {
+    return dispatch => {
+        if (poolId === 'all') {
+            dispatch(setSelectedPoolId(poolId));
+        } else {
+            const state = store.getState();
+
+            if (state.allPools && state.allPools[poolId]) {
+                dispatch(setSelectedPoolId(poolId));
+                const hasDailyData = state.allPools[poolId].dailyStats !== undefined;
+
+                // if no daily data are assigned to the pool, fetch them
+                if (!hasDailyData) {
+                    dispatch(fetchDailyFees(poolId));
+                }
+            }
+        }
+    };
+};
+
+export const fetchDailyFees = (poolKey: string) => {
+    // poolKey is the key in allPools, not pool ID as a smart contract address
+    return async dispatch => {
+        dispatch(fetchDailyInit());
+
+        const state = store.getState();
+        const poolItem = state.allPools[poolKey];
+        const poolId = poolKey.split('_')[0];
+        const response = await getDailyFees(poolId);
+
+        if (response) {
+            const dailyStats = statsComputations.getDailyRewards(response, poolItem);
+            dispatch(fetchDailySuccess(poolKey, dailyStats));
+        } else {
+            dispatch(fetchDailyFailed());
+            console.log('Did not get valid response in fetchDailyFees()');
+        }
+    };
+};
+
 export const fetchSnapshots = (addresses: string[] | string) => {
     // I can use dispatch here thanks to redux thunk
     return async dispatch => {
@@ -143,16 +213,16 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                     console.log(`Did not find any pools associated with: ${queryAddress}`);
                 } else {
                     // Set unclaimed yield rewards
-                    // try {
-                    //     await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
-                    // } catch (e) {
-                    //     console.log(
-                    //         `Could not fetch unclaimed yield rewards for address: ${address}`,
-                    //     );
-                    //     analytics.logEvent('fetch_unclaimed_yield_failed', {
-                    //         address: addressWithout0x,
-                    //     });
-                    // }
+                    try {
+                        await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
+                    } catch (e) {
+                        console.log(
+                            `Could not fetch unclaimed yield rewards for address: ${address}`,
+                        );
+                        analytics.logEvent('fetch_unclaimed_yield_failed', {
+                            address: addressWithout0x,
+                        });
+                    }
 
                     // Two addresses can have assets in the same pool. To create a unique iD for each pool, I combine user's address and pool ID
                     fetchedSnapshotsBundled = {
@@ -184,8 +254,6 @@ export const fetchSnapshots = (addresses: string[] | string) => {
         const customPoolsObject: AllPoolsGlobal = {};
 
         for (const [id, snapshotsArr] of Object.entries(fetchedSnapshotsBundled)) {
-            console.log('snapshotsArr', snapshotsArr);
-
             const poolId = id.split('_')[0];
             const snapshotsCount = snapshotsArr.length;
             const exchange: Exchange = snapshotsArr[0].exchange;
@@ -238,11 +306,12 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                         getPooledTokensInfo(snapshotsArr[0].tokens),
                     ),
                     snapshots: snapshotsArr,
+                    dailyStats: undefined,
                 };
             }
         }
 
-        console.log('customPoolsObject', customPoolsObject);
+        // console.log('customPoolsObject', customPoolsObject);
         dispatch(
             fetchSnapsSuccess(customPoolsObject, dexToPoolMap, activePoolIds, inactivePoolIds),
         );

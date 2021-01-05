@@ -9,7 +9,7 @@ import {
 import { analytics, variables } from '@config';
 import { formatUtils } from '@utils';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '@reducers';
 import styled from 'styled-components';
 import { AllPoolsGlobal } from '@types';
 import { useTheme } from '@hooks';
@@ -81,7 +81,7 @@ const SubNote = styled.div`
 const CollapseWrapper = styled.div``;
 
 const LiquidityPool = () => {
-    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
+    const allPools = useSelector(state => state.allPools);
     const selectedPoolId = useSelector(state => state.selectedPoolId);
     let pool = allPools[selectedPoolId];
     const [isOpened, setIsOpened] = useState(false);

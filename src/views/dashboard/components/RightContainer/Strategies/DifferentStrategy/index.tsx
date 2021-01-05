@@ -96,7 +96,7 @@ interface Props {
     tokenSymbols: string[];
     yieldTokenSymbol: string | undefined;
     txCostEth: number;
-    lastIntAvDailyRewardsUsd: number;
+    lastWeekAverageDailyRewardsUsd: number;
     depositTimestampsArr: number[];
     depositTokenAmountsArr: Array<Array<number>>;
     currentDepositTokenPricesArr: number[];
@@ -121,7 +121,7 @@ const DifferentStrategy = ({
     yieldTokenSymbol,
     txCostEth,
     endTimeText,
-    lastIntAvDailyRewardsUsd,
+    lastWeekAverageDailyRewardsUsd,
     depositTimestampsArr,
     depositTokenAmountsArr,
     currentDepositTokenPricesArr,
@@ -139,7 +139,7 @@ const DifferentStrategy = ({
 
     const estDaysLeft = getEstDaysLeft(
         poolStrategyUsd - differentStrategyUsd,
-        lastIntAvDailyRewardsUsd,
+        lastWeekAverageDailyRewardsUsd,
     );
 
     const handleExpandValue = (isOpened: boolean) => {
@@ -377,9 +377,9 @@ const DifferentStrategy = ({
                                                         <>
                                                             Est. days left to compensate loss
                                                             <QuestionTooltip
-                                                                content={
-                                                                    'Based on your average rewards during the last week'
-                                                                }
+                                                                content={`Based on your average rewards during the last week (${formatUtils.getFormattedUsdValue(
+                                                                    lastWeekAverageDailyRewardsUsd,
+                                                                )}/day)`}
                                                             />
                                                         </>
                                                     }
