@@ -1,5 +1,30 @@
 import { mathUtils, lossUtils } from '.';
-import { GraphData, IntervalStats } from '@types';
+import {
+    GraphData,
+    IntervalStats,
+    DailyStats,
+    Exchange,
+    DailyData,
+    PoolToken,
+    PoolItem,
+} from '@types';
+
+const getDailyGraphData = (data: DailyStats, tokenSymbols: string[]) => {
+    const { timestamps, feesTokenAmounts, feesUsd } = data;
+
+    // return data in graph-ready format
+    let graphData = new Array();
+    for (let i = 0; i < timestamps.length; i++) {
+        graphData[i] = {
+            timestamp: timestamps[i],
+            tokenSymbols: tokenSymbols,
+            feesTokenAmounts: feesTokenAmounts[i],
+            feesUsd: feesUsd[i],
+        };
+    }
+
+    return graphData;
+};
 
 const getGraphData = (intervalStats: IntervalStats[]) => {
     const statsCount = intervalStats.length;
@@ -225,6 +250,7 @@ export {
     getMaxPossiblePoolValue,
     getStrategiesGraphData,
     getStrategiesMaxPossiblePoolValues,
+    getDailyGraphData,
 };
 
 const exampleGraphData = [

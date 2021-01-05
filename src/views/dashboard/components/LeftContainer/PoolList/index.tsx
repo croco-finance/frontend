@@ -102,7 +102,7 @@ const PoolList = () => {
                             </InactiveHeadline>
                         </ExchangeHeader>
                         <Value>{''}</Value>
-                        <Gains>{activePoolIds.length === 0 ? 'Reward/Loss' : ''}</Gains>
+                        <Gains>{activePoolIds.length === 0 ? 'Reward' : ''}</Gains>
                     </Header>
 
                     {inactivePoolIdsOrdered.map(poolId => {

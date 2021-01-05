@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import PoolItemCard from '../PoolItemCard';
 import { useSelector } from '@reducers';
+import { changeSelectedPool } from '@actions';
 
 const Item = styled.div`
     display: flex;
@@ -95,7 +96,9 @@ const PoolItem = ({ poolId }: Props) => {
     let isSelected = selectedPoolId === poolId;
 
     const handleOnClick = (e, poolId) => {
-        dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: poolId });
+        dispatch(changeSelectedPool(poolId));
+        // dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: poolId });
+        // dispatch(fetchDailyFees(poolId));
     };
 
     return (

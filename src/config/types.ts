@@ -180,6 +180,8 @@ export interface PoolItem {
     depositTokenAmounts: number[][];
     depositEthAmounts: number[][];
     tokenSymbols: string[];
+    snapshots: Snap[];
+    dailyStats: DailyStats | undefined;
 }
 
 export interface YieldTokenInfo {
@@ -228,6 +230,24 @@ export interface Deposit {
 }
 
 export interface Withdrawal extends Deposit {}
+export interface DailyData {
+    block: number;
+    ethPrice: number;
+    exchange: Exchange;
+    liquidityTokenTotalSupply: number;
+    relevantYieldTokenPrices: { [key: string]: string };
+    timestamp: number;
+    txCostEth: number;
+    tokens: PoolToken[];
+}
+
+export interface DailyStats {
+    timestamps: number[];
+    feesTokenAmounts: number[];
+    feesUsd: number[];
+    averageDailyFeesUsd: number;
+    averageDailyYieldUsd: number;
+}
 
 export type AllPoolsGlobal = { [key: string]: PoolItem } | {};
 export interface AddressData {
@@ -247,6 +267,8 @@ export interface AppStateInterface {
     inactivePoolIds: string[];
     error: boolean;
     loading: boolean;
+    errorDaily: boolean;
+    loadingDaily: boolean;
     noPoolsFound: boolean;
     theme: AppThemeVariant;
 }

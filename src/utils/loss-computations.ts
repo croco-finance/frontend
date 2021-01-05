@@ -1,7 +1,36 @@
 import { mathUtils } from '.';
+import { Exchange } from '@types';
 
-export const getRelativeImpLoss = (poolValue: number, hodlValue: number) => {
+const getRelativeImpLoss = (poolValue: number, hodlValue: number) => {
     return poolValue / hodlValue - 1;
+};
+
+const getIntervalFees = (
+    startTokenBalances: number[],
+    endTokenBalances: number[],
+    endTokenPrices: number[],
+    tokenWeights: number[],
+    exchange: Exchange,
+) => {
+    let tokenBalancesNoFees;
+    if (exchange === 'UNI_V2' || exchange === 'SUSHI') {
+        tokenBalancesNoFees = getNewBalancesUniswap(startTokenBalances, endTokenPrices);
+    } else if (exchange === 'BALANCER') {
+        tokenBalancesNoFees = getNewBalancesBalancer(
+            startTokenBalances,
+            endTokenPrices,
+            tokenWeights,
+        );
+    }
+
+    const feesTokenAmounts = mathUtils.subtractArraysElementWise(
+        endTokenBalances,
+        tokenBalancesNoFees,
+    );
+
+    const feesUsd = mathUtils.getTokenArrayValue(feesTokenAmounts, endTokenPrices);
+
+    return { feesTokenAmounts, feesUsd };
 };
 
 const getNewBalancesBalancer = (
@@ -68,4 +97,10 @@ const getUniImpLossFromPriceChangeRatio = priceChangeRatio => {
     return (2 * Math.sqrt(priceChangeRatio)) / (1 + priceChangeRatio) - 1;
 };
 
-export { getUniImpLossFromPriceChangeRatio, getNewBalancesUniswap, getNewBalancesBalancer };
+export {
+    getUniImpLossFromPriceChangeRatio,
+    getNewBalancesUniswap,
+    getNewBalancesBalancer,
+    getRelativeImpLoss,
+    getIntervalFees,
+};

@@ -8,6 +8,7 @@ import * as graphUtils from './graph';
 import { getSnaps } from './firebase-loader';
 import { setUnclaimed } from './unclaimed-loader';
 import { loadState, saveState } from './local-storage';
+import { getDailyFees } from './daily-fees-loader';
 
 export {
     validationUtils,
@@ -21,4 +22,5 @@ export {
     graphUtils,
     loadState,
     saveState,
+    getDailyFees,
 };

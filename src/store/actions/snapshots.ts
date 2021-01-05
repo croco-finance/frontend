@@ -1,9 +1,19 @@
-import { formatUtils, statsComputations, getSnaps } from '@utils';
+import { formatUtils, statsComputations, getSnaps, getDailyFees } from '@utils';
 import exampleFirebaseData from '../../config/example-data-firebase';
 import exampleFirebaseDataSmall from '../../config/example-data-bundled';
+import store from '../../store';
 
 import * as actionTypes from '@actionTypes';
-import { AllPoolsGlobal, PoolToken, DexToPoolIdMap, Exchange, SnapStructure, Snap } from '@types';
+import {
+    AllPoolsGlobal,
+    PoolToken,
+    DexToPoolIdMap,
+    Exchange,
+    SnapStructure,
+    Snap,
+    DailyStats,
+    PoolItem,
+} from '@types';
 import { ethersProvider } from '@config';
 import { setUnclaimed, validationUtils } from '@utils';
 import { analytics } from '@config';
@@ -79,6 +89,26 @@ export const fetchSnapsFailed = () => {
     };
 };
 
+export const fetchDailyInit = () => {
+    return {
+        type: actionTypes.FETCH_DAILY_INIT,
+    };
+};
+
+export const fetchDailyFailed = () => {
+    return {
+        type: actionTypes.FETCH_DAILY_FAILED,
+    };
+};
+
+export const fetchDailySuccess = (poolId: string, payload: DailyStats | undefined) => {
+    return {
+        type: actionTypes.FETCH_DAILY_SUCCESS,
+        poolId: poolId,
+        payload: payload,
+    };
+};
+
 export const fetchSnapsSuccess = (
     pools: AllPoolsGlobal,
     dexToPoolMap: DexToPoolIdMap,
@@ -111,6 +141,46 @@ export const setIsLoading = (isLoading: boolean) => {
 export const noPoolsFound = () => {
     return {
         type: actionTypes.NO_POOLS_FOUND,
+    };
+};
+
+export const changeSelectedPool = (poolId: string) => {
+    return dispatch => {
+        if (poolId === 'all') {
+            dispatch(setSelectedPoolId(poolId));
+        } else {
+            const state = store.getState();
+
+            if (state.allPools && state.allPools[poolId]) {
+                dispatch(setSelectedPoolId(poolId));
+                const hasDailyData = state.allPools[poolId].dailyStats !== undefined;
+
+                // if no daily data are assigned to the pool, fetch them
+                if (!hasDailyData) {
+                    dispatch(fetchDailyFees(poolId));
+                }
+            }
+        }
+    };
+};
+
+export const fetchDailyFees = (poolKey: string) => {
+    // poolKey is the key in allPools, not pool ID as a smart contract address
+    return async dispatch => {
+        dispatch(fetchDailyInit());
+
+        const state = store.getState();
+        const poolItem = state.allPools[poolKey];
+        const poolId = poolKey.split('_')[0];
+        const response = await getDailyFees(poolId);
+
+        if (response) {
+            const dailyStats = statsComputations.getDailyRewards(response, poolItem);
+            dispatch(fetchDailySuccess(poolKey, dailyStats));
+        } else {
+            dispatch(fetchDailyFailed());
+            console.log('Did not get valid response in fetchDailyFees()');
+        }
     };
 };
 
@@ -235,6 +305,8 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                     tokenSymbols: formatUtils.getTokenSymbolArr(
                         getPooledTokensInfo(snapshotsArr[0].tokens),
                     ),
+                    snapshots: snapshotsArr,
+                    dailyStats: undefined,
                 };
             }
         }

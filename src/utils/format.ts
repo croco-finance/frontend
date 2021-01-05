@@ -1,6 +1,16 @@
 import { mathUtils } from '.';
 import { AllAddressesGlobal, PoolToken } from '@types';
 
+const getFormattedUsdValue = (value: number) => {
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'Usd',
+        minimumFractionDigits: 2,
+    });
+
+    return formatter.format(value);
+};
+
 type DateFormats = 'MONTH_DAY_YEAR' | 'MONTH_DAY';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -126,7 +136,27 @@ const getBundledAddresses = (addresses: AllAddressesGlobal) => {
     return addressesArr;
 };
 
+const getPooledTokenBalancesAsArr = (userPoolShare: number, tokens: PoolToken[]) => {
+    const tokenBalances = new Array();
+    tokens.forEach(token => {
+        tokenBalances.push(token.reserve * userPoolShare);
+    });
+
+    return tokenBalances;
+};
+
+const getPooledTokenPricesAsArr = (tokens: PoolToken[]) => {
+    const tokenPrices = new Array();
+    tokens.forEach(token => {
+        tokenPrices.push(token.priceUsd);
+    });
+
+    return tokenPrices;
+};
+
 export {
+    getPooledTokenBalancesAsArr,
+    getPooledTokenPricesAsArr,
     getFormattedDateFromTimestamp,
     getFormattedPercentageValue,
     getFormattedCryptoValue,
@@ -134,4 +164,5 @@ export {
     getTokenWeightsArr,
     tokenArrToCommaSeparatedString,
     getBundledAddresses,
+    getFormattedUsdValue,
 };

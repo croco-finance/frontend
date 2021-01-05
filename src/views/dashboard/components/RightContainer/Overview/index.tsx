@@ -8,6 +8,7 @@ import { graphUtils } from '@utils';
 import { InfoBox } from '@components/ui';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
+import DailyFees from '../DailyFees';
 
 const Wrapper = styled.div`
     display: flex;
@@ -76,8 +77,10 @@ const Overview = () => {
             : graphUtils.getGraphData(allPools[selectedPoolId].intervalStats);
 
     let exchange;
+    let poolId;
     if (allPools && allPools[selectedPoolId]) {
         exchange = allPools[selectedPoolId].exchange;
+        poolId = allPools[selectedPoolId].poolId;
     }
 
     return (
@@ -93,6 +96,7 @@ const Overview = () => {
             ) : null}
 
             <PoolOverview />
+            <DailyFees selectedPool={allPools[selectedPoolId]} />
             <GraphWrapper>
                 <GraphTitle>History of your interactions with the pool</GraphTitle>
                 <Graph data={graphData} theme={theme} />
@@ -100,13 +104,6 @@ const Overview = () => {
             {activePoolIds.includes(selectedPoolId) ? (
                 <SimulatorButtonWrapper>
                     <StyledLink
-                        // onClick={e => {
-                        //     analytics.Event(
-                        //         'SIMULATOR',
-                        //         'Went to simulator from pool card',
-                        //         userAddress,
-                        //     );
-                        // }}
                         to={{
                             pathname: `/simulator`,
                         }}

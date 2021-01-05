@@ -1,4 +1,4 @@
-import { setSelectedPoolId } from '@actions';
+import { setSelectedPoolId, fetchDailyFees } from '@actions';
 import { AddressSelect } from '@components/containers';
 import {
     LeftLayoutContainer,

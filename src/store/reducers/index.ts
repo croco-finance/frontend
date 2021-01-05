@@ -14,6 +14,8 @@ export const initialState: AppStateInterface = {
     error: false,
     loading: false,
     noPoolsFound: false,
+    errorDaily: false,
+    loadingDaily: false,
     theme: 'light',
 };
 
@@ -104,6 +106,25 @@ const reducer = (state = initialState, action) => {
                 draft.error = false;
                 draft.loading = true;
                 draft.noPoolsFound = true;
+                break;
+            }
+
+            case actionTypes.FETCH_DAILY_INIT: {
+                draft.errorDaily = false;
+                draft.loadingDaily = true;
+                break;
+            }
+
+            case actionTypes.FETCH_DAILY_FAILED: {
+                draft.errorDaily = true;
+                draft.loadingDaily = false;
+                break;
+            }
+
+            case actionTypes.FETCH_DAILY_SUCCESS: {
+                draft.allPools[action.poolId]['dailyStats'] = action.payload;
+                draft.loadingDaily = false;
+                draft.errorDaily = false;
                 break;
             }
 

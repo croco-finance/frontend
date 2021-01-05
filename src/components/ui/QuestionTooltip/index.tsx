@@ -9,7 +9,8 @@ import { useTheme } from '@hooks';
 
 const IconWrapper = styled.div`
     display: flex;
-    margin: 0 5px;
+    padding: 0 5px;
+    align-items: center;
 `;
 
 type Props = TippyProps & {
@@ -30,7 +31,7 @@ const QuestionTooltip = ({
     return (
         <Tippy duration={duration} content={content}>
             <IconWrapper>
-                <Icon icon="question_active" color={theme.FONT_LIGHT} size={16} />
+                <Icon icon="question" color={theme.FONT_LIGHT} size={16} />
             </IconWrapper>
         </Tippy>
     );
