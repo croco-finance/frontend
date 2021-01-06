@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow, QuestionTooltip } from '@components/ui';
-import { colors, variables, types } from '@config';
-import { mathUtils, lossUtils, formatUtils, simulatorUtils, graphUtils } from '@utils';
-import ILGraph from '../ILGraph';
+import { BoxRow, FiatValue, GrayBox, QuestionTooltip, VerticalCryptoAmounts } from '@components/ui';
+import { variables } from '@config';
 import { useTheme } from '@hooks';
+import { formatUtils, graphUtils, mathUtils } from '@utils';
+import React from 'react';
+import styled from 'styled-components';
+import ILGraph from '../ILGraph';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -121,6 +120,7 @@ interface Props {
     impLossUsd: number;
     impLossRel: number;
     isActive: boolean;
+    lastWeekAverageDailyRewardsUsd: number | undefined;
 }
 
 const Overview = ({
@@ -139,6 +139,7 @@ const Overview = ({
     impLossUsd,
     impLossRel,
     isActive,
+    lastWeekAverageDailyRewardsUsd,
 }: Props) => {
     const theme: any = useTheme();
 
@@ -160,14 +161,9 @@ const Overview = ({
         2,
     );
 
-    const averageRewardsLastSnapshot = mathUtils.getAverageDailyRewards(
-        lastSnapTimestampStart,
-        lastSnapTimestampEnd,
-        // TODO is this correct way how to compute new fee value after price change?
-        lastIntSimulatedFeesUsd + lastIntYieldUsd,
-    );
-
-    const estDaysLeftStaking = Math.round(Math.abs(impLossUsd / averageRewardsLastSnapshot));
+    const estDaysLeftStaking = lastWeekAverageDailyRewardsUsd
+        ? Math.round(Math.abs(impLossUsd / lastWeekAverageDailyRewardsUsd))
+        : NaN;
 
     return (
         <Wrapper>
@@ -246,7 +242,9 @@ const Overview = ({
                     bottomBarBorderRadius={[0, 0, 10, 10]}
                     backgroundColor={theme.BACKGROUND}
                     bottomBar={
-                        !isNaN(estDaysLeftStaking) && estDaysLeftStaking !== Infinity ? (
+                        !isNaN(estDaysLeftStaking) &&
+                        estDaysLeftStaking !== Infinity &&
+                        lastWeekAverageDailyRewardsUsd ? (
                             <>
                                 <DaysLeftGridWrapper>
                                     <BoxRow
@@ -255,18 +253,9 @@ const Overview = ({
                                             <>
                                                 Est. days left to compensate loss
                                                 <QuestionTooltip
-                                                    content={
-                                                        <>
-                                                            Based on your average rewards since{' '}
-                                                            {formatUtils.getFormattedDateFromTimestamp(
-                                                                lastSnapTimestampStart,
-                                                                'MONTH_DAY_YEAR',
-                                                            )}
-                                                            <br></br>
-                                                            (date of your last interaction with the
-                                                            pool)
-                                                        </>
-                                                    }
+                                                    content={`Based on your average fee rewards during the last week (${formatUtils.getFormattedUsdValue(
+                                                        lastWeekAverageDailyRewardsUsd,
+                                                    )}/day)`}
                                                 />
                                             </>
                                         }

@@ -39,21 +39,6 @@ const getTokenArrayValue = (tokenBalances: Array<number>, tokenPrices: Array<num
         sum += tokenBalances[i] * tokenPrices[i];
     }
     return sum;
-    // return mathUtils.sumArr(mathUtils.multiplyArraysElementWise(tokenBalances, tokenPrices));
-};
-
-// This is useful for generating data for imp.loss curve.
-const arrangeArray = (start, end, step) => {
-    const stepDecimals = countDecimals(step);
-    // TODO make sure start % step = 0 and start = -end;
-    const arrLength = Math.floor(2 * (end / step) + 1);
-    const arr = new Array(arrLength);
-    const powerElement = Math.pow(10, stepDecimals);
-    // TODO make this programmatically more stable
-    for (let i = 0; i < arrLength; i++) {
-        arr[i] = Math.round((start + i * step) * powerElement) / powerElement;
-    }
-    return arr;
 };
 
 const sumArr = (arr: number[]) => {
@@ -163,7 +148,6 @@ const arraysContainEqualElements = (_arr1: string[], _arr2: string[]) => {
 
 export {
     countDecimals,
-    arrangeArray,
     getAverageDailyRewards,
     multiplyArraysElementWise,
     subtractArraysElementWise,
