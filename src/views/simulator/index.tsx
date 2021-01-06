@@ -1,4 +1,4 @@
-import { setSelectedPoolId, fetchDailyFees } from '@actions';
+import { changeSelectedPool } from '@actions';
 import { AddressSelect } from '@components/containers';
 import {
     LeftLayoutContainer,
@@ -326,7 +326,7 @@ const Simulator = () => {
                                         options={buildPoolOptions(allPools)}
                                         onChange={(option: PoolOption) => {
                                             if (option)
-                                                dispatch(setSelectedPoolId(option.value.poolId));
+                                                dispatch(changeSelectedPool(option.value.poolId));
                                         }}
                                         selected={buildPoolOption(
                                             allPools[selectedPoolId],

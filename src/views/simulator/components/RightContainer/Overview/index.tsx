@@ -165,6 +165,9 @@ const Overview = ({
         ? Math.round(Math.abs(impLossUsd / lastWeekAverageDailyRewardsUsd))
         : NaN;
 
+    console.log('estDaysLeftStaking', estDaysLeftStaking);
+    console.log('lastWeekAverageDailyRewardsUsd', lastWeekAverageDailyRewardsUsd);
+
     return (
         <Wrapper>
             <XScrollWrapper>
@@ -238,10 +241,11 @@ const Overview = ({
                 <ImpLossHeader>Impermanent loss compared to HODLing pooled tokens</ImpLossHeader>
                 <GrayBox
                     padding={[15, 20, 15, 20]}
-                    borderRadius={[10, 10, 0, 0]}
+                    borderRadius={isActive ? [10, 10, 0, 0] : [10, 10, 10, 10]}
                     bottomBarBorderRadius={[0, 0, 10, 10]}
                     backgroundColor={theme.BACKGROUND}
                     bottomBar={
+                        isActive &&
                         !isNaN(estDaysLeftStaking) &&
                         estDaysLeftStaking !== Infinity &&
                         lastWeekAverageDailyRewardsUsd ? (
