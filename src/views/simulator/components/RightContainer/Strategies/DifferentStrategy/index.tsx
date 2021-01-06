@@ -407,25 +407,25 @@ const DifferentStrategy = ({
                                             />
                                         </BottomBarRow>
                                         {estDaysLeft &&
-                                            estDaysLeft > 0 &&
-                                            poolIsActive &&
-                                            lastWeekAverageDailyRewardsUsd && (
-                                                <BottomBarRow>
-                                                    <BoxRow
-                                                        firstColumn={
-                                                            <>
-                                                                Est. days left to compensate loss
-                                                                <QuestionTooltip
-                                                                    content={`Based on your average fee rewards during the last week (${formatUtils.getFormattedUsdValue(
-                                                                        lastWeekAverageDailyRewardsUsd,
-                                                                    )}/day)`}
-                                                                />
-                                                            </>
-                                                        }
-                                                        secondColumn={estDaysLeft}
-                                                    />
-                                                </BottomBarRow>
-                                            )}
+                                        estDaysLeft > 0 &&
+                                        poolIsActive &&
+                                        lastWeekAverageDailyRewardsUsd ? (
+                                            <BottomBarRow>
+                                                <BoxRow
+                                                    firstColumn={
+                                                        <>
+                                                            Est. days left to compensate loss
+                                                            <QuestionTooltip
+                                                                content={`Based on your average fee rewards during the last week (${formatUtils.getFormattedUsdValue(
+                                                                    lastWeekAverageDailyRewardsUsd,
+                                                                )}/day)`}
+                                                            />
+                                                        </>
+                                                    }
+                                                    secondColumn={estDaysLeft}
+                                                />
+                                            </BottomBarRow>
+                                        ) : null}
                                     </>
                                 }
                             >
