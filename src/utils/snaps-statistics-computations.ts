@@ -495,12 +495,6 @@ const getCumulativeStats = (
         yieldUsd = mathUtils.getTokenArrayValue(yieldTotalTokenAmounts, yieldTokenPrices);
     }
 
-    // Average daily rewards in last interval
-    const lastIntAvDailyRewardsUsd = mathUtils.getAverageDailyRewards(
-        lastInterval.timestampStart,
-        lastInterval.timestampEnd,
-        lastInterval.feesUsdEndPrice + lastInterval.yieldTotalTokenAmount * yieldTokenPriceEnd,
-    );
     // strategies
     const poolStrategyUsd = currentPoolValueUsd + withdrawalsUsd + yieldUsd - txCostUsd;
     const tokensHodlStrategyTokenAmounts = depositsTokenAmounts;
@@ -530,7 +524,6 @@ const getCumulativeStats = (
         withdrawalsTokenAmounts: withdrawalsTokenAmounts,
         depositsUsd: depositsUsd,
         withdrawalsUsd: withdrawalsUsd,
-        lastIntAvDailyRewardsUsd: lastIntAvDailyRewardsUsd,
         poolStrategyUsd: poolStrategyUsd,
         tokensHodlStrategyTokenAmounts: tokensHodlStrategyTokenAmounts,
         tokensHodlStrategyUsd: tokensHodlStrategyUsd,
@@ -622,14 +615,13 @@ const getDailyRewards = (
     poolItem: PoolItem,
 ): DailyStats | undefined => {
     const { exchange, snapshots, tokenWeights } = poolItem;
-
     const userTokenBalancesDaily = new Array();
     const tokenPricesDaily = new Array();
     const tokenFeesArr = new Array();
     const usdFeesArr = new Array();
     const dayTimestamps = new Array();
     const statsTimestamps = new Array();
-    const userLpTokenBalances = new Array();
+    const userTokenBalancesIntervals = new Array();
     let indexOfLastSnapChecked = 0; // index of snapshot which lp tokens a
 
     // Convert dayIds to number and make sure the dayIds are sorted
@@ -640,6 +632,15 @@ const getDailyRewards = (
     // Iterate day by day
     dayIdsNumbers.forEach((dayId, i) => {
         const poolDayData = dailyData[dayId.toString()];
+        let poolDayDataNext;
+
+        // check if this is not the last snap
+        if (i < dayIdsNumbers.length - 1) {
+            poolDayDataNext = dailyData[dayIdsNumbers[i + 1].toString()];
+        } else {
+            poolDayDataNext = poolDayData;
+        }
+
         // get day timestamp
         const dayTimestamp = dayId * 86400 * 1000;
         let newerSnapFound = false;
@@ -659,15 +660,28 @@ const getDailyRewards = (
                 // users pool share at this particular day (timestamp)
                 const userPoolShare = userLPTokenBalance / poolDayData.liquidityTokenTotalSupply;
 
+                // also check user's pool share at the beginning of the next day in BEFORE he makes withdraw or deposit.
+                // In such scenario the fees would be computed incorrectly
+                const userPoolShareNextDay =
+                    userLPTokenBalance / poolDayDataNext.liquidityTokenTotalSupply;
+
                 // how much of the total pool reserves belongs to the user
                 const pooledTokenBalances = formatUtils.getPooledTokenBalancesAsArr(
                     userPoolShare,
                     poolDayData.tokens,
                 );
 
+                const pooledTokenBalancesNextDay = formatUtils.getPooledTokenBalancesAsArr(
+                    userPoolShareNextDay,
+                    poolDayDataNext.tokens,
+                );
+
                 // push to array how much tokens did the user have at this day
                 userTokenBalancesDaily.push(pooledTokenBalances);
-                userLpTokenBalances.push(userLPTokenBalance);
+                userTokenBalancesIntervals.push({
+                    start: pooledTokenBalances,
+                    end: pooledTokenBalancesNextDay,
+                });
 
                 // save that I found a snap newer than current day timestamp
                 newerSnapFound = true;
@@ -692,13 +706,24 @@ const getDailyRewards = (
             } else {
                 const userLPTokenBalance = snapshots[indexOfLastSnapChecked].liquidityTokenBalance;
                 const userPoolShare = userLPTokenBalance / poolDayData.liquidityTokenTotalSupply;
+                const userPoolShareNextDay =
+                    userLPTokenBalance / poolDayDataNext.liquidityTokenTotalSupply;
+
                 const pooledTokenBalances = formatUtils.getPooledTokenBalancesAsArr(
                     userPoolShare,
                     poolDayData.tokens,
                 );
 
+                const pooledTokenBalancesNextDay = formatUtils.getPooledTokenBalancesAsArr(
+                    userPoolShareNextDay,
+                    poolDayDataNext.tokens,
+                );
+
                 userTokenBalancesDaily.push(pooledTokenBalances);
-                userLpTokenBalances.push(userLPTokenBalance);
+                userTokenBalancesIntervals.push({
+                    start: pooledTokenBalances,
+                    end: pooledTokenBalancesNextDay,
+                });
             }
         }
     });
@@ -706,12 +731,13 @@ const getDailyRewards = (
     // get array of fees collected
     for (let i = 0; i < userTokenBalancesDaily.length - 1; i++) {
         const { feesTokenAmounts, feesUsd } = lossUtils.getIntervalFees(
-            userTokenBalancesDaily[i],
-            userTokenBalancesDaily[i + 1],
+            userTokenBalancesIntervals[i].start,
+            userTokenBalancesIntervals[i].end,
             tokenPricesDaily[i + 1],
             tokenWeights,
             exchange,
         );
+
         tokenFeesArr.push(feesTokenAmounts);
         usdFeesArr.push(feesUsd);
 

@@ -151,7 +151,6 @@ export interface CumulativeStats {
     tokensHodlStrategyUsd: number;
     ethHodlStrategyUsd: number;
     ethHodlStrategyEth: number;
-    lastIntAvDailyRewardsUsd: number;
     currentTokenBalances: number[];
     feesTokenAmountsExceptLastInt: number[];
 }

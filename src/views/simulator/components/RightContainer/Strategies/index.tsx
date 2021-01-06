@@ -98,7 +98,6 @@ interface Props {
     feesTokenAmounts: number[];
     tokenSymbols: string[];
     txCostEth: number;
-    lastIntAvDailyRewardsUsd: number;
     depositTimestampsArr: number[];
     depositTokenAmountsArr: Array<Array<number>>;
     poolIsActive: boolean;
@@ -121,7 +120,6 @@ interface Props {
     simulatedYieldUsd: number;
     tokensHodlStrategyTokenAmounts: number[];
     ethHodlStrategyEth: number;
-    lastIntSimulatedAverageRewards: number;
     yieldTokenSymbols: string[];
     yieldTotalTokenAmounts: number[];
     hasYieldReward: boolean;
@@ -129,6 +127,7 @@ interface Props {
     // slider
     sliderDefaultCoeffs: number[];
     sliderDefaultEthCoeff: number;
+    lastWeekAverageDailyRewardsUsd: number | undefined;
 }
 
 const Strategies = ({
@@ -145,7 +144,6 @@ const Strategies = ({
     feesTokenAmounts,
     tokenSymbols,
     txCostEth,
-    lastIntAvDailyRewardsUsd,
     lastSnapTimestampEnd,
     depositTimestampsArr,
     depositTokenAmountsArr,
@@ -167,11 +165,11 @@ const Strategies = ({
     ethHodlStrategyEth,
     sliderDefaultCoeffs,
     sliderDefaultEthCoeff,
-    lastIntSimulatedAverageRewards,
     yieldTokenSymbols,
     yieldTotalTokenAmounts,
     hasYieldReward,
     exchange,
+    lastWeekAverageDailyRewardsUsd,
 }: Props) => {
     const theme: any = useTheme();
 
@@ -295,7 +293,6 @@ const Strategies = ({
                     simulatedDifferentStrategyUsd={simulatedTokensHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
                     txCostEth={txCostEth}
-                    lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
                     depositTimestampsArr={depositTimestampsArr}
                     depositTokenAmountsArr={depositTokenAmountsArr}
                     currentDepositTokenPricesArr={simulatedPooledTokenPrices}
@@ -306,7 +303,7 @@ const Strategies = ({
                     simulatedFeesUsd={simulatedFeesUsd}
                     simulatedFeesTokenAmounts={simulatedFeesTokenAmounts}
                     simulatedYieldUsd={simulatedYieldUsd}
-                    lastIntSimulatedAverageRewards={lastIntSimulatedAverageRewards}
+                    lastWeekAverageDailyRewardsUsd={lastWeekAverageDailyRewardsUsd}
                     hasYieldReward={hasYieldReward}
                     yieldTokenSymbols={yieldTokenSymbols}
                     yieldTotalTokenAmounts={yieldTotalTokenAmounts}
@@ -350,7 +347,6 @@ const Strategies = ({
                     simulatedDifferentStrategyUsd={simulatedEthHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
                     txCostEth={txCostEth}
-                    lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
                     depositTimestampsArr={depositTimestampsArr}
                     depositTokenAmountsArr={depositEthAmountsArr}
                     currentDepositTokenPricesArr={[simulatedEthPrice]}
@@ -361,7 +357,7 @@ const Strategies = ({
                     simulatedFeesUsd={simulatedFeesUsd}
                     simulatedFeesTokenAmounts={simulatedFeesTokenAmounts}
                     simulatedYieldUsd={simulatedYieldUsd}
-                    lastIntSimulatedAverageRewards={lastIntSimulatedAverageRewards}
+                    lastWeekAverageDailyRewardsUsd={lastWeekAverageDailyRewardsUsd}
                     hasYieldReward={hasYieldReward}
                     yieldTokenSymbols={yieldTokenSymbols}
                     yieldTotalTokenAmounts={yieldTotalTokenAmounts}

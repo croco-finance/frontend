@@ -95,7 +95,6 @@ interface Props {
     feesTokenAmounts: number[];
     tokenSymbols: string[];
     txCostEth: number;
-    lastIntAvDailyRewardsUsd: number;
     depositTimestampsArr: number[];
     depositTokenAmountsArr: Array<Array<number>>;
     currentDepositTokenPricesArr: number[];
@@ -107,10 +106,10 @@ interface Props {
     simulatedFeesUsd: number;
     simulatedFeesTokenAmounts: number[];
     simulatedYieldUsd: number;
-    lastIntSimulatedAverageRewards: number;
     yieldTokenSymbols: string[];
     yieldTotalTokenAmounts: number[];
     hasYieldReward: boolean;
+    lastWeekAverageDailyRewardsUsd: number | undefined;
 }
 
 const DifferentStrategy = ({
@@ -132,10 +131,10 @@ const DifferentStrategy = ({
     simulatedFeesUsd,
     simulatedFeesTokenAmounts,
     simulatedYieldUsd,
-    lastIntSimulatedAverageRewards,
     yieldTokenSymbols,
     yieldTotalTokenAmounts,
     hasYieldReward,
+    lastWeekAverageDailyRewardsUsd,
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
@@ -168,10 +167,12 @@ const DifferentStrategy = ({
         simulatedYieldUsd +
         simulatedTxCostUsd;
 
-    const estDaysLeft = getEstDaysLeft(
-        simulatedPoolStrategyUsd - simulatedDifferentStrategyUsd,
-        lastIntSimulatedAverageRewards,
-    );
+    const estDaysLeft = lastWeekAverageDailyRewardsUsd
+        ? getEstDaysLeft(
+              simulatedPoolStrategyUsd - simulatedDifferentStrategyUsd,
+              lastWeekAverageDailyRewardsUsd,
+          )
+        : undefined;
 
     let divergenceLossText = 'Price divergence loss';
     if (divergenceLoss > 0) divergenceLossText = 'Price divergence gain';
@@ -405,23 +406,26 @@ const DifferentStrategy = ({
                                                 }
                                             />
                                         </BottomBarRow>
-                                        {/* {estDaysLeft > 0 && poolIsActive && (
-                                            <BottomBarRow>
-                                                <BoxRow
-                                                    firstColumn={
-                                                        <>
-                                                            Est. days left to compensate loss
-                                                            <QuestionTooltip
-                                                                content={
-                                                                    'Based on your average rewards during the last week'
-                                                                }
-                                                            />
-                                                        </>
-                                                    }
-                                                    secondColumn={estDaysLeft}
-                                                />
-                                            </BottomBarRow>
-                                        )} */}
+                                        {estDaysLeft &&
+                                            estDaysLeft > 0 &&
+                                            poolIsActive &&
+                                            lastWeekAverageDailyRewardsUsd && (
+                                                <BottomBarRow>
+                                                    <BoxRow
+                                                        firstColumn={
+                                                            <>
+                                                                Est. days left to compensate loss
+                                                                <QuestionTooltip
+                                                                    content={`Based on your average fee rewards during the last week (${formatUtils.getFormattedUsdValue(
+                                                                        lastWeekAverageDailyRewardsUsd,
+                                                                    )}/day)`}
+                                                                />
+                                                            </>
+                                                        }
+                                                        secondColumn={estDaysLeft}
+                                                    />
+                                                </BottomBarRow>
+                                            )}
                                     </>
                                 }
                             >

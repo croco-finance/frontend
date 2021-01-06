@@ -1,5 +1,5 @@
 import { mathUtils } from '.';
-import { Exchange } from '@types';
+import { Exchange, Snap } from '@types';
 
 const getRelativeImpLoss = (poolValue: number, hodlValue: number) => {
     return poolValue / hodlValue - 1;

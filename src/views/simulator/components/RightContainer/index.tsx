@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import { PoolHeader, TabSelectHeader } from '@components/ui';
+import { AllPoolsGlobal, PoolItem } from '@types';
+import { mathUtils, simulatorUtils } from '@utils';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Overview from './Overview';
-import { TabSelectHeader, PoolHeader } from '@components/ui';
-import { formatUtils, graphUtils, simulatorUtils, mathUtils } from '@utils';
-import { AllPoolsGlobal, PoolItem } from '@types';
 import Strategies from './Strategies';
-import { getTokenArrayValue } from 'src/utils/math';
 
 const Wrapper = styled.div`
     display: flex;
@@ -79,7 +78,6 @@ const RightContainer = ({
         ethHodlStrategyUsd,
         tokensHodlStrategyUsd,
         feesUsd,
-        lastIntAvDailyRewardsUsd,
         tokensHodlStrategyTokenAmounts,
         ethHodlStrategyEth,
         endPoolValueUsd,
@@ -89,6 +87,9 @@ const RightContainer = ({
         yieldTokenSymbols,
         yieldTotalTokenAmounts,
     } = pool.cumulativeStats;
+
+    let lastWeekAverageDailyRewardsUsd: number | undefined = undefined;
+    if (pool.dailyStats) lastWeekAverageDailyRewardsUsd = pool.dailyStats.averageDailyFeesUsd;
 
     // Get simulated prices of pooled tokens and ETH
     const simulatedPooledTokenPrices = mathUtils.multiplyArraysElementWise(
@@ -207,6 +208,7 @@ const RightContainer = ({
                     lastSnapTimestampEnd={lastSnapTimestampEnd}
                     impLossUsd={impLossUsd}
                     impLossRel={impLossRel}
+                    lastWeekAverageDailyRewardsUsd={lastWeekAverageDailyRewardsUsd}
                 />
             )}
 
@@ -224,12 +226,11 @@ const RightContainer = ({
                     txCostUsd={txCostUsd}
                     txCostEth={txCostEth}
                     yieldUsd={yieldUsd}
-                    lastIntAvDailyRewardsUsd={lastIntAvDailyRewardsUsd}
                     depositTimestampsArr={depositTimestamps}
                     depositTokenAmountsArr={depositTokenAmounts}
                     depositEthAmountsArr={depositEthAmounts}
                     withdrawalsTokenAmounts={withdrawalsTokenAmounts}
-                    lastIntSimulatedAverageRewards={lastIntSimulatedAverageRewards}
+                    lastWeekAverageDailyRewardsUsd={lastWeekAverageDailyRewardsUsd}
                     lastSnapTimestampEnd={lastSnapTimestampEnd}
                     hasYieldReward={hasYieldReward}
                     yieldTokenSymbols={yieldTokenSymbols}
