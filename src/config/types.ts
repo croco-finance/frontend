@@ -218,6 +218,7 @@ export interface SummaryStats {
     yieldUsd: number;
     txCostEth: number;
     txCostUsd: number;
+    dailyStats: DailyStats | undefined;
     // average rewards since last deposit -> average rewards in last snapshot
 }
 

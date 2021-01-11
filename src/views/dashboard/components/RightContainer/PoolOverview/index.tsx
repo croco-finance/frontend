@@ -1,12 +1,11 @@
-import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow } from '@components/ui';
-import { colors, variables } from '@config';
+import { BoxRow, FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
+import { variables } from '@config';
+import { useTheme } from '@hooks';
+import { AllPoolsGlobal } from '@types';
 import { formatUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { AllPoolsGlobal } from '@types';
-import { useTheme } from '@hooks';
-import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // optional
 
 const Wrapper = styled.div`
@@ -89,7 +88,7 @@ const PoolOverview = () => {
         );
     }
 
-    let { pooledTokens, isActive, hasYieldReward, yieldToken, intervalStats, exchange } = pool;
+    let { pooledTokens, isActive, hasYieldReward, intervalStats } = pool;
 
     const {
         feesUsd,

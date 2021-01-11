@@ -1,14 +1,14 @@
-import { analytics, colors, variables, types } from '@config';
+import { InfoBox } from '@components/ui';
+import { colors, variables } from '@config';
+import { useTheme } from '@hooks';
+import { useSelector } from '@reducers';
+import { graphUtils } from '@utils';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import PoolOverview from '../PoolOverview';
-import Graph from '../Graph';
-import { graphUtils } from '@utils';
-import { InfoBox } from '@components/ui';
-import { useTheme } from '@hooks';
-import { useSelector } from '@reducers';
 import DailyFees from '../DailyFees';
+import Graph from '../Graph';
+import PoolOverview from '../PoolOverview';
 
 const Wrapper = styled.div`
     display: flex;

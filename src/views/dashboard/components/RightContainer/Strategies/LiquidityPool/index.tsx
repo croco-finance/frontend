@@ -1,18 +1,17 @@
 import {
+    BoxRow,
+    CollapsibleContainer,
     FiatValue,
     GrayBox,
-    VerticalCryptoAmounts,
-    CollapsibleContainer,
-    BoxRow,
     Icon,
+    VerticalCryptoAmounts,
 } from '@components/ui';
 import { analytics, variables } from '@config';
+import { useTheme } from '@hooks';
+import { useSelector } from '@reducers';
 import { formatUtils } from '@utils';
 import React, { useState } from 'react';
-import { useSelector } from '@reducers';
 import styled from 'styled-components';
-import { AllPoolsGlobal } from '@types';
-import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -108,7 +107,7 @@ const LiquidityPool = () => {
         );
     }
 
-    let { pooledTokens, isActive, hasYieldReward, yieldToken, intervalStats, exchange } = pool;
+    let { pooledTokens, isActive, hasYieldReward, intervalStats } = pool;
 
     const {
         yieldUsd,
@@ -116,7 +115,6 @@ const LiquidityPool = () => {
         txCostUsd,
         currentPoolValueUsd,
         tokenBalances,
-        yieldTotalTokenAmount,
         withdrawalsUsd,
         withdrawalsTokenAmounts,
         poolStrategyUsd,

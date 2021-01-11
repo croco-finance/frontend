@@ -1,13 +1,5 @@
-import { mathUtils, lossUtils } from '.';
-import {
-    GraphData,
-    IntervalStats,
-    DailyStats,
-    Exchange,
-    DailyData,
-    PoolToken,
-    PoolItem,
-} from '@types';
+import { DailyStats, GraphData, IntervalStats } from '@types';
+import { mathUtils } from '.';
 
 const getDailyGraphData = (data: DailyStats, tokenSymbols: string[]) => {
     const { timestamps, feesTokenAmounts, feesUsd } = data;

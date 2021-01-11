@@ -260,9 +260,6 @@ const Simulator = () => {
     }, [selectedPoolId]);
 
     const handleTabChange = (tab: TabOptions) => {
-        // analytics.logEvent(`simulator_${tab}_view`, {
-        //     screen_name: tab,
-        // });
         analytics.logEvent(`simulator_${tab}_view`);
         setSelectedTab(tab);
     };

@@ -1,22 +1,23 @@
-import { formatUtils, statsComputations, getSnaps, getDailyFees } from '@utils';
-import exampleFirebaseData from '../../config/example-data-firebase';
-import exampleFirebaseDataSmall from '../../config/example-data-bundled';
-import store from '../../store';
-
 import * as actionTypes from '@actionTypes';
+import { analytics, ethersProvider } from '@config';
 import {
     AllPoolsGlobal,
-    PoolToken,
+    DailyStats,
     DexToPoolIdMap,
     Exchange,
-    SnapStructure,
+    PoolToken,
     Snap,
-    DailyStats,
-    PoolItem,
+    SnapStructure,
 } from '@types';
-import { ethersProvider } from '@config';
-import { setUnclaimed, validationUtils } from '@utils';
-import { analytics } from '@config';
+import {
+    formatUtils,
+    getDailyFees,
+    getSnaps,
+    setUnclaimed,
+    statsComputations,
+    validationUtils,
+} from '@utils';
+import store from '../../store';
 
 // Helper functions
 const getPooledTokensInfo = (tokens: PoolToken[]) => {

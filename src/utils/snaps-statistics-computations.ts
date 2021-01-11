@@ -1,17 +1,16 @@
-import { lossUtils, mathUtils, formatUtils } from '.';
 import {
-    Snap,
-    IntervalStats,
-    CumulativeStats,
     AllPoolsGlobal,
-    SummaryStats,
-    Deposit,
-    Withdrawal,
+    CumulativeStats,
     DailyData,
-    PoolItem,
     DailyStats,
+    Deposit,
+    IntervalStats,
+    PoolItem,
+    Snap,
+    SummaryStats,
+    Withdrawal,
 } from '@types';
-import { Console } from 'console';
+import { formatUtils, lossUtils, mathUtils } from '.';
 
 const getPoolStatsFromSnapshots = (poolSnapshots: Snap[]) => {
     // get interval stats first
@@ -607,6 +606,7 @@ const getPoolsSummaryObject = (
         feesTokenSymbols: Object.keys(feesTokenAmountsSum),
         feesTokenAmounts: Object.values(feesTokenAmountsSum),
         feesUsd: feesUsdSum,
+        dailyStats: undefined,
     };
 };
 

@@ -1,20 +1,18 @@
-import { constants } from '@config';
+import { setTheme } from '@actions';
+import { constants, THEME } from '@config';
+import { useSelector } from '@reducers';
+import { formatUtils } from '@utils';
 import React, { useEffect } from 'react';
 import ReactGA from 'react-ga';
+import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Route, Switch } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
 import './App.css';
+import { fetchSnapshots } from './store/actions/index';
 import Dashboard from './views/dashboard';
 import LandingPage from './views/landing-page';
 import Simulator from './views/simulator';
-import { useDispatch } from 'react-redux';
-import { AllAddressesGlobal } from '@types';
-import { fetchSnapshots } from './store/actions/index';
-import { formatUtils } from '@utils';
-import { useSelector } from '@reducers';
-import { setTheme } from '@actions';
-import { ThemeProvider } from 'styled-components';
-import { THEME } from '@config';
 // this is still not working properly. I am using GA script in index.html to track basic traffic
 ReactGA.initialize(constants.GOOGLE_ANALYTICS_TRACKING_ID);
 

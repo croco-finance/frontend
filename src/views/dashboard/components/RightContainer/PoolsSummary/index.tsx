@@ -1,10 +1,10 @@
-import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow } from '@components/ui';
-import { colors, variables } from '@config';
+import { BoxRow, FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
+import { variables } from '@config';
+import { useTheme } from '@hooks';
 import { statsComputations } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;

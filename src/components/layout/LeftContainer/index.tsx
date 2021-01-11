@@ -1,6 +1,6 @@
+import { variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
-import { colors, variables } from '@config';
 
 const Wrapper = styled.div<Props>`
     width: 40%;
@@ -16,7 +16,6 @@ const Wrapper = styled.div<Props>`
         width: 100%;
         max-height: 80vh;
         height: auto;
-        /* padding-bottom: 20px; */
         border-bottom: 10px solid ${props => props.theme.STROKE_GREY};
     }
 `;
