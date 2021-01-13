@@ -1,4 +1,5 @@
 import { BoxRow, FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
+import { DailyFeesChart } from '@components/containers';
 import { variables } from '@config';
 import { useTheme } from '@hooks';
 import { statsComputations } from '@utils';
@@ -82,10 +83,7 @@ const PoolsSummary = () => {
         );
     }
 
-    let activePoolsSummaryObject: any = statsComputations.getPoolsSummaryObject(
-        allPools,
-        activePoolIds,
-    );
+    let activePoolsSummaryObject = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
 
     const {
         valueLockedUsd,
@@ -99,7 +97,10 @@ const PoolsSummary = () => {
         feesTokenSymbols,
         feesTokenAmounts,
         feesUsd,
+        dailyStats,
     } = activePoolsSummaryObject;
+
+    console.log('activePoolsSummaryObject', activePoolsSummaryObject);
 
     const feesRow = (
         <BoxRow
@@ -210,6 +211,7 @@ const PoolsSummary = () => {
                     {txCostRow}
                 </GridWrapper>
             </GrayBox>
+            {dailyStats && <DailyFeesChart dailyStats={dailyStats} noBorder />}
         </Wrapper>
     );
 };

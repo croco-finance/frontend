@@ -6,9 +6,9 @@ import { graphUtils } from '@utils';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import DailyFees from '../DailyFees';
 import Graph from '../Graph';
 import PoolOverview from '../PoolOverview';
+import { DailyFeesChart } from '@components/containers';
 
 const Wrapper = styled.div`
     display: flex;
@@ -78,9 +78,11 @@ const Overview = () => {
 
     let exchange;
     let poolId;
+    let dailyStats;
     if (allPools && allPools[selectedPoolId]) {
         exchange = allPools[selectedPoolId].exchange;
         poolId = allPools[selectedPoolId].poolId;
+        dailyStats = allPools[selectedPoolId].dailyStats;
     }
 
     return (
@@ -96,7 +98,7 @@ const Overview = () => {
             ) : null}
 
             <PoolOverview />
-            <DailyFees selectedPool={allPools[selectedPoolId]} />
+            {dailyStats && <DailyFeesChart dailyStats={dailyStats} />}
             <GraphWrapper>
                 <GraphTitle>History of your interactions with the pool</GraphTitle>
                 <Graph data={graphData} theme={theme} />

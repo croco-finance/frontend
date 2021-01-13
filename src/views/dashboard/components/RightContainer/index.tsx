@@ -1,16 +1,11 @@
-import { analytics, animations, colors, variables, types } from '@config';
+import { InlineCircle, PoolHeader, TabSelectHeader } from '@components/ui';
+import { analytics, colors, variables } from '@config';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import PoolOverview from './PoolOverview';
-import PoolsSummary from './PoolsSummary';
-import Graph from './Graph';
-import { graphUtils, formatUtils } from '@utils';
-import { InlineCircle, TabSelectHeader, PoolHeader } from '@components/ui';
+import { useSelector } from '@reducers';
 import Overview from './Overview';
+import PoolsSummary from './PoolsSummary';
 import Strategies from './Strategies';
-import { AppStateInterface } from '@types';
-import { useSelector } from '../../../../store/reducers';
 
 const Wrapper = styled.div`
     display: flex;

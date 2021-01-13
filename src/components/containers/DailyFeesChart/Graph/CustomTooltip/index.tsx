@@ -48,11 +48,13 @@ const GridWrapper = styled.div`
     /* padding: 0px 10px; */
 `;
 
-const TooltipGridWrapper = styled(GridWrapper)`
-    border-bottom: ${props => `1px solid ${props.theme.FONT_MEDIUM}`};
-    padding-bottom: 5px;
-    margin-bottom: 8px;
-`;
+const TooltipGridWrapper = styled(GridWrapper)``;
+
+const TokenFeesGridWrapper = styled(GridWrapper)`
+    border-top: ${props => `1px solid ${props.theme.FONT_MEDIUM}`};
+    padding-top: 5px;
+    margin top: 8px;`;
+
 interface Props extends TooltipProps {
     // inherited from TooltipProps
     payload?: any;
@@ -64,6 +66,7 @@ const CustomTooltip = (props: Props) => {
         const graphData: any = props.payload[0].payload;
         const { feesUsd, timestamp, feesTokenAmounts, tokenSymbols } = graphData;
         const dayString = formatUtils.getFormattedDateFromTimestamp(timestamp, 'MONTH_DAY');
+        console.log('feesTokenAmounts', feesTokenAmounts);
 
         return (
             <CustomTooltipWrapper>
@@ -75,14 +78,16 @@ const CustomTooltip = (props: Props) => {
                             secondColumn={<FiatValue value={feesUsd ? feesUsd : 0} />}
                         />
                     </TooltipGridWrapper>
-                    <GridWrapper>
-                        {feesTokenAmounts.map((amount, i) => (
-                            <TooltipRow
-                                firstColumn={`Fees ${tokenSymbols[i]}`}
-                                secondColumn={amount ? amount.toFixed(5) : 0}
-                            />
-                        ))}
-                    </GridWrapper>
+                    {feesTokenAmounts && (
+                        <TokenFeesGridWrapper>
+                            {feesTokenAmounts.map((amount, i) => (
+                                <TooltipRow
+                                    firstColumn={`Fees ${tokenSymbols[i]}`}
+                                    secondColumn={amount ? amount.toFixed(5) : 0}
+                                />
+                            ))}
+                        </TokenFeesGridWrapper>
+                    )}
                 </ValueWrapper>
             </CustomTooltipWrapper>
         );

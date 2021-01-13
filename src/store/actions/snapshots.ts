@@ -154,12 +154,6 @@ export const changeSelectedPool = (poolId: string) => {
 
             if (state.allPools && state.allPools[poolId]) {
                 dispatch(setSelectedPoolId(poolId));
-                const hasDailyData = state.allPools[poolId].dailyStats !== undefined;
-
-                // if no daily data are assigned to the pool, fetch them
-                if (!hasDailyData) {
-                    dispatch(fetchDailyFees(poolId));
-                }
             }
         }
     };
@@ -179,6 +173,7 @@ export const fetchDailyFees = (poolKey: string) => {
             const dailyStats = statsComputations.getDailyRewards(response, poolItem);
             dispatch(fetchDailySuccess(poolKey, dailyStats));
         } else {
+            // TODO save ID of the pool for which the fetch failed
             dispatch(fetchDailyFailed());
             console.log('Did not get valid response in fetchDailyFees()');
         }
@@ -214,16 +209,16 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                     console.log(`Did not find any pools associated with: ${queryAddress}`);
                 } else {
                     // Set unclaimed yield rewards
-                    try {
-                        await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
-                    } catch (e) {
-                        console.log(
-                            `Could not fetch unclaimed yield rewards for address: ${address}`,
-                        );
-                        analytics.logEvent('fetch_unclaimed_yield_failed', {
-                            address: addressWithout0x,
-                        });
-                    }
+                    // try {
+                    //     await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
+                    // } catch (e) {
+                    //     console.log(
+                    //         `Could not fetch unclaimed yield rewards for address: ${address}`,
+                    //     );
+                    //     analytics.logEvent('fetch_unclaimed_yield_failed', {
+                    //         address: addressWithout0x,
+                    //     });
+                    // }
 
                     // Two addresses can have assets in the same pool. To create a unique iD for each pool, I combine user's address and pool ID
                     fetchedSnapshotsBundled = {
@@ -237,9 +232,6 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                 analytics.logEvent('fetch_snaps_failed', { address: addressWithout0x });
             }
         }
-
-        // fetchedSnapshotsBundled = exampleFirebaseData;
-        // console.log('fetchedSnapshotsBundled: ', fetchedSnapshotsBundled);
 
         // check if some pools were found
         if (Object.keys(fetchedSnapshotsBundled).length === 0) {
@@ -312,7 +304,38 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             }
         }
 
-        // console.log('customPoolsObject', customPoolsObject);
+        // fetch daily fees for all active pools
+        try {
+            for (const [id, snapshotsArr] of Object.entries(customPoolsObject)) {
+                const poolItem = customPoolsObject[id];
+                const { poolId, isActive } = poolItem;
+
+                // fetch daily data only for active pools
+                if (isActive) {
+                    try {
+                        const response = await getDailyFees(poolId);
+                        if (response) {
+                            const dailyStats = statsComputations.getDailyRewards(
+                                response,
+                                poolItem,
+                            );
+                            poolItem.dailyStats = dailyStats;
+                        } else {
+                            // TODO save ID of the pool for which the fetch failed
+                            dispatch(fetchDailyFailed());
+                            console.log('Did not get valid response in fetchDailyFees()');
+                        }
+                    } catch (e) {
+                        console.log('Failed to fetch daily data for pool ID: ', poolId);
+                    }
+                }
+            }
+        } catch (e) {
+            console.log('Error while fetching daily data for pools');
+            dispatch(fetchDailyFailed());
+        }
+
+        console.log('customPoolsObject', customPoolsObject);
         dispatch(
             fetchSnapsSuccess(customPoolsObject, dexToPoolMap, activePoolIds, inactivePoolIds),
         );

@@ -67,8 +67,7 @@ const SummaryItem = ({ headline }: Props) => {
     const activePoolIds = useSelector(state => state.activePoolIds);
 
     const poolsSummaryInfo = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
-
-    const { feesUsd, yieldUsd, txCostUsd, valueLockedUsd } = poolsSummaryInfo;
+    const { feesUsd, yieldUsd, valueLockedUsd } = poolsSummaryInfo;
 
     let isSelected = selectedPoolId === 'all';
 

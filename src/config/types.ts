@@ -193,19 +193,6 @@ export interface GenericPooledTokenInfo extends Token {
     weight: number;
 }
 
-export interface GraphData {
-    label: string;
-    lastTimestamp: number;
-    timestampPrev: number | null;
-    timestamp: number;
-    poolValues: Array<number | undefined>; // undefined has to be here because of recharts library
-    poolValuePrev: number | undefined;
-    feesUsd: number;
-    yieldUsd: number;
-    txCostUsd: number;
-    impLossUsd: number;
-}
-
 export interface SummaryStats {
     valueLockedUsd: any;
     pooledTokenSymbols: string[];
@@ -243,10 +230,11 @@ export interface DailyData {
 
 export interface DailyStats {
     timestamps: number[];
-    feesTokenAmounts: number[];
     feesUsd: number[];
-    averageDailyFeesUsd: number;
-    averageDailyYieldUsd: number;
+    tokenSymbols: string[] | undefined;
+    feesTokenAmounts: number[] | undefined;
+    averageDailyFeesUsd: number | undefined;
+    averageDailyYieldUsd: number | undefined;
 }
 
 export type AllPoolsGlobal = { [key: string]: PoolItem } | {};
@@ -290,3 +278,24 @@ type PropsOnlyInDarkTheme = Omit<DarkThemeProps, keyof LightThemeProps>;
 export type AppThemeColors = CommonThemeProps &
     Partial<PropsOnlyInDarkTheme> &
     Partial<PropsOnlyInLightTheme>;
+
+// Graph interfaces
+export interface DailyFeesGraph {
+    timestamp: number;
+    tokenSymbols: string[] | undefined;
+    feesTokenAmounts: number[] | undefined;
+    feesUsd: number;
+}
+
+export interface GraphData {
+    label: string;
+    lastTimestamp: number;
+    timestampPrev: number | null;
+    timestamp: number;
+    poolValues: Array<number | undefined>; // undefined has to be here because of recharts library
+    poolValuePrev: number | undefined;
+    feesUsd: number;
+    yieldUsd: number;
+    txCostUsd: number;
+    impLossUsd: number;
+}

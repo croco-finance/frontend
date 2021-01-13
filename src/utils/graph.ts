@@ -1,8 +1,8 @@
 import { DailyStats, GraphData, IntervalStats } from '@types';
 import { mathUtils } from '.';
 
-const getDailyGraphData = (data: DailyStats, tokenSymbols: string[]) => {
-    const { timestamps, feesTokenAmounts, feesUsd } = data;
+const getDailyGraphData = (data: DailyStats) => {
+    const { timestamps, feesTokenAmounts, feesUsd, tokenSymbols } = data;
 
     // return data in graph-ready format
     let graphData = new Array();
@@ -10,7 +10,7 @@ const getDailyGraphData = (data: DailyStats, tokenSymbols: string[]) => {
         graphData[i] = {
             timestamp: timestamps[i],
             tokenSymbols: tokenSymbols,
-            feesTokenAmounts: feesTokenAmounts[i],
+            feesTokenAmounts: feesTokenAmounts ? feesTokenAmounts[i] : undefined,
             feesUsd: feesUsd[i],
         };
     }
