@@ -2,12 +2,13 @@ import { InfoBox } from '@components/ui';
 import { colors, variables } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
-import { graphUtils } from '@utils';
+import { graphUtils, statsComputations } from '@utils';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Graph from '../Graph';
 import PoolOverview from '../PoolOverview';
+import SummaryOverview from '../SummaryOverview';
 import { DailyFeesChart } from '@components/containers';
 
 const Wrapper = styled.div`
@@ -64,30 +65,46 @@ const BalancerBanner = styled.div`
 
 const Overview = () => {
     const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state);
-
     const theme: any = useTheme();
 
     if (activePoolIds.length <= 0 && selectedPoolId === 'all') {
         return null;
     }
 
-    let graphData =
+    let activePoolsSummary = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
+
+    let historyGraphData =
         selectedPoolId === 'all'
-            ? []
+            ? undefined
             : graphUtils.getGraphData(allPools[selectedPoolId].intervalStats);
 
     let exchange;
     let poolId;
     let dailyStats;
+
+    // stats for daily fee chart
+    if (selectedPoolId === 'all') {
+        dailyStats = activePoolsSummary.dailyStats;
+    } else {
+        dailyStats = allPools[selectedPoolId].dailyStats;
+    }
     if (allPools && allPools[selectedPoolId]) {
         exchange = allPools[selectedPoolId].exchange;
         poolId = allPools[selectedPoolId].poolId;
-        dailyStats = allPools[selectedPoolId].dailyStats;
+    }
+
+    // choose if to show fee/yield overview for a single pool ir pool summary
+    let poolOverview;
+    if (allPools && selectedPoolId === 'all' && activePoolsSummary) {
+        poolOverview = <SummaryOverview summary={activePoolsSummary} />;
+    } else {
+        if (allPools && allPools[selectedPoolId]) {
+            poolOverview = <PoolOverview pool={allPools[selectedPoolId]} />;
+        }
     }
 
     return (
         <Wrapper>
-            {/* </BalancerBanner> */}
             {exchange === 'BALANCER' ? (
                 <BalancerBanner>
                     <InfoBox>
@@ -97,12 +114,18 @@ const Overview = () => {
                 </BalancerBanner>
             ) : null}
 
-            <PoolOverview />
-            {dailyStats && <DailyFeesChart dailyStats={dailyStats} />}
-            <GraphWrapper>
-                <GraphTitle>History of your interactions with the pool</GraphTitle>
-                <Graph data={graphData} theme={theme} />
-            </GraphWrapper>
+            {poolOverview}
+
+            {dailyStats && (
+                <DailyFeesChart dailyStats={dailyStats} noBorder={selectedPoolId === 'all'} />
+            )}
+            {historyGraphData && (
+                <GraphWrapper>
+                    <GraphTitle>History of your interactions with the pool</GraphTitle>
+                    <Graph data={historyGraphData} theme={theme} />
+                </GraphWrapper>
+            )}
+
             {activePoolIds.includes(selectedPoolId) ? (
                 <SimulatorButtonWrapper>
                     <StyledLink

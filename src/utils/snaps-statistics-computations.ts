@@ -7,12 +7,12 @@ import {
     IntervalStats,
     PoolItem,
     Snap,
+    SnapStructure,
     SummaryStats,
     Withdrawal,
 } from '@types';
-import { formatUtils, lossUtils, mathUtils } from '.';
-import { fetchDailyFees } from '@actions';
-import { getDailyFees } from '@utils';
+import { formatUtils, lossUtils, mathUtils, helperUtils } from '.';
+import { validationUtils } from '@utils';
 
 const getPoolStatsFromSnapshots = (poolSnapshots: Snap[]) => {
     // get interval stats first
@@ -541,20 +541,19 @@ const mergeTokenSymbolsAndAmountsArrays = (
     timestamps0: number[],
     timestamps1: number[],
 ) => {
-    console.log('*** mergeTokenSymbolsAndAmountsArrays ***');
     const timestampsMerged: number[] = [];
     const feesUsdMerged: number[] = [];
 
     // select the first pool's timestamps as default and get sum of fees for each of them
     timestamps0.forEach((timestamp0, i) => {
-        // check if the timestamps belong to the same day(TODO change this to something more accurate)
-        if (timestamps1[i] === timestamp0 || Math.abs(timestamps1[i] - timestamp0) < 3600 * 1000) {
+        // check if the timestamps belong to the same day
+        if (validationUtils.timestampsAreOnSameDay(timestamp0, timestamps1[i])) {
             // you can sum the fee values from both arrays
             timestampsMerged.push(timestamp0);
             feesUsdMerged.push(feesUsd0[i] + feesUsd1[i]);
-
             // TODO compute token fee estimates as well
         }
+        // TODO what to do if the dates don't match?
     });
 
     return { timestamps: timestampsMerged, feesUsd: feesUsdMerged };
@@ -572,25 +571,23 @@ const getPoolsSummaryObject = (
     let yieldUsdSum = 0;
     let totalValueLockedUsd = 0;
     let pooledTokenAmountsSum: { [key: string]: number } = {};
-    let yieldTotalTokenAmountsSum: { [key: string]: number } = {};
     let tokenSymbolsDailySum: string[] | undefined = undefined;
     let feesTokenAmountsDailySum: number[] | undefined = undefined;
     let feesTimestampsDailySum: number[] | undefined = undefined;
     let feesUsdDailySum: number[] | undefined = undefined;
+    let yieldRewardsMerged: { [key: string]: number } = {};
 
     // iterate through all specified pool IDs
     for (let i = 0; i < filteredPoolIds.length; i++) {
-        console.log('Processing pool ID: ', filteredPoolIds[i]);
         const poolId = filteredPoolIds[i];
         const pool: PoolItem = allPools[poolId];
-        const { cumulativeStats, pooledTokens, yieldToken } = pool;
+        const { cumulativeStats, pooledTokens, yieldRewards } = pool;
         const {
             currentPoolValueUsd,
             tokenBalances,
             feesTokenAmounts,
             feesUsd,
             yieldUsd,
-            yieldTotalTokenAmounts,
             txCostUsd,
             txCostEth,
         } = cumulativeStats;
@@ -606,26 +603,22 @@ const getPoolsSummaryObject = (
             feesTokenAmountsSum[token.symbol] += feesTokenAmounts[i];
         });
 
-        if (yieldToken) {
-            const yieldTokenSymbol = yieldToken.symbol;
-            if (!yieldTotalTokenAmountsSum[yieldTokenSymbol]) {
-                yieldTotalTokenAmountsSum[yieldTokenSymbol] = 0;
-            }
-
-            // TODO support multiple yield tokens
-            yieldTotalTokenAmountsSum[yieldTokenSymbol] += yieldTotalTokenAmounts[0];
+        // check for yield rewards
+        if (yieldRewards) {
+            yieldRewardsMerged = helperUtils.mergeStringNumberObjects(
+                yieldRewardsMerged,
+                yieldRewards,
+            );
         }
 
         // fetch daily fee rewards
         if (!tokenSymbolsDailySum && pool.dailyStats) {
-            console.log('first hovno');
             // this is the first pool I am processing
             tokenSymbolsDailySum = pool.tokenSymbols;
             feesTokenAmountsDailySum = pool.dailyStats.feesTokenAmounts;
             feesTimestampsDailySum = pool.dailyStats.timestamps;
             feesUsdDailySum = pool.dailyStats.feesUsd;
         } else {
-            console.log('else hovno');
             // One pool is already processed and this is another one
             if (
                 pool.dailyStats &&
@@ -640,9 +633,6 @@ const getPoolsSummaryObject = (
                     feesTimestampsDailySum,
                     pool.dailyStats.timestamps,
                 );
-
-                console.log('timestamps', timestamps);
-                console.log('feesUsd', feesUsd);
 
                 feesTimestampsDailySum = timestamps;
                 feesUsdDailySum = feesUsd;
@@ -661,12 +651,8 @@ const getPoolsSummaryObject = (
 
     // create daily data object
     let dailyStats: DailyStats | undefined = undefined;
-    // console.log('feesTimestampsDailySum', feesTimestampsDailySum);
-    // console.log('feesUsdDailySum', feesUsdDailySum);
 
     if (feesTimestampsDailySum && feesUsdDailySum && tokenSymbolsDailySum) {
-        console.log('check passed');
-
         dailyStats = {
             tokenSymbols: tokenSymbolsDailySum,
             timestamps: feesTimestampsDailySum,
@@ -682,8 +668,8 @@ const getPoolsSummaryObject = (
         valueLockedUsd: totalValueLockedUsd,
         pooledTokenSymbols: Object.keys(pooledTokenAmountsSum),
         pooledTokenAmounts: Object.values(pooledTokenAmountsSum),
-        yieldTokenSymbols: Object.keys(yieldTotalTokenAmountsSum),
-        yieldTotalTokenAmounts: Object.values(yieldTotalTokenAmountsSum),
+        yieldTokenSymbols: Object.keys(yieldRewardsMerged),
+        yieldTotalTokenAmounts: Object.values(yieldRewardsMerged),
         yieldUsd: yieldUsdSum,
         txCostEth: txCostEthSum,
         txCostUsd: txCostUsdSum,
@@ -924,10 +910,22 @@ const getAverageDailyYieldRewardsSinceTimestamp = (timestamp: number, snapshots:
         yieldRewardSum,
     );
 
-    console.log('yieldRewardSum', yieldRewardSum);
-    console.log('averageDailyYield', averageDailyYield);
-
     return averageDailyYield;
+};
+
+const getYieldTokensFromSnaps = (snapshots: Snap[]) => {
+    const yieldRewards = {};
+    snapshots.forEach(snap => {
+        if (snap.yieldReward && snap.yieldReward.token) {
+            const tokenSymbol = snap.yieldReward.token.symbol;
+            if (!yieldRewards[tokenSymbol]) {
+                yieldRewards[tokenSymbol] = 0;
+            }
+            yieldRewards[tokenSymbol] += snap.yieldReward.claimed + snap.yieldReward.unclaimed;
+        }
+    });
+
+    return yieldRewards;
 };
 
 export {
@@ -936,4 +934,5 @@ export {
     getPoolsSummaryObject,
     getDepositsAndWithdrawals,
     getDailyRewards,
+    getYieldTokensFromSnaps,
 };

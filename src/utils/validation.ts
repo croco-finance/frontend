@@ -14,4 +14,16 @@ const isHex = num => {
     return Boolean(num.match(/^0x[0-9a-f]+$/i));
 };
 
-export { isValidEthereumAddress, isHex };
+// timestamps in milliseconds are expected
+const timestampsAreOnSameDay = (timestamps0: number, timestamp1: number) => {
+    const date0 = new Date(timestamps0);
+    const date1 = new Date(timestamp1);
+
+    return (
+        date0.getFullYear() === date1.getFullYear() &&
+        date0.getMonth() === date1.getMonth() &&
+        date0.getDate() === date1.getDate()
+    );
+};
+
+export { isValidEthereumAddress, isHex, timestampsAreOnSameDay };

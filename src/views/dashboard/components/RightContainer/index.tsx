@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from '@reducers';
 import Overview from './Overview';
-import PoolsSummary from './PoolsSummary';
 import Strategies from './Strategies';
 
 const Wrapper = styled.div`
@@ -46,7 +45,7 @@ const RightContainer = () => {
         selectedPoolId === 'all' ? (
             <SummaryHeadline>
                 <InlineCircle size={32} color={colors.GREEN} />
-                <SummaryHeadlineText>Summary of active positions</SummaryHeadlineText>
+                <SummaryHeadlineText>Summary of all active positions</SummaryHeadlineText>
             </SummaryHeadline>
         ) : (
             <PoolHeader
@@ -56,14 +55,12 @@ const RightContainer = () => {
             />
         );
 
-    let pageToShow = <PoolsSummary />;
+    let pageToShow;
 
-    if (selectedPoolId !== 'all') {
-        if (selectedTab === 'overview') {
-            pageToShow = <Overview />;
-        } else if (selectedTab === 'strategies') {
-            pageToShow = <Strategies />;
-        }
+    if (selectedTab === 'overview' || selectedPoolId === 'all') {
+        pageToShow = <Overview />;
+    } else if (selectedTab === 'strategies') {
+        pageToShow = <Strategies />;
     }
 
     return (
@@ -73,7 +70,6 @@ const RightContainer = () => {
                 onSelectTab={tab => handleTabChange(tab)}
                 hideTabs={selectedPoolId === 'all'}
             />
-
             {pageToShow}
         </Wrapper>
     );

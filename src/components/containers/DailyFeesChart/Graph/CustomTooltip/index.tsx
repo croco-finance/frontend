@@ -66,7 +66,6 @@ const CustomTooltip = (props: Props) => {
         const graphData: any = props.payload[0].payload;
         const { feesUsd, timestamp, feesTokenAmounts, tokenSymbols } = graphData;
         const dayString = formatUtils.getFormattedDateFromTimestamp(timestamp, 'MONTH_DAY');
-        console.log('feesTokenAmounts', feesTokenAmounts);
 
         return (
             <CustomTooltipWrapper>

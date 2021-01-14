@@ -1,10 +1,8 @@
 import { BoxRow, FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
-import { DailyFeesChart } from '@components/containers';
 import { variables } from '@config';
 import { useTheme } from '@hooks';
-import { statsComputations } from '@utils';
+import { SummaryStats } from '@types';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -70,20 +68,12 @@ const TotalSubNote = styled.div`
     color: ${props => props.theme.FONT_LIGHT};
 `;
 
-const PoolsSummary = () => {
-    const allPools = useSelector(state => state.allPools);
-    const activePoolIds = useSelector(state => state.activePoolIds);
+interface Props {
+    summary: SummaryStats;
+}
+
+const SummaryOverview = ({ summary }: Props) => {
     const theme: any = useTheme();
-
-    if (!allPools) {
-        return (
-            <Wrapper>
-                <h2>We didn't find any pools associated with this address :( </h2>
-            </Wrapper>
-        );
-    }
-
-    let activePoolsSummaryObject = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
 
     const {
         valueLockedUsd,
@@ -97,10 +87,7 @@ const PoolsSummary = () => {
         feesTokenSymbols,
         feesTokenAmounts,
         feesUsd,
-        dailyStats,
-    } = activePoolsSummaryObject;
-
-    console.log('activePoolsSummaryObject', activePoolsSummaryObject);
+    } = summary;
 
     const feesRow = (
         <BoxRow
@@ -152,7 +139,7 @@ const PoolsSummary = () => {
             <HeaderWrapper>
                 <GridWrapper>
                     <BoxRow
-                        firstColumn="Overview"
+                        firstColumn="All active pools"
                         secondColumn="Crypto "
                         thirdColumn="Value today"
                         columnColors={['light', 'light', 'light']}
@@ -211,9 +198,8 @@ const PoolsSummary = () => {
                     {txCostRow}
                 </GridWrapper>
             </GrayBox>
-            {dailyStats && <DailyFeesChart dailyStats={dailyStats} noBorder />}
         </Wrapper>
     );
 };
 
-export default PoolsSummary;
+export default SummaryOverview;

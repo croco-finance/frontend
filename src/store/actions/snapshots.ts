@@ -159,27 +159,6 @@ export const changeSelectedPool = (poolId: string) => {
     };
 };
 
-export const fetchDailyFees = (poolKey: string) => {
-    // poolKey is the key in allPools, not pool ID as a smart contract address
-    return async dispatch => {
-        dispatch(fetchDailyInit());
-
-        const state = store.getState();
-        const poolItem = state.allPools[poolKey];
-        const poolId = poolKey.split('_')[0];
-        const response = await getDailyFees(poolId);
-
-        if (response) {
-            const dailyStats = statsComputations.getDailyRewards(response, poolItem);
-            dispatch(fetchDailySuccess(poolKey, dailyStats));
-        } else {
-            // TODO save ID of the pool for which the fetch failed
-            dispatch(fetchDailyFailed());
-            console.log('Did not get valid response in fetchDailyFees()');
-        }
-    };
-};
-
 export const fetchSnapshots = (addresses: string[] | string) => {
     // I can use dispatch here thanks to redux thunk
     return async dispatch => {
@@ -209,16 +188,16 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                     console.log(`Did not find any pools associated with: ${queryAddress}`);
                 } else {
                     // Set unclaimed yield rewards
-                    // try {
-                    //     await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
-                    // } catch (e) {
-                    //     console.log(
-                    //         `Could not fetch unclaimed yield rewards for address: ${address}`,
-                    //     );
-                    //     analytics.logEvent('fetch_unclaimed_yield_failed', {
-                    //         address: addressWithout0x,
-                    //     });
-                    // }
+                    try {
+                        await setUnclaimed(ethersProvider, address, fetchedSnapshotsAddress);
+                    } catch (e) {
+                        console.log(
+                            `Could not fetch unclaimed yield rewards for address: ${address}`,
+                        );
+                        analytics.logEvent('fetch_unclaimed_yield_failed', {
+                            address: addressWithout0x,
+                        });
+                    }
 
                     // Two addresses can have assets in the same pool. To create a unique iD for each pool, I combine user's address and pool ID
                     fetchedSnapshotsBundled = {
@@ -283,9 +262,7 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                     isActive: poolIsActive,
                     timestampEnd: snapshotsArr[snapshotsCount - 1].timestamp, // last sna
                     hasYieldReward: getIfPoolHasYieldReward(snapshotsArr),
-                    yieldToken: snapshotsArr[0].yieldReward
-                        ? snapshotsArr[0].yieldReward.token
-                        : null,
+                    yieldRewards: statsComputations.getYieldTokensFromSnaps(snapshotsArr),
                     pooledTokens: getPooledTokensInfo(snapshotsArr[0].tokens),
                     intervalStats: intervalStats,
                     cumulativeStats: cumulativeStats,
@@ -305,8 +282,9 @@ export const fetchSnapshots = (addresses: string[] | string) => {
         }
 
         // fetch daily fees for all active pools
+        dispatch(fetchDailyInit());
         try {
-            for (const [id, snapshotsArr] of Object.entries(customPoolsObject)) {
+            for (const [id, _] of Object.entries(customPoolsObject)) {
                 const poolItem = customPoolsObject[id];
                 const { poolId, isActive } = poolItem;
 
@@ -335,7 +313,6 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             dispatch(fetchDailyFailed());
         }
 
-        console.log('customPoolsObject', customPoolsObject);
         dispatch(
             fetchSnapsSuccess(customPoolsObject, dexToPoolMap, activePoolIds, inactivePoolIds),
         );

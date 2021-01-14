@@ -77,6 +77,7 @@ const reducer = (state = initialState, action) => {
                 draft.error = false;
                 draft.noPoolsFound = false;
                 draft.selectedPoolId = 'all';
+                draft.loadingDaily = false;
                 break;
             }
 

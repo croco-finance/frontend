@@ -55,7 +55,6 @@ const RightContainer = ({
     let {
         poolId,
         isActive,
-        yieldToken,
         exchange,
         tokenWeights,
         depositTimestamps,

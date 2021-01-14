@@ -167,7 +167,7 @@ export interface PoolItem {
     poolId: string;
     isActive: boolean;
     pooledTokens: GenericPooledTokenInfo[];
-    yieldToken: Token | null;
+    yieldRewards: { [key: string]: number };
     hasYieldReward: boolean;
     timestampEnd: number;
     intervalStats: IntervalStats[];

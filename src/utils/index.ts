@@ -5,6 +5,7 @@ import * as statsComputations from './snaps-statistics-computations';
 import * as simulatorUtils from './simulator';
 import * as formatUtils from './format';
 import * as graphUtils from './graph';
+import * as helperUtils from './helpers';
 import { getSnaps } from './firebase-loader';
 import { setUnclaimed } from './unclaimed-loader';
 import { loadState, saveState } from './local-storage';
@@ -23,4 +24,5 @@ export {
     loadState,
     saveState,
     getDailyFees,
+    helperUtils,
 };

@@ -1,7 +1,7 @@
 import { BoxRow, FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
 import { variables } from '@config';
 import { useTheme } from '@hooks';
-import { AllPoolsGlobal } from '@types';
+import { AllPoolsGlobal, PoolItem, SummaryStats, CumulativeStats } from '@types';
 import { formatUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -71,23 +71,12 @@ const TotalSubNote = styled.div`
     color: ${props => props.theme.FONT_LIGHT};
 `;
 
-const PoolOverview = () => {
-    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    let pool = allPools[selectedPoolId];
+interface Props {
+    pool: PoolItem;
+}
+
+const PoolOverview = ({ pool }: Props) => {
     const theme: any = useTheme();
-
-    // Compute imp loss, fees, hold, ETH hold, token hold fo each snapshot
-
-    // TODO make the following checks and computations cleaner
-    if (!allPools || !pool) {
-        return (
-            <Wrapper>
-                <h2>We didn't find any pools associated with this address :( </h2>
-            </Wrapper>
-        );
-    }
-
     let { pooledTokens, isActive, hasYieldReward, intervalStats } = pool;
 
     const {
@@ -108,7 +97,6 @@ const PoolOverview = () => {
               intervalStats[intervalStats.length - 1].timestampEnd,
               'MONTH_DAY_YEAR',
           )}`;
-    const poolShareValueText = isActive ? 'Your pool share' : 'End pool share';
 
     const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
 
@@ -163,7 +151,7 @@ const PoolOverview = () => {
             <HeaderWrapper>
                 <GridWrapper>
                     <BoxRow
-                        firstColumn="Pool overview"
+                        firstColumn={isActive ? 'Pool overview' : 'Rewards & Expenses'}
                         secondColumn="Crypto "
                         thirdColumn={endTimeText}
                         columnColors={['light', 'light', 'light']}
@@ -194,28 +182,32 @@ const PoolOverview = () => {
                     </TotalLossRow>
                 }
             >
-                <PoolValueGridWrapper>
-                    <BoxRow
-                        firstColumn={poolShareValueText}
-                        secondColumn={
-                            <VerticalCryptoAmounts
-                                tokenSymbols={tokenSymbolsArr}
-                                tokenAmounts={tokenBalances}
-                            />
-                        }
-                        thirdColumn={<FiatValue value={endPoolValueUsd} />}
-                        columnColors={['medium', 'light', 'dark']}
-                    />
-                </PoolValueGridWrapper>
+                {isActive && (
+                    <PoolValueGridWrapper>
+                        <BoxRow
+                            firstColumn="Your current pool share"
+                            secondColumn={
+                                <VerticalCryptoAmounts
+                                    tokenSymbols={tokenSymbolsArr}
+                                    tokenAmounts={tokenBalances}
+                                />
+                            }
+                            thirdColumn={<FiatValue value={endPoolValueUsd} />}
+                            columnColors={['medium', 'light', 'dark']}
+                        />
+                    </PoolValueGridWrapper>
+                )}
 
-                <RewardsExpensesHeader>
-                    <BoxRow
-                        firstColumn="Rewards & Expenses"
-                        secondColumn=""
-                        thirdColumn=""
-                        columnColors={['light', 'light', 'light']}
-                    />
-                </RewardsExpensesHeader>
+                {isActive && (
+                    <RewardsExpensesHeader>
+                        <BoxRow
+                            firstColumn="Rewards & Expenses"
+                            secondColumn=""
+                            thirdColumn=""
+                            columnColors={['light', 'light', 'light']}
+                        />
+                    </RewardsExpensesHeader>
+                )}
 
                 <GridWrapper>
                     {feesRow}
