@@ -1,10 +1,9 @@
-import { FiatValue, GrayBox, VerticalCryptoAmounts, BoxRow } from '@components/ui';
-import { colors, variables } from '@config';
-import { statsComputations } from '@utils';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
+import { BoxRow, FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
+import { variables } from '@config';
 import { useTheme } from '@hooks';
+import { SummaryStats } from '@types';
+import React from 'react';
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -69,23 +68,12 @@ const TotalSubNote = styled.div`
     color: ${props => props.theme.FONT_LIGHT};
 `;
 
-const PoolsSummary = () => {
-    const allPools = useSelector(state => state.allPools);
-    const activePoolIds = useSelector(state => state.activePoolIds);
+interface Props {
+    summary: SummaryStats;
+}
+
+const SummaryOverview = ({ summary }: Props) => {
     const theme: any = useTheme();
-
-    if (!allPools) {
-        return (
-            <Wrapper>
-                <h2>We didn't find any pools associated with this address :( </h2>
-            </Wrapper>
-        );
-    }
-
-    let activePoolsSummaryObject: any = statsComputations.getPoolsSummaryObject(
-        allPools,
-        activePoolIds,
-    );
 
     const {
         valueLockedUsd,
@@ -99,7 +87,7 @@ const PoolsSummary = () => {
         feesTokenSymbols,
         feesTokenAmounts,
         feesUsd,
-    } = activePoolsSummaryObject;
+    } = summary;
 
     const feesRow = (
         <BoxRow
@@ -151,7 +139,7 @@ const PoolsSummary = () => {
             <HeaderWrapper>
                 <GridWrapper>
                     <BoxRow
-                        firstColumn="Overview"
+                        firstColumn="All active pools"
                         secondColumn="Crypto "
                         thirdColumn="Value today"
                         columnColors={['light', 'light', 'light']}
@@ -214,4 +202,4 @@ const PoolsSummary = () => {
     );
 };
 
-export default PoolsSummary;
+export default SummaryOverview;

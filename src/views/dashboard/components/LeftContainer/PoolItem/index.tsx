@@ -1,12 +1,11 @@
-import * as actionTypes from '@actionTypes';
+import { changeSelectedPool } from '@actions';
 import { FiatValue, TokenLogo } from '@components/ui';
-import { colors, variables, types } from '@config';
+import { variables } from '@config';
+import { useSelector } from '@reducers';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import PoolItemCard from '../PoolItemCard';
-import { useSelector } from '@reducers';
-import { changeSelectedPool } from '@actions';
 
 const Item = styled.div`
     display: flex;
@@ -97,8 +96,6 @@ const PoolItem = ({ poolId }: Props) => {
 
     const handleOnClick = (e, poolId) => {
         dispatch(changeSelectedPool(poolId));
-        // dispatch({ type: actionTypes.SET_SELECTED_POOL_ID, poolId: poolId });
-        // dispatch(fetchDailyFees(poolId));
     };
 
     return (

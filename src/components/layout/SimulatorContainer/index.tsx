@@ -1,7 +1,6 @@
+import { variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
-import { LeftFillContainer, RightFillContainer, MainContainer } from '..';
-import { variables } from '@config';
 
 const Wrapper = styled.div`
     display: flex;
@@ -19,14 +18,6 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
 }
 
-const SimulatorContainer = ({ children }: Props) => (
-    <Wrapper>
-        {children}
-
-        {/* <LeftFillContainer /> */}
-        {/* <MainContainer>{children}</MainContainer> */}
-        {/* <RightFillContainer /> */}
-    </Wrapper>
-);
+const SimulatorContainer = ({ children }: Props) => <Wrapper>{children}</Wrapper>;
 
 export default SimulatorContainer;

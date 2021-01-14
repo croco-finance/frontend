@@ -1,22 +1,23 @@
-import { formatUtils, statsComputations, getSnaps, getDailyFees } from '@utils';
-import exampleFirebaseData from '../../config/example-data-firebase';
-import exampleFirebaseDataSmall from '../../config/example-data-bundled';
-import store from '../../store';
-
 import * as actionTypes from '@actionTypes';
+import { analytics, ethersProvider } from '@config';
 import {
     AllPoolsGlobal,
-    PoolToken,
+    DailyStats,
     DexToPoolIdMap,
     Exchange,
-    SnapStructure,
+    PoolToken,
     Snap,
-    DailyStats,
-    PoolItem,
+    SnapStructure,
 } from '@types';
-import { ethersProvider } from '@config';
-import { setUnclaimed, validationUtils } from '@utils';
-import { analytics } from '@config';
+import {
+    formatUtils,
+    getDailyFees,
+    getSnaps,
+    setUnclaimed,
+    statsComputations,
+    validationUtils,
+} from '@utils';
+import store from '../../store';
 
 // Helper functions
 const getPooledTokensInfo = (tokens: PoolToken[]) => {
@@ -153,33 +154,7 @@ export const changeSelectedPool = (poolId: string) => {
 
             if (state.allPools && state.allPools[poolId]) {
                 dispatch(setSelectedPoolId(poolId));
-                const hasDailyData = state.allPools[poolId].dailyStats !== undefined;
-
-                // if no daily data are assigned to the pool, fetch them
-                if (!hasDailyData) {
-                    dispatch(fetchDailyFees(poolId));
-                }
             }
-        }
-    };
-};
-
-export const fetchDailyFees = (poolKey: string) => {
-    // poolKey is the key in allPools, not pool ID as a smart contract address
-    return async dispatch => {
-        dispatch(fetchDailyInit());
-
-        const state = store.getState();
-        const poolItem = state.allPools[poolKey];
-        const poolId = poolKey.split('_')[0];
-        const response = await getDailyFees(poolId);
-
-        if (response) {
-            const dailyStats = statsComputations.getDailyRewards(response, poolItem);
-            dispatch(fetchDailySuccess(poolKey, dailyStats));
-        } else {
-            dispatch(fetchDailyFailed());
-            console.log('Did not get valid response in fetchDailyFees()');
         }
     };
 };
@@ -237,9 +212,6 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             }
         }
 
-        // fetchedSnapshotsBundled = exampleFirebaseData;
-        // console.log('fetchedSnapshotsBundled: ', fetchedSnapshotsBundled);
-
         // check if some pools were found
         if (Object.keys(fetchedSnapshotsBundled).length === 0) {
             dispatch(noPoolsFound());
@@ -290,9 +262,7 @@ export const fetchSnapshots = (addresses: string[] | string) => {
                     isActive: poolIsActive,
                     timestampEnd: snapshotsArr[snapshotsCount - 1].timestamp, // last sna
                     hasYieldReward: getIfPoolHasYieldReward(snapshotsArr),
-                    yieldToken: snapshotsArr[0].yieldReward
-                        ? snapshotsArr[0].yieldReward.token
-                        : null,
+                    yieldRewards: statsComputations.getYieldTokensFromSnaps(snapshotsArr),
                     pooledTokens: getPooledTokensInfo(snapshotsArr[0].tokens),
                     intervalStats: intervalStats,
                     cumulativeStats: cumulativeStats,
@@ -311,7 +281,38 @@ export const fetchSnapshots = (addresses: string[] | string) => {
             }
         }
 
-        // console.log('customPoolsObject', customPoolsObject);
+        // fetch daily fees for all active pools
+        dispatch(fetchDailyInit());
+        try {
+            for (const [id, _] of Object.entries(customPoolsObject)) {
+                const poolItem = customPoolsObject[id];
+                const { poolId, isActive } = poolItem;
+
+                // fetch daily data only for active pools
+                if (isActive) {
+                    try {
+                        const response = await getDailyFees(poolId);
+                        if (response) {
+                            const dailyStats = statsComputations.getDailyRewards(
+                                response,
+                                poolItem,
+                            );
+                            poolItem.dailyStats = dailyStats;
+                        } else {
+                            // TODO save ID of the pool for which the fetch failed
+                            dispatch(fetchDailyFailed());
+                            console.log('Did not get valid response in fetchDailyFees()');
+                        }
+                    } catch (e) {
+                        console.log('Failed to fetch daily data for pool ID: ', poolId);
+                    }
+                }
+            }
+        } catch (e) {
+            console.log('Error while fetching daily data for pools');
+            dispatch(fetchDailyFailed());
+        }
+
         dispatch(
             fetchSnapsSuccess(customPoolsObject, dexToPoolMap, activePoolIds, inactivePoolIds),
         );

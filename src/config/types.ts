@@ -167,7 +167,7 @@ export interface PoolItem {
     poolId: string;
     isActive: boolean;
     pooledTokens: GenericPooledTokenInfo[];
-    yieldToken: Token | null;
+    yieldRewards: { [key: string]: number };
     hasYieldReward: boolean;
     timestampEnd: number;
     intervalStats: IntervalStats[];
@@ -193,19 +193,6 @@ export interface GenericPooledTokenInfo extends Token {
     weight: number;
 }
 
-export interface GraphData {
-    label: string;
-    lastTimestamp: number;
-    timestampPrev: number | null;
-    timestamp: number;
-    poolValues: Array<number | undefined>; // undefined has to be here because of recharts library
-    poolValuePrev: number | undefined;
-    feesUsd: number;
-    yieldUsd: number;
-    txCostUsd: number;
-    impLossUsd: number;
-}
-
 export interface SummaryStats {
     valueLockedUsd: any;
     pooledTokenSymbols: string[];
@@ -218,6 +205,7 @@ export interface SummaryStats {
     yieldUsd: number;
     txCostEth: number;
     txCostUsd: number;
+    dailyStats: DailyStats | undefined;
     // average rewards since last deposit -> average rewards in last snapshot
 }
 
@@ -242,10 +230,11 @@ export interface DailyData {
 
 export interface DailyStats {
     timestamps: number[];
-    feesTokenAmounts: number[];
     feesUsd: number[];
-    averageDailyFeesUsd: number;
-    averageDailyYieldUsd: number;
+    tokenSymbols: string[] | undefined;
+    feesTokenAmounts: number[] | undefined;
+    averageDailyFeesUsd: number | undefined;
+    averageDailyYieldUsd: number | undefined;
 }
 
 export type AllPoolsGlobal = { [key: string]: PoolItem } | {};
@@ -289,3 +278,24 @@ type PropsOnlyInDarkTheme = Omit<DarkThemeProps, keyof LightThemeProps>;
 export type AppThemeColors = CommonThemeProps &
     Partial<PropsOnlyInDarkTheme> &
     Partial<PropsOnlyInLightTheme>;
+
+// Graph interfaces
+export interface DailyFeesGraph {
+    timestamp: number;
+    tokenSymbols: string[] | undefined;
+    feesTokenAmounts: number[] | undefined;
+    feesUsd: number;
+}
+
+export interface GraphData {
+    label: string;
+    lastTimestamp: number;
+    timestampPrev: number | null;
+    timestamp: number;
+    poolValues: Array<number | undefined>; // undefined has to be here because of recharts library
+    poolValuePrev: number | undefined;
+    feesUsd: number;
+    yieldUsd: number;
+    txCostUsd: number;
+    impLossUsd: number;
+}

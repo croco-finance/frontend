@@ -47,7 +47,6 @@ class FeesGraph extends PureComponent<Props, {}> {
 
     render() {
         const { data, theme, height, averageFees } = this.props;
-        const pooledTokensCount = data[0].feesTokenAmounts.length; // if UNI-WETH pool, returns 2
 
         return (
             <ResponsiveContainer width="100%" height={height}>

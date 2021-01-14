@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Features from './components/Features';
 import LandingPageText from './components/LandingPageText';
-import { setAddresses, setSelectedAddress } from '@actions';
+
 const CONTENT_WIDTH = 1100;
 const INPUT_HEIGHT = '66px';
 const INPUT_HEIGHT_SMALL = '50px';

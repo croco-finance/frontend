@@ -19,13 +19,6 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
 }
 
-const DashboardContainer = ({ children }: Props) => (
-    <Wrapper>
-        {children}
-        {/* <LeftFillContainer /> */}
-        {/* <MainContainer>{children}</MainContainer> */}
-        {/* <RightFillContainer /> */}
-    </Wrapper>
-);
+const DashboardContainer = ({ children }: Props) => <Wrapper>{children}</Wrapper>;
 
 export default DashboardContainer;

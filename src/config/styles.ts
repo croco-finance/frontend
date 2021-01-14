@@ -1,5 +1,4 @@
 import { css } from 'styled-components';
-import { colors } from '@config';
 
 export const scrollBarStyles = css`
     ::-webkit-scrollbar {

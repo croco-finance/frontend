@@ -1,16 +1,10 @@
-import { analytics, animations, colors, variables, types } from '@config';
+import { InlineCircle, PoolHeader, TabSelectHeader } from '@components/ui';
+import { analytics, colors, variables } from '@config';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import PoolOverview from './PoolOverview';
-import PoolsSummary from './PoolsSummary';
-import Graph from './Graph';
-import { graphUtils, formatUtils } from '@utils';
-import { InlineCircle, TabSelectHeader, PoolHeader } from '@components/ui';
+import { useSelector } from '@reducers';
 import Overview from './Overview';
 import Strategies from './Strategies';
-import { AppStateInterface } from '@types';
-import { useSelector } from '../../../../store/reducers';
 
 const Wrapper = styled.div`
     display: flex;
@@ -51,7 +45,7 @@ const RightContainer = () => {
         selectedPoolId === 'all' ? (
             <SummaryHeadline>
                 <InlineCircle size={32} color={colors.GREEN} />
-                <SummaryHeadlineText>Summary of active positions</SummaryHeadlineText>
+                <SummaryHeadlineText>Summary of all active positions</SummaryHeadlineText>
             </SummaryHeadline>
         ) : (
             <PoolHeader
@@ -61,14 +55,12 @@ const RightContainer = () => {
             />
         );
 
-    let pageToShow = <PoolsSummary />;
+    let pageToShow;
 
-    if (selectedPoolId !== 'all') {
-        if (selectedTab === 'overview') {
-            pageToShow = <Overview />;
-        } else if (selectedTab === 'strategies') {
-            pageToShow = <Strategies />;
-        }
+    if (selectedTab === 'overview' || selectedPoolId === 'all') {
+        pageToShow = <Overview />;
+    } else if (selectedTab === 'strategies') {
+        pageToShow = <Strategies />;
     }
 
     return (
@@ -78,7 +70,6 @@ const RightContainer = () => {
                 onSelectTab={tab => handleTabChange(tab)}
                 hideTabs={selectedPoolId === 'all'}
             />
-
             {pageToShow}
         </Wrapper>
     );

@@ -1,17 +1,17 @@
-import { Spinner, GrayBox, FiatValue } from '@components/ui';
+import { Spinner, GrayBox, FiatValue, InfoBox } from '@components/ui';
 import { variables } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
-import { PoolItem } from '@types';
+import { DailyStats } from '@types';
 import { formatUtils, graphUtils, mathUtils } from '@utils';
 import React from 'react';
 import styled from 'styled-components';
 import FeesGraph from './Graph';
 
-const Wrapper = styled.div<{ height: number }>`
+const Wrapper = styled.div<{ height: number; noBorder: boolean }>`
     min-height: ${props => props.height + 10}px;
     width: 100%;
-    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
+    border-bottom: ${props => (props.noBorder ? 'none' : `1px solid ${props.theme.STROKE_GREY}}`)};
     margin-top: 30px;
     padding: 10px 8px 40px 8px;
     display: flex;
@@ -53,44 +53,40 @@ const FeeStatHeadline = styled.div`
     color: ${props => props.theme.FONT_LIGHT};
     margin-right: 8px;
 `;
+
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-    selectedPool: PoolItem | undefined;
+    dailyStats: DailyStats;
     graphHeight?: number;
+    noBorder?: boolean;
 }
 
-const DailyFees = ({ selectedPool, graphHeight = 380 }: Props) => {
+const DailyFeesChart = ({ dailyStats, graphHeight = 380, noBorder = false }: Props) => {
     const { loadingDaily, errorDaily } = useSelector(state => state);
     const theme: any = useTheme();
 
-    let data: any = null;
-    let feesUsd: number[] | null = null;
-    if (selectedPool) {
-        // hide fees chart for inactive pools
-        if (!selectedPool.isActive) return null;
+    const graphData = graphUtils.getDailyGraphData(dailyStats);
+    const feesUsd = dailyStats.feesUsd;
 
-        if (selectedPool.dailyStats) {
-            data = graphUtils.getDailyGraphData(selectedPool.dailyStats, selectedPool.tokenSymbols);
-            feesUsd = selectedPool.dailyStats.feesUsd;
-        }
-    }
-
-    const earnedSinceText = data
-        ? formatUtils.getFormattedDateFromTimestamp(data[0].timestamp, 'MONTH_DAY')
+    const earnedSinceText = graphData
+        ? formatUtils.getFormattedDateFromTimestamp(graphData[0].timestamp, 'MONTH_DAY')
         : '...';
 
-    if (errorDaily) return null;
+    let exceptionContent;
+    if (loadingDaily) exceptionContent = <Spinner size={20} />;
+    if (errorDaily)
+        exceptionContent = <InfoBox>We encountered some issues while fetching daily fees </InfoBox>;
 
     return (
-        <Wrapper height={graphHeight}>
+        <Wrapper height={graphHeight} noBorder={noBorder}>
             {loadingDaily ? (
-                <Spinner size={20} />
+                exceptionContent
             ) : (
                 <>
                     <GraphHeadline>{`Daily fees earned since ${earnedSinceText}`}</GraphHeadline>
-                    {data && feesUsd ? (
+                    {graphData && feesUsd ? (
                         <>
                             <FeesGraph
-                                data={data}
+                                data={graphData}
                                 averageFees={mathUtils.getArrayAverage(feesUsd)}
                                 theme={theme}
                                 height={graphHeight}
@@ -122,4 +118,4 @@ const DailyFees = ({ selectedPool, graphHeight = 380 }: Props) => {
     );
 };
 
-export default DailyFees;
+export default DailyFeesChart;

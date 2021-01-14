@@ -165,9 +165,6 @@ const Overview = ({
         ? Math.round(Math.abs(impLossUsd / lastWeekAverageDailyRewardsUsd))
         : NaN;
 
-    console.log('estDaysLeftStaking', estDaysLeftStaking);
-    console.log('lastWeekAverageDailyRewardsUsd', lastWeekAverageDailyRewardsUsd);
-
     return (
         <Wrapper>
             <XScrollWrapper>
