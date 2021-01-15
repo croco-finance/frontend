@@ -541,22 +541,37 @@ const mergeTokenSymbolsAndAmountsArrays = (
     timestamps0: number[],
     timestamps1: number[],
 ) => {
-    const timestampsMerged: number[] = [];
-    const feesUsdMerged: number[] = [];
+    let errorDays: number[] = [];
+    const timestampsMerged = helperUtils.getUniqueItemsFromArray(timestamps0.concat(timestamps1));
+    const feesUsdMerged: number[] = new Array(timestampsMerged.length);
 
-    // select the first pool's timestamps as default and get sum of fees for each of them
-    timestamps0.forEach((timestamp0, i) => {
-        // check if the timestamps belong to the same day
-        if (validationUtils.timestampsAreOnSameDay(timestamp0, timestamps1[i])) {
-            // you can sum the fee values from both arrays
-            timestampsMerged.push(timestamp0);
-            feesUsdMerged.push(feesUsd0[i] + feesUsd1[i]);
-            // TODO compute token fee estimates as well
+    // sort array just to be sure
+    timestampsMerged.sort();
+    // iterate through each timestamps
+    timestampsMerged.forEach((timestamp, i) => {
+        // check of timestamp is present in timestamps0 and timestamps1
+        const indexOf0 = timestamps0.indexOf(timestamp);
+        const indexOf1 = timestamps1.indexOf(timestamp);
+        let sum = 0;
+
+        // if the timestamp is not present in of the timestamp arrays,
+        if (indexOf0 >= 0) {
+            sum += feesUsd0[indexOf0];
+        } else {
+            errorDays.push(timestamp);
         }
-        // TODO what to do if the dates don't match?
+        if (indexOf1 >= 0) {
+            sum += feesUsd1[indexOf1];
+        } else {
+            errorDays.push(timestamp);
+        }
+
+        feesUsdMerged[i] = sum;
+        // TODO compute token fee estimates as well
+        errorDays = helperUtils.getUniqueItemsFromArray(errorDays);
     });
 
-    return { timestamps: timestampsMerged, feesUsd: feesUsdMerged };
+    return { timestamps: timestampsMerged, feesUsd: feesUsdMerged, errorDays: errorDays };
 };
 
 const getPoolsSummaryObject = (
@@ -576,6 +591,7 @@ const getPoolsSummaryObject = (
     let feesTimestampsDailySum: number[] | undefined = undefined;
     let feesUsdDailySum: number[] | undefined = undefined;
     let yieldRewardsMerged: { [key: string]: number } = {};
+    let errorDaysDailyFees: number[] = [];
 
     // iterate through all specified pool IDs
     for (let i = 0; i < filteredPoolIds.length; i++) {
@@ -627,7 +643,7 @@ const getPoolsSummaryObject = (
                 feesTimestampsDailySum &&
                 feesUsdDailySum
             ) {
-                const { timestamps, feesUsd } = mergeTokenSymbolsAndAmountsArrays(
+                const { timestamps, feesUsd, errorDays } = mergeTokenSymbolsAndAmountsArrays(
                     feesUsdDailySum,
                     pool.dailyStats.feesUsd,
                     feesTimestampsDailySum,
@@ -636,6 +652,9 @@ const getPoolsSummaryObject = (
 
                 feesTimestampsDailySum = timestamps;
                 feesUsdDailySum = feesUsd;
+                errorDaysDailyFees = helperUtils.getUniqueItemsFromArray(
+                    errorDaysDailyFees.concat(errorDays),
+                );
             }
         }
 
@@ -654,6 +673,7 @@ const getPoolsSummaryObject = (
 
     if (feesTimestampsDailySum && feesUsdDailySum && tokenSymbolsDailySum) {
         dailyStats = {
+            errorDays: errorDaysDailyFees,
             tokenSymbols: tokenSymbolsDailySum,
             timestamps: feesTimestampsDailySum,
             // TODO token fees in summary overview
@@ -696,6 +716,7 @@ const getDailyRewards = (
     const statsTimestamps = new Array();
     const userTokenBalancesIntervals = new Array();
     let indexOfLastSnapChecked = 0; // index of snapshot which lp tokens a
+    let errorDaysDailyFees: number[] = [];
 
     // Convert dayIds to number and make sure the dayIds are sorted
     let dayIdsString = Object.keys(dailyData);
@@ -813,7 +834,6 @@ const getDailyRewards = (
 
         tokenFeesArr.push(feesTokenAmounts);
         usdFeesArr.push(feesUsd);
-
         statsTimestamps.push(dayTimestamps[i + 1]);
     }
 
@@ -835,6 +855,7 @@ const getDailyRewards = (
         const averageDailyYield = 0;
 
         return {
+            errorDays: [],
             tokenSymbols: tokenSymbols,
             timestamps: statsTimestamps,
             feesTokenAmounts: tokenFeesArr,
