@@ -84,6 +84,7 @@ class FeesGraph extends PureComponent<Props, {}> {
                         tick={{ fontSize: variables.FONT_SIZE.SMALL }}
                         stroke={colors.FONT_MEDIUM}
                         tickFormatter={formatUtils.getFormattedUsdValue}
+                        domain={[0, 'auto']}
                     ></YAxis>
 
                     <Tooltip

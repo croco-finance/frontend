@@ -22,13 +22,14 @@ const Text = styled.div`
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
+    iconSize?: number;
 }
 
-const InfoBox = ({ children }: Props) => {
+const InfoBox = ({ children, iconSize = 16, className }: Props) => {
     const theme: any = useTheme();
     return (
-        <Wrapper>
-            <Icon icon="info" color={theme.PURPLE} size={18} />
+        <Wrapper className={className}>
+            <Icon icon="info" color={theme.PURPLE} size={iconSize} />
             <Text>{children}</Text>
         </Wrapper>
     );

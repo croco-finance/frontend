@@ -229,6 +229,7 @@ export interface DailyData {
 }
 
 export interface DailyStats {
+    errorDays: number[]; // timestamps
     timestamps: number[];
     feesUsd: number[];
     tokenSymbols: string[] | undefined;

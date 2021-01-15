@@ -54,6 +54,14 @@ const FeeStatHeadline = styled.div`
     margin-right: 8px;
 `;
 
+const StyledInfoBox = styled(InfoBox)`
+    max-width: 80%;
+    justify-content: center;
+    font-size: ${variables.FONT_SIZE.TINY};
+    padding: 5px;
+    margin-left: 10px;
+`;
+
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     dailyStats: DailyStats;
     graphHeight?: number;
@@ -65,7 +73,7 @@ const DailyFeesChart = ({ dailyStats, graphHeight = 380, noBorder = false }: Pro
     const theme: any = useTheme();
 
     const graphData = graphUtils.getDailyGraphData(dailyStats);
-    const feesUsd = dailyStats.feesUsd;
+    const { feesUsd, errorDays } = dailyStats;
 
     const earnedSinceText = graphData
         ? formatUtils.getFormattedDateFromTimestamp(graphData[0].timestamp, 'MONTH_DAY')
@@ -83,6 +91,17 @@ const DailyFeesChart = ({ dailyStats, graphHeight = 380, noBorder = false }: Pro
             ) : (
                 <>
                     <GraphHeadline>{`Daily fees earned since ${earnedSinceText}`}</GraphHeadline>
+                    {errorDays.length > 0 && (
+                        <StyledInfoBox iconSize={14}>
+                            {`We couldn't get all fees for: ${errorDays.map(
+                                timestamp =>
+                                    ` ${formatUtils.getFormattedDateFromTimestamp(
+                                        timestamp,
+                                        'MONTH_DAY',
+                                    )}  `,
+                            )}`}
+                        </StyledInfoBox>
+                    )}
                     {graphData && feesUsd ? (
                         <>
                             <FeesGraph
