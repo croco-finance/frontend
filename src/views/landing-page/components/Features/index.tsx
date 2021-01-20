@@ -15,14 +15,14 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     font-size: ${variables.FONT_SIZE.NORMAL};
-    max-width: 980px;
+    max-width: 1080px;
 `;
 
 const FeaturesWrapper = styled.div`
     margin: 80px 0 0 0;
 
     & > section {
-        margin-bottom: 50px;
+        margin-bottom: 30px;
 
         &:last-child {
             margin-bottom: 0;
@@ -39,8 +39,8 @@ const StyledH1 = styled.h1<{ textAlign: string }>`
     margin-bottom: 10px;
 
     @media only screen and (min-width: ${variables.SCREEN_SIZE.MD}) {
-        font-size: 34px;
-        line-height: 44px;
+        font-size: 30px;
+        line-height: 40px;
         white-space: pre-wrap;
     }
 

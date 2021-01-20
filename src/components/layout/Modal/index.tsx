@@ -36,8 +36,8 @@ const ModalOverlay = styled.div`
     height: 100%;
     top: 0px;
     left: 0px;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.4);
+    /* backdrop-filter: blur(px); */
     display: flex;
     flex-direction: column;
     align-items: center;

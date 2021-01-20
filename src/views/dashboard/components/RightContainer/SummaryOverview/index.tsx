@@ -103,19 +103,20 @@ const SummaryOverview = ({ summary }: Props) => {
         />
     );
 
-    const yieldRow = (
-        <BoxRow
-            firstColumn="Yield reward"
-            secondColumn={
-                <VerticalCryptoAmounts
-                    tokenSymbols={yieldTokenSymbols}
-                    tokenAmounts={yieldTotalTokenAmounts}
-                />
-            }
-            thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
-            columnColors={['medium', 'light', 'dark']}
-        />
-    );
+    const yieldRow =
+        yieldTokenSymbols.length > 0 && yieldTotalTokenAmounts.length > 0 ? (
+            <BoxRow
+                firstColumn="Yield reward"
+                secondColumn={
+                    <VerticalCryptoAmounts
+                        tokenSymbols={yieldTokenSymbols}
+                        tokenAmounts={yieldTotalTokenAmounts}
+                    />
+                }
+                thirdColumn={<FiatValue value={yieldUsd} usePlusSymbol />}
+                columnColors={['medium', 'light', 'dark']}
+            />
+        ) : null;
 
     const txCostRow = (
         <BoxRow

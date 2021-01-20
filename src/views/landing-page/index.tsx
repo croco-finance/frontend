@@ -359,50 +359,50 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                 </TopBar>
 
                 <AnimatedWrapper>
-                    <Fade direction="up" delay={400} triggerOnce>
-                        <IllustrationWrapper>
-                            <LandingPageText />
-                        </IllustrationWrapper>
-                        <AddressInputWrapper isDark={theme === 'dark'}>
-                            <AddressInput
-                                isDark={theme === 'dark'}
-                                type="text"
-                                spellCheck={false}
-                                placeholder="Enter ENS domain or valid Ethereum address"
-                                value={inputAddress}
-                                onChange={event => {
-                                    handleAddressChange(event.target.value.trim());
-                                    setInputAddress(event.target.value.trim());
-                                }}
-                            ></AddressInput>
-                            <DashboardButton
-                                onClick={e => {
-                                    handleButtonOnClick();
-                                }}
-                                active={isValidAddress}
-                                to={{
-                                    pathname: isValidAddress ? '/dashboard' : '',
-                                }}
-                            >
-                                {loadingEnsDomain ? (
-                                    <Spinner size={14} color={colors.FONT_MEDIUM} />
-                                ) : (
-                                    "Let's Go!"
-                                )}
-                            </DashboardButton>
-                        </AddressInputWrapper>
-                        <PortisButtonWrapper>
-                            Or log in using
-                            <PortisButton onClick={handlePortisLogin}>
-                                {portisLoading ? (
-                                    <Spinner size={12} color={'#4b6b9a'} />
-                                ) : (
-                                    <Icon icon="portis" size={14} />
-                                )}
-                                <PortisButtonText>Portis</PortisButtonText>
-                            </PortisButton>
-                        </PortisButtonWrapper>
-                    </Fade>
+                    {/* <Fade direction="up" delay={400} triggerOnce> */}
+                    <IllustrationWrapper>
+                        <LandingPageText />
+                    </IllustrationWrapper>
+                    <AddressInputWrapper isDark={theme === 'dark'}>
+                        <AddressInput
+                            isDark={theme === 'dark'}
+                            type="text"
+                            spellCheck={false}
+                            placeholder="Enter ENS domain or valid Ethereum address"
+                            value={inputAddress}
+                            onChange={event => {
+                                handleAddressChange(event.target.value.trim());
+                                setInputAddress(event.target.value.trim());
+                            }}
+                        ></AddressInput>
+                        <DashboardButton
+                            onClick={e => {
+                                handleButtonOnClick();
+                            }}
+                            active={isValidAddress}
+                            to={{
+                                pathname: isValidAddress ? '/dashboard' : '',
+                            }}
+                        >
+                            {loadingEnsDomain ? (
+                                <Spinner size={14} color={colors.FONT_MEDIUM} />
+                            ) : (
+                                "Let's Go!"
+                            )}
+                        </DashboardButton>
+                    </AddressInputWrapper>
+                    <PortisButtonWrapper>
+                        Or log in using
+                        <PortisButton onClick={handlePortisLogin}>
+                            {portisLoading ? (
+                                <Spinner size={12} color={'#4b6b9a'} />
+                            ) : (
+                                <Icon icon="portis" size={14} />
+                            )}
+                            <PortisButtonText>Portis</PortisButtonText>
+                        </PortisButton>
+                    </PortisButtonWrapper>
+                    {/* </Fade> */}
                 </AnimatedWrapper>
 
                 <Features />

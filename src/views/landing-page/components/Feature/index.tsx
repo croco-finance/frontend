@@ -5,7 +5,8 @@ import { Fade } from 'react-awesome-reveal';
 import { rgba } from 'polished';
 import IMG from '../../../../../src/data/images/landing-page/feature1.png';
 
-const LIGHT_GREY = '#f5f5f5';
+// const LIGHT_GREY = '#f5f5f5';
+const LIGHT_GREY = '#fff';
 
 // due to iOS browser bug, it doesn't handle transparent color in gradients well
 const transparent = rgba(LIGHT_GREY, 0);
@@ -14,8 +15,9 @@ const Feature = styled.section<{ flip?: boolean }>`
     position: relative;
     display: flex;
     flex: 1;
-    border-radius: 40px;
-    background: ${props => props.theme.BACKGROUND};
+    /* border-radius: 40px; */
+    /* background: ${props => props.theme.BACKGROUND}; */
+    /* border-bottom: ${props => `1px solid ${props.theme.STROKE_GREY}`}; */
     flex-direction: ${props => (props.flip === true ? 'row-reverse' : 'row')};
     overflow: hidden;
     padding: 40px 0;
@@ -55,17 +57,17 @@ const StyledText = styled.div<{ flip?: boolean }>`
         z-index: -1;
     }
 
-    ${props =>
+    /* ${props =>
         props.flip === false &&
         `
             &:after {
                 right: -70%;
-                background: linear-gradient(to left, ${transparent} 0%, ${props.theme.BACKGROUND} 100%);
+                background: linear-gradient(to left, ${transparent} 0%, ${props.theme.BG_WHITE} 100%);
             }
 
             &:before {
                 left: 0;
-                background: ${props.theme.BACKGROUND};
+                background: ${props.theme.BG_WHITE};
                 z-index: -1;
             }
         `}
@@ -75,14 +77,14 @@ const StyledText = styled.div<{ flip?: boolean }>`
         `
             &:after {
                 left: -70%;
-                background: linear-gradient(to right, ${transparent} 0%, ${props.theme.BACKGROUND} 100%);
+                background: linear-gradient(to right, ${transparent} 0%, ${props.theme.BG_WHITE} 100%);
             }
 
             &:before {
                 right: 0;
-                background: ${props.theme.BACKGROUND};
+                background: ${props.theme.BG_WHITE};
             }
-        `}
+        `} */
 
     @media only screen and (min-width: ${variables.SCREEN_SIZE.XL}) {
         &:before {
@@ -134,9 +136,7 @@ const Index = ({ children, flip, image, backgroundPosition, backgroundSize }: Pr
     return (
         <Feature flip={flip}>
             <StyledText flip={flip}>
-                <Fade fraction={0.5} triggerOnce>
-                    <div>{children}</div>
-                </Fade>
+                <div>{children}</div>
             </StyledText>
             <FeatureImage
                 image={image}
