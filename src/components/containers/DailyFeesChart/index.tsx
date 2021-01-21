@@ -1,4 +1,4 @@
-import { Spinner, GrayBox, FiatValue, InfoBox } from '@components/ui';
+import { Spinner, GrayBox, FiatValue, InfoBox, QuestionTooltip } from '@components/ui';
 import { variables } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
@@ -27,6 +27,7 @@ const GraphHeadline = styled.div`
     height: 30px;
     color: ${props => props.theme.FONT_MEDIUM};
     font-size: ${variables.FONT_SIZE.NORMAL};
+    align-items: center;
 `;
 const StyledGrayBox = styled(GrayBox)`
     margin: 30px 15px 0px 20px;
@@ -90,7 +91,14 @@ const DailyFeesChart = ({ dailyStats, graphHeight = 380, noBorder = false }: Pro
                 exceptionContent
             ) : (
                 <>
-                    <GraphHeadline>{`Daily fees earned since ${earnedSinceText}`}</GraphHeadline>
+                    <GraphHeadline>
+                        {`Daily fees earned since ${earnedSinceText}`}
+                        <QuestionTooltip
+                            content={
+                                'Includes only rewards from trading fees (yield rewards are not included). Fee value is computed for token prices at the particular day.'
+                            }
+                        />
+                    </GraphHeadline>
                     {errorDays.length > 0 && (
                         <StyledInfoBox iconSize={14}>
                             {`We couldn't get all fees for: ${errorDays.map(
