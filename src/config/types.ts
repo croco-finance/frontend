@@ -1,4 +1,7 @@
 import { THEME } from '@config';
+import { ICONS } from '@components/ui/Icon/icons';
+import { TOKENS } from '@components/ui/TokenLogo/tokens';
+
 export interface Snap {
     block: number;
     ethPrice: number;
@@ -300,3 +303,6 @@ export interface GraphData {
     txCostUsd: number;
     impLossUsd: number;
 }
+
+export type IconType = keyof typeof ICONS;
+export type TokenType = keyof typeof TOKENS;

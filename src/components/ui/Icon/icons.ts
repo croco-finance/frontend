@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-export const ICONS: any = {
+export const ICONS = {
     // social icons
     github: require('../../../data/images/icons/github.svg'),
     twitter: require('../../../data/images/icons/twitter.svg'),

@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-export const TOKENS: any = {
+export const TOKENS = {
     aave: require('../../../data/images/tokens/aave.svg'),
     bal: require('../../../data/images/tokens/bal.svg'),
     comp: require('../../../data/images/tokens/comp.svg'),
