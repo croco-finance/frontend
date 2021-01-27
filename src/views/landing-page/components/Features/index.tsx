@@ -1,15 +1,14 @@
 import { variables } from '@config';
 import { useSelector } from '@reducers';
-import { join } from 'path';
 import React from 'react';
 import styled from 'styled-components';
+import OverviewImage from '../../../../../src/data/images/landing-page/overview.svg';
+import OverviewImageDark from '../../../../../src/data/images/landing-page/overview_dark.svg';
+import PoolsImage from '../../../../../src/data/images/landing-page/pools.svg';
+import PoolsImageDark from '../../../../../src/data/images/landing-page/pools_dark.svg';
+import SimulatorImage from '../../../../../src/data/images/landing-page/simulator.svg';
+import SimulatorImageDark from '../../../../../src/data/images/landing-page/simulator_dark.svg';
 import Feature from '../Feature';
-const feature1 = require('../../../../../src/data/images/landing-page/pools.png');
-const feature2 = require('../../../../../src/data/images/landing-page/compare-strategies.png');
-const feature3 = require('../../../../../src/data/images/landing-page/simulator.png');
-const feature1Dark = require('../../../../../src/data/images/landing-page/pools-dark.png');
-const feature2Dark = require('../../../../../src/data/images/landing-page/compare-strategies-dark.png');
-const feature3Dark = require('../../../../../src/data/images/landing-page/simulator-dark.png');
 
 const Wrapper = styled.div`
     display: flex;
@@ -22,11 +21,7 @@ const FeaturesWrapper = styled.div`
     margin: 80px 0 0 0;
 
     & > section {
-        margin-bottom: 30px;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
+        padding: 30px 0;
     }
 `;
 
@@ -37,6 +32,7 @@ const StyledH1 = styled.h1<{ textAlign: string }>`
     color: ${props => props.theme.FONT_DARK};
     padding-left: ${props => (props.textAlign === 'right' ? '20px' : '0')};
     margin-bottom: 10px;
+    width: 100%;
 
     @media only screen and (min-width: ${variables.SCREEN_SIZE.MD}) {
         font-size: 30px;
@@ -61,73 +57,45 @@ const StyledP = styled.p<{ textAlign: string }>`
     }
 `;
 
-const features = [
-    {
-        id: 1,
-        headline: 'Track your liquidity pool positions',
-        text:
-            'See how much you earned on fees and yield farming and how much you paid for transactions.',
-        textAlign: 'left',
-        backgroundPosition: 'center right',
-        backgroundSize: '360px auto',
-        image: feature1,
-        imageDark: feature1Dark,
-        soon: false,
-    },
-    {
-        id: 2,
-        headline: 'Compare strategies',
-        text: "See if you would've performed better if you hodl'd your tokens instead.",
-        backgroundPosition: 'center left',
-        backgroundSize: '470px auto',
-        textAlign: 'right',
-        image: feature2,
-        imageDark: feature2Dark,
-        soon: false,
-    },
-    {
-        id: 3,
-        headline: 'Simulator',
-        text: 'Try by yourself how changes in token prices affect pool value and divergence loss.',
-        backgroundSize: '460px auto',
-        backgroundPosition: 'bottom right',
-        textAlign: 'left',
-        image: feature3,
-        imageDark: feature3Dark,
-        soon: false,
-    },
-];
-
-export const resolveStaticPath = (path: string) => {
-    const staticPath = join('/static', path);
-    if (process.env.assetPrefix) {
-        return join(process.env.assetPrefix, staticPath);
-    }
-
-    return staticPath;
-};
-
 const Index = () => {
     const theme = useSelector(state => state.theme);
     return (
         <Wrapper>
             <FeaturesWrapper>
-                {features.map((item, key) => (
-                    <Feature
-                        image={theme === 'light' ? item.image : item.imageDark}
-                        key={item.id}
-                        flip={key % 2 === 1}
-                        backgroundPosition={
-                            item.backgroundPosition !== undefined
-                                ? item.backgroundPosition
-                                : undefined
-                        }
-                        backgroundSize={item.backgroundSize}
-                    >
-                        <StyledH1 textAlign={item.textAlign}>{item.headline}</StyledH1>
-                        <StyledP textAlign={item.textAlign}>{item.text}</StyledP>
-                    </Feature>
-                ))}
+                <Feature
+                    image={theme === 'light' ? PoolsImage : PoolsImageDark}
+                    imageSize={200}
+                    flip={false}
+                >
+                    <StyledH1 textAlign="left">Track your liquidity pool positions</StyledH1>
+                    <StyledP textAlign="left">
+                        See how much you earned on fees and yield farming and how much you paid for
+                        transactions.
+                    </StyledP>
+                </Feature>
+
+                <Feature
+                    image={theme === 'light' ? OverviewImage : OverviewImageDark}
+                    imageSize={240}
+                    flip={true}
+                >
+                    <StyledH1 textAlign="left">Compare strategies</StyledH1>
+                    <StyledP textAlign="left">
+                        See if you would've performed better if you hold your tokens instead.
+                    </StyledP>
+                </Feature>
+
+                <Feature
+                    image={theme === 'light' ? SimulatorImage : SimulatorImageDark}
+                    imageSize={250}
+                    flip={false}
+                >
+                    <StyledH1 textAlign="left">Simulator</StyledH1>
+                    <StyledP textAlign="left">
+                        Try by yourself how changes in token prices affect pool value and divergence
+                        loss.
+                    </StyledP>
+                </Feature>
             </FeaturesWrapper>
         </Wrapper>
     );

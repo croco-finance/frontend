@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="150.84818mm"
+   height="93.987816mm"
+   viewBox="0 0 150.84818 93.987816"
+   version="1.1"
+   id="svg13854"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="overview.svg">
+  <defs
+     id="defs13848" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.79466649"
+     inkscape:cx="259.95586"
+     inkscape:cy="111.15317"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1848"
+     inkscape:window-height="1016"
+     inkscape:window-x="72"
+     inkscape:window-y="1107"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata13851">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-33.344772,-68.724663)">
+    <g
+       id="g14532"
+       transform="translate(-59.328467)">
+      <rect
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         ry="4.1462235"
+         rx="4.1462235"
+         y="68.724663"
+         x="92.674011"
+         height="93.844246"
+         width="150.8474"
+         id="rect21838-6-0-4"
+         style="opacity:1;fill:#fafafc;fill-opacity:1;stroke:none;stroke-width:6.75133181;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="path21840-0-8-4"
+         d="m 235.14854,78.482028 1.2684,1.25262 c 0.087,0.0865 0.087,0.22664 0,0.31308 -0.088,0.0866 -0.2295,0.0866 -0.3171,0 l -0.9514,-0.93961 -0.9512,0.93961 c -0.088,0.0866 -0.2295,0.0866 -0.3172,0 -0.087,-0.0865 -0.087,-0.22665 0,-0.31308 z"
+         inkscape:connector-curvature="0"
+         style="fill:#c8cbd9;fill-opacity:1;fill-rule:evenodd;stroke-width:0.29646572" />
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.54939246px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#7d8da9;fill-opacity:1;stroke:none;stroke-width:0.0887348"
+         x="100.98245"
+         y="80.208427"
+         id="text21844-2-7-3"><tspan
+           id="tspan21842-7-6-8"
+           sodipodi:role="line"
+           x="100.98245"
+           y="80.208427"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.57307005px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#7d8da9;fill-opacity:1;stroke-width:0.0887348">You gained compared to hodling pooled assets</tspan></text>
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="path21846-6-5-6"
+         d="M 243.33084,147.51369 H 92.673239 v 13.37608 c 0,1.00972 0.8912,1.82271 1.9973,1.82271 H 241.33374 c 1.1067,0 1.9971,-0.81299 1.9971,-1.82271 z"
+         style="opacity:1;fill:#f2f3f4;fill-opacity:1;stroke:none;stroke-width:0.13027205;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         inkscape:connector-curvature="0" />
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="text21850-1-2-0"
+         y="156.01765"
+         x="101.17679"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.66774774px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#657795;fill-opacity:1;stroke:none;stroke-width:0.09169368"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.69221616px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#657795;fill-opacity:1;stroke-width:0.09169368"
+           y="156.01765"
+           x="101.17679"
+           sodipodi:role="line"
+           id="tspan21848-3-4-8">Total gain </tspan></text>
+      <rect
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         style="opacity:1;fill:#40bf4a;fill-opacity:1;stroke:none;stroke-width:0.18958798;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.56876392, 0.56876392;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect21852-2-0-9"
+         width="20.163887"
+         height="7.6688123"
+         x="206.3096"
+         y="151.27861"
+         rx="1.1622226"
+         ry="1.1622226" />
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.88292074px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.10616061"
+         x="208.34573"
+         y="156.39664"
+         id="text21856-1-0-2"><tspan
+           id="tspan21854-5-6-2"
+           sodipodi:role="line"
+           x="208.34573"
+           y="156.39664"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.66720295px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#ffffff;fill-opacity:1;stroke-width:0.10616061">+ $288.48</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="text21860-9-8-3"
+         y="93.156853"
+         x="101.11917"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.90352154px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#94a2bb;fill-opacity:1;stroke:none;stroke-width:0.07258803"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.92289138px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#94a2bb;fill-opacity:1;stroke-width:0.07258803"
+           y="93.156853"
+           x="101.11917"
+           sodipodi:role="line"
+           id="tspan21858-9-5-1">Gains &amp; Losses</tspan></text>
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         inkscape:connector-curvature="0"
+         id="path21862-1-4-8"
+         d="M 97.580339,96.446819 H 236.15814"
+         style="fill:none;stroke:#c8cbd9;stroke-width:0.21731156;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:nodetypes="cc" />
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.90352154px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#94a2bb;fill-opacity:1;stroke:none;stroke-width:0.07258803"
+         x="161.07083"
+         y="93.156853"
+         id="text21866-4-9-3"><tspan
+           id="tspan21864-9-4-4"
+           sodipodi:role="line"
+           x="161.07083"
+           y="93.156853"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.92289138px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#94a2bb;fill-opacity:1;stroke-width:0.07258803">Crypto amount</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="text21870-1-6-2"
+         y="93.156853"
+         x="209.79544"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.90352154px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#94a2bb;fill-opacity:1;stroke:none;stroke-width:0.07258803"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.92289138px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#94a2bb;fill-opacity:1;stroke-width:0.07258803"
+           y="93.156853"
+           x="209.79544"
+           sodipodi:role="line"
+           id="tspan21868-0-8-2">Value today</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="text21874-7-3-4"
+         y="104.94125"
+         x="100.98001"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.5943408px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#657795;fill-opacity:1;stroke:none;stroke-width:0.08985853"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.61832023px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#657795;fill-opacity:1;stroke-width:0.08985853"
+           y="104.94125"
+           x="100.98001"
+           sodipodi:role="line"
+           id="tspan21872-5-2-5">Fees earned</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.5943408px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#657795;fill-opacity:1;stroke:none;stroke-width:0.08985853"
+         x="101.2681"
+         y="117.80447"
+         id="text21878-8-3-1"><tspan
+           id="tspan21876-7-6-7"
+           sodipodi:role="line"
+           x="101.2681"
+           y="117.80447"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.61832023px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#657795;fill-opacity:1;stroke-width:0.08985853">Yield rewards</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="text21882-0-2-5"
+         y="129.58278"
+         x="101.17825"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.5943408px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#657795;fill-opacity:1;stroke:none;stroke-width:0.08985853"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.61832023px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#657795;fill-opacity:1;stroke-width:0.08985853"
+           y="129.58278"
+           x="101.17825"
+           sodipodi:role="line"
+           id="tspan21880-4-2-7">Tx. costs</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.5943408px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#657795;fill-opacity:1;stroke:none;stroke-width:0.08985853"
+         x="100.98001"
+         y="141.59973"
+         id="text21886-8-4-1"><tspan
+           id="tspan21884-0-7-6"
+           sodipodi:role="line"
+           x="100.98001"
+           y="141.59973"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.61832023px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#657795;fill-opacity:1;stroke-width:0.08985853">Price divergence loss</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.83018279px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#002237;fill-opacity:1;stroke:none;stroke-width:0.10471877"
+         x="210.06644"
+         y="104.69038"
+         id="text21890-4-0-9"><tspan
+           id="tspan21888-2-4-8"
+           sodipodi:role="line"
+           x="210.06644"
+           y="104.69038"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.61739445px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#002237;fill-opacity:1;stroke-width:0.10471877">+ $960.16</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.94793248px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#94a2bb;fill-opacity:1;stroke:none;stroke-width:0.08059765"
+         x="163.83255"
+         y="103.73708"
+         id="text21894-9-9-1"><tspan
+           id="tspan21892-6-6-3"
+           sodipodi:role="line"
+           x="163.83255"
+           y="103.73708"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.78415823px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#94a2bb;fill-opacity:1;stroke-width:0.08059765">0.0164 WBTC</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="text21898-1-5-3"
+         y="107.62331"
+         x="163.66458"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.94793248px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#94a2bb;fill-opacity:1;stroke:none;stroke-width:0.08059765"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.78415823px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#94a2bb;fill-opacity:1;stroke-width:0.08059765"
+           y="107.62331"
+           x="163.66458"
+           sodipodi:role="line"
+           id="tspan21896-0-4-3">0.4475 WETH</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="text21902-4-6-7"
+         y="117.82226"
+         x="210.3018"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.83018279px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#002237;fill-opacity:1;stroke:none;stroke-width:0.10471877"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.61739445px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#002237;fill-opacity:1;stroke-width:0.10471877"
+           y="117.82226"
+           x="210.3018"
+           sodipodi:role="line"
+           id="tspan21900-2-4-9">+ $521.63</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.83018279px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#002237;fill-opacity:1;stroke:none;stroke-width:0.10471877"
+         x="212.92435"
+         y="129.60057"
+         id="text21906-2-2-8"><tspan
+           id="tspan21904-2-5-6"
+           sodipodi:role="line"
+           x="212.92435"
+           y="129.60057"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.61739445px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#002237;fill-opacity:1;stroke-width:0.10471877">- $32.41</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="text21910-0-1-7"
+         y="117.53063"
+         x="165.85013"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.94793248px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#94a2bb;fill-opacity:1;stroke:none;stroke-width:0.08059765"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.78415823px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#94a2bb;fill-opacity:1;stroke-width:0.08059765"
+           y="117.53063"
+           x="165.85013"
+           sodipodi:role="line"
+           id="tspan21908-5-6-0">151.9167 UNI</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.94793248px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#94a2bb;fill-opacity:1;stroke:none;stroke-width:0.08059765"
+         x="165.98929"
+         y="129.30888"
+         id="text21914-5-1-4"><tspan
+           id="tspan21912-2-3-8"
+           sodipodi:role="line"
+           x="165.98929"
+           y="129.30888"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:2.78415823px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#94a2bb;fill-opacity:1;stroke-width:0.08059765">0.0585 ETH</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="text21918-9-7-4"
+         y="140.91411"
+         x="209.36136"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.83018279px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#002237;fill-opacity:1;stroke:none;stroke-width:0.10471877"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.61739445px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#002237;fill-opacity:1;stroke-width:0.10471877"
+           y="140.91411"
+           x="209.36136"
+           sodipodi:role="line"
+           id="tspan21916-0-7-8">- $1,160.9</tspan></text>
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/robert/Documents/projects/croco-finance/frontend/src/data/images/landing-page/compare-strategies.png"
+         id="text21922-2-1-1"
+         y="80.616508"
+         x="208.34573"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.88292074px;line-height:1.25;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';letter-spacing:0px;word-spacing:0px;fill:#40bf4a;fill-opacity:1;stroke:none;stroke-width:0.10616061"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:3.66720295px;font-family:'TT Hoves';-inkscape-font-specification:'TT Hoves Medium';fill:#40bf4a;fill-opacity:1;stroke-width:0.10616061"
+           y="80.616508"
+           x="208.34573"
+           sodipodi:role="line"
+           id="tspan21920-8-2-6">+ $288.48</tspan></text>
+    </g>
+  </g>
+</svg>

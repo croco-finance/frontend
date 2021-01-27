@@ -12,7 +12,7 @@ import styled, { css } from 'styled-components';
 import Features from './components/Features';
 import LandingPageText from './components/LandingPageText';
 
-const CONTENT_WIDTH = 1100;
+const CONTENT_WIDTH = 1200;
 const INPUT_HEIGHT = '66px';
 const INPUT_HEIGHT_SMALL = '50px';
 const INPUT_BORDER_RADIUS = '10px';
@@ -23,14 +23,14 @@ const MainWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 0 20px;
     background-color: ${props => props.theme.BG_WHITE};
-    padding-bottom: 180px;
+    padding-bottom: 100px;
 
     ${styles.scrollBarStyles};
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        padding: 0 10px;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 `;
 
@@ -227,10 +227,16 @@ const PortisButtonText = styled.div`
 const Footer = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 160px;
     width: 100%;
-    height: 80px;
+    height: 50px;
+    justify-content: center;
     background-color: ${props => props.theme.BACKGROUND};
+    color: ${props => props.theme.FONT_MEDIUM};
+    font-size: ${variables.FONT_SIZE.SMALL};
+`;
+
+const FooterText = styled.div`
+    margin-right: 6px;
 `;
 
 // props: RouteComponentProps<any>
@@ -324,91 +330,97 @@ const LandingPage = (props: RouteComponentProps<any>) => {
     };
 
     return (
-        <MainWrapper>
-            <ContentWrapper>
-                <TopBar>
-                    <PageLogoWrapper>
-                        <PageLogo height={20} />
-                    </PageLogoWrapper>
-                    <CommunityIconsWrapper>
-                        <IconLinkWrapper
-                            rel="noreferrer"
-                            target="_blank"
-                            href={constants.DISCORD_LINK}
-                        >
-                            <Icon icon="discord" size={20} />
-                        </IconLinkWrapper>
-                        <IconLinkWrapper
-                            rel="noreferrer"
-                            target="_blank"
-                            href={constants.TELEGRAM_LINK}
-                        >
-                            <Icon icon="telegram" size={20} />
-                        </IconLinkWrapper>
-                        <IconLinkWrapper
-                            rel="noreferrer"
-                            target="_blank"
-                            href={constants.TWITTER_LINK}
-                        >
-                            <Icon icon="twitter" size={20} />
-                        </IconLinkWrapper>
-                        <DarkModeSwitchWrapper>
-                            <DarkModeSwitch />
-                        </DarkModeSwitchWrapper>
-                    </CommunityIconsWrapper>
-                </TopBar>
+        <>
+            <MainWrapper>
+                <ContentWrapper>
+                    <TopBar>
+                        <PageLogoWrapper>
+                            <PageLogo height={20} />
+                        </PageLogoWrapper>
+                        <CommunityIconsWrapper>
+                            <IconLinkWrapper
+                                rel="noreferrer"
+                                target="_blank"
+                                href={constants.DISCORD_LINK}
+                            >
+                                <Icon icon="discord" size={20} />
+                            </IconLinkWrapper>
+                            <IconLinkWrapper
+                                rel="noreferrer"
+                                target="_blank"
+                                href={constants.TELEGRAM_LINK}
+                            >
+                                <Icon icon="telegram" size={20} />
+                            </IconLinkWrapper>
+                            <IconLinkWrapper
+                                rel="noreferrer"
+                                target="_blank"
+                                href={constants.TWITTER_LINK}
+                            >
+                                <Icon icon="twitter" size={20} />
+                            </IconLinkWrapper>
+                            <DarkModeSwitchWrapper>
+                                <DarkModeSwitch />
+                            </DarkModeSwitchWrapper>
+                        </CommunityIconsWrapper>
+                    </TopBar>
 
-                <AnimatedWrapper>
-                    {/* <Fade direction="up" delay={400} triggerOnce> */}
-                    <IllustrationWrapper>
-                        <LandingPageText />
-                    </IllustrationWrapper>
-                    <AddressInputWrapper isDark={theme === 'dark'}>
-                        <AddressInput
-                            isDark={theme === 'dark'}
-                            type="text"
-                            spellCheck={false}
-                            placeholder="Enter ENS domain or valid Ethereum address"
-                            value={inputAddress}
-                            onChange={event => {
-                                handleAddressChange(event.target.value.trim());
-                                setInputAddress(event.target.value.trim());
-                            }}
-                        ></AddressInput>
-                        <DashboardButton
-                            onClick={e => {
-                                handleButtonOnClick();
-                            }}
-                            active={isValidAddress}
-                            to={{
-                                pathname: isValidAddress ? '/dashboard' : '',
-                            }}
-                        >
-                            {loadingEnsDomain ? (
-                                <Spinner size={14} color={colors.FONT_MEDIUM} />
-                            ) : (
-                                "Let's Go!"
-                            )}
-                        </DashboardButton>
-                    </AddressInputWrapper>
-                    <PortisButtonWrapper>
-                        Or log in using
-                        <PortisButton onClick={handlePortisLogin}>
-                            {portisLoading ? (
-                                <Spinner size={12} color={'#4b6b9a'} />
-                            ) : (
-                                <Icon icon="portis" size={14} />
-                            )}
-                            <PortisButtonText>Portis</PortisButtonText>
-                        </PortisButton>
-                    </PortisButtonWrapper>
-                    {/* </Fade> */}
-                </AnimatedWrapper>
+                    <AnimatedWrapper>
+                        {/* <Fade direction="up" delay={400} triggerOnce> */}
+                        <IllustrationWrapper>
+                            <LandingPageText />
+                        </IllustrationWrapper>
+                        <AddressInputWrapper isDark={theme === 'dark'}>
+                            <AddressInput
+                                isDark={theme === 'dark'}
+                                type="text"
+                                spellCheck={false}
+                                placeholder="Enter ENS domain or valid Ethereum address"
+                                value={inputAddress}
+                                onChange={event => {
+                                    handleAddressChange(event.target.value.trim());
+                                    setInputAddress(event.target.value.trim());
+                                }}
+                            ></AddressInput>
+                            <DashboardButton
+                                onClick={e => {
+                                    handleButtonOnClick();
+                                }}
+                                active={isValidAddress}
+                                to={{
+                                    pathname: isValidAddress ? '/dashboard' : '',
+                                }}
+                            >
+                                {loadingEnsDomain ? (
+                                    <Spinner size={14} color={colors.FONT_MEDIUM} />
+                                ) : (
+                                    "Let's Go!"
+                                )}
+                            </DashboardButton>
+                        </AddressInputWrapper>
+                        <PortisButtonWrapper>
+                            Or log in using
+                            <PortisButton onClick={handlePortisLogin}>
+                                {portisLoading ? (
+                                    <Spinner size={12} color={'#4b6b9a'} />
+                                ) : (
+                                    <Icon icon="portis" size={14} />
+                                )}
+                                <PortisButtonText>Portis</PortisButtonText>
+                            </PortisButton>
+                        </PortisButtonWrapper>
+                        {/* </Fade> */}
+                    </AnimatedWrapper>
 
-                <Features />
-            </ContentWrapper>
-            {/* <Footer>croco.finance</Footer> */}
-        </MainWrapper>
+                    <Features />
+                </ContentWrapper>
+            </MainWrapper>
+
+            <Footer>
+                <FooterText>Croco Finance @ 2021</FooterText>
+                <Icon icon="croco_emoji" size={14} />
+            </Footer>
+        </>
     );
 };
 export default withRouter(LandingPage);
