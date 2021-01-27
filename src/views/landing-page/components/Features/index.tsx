@@ -65,6 +65,7 @@ const Index = () => {
                 <Feature
                     image={theme === 'light' ? PoolsImage : PoolsImageDark}
                     imageSize={200}
+                    imageSizeSmall={150}
                     flip={false}
                 >
                     <StyledH1 textAlign="left">Track your liquidity pool positions</StyledH1>
@@ -77,6 +78,7 @@ const Index = () => {
                 <Feature
                     image={theme === 'light' ? OverviewImage : OverviewImageDark}
                     imageSize={240}
+                    imageSizeSmall={170}
                     flip={true}
                 >
                     <StyledH1 textAlign="left">Compare strategies</StyledH1>
@@ -88,6 +90,7 @@ const Index = () => {
                 <Feature
                     image={theme === 'light' ? SimulatorImage : SimulatorImageDark}
                     imageSize={250}
+                    imageSizeSmall={170}
                     flip={false}
                 >
                     <StyledH1 textAlign="left">Simulator</StyledH1>

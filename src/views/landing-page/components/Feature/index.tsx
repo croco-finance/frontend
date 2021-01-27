@@ -35,6 +35,7 @@ const StyledText = styled.div<{ flip?: boolean }>`
 
     @media only screen and (max-width: ${variables.SCREEN_SIZE.MD}) {
         width: 100%;
+        padding: 10px 20px;
     }
 `;
 
@@ -43,12 +44,20 @@ const ImageWrapper = styled.div`
     width: 50%;
     display: flex;
     justify-content: center;
+
+    @media only screen and (max-width: ${variables.SCREEN_SIZE.MD}) {
+        padding: 10px 20px;
+    }
 `;
-const FeatureImage = styled.img<{ size: number }>`
+const FeatureImage = styled.img<{ size: number; sizeSmall: number }>`
     height: ${props => props.size}px;
 
     @media only screen and (min-width: ${variables.SCREEN_SIZE.MD}) {
         display: block;
+    }
+
+    @media only screen and (max-width: ${variables.SCREEN_SIZE.MD}) {
+        height: ${props => props.sizeSmall}px;
     }
 `;
 
@@ -56,15 +65,16 @@ interface Props {
     children: ReactNode;
     flip?: boolean;
     imageSize: number;
+    imageSizeSmall: number;
     image: string;
 }
 
-const Index = ({ children, flip, image, imageSize }: Props) => {
+const Index = ({ children, flip, image, imageSize, imageSizeSmall }: Props) => {
     return (
         <Feature flip={flip}>
             <StyledText flip={flip}>{children}</StyledText>
             <ImageWrapper>
-                <FeatureImage src={image} size={imageSize} />
+                <FeatureImage src={image} size={imageSize} sizeSmall={imageSizeSmall} />
             </ImageWrapper>
         </Feature>
     );
