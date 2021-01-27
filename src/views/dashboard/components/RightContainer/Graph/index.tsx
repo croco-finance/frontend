@@ -13,7 +13,7 @@ import {
     ResponsiveContainer,
 } from 'recharts';
 
-import { GraphData, AppThemeColors } from '@types';
+import { InteractionsGraphData, AppThemeColors } from '@types';
 import CustomTooltip from './CustomTooltip';
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -69,13 +69,18 @@ class CustomizedAxisTick extends PureComponent<any, any> {
     }
 }
 
-const isYieldArea = (data: GraphData) => {
+const isYieldArea = (data: InteractionsGraphData) => {
     const actionLabel = getFormattedXAxisLabel(data.label);
     if (actionLabel === 'Yield start') return true;
     return false;
 };
 
-const getBarColor = (data: GraphData, highlightedAreaId, dataKeyName, theme: AppThemeColors) => {
+const getBarColor = (
+    data: InteractionsGraphData,
+    highlightedAreaId,
+    dataKeyName,
+    theme: AppThemeColors,
+) => {
     const lightPurple = '#e9bcf9';
     const darkPurple = '#c752f1';
 
@@ -99,7 +104,7 @@ const getBarColor = (data: GraphData, highlightedAreaId, dataKeyName, theme: App
 };
 
 const getBarStrokeColor = (
-    data: GraphData,
+    data: InteractionsGraphData,
     highlightedAreaId,
     dataKeyName,
     theme: AppThemeColors,

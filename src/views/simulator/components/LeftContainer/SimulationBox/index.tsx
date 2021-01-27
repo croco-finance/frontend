@@ -1,10 +1,10 @@
 import { FiatValue, TokenLogo } from '@components/ui';
-import { colors, variables, types } from '@config';
+import { types, variables } from '@config';
+import { formatUtils } from '@utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import PriceChangeRow from './PriceChangeRow';
-import { formatUtils } from '@utils';
 
 const GRID_GAP = 5;
 
@@ -103,7 +103,7 @@ const SimulationBox = ({
     const yieldTokenSymbol = yieldToken?.symbol;
 
     // find out if WETH is among pooled tokens. If not, the index will be -1
-    const indexOfWeth = tokenSymbolsArr.indexOf('WETH');
+    const indexOfWeth = tokenSymbolsArr.indexOf('weth');
 
     // get index of yield token
     const indexOfYield = tokenSymbolsArr.indexOf(yieldTokenSymbol);
@@ -165,7 +165,7 @@ const SimulationBox = ({
                             onDefaultSliderValueChange={newValue => onNewDefaultEthValue(newValue)}
                             firstColumn={
                                 <TokenWrapper>
-                                    <TokenLogo symbol={'ETH'} size={22} />
+                                    <TokenLogo symbol={'eth'} size={22} />
                                     <TokenSymbol>ETH</TokenSymbol>
                                 </TokenWrapper>
                             }

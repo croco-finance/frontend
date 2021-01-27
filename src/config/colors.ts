@@ -47,6 +47,7 @@ export const THEME = {
         PASTEL_YELLOW: '#fff9aa',
 
         STROKE_GREY: '#d6dbe4',
+        STROKE_GREY_LIGHT: '#e5eaf3',
         STROKE_BLUE: '#a9c6ff',
         STROKE_PURPLE: '#baa6f9',
 
@@ -128,6 +129,7 @@ export const THEME = {
         PASTEL_YELLOW: '#fff9aa',
 
         STROKE_GREY: '#323437',
+        STROKE_GREY_LIGHT: '#292e2f',
         STROKE_BLUE: '#002b80',
         STROKE_PURPLE: '#6241c7',
 

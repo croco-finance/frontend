@@ -2,6 +2,7 @@ import React from 'react';
 import { ReactSVG } from 'react-svg';
 import styled, { css } from 'styled-components';
 import { ICONS } from './icons';
+import { IconType } from '@types';
 
 const SvgWrapper = styled.div<{ size: number; color?: string; hoverColor?: string }>`
     display: inline-block;
@@ -33,7 +34,7 @@ const SvgWrapper = styled.div<{ size: number; color?: string; hoverColor?: strin
 `;
 
 interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
-    icon: string; // add TokenType later
+    icon: IconType;
     size?: number;
     color?: string;
     hoverColor?: string;

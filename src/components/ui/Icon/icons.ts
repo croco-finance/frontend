@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-export const ICONS: any = {
+export const ICONS = {
     // social icons
     github: require('../../../data/images/icons/github.svg'),
     twitter: require('../../../data/images/icons/twitter.svg'),
@@ -29,6 +29,9 @@ export const ICONS: any = {
     close: require('../../../data/images/icons/close.svg'),
     copy: require('../../../data/images/icons/copy.svg'),
     settings: require('../../../data/images/icons/settings.svg'),
+    croco_emoji: require('../../../data/images/icons/croco_emoji.svg'),
+    heart: require('../../../data/images/icons/heart.svg'),
+    croco_heart: require('../../../data/images/icons/croco_heart.svg'),
 
     // themes
     dayMode: require('../../../data/images/icons/day-mode.svg'),

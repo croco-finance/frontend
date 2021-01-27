@@ -160,7 +160,6 @@ export const changeSelectedPool = (poolId: string) => {
 };
 
 export const fetchSnapshots = (addresses: string[] | string) => {
-    // I can use dispatch here thanks to redux thunk
     return async dispatch => {
         dispatch(fetchSnapsInit());
 

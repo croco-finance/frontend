@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Select, TokenLogo } from '..';
+import { TokenType } from '@types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -12,7 +13,7 @@ const Wrapper = styled.div`
 `;
 
 interface Option {
-    value: string;
+    value: TokenType;
     label: string;
 }
 const TokenOption = ({ value, label }: Option) => (

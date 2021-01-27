@@ -1,4 +1,4 @@
-import { DailyStats, GraphData, IntervalStats } from '@types';
+import { DailyStats, InteractionsGraphData, IntervalStats } from '@types';
 import { mathUtils } from '.';
 
 const getDailyGraphData = (data: DailyStats) => {
@@ -18,10 +18,10 @@ const getDailyGraphData = (data: DailyStats) => {
     return graphData;
 };
 
-const getGraphData = (intervalStats: IntervalStats[]) => {
+const getInteractionsGraphData = (intervalStats: IntervalStats[]): InteractionsGraphData[] => {
     const statsCount = intervalStats.length;
     const lastTimestamp = intervalStats[intervalStats.length - 1].timestampEnd;
-    let graphData: GraphData[] = new Array(statsCount + 1);
+    let graphData: InteractionsGraphData[] = new Array(statsCount + 1);
 
     // Get first element of graph data. The rest will be computed using loop
     const initialPoolValues = new Array(statsCount).fill(undefined);
@@ -237,7 +237,7 @@ const getStrategiesMaxPossiblePoolValues = (
 };
 
 export {
-    getGraphData,
+    getInteractionsGraphData,
     getILGraphData,
     getMaxPossiblePoolValue,
     getStrategiesGraphData,

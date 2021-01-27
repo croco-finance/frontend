@@ -1,4 +1,3 @@
-import { colors } from '@config';
 import React from 'react';
 import styled, { css } from 'styled-components';
 

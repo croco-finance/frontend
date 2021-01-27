@@ -1,11 +1,10 @@
-import { colors, variables } from '@config';
+import { CustomLink, Icon, MultipleTokenLogo } from '@components/ui';
+import { constants, variables } from '@config';
+import { useTheme } from '@hooks';
+import { Exchange, TokenType } from '@types';
+import { formatUtils } from '@utils';
 import React from 'react';
 import styled from 'styled-components';
-import { MultipleTokenLogo, CustomLink, Icon } from '@components/ui';
-import { formatUtils } from '@utils';
-import { Exchange } from '@types';
-import { constants } from '@config';
-import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     display: flex;
@@ -44,7 +43,7 @@ const IconWrapper = styled.div`
 `;
 
 interface Props {
-    tokenSymbolsArr: Array<string>;
+    tokenSymbolsArr: Array<TokenType>;
     exchange: Exchange;
     poolId: string;
 }

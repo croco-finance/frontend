@@ -1,4 +1,7 @@
 import { THEME } from '@config';
+import { ICONS } from '@components/ui/Icon/icons';
+import { TOKENS } from '@components/ui/TokenLogo/tokens';
+
 export interface Snap {
     block: number;
     ethPrice: number;
@@ -178,7 +181,7 @@ export interface PoolItem {
     depositTimestamps: number[];
     depositTokenAmounts: number[][];
     depositEthAmounts: number[][];
-    tokenSymbols: string[];
+    tokenSymbols: TokenType[];
     snapshots: Snap[];
     dailyStats: DailyStats | undefined;
 }
@@ -288,7 +291,7 @@ export interface DailyFeesGraph {
     feesUsd: number;
 }
 
-export interface GraphData {
+export interface InteractionsGraphData {
     label: string;
     lastTimestamp: number;
     timestampPrev: number | null;
@@ -300,3 +303,6 @@ export interface GraphData {
     txCostUsd: number;
     impLossUsd: number;
 }
+
+export type IconType = keyof typeof ICONS;
+export type TokenType = keyof typeof TOKENS;

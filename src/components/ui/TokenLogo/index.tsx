@@ -2,6 +2,7 @@ import React from 'react';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
 import { TOKENS } from './tokens';
+import { TokenType } from '@types';
 
 const SvgWrapper = styled.div<Omit<Props, 'symbol'>>`
     display: inline-block;
@@ -14,7 +15,7 @@ const SvgWrapper = styled.div<Omit<Props, 'symbol'>>`
 `;
 
 interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
-    symbol: string; // add TokenType later
+    symbol: TokenType;
     size?: number;
 }
 

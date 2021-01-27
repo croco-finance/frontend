@@ -76,7 +76,7 @@ const Overview = () => {
     let historyGraphData =
         selectedPoolId === 'all'
             ? undefined
-            : graphUtils.getGraphData(allPools[selectedPoolId].intervalStats);
+            : graphUtils.getInteractionsGraphData(allPools[selectedPoolId].intervalStats);
 
     let exchange;
     let poolId;
