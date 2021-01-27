@@ -7,12 +7,10 @@ import {
     IntervalStats,
     PoolItem,
     Snap,
-    SnapStructure,
     SummaryStats,
     Withdrawal,
 } from '@types';
-import { formatUtils, lossUtils, mathUtils, helperUtils } from '.';
-import { validationUtils } from '@utils';
+import { formatUtils, helperUtils, lossUtils, mathUtils, validationUtils } from '.';
 
 const getPoolStatsFromSnapshots = (poolSnapshots: Snap[]) => {
     // get interval stats first
@@ -111,7 +109,7 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
         newBalancesNoFees,
     );
 
-    // Workaround - if the fees are negative (which is WRONG!), set NaN fees
+    // Temporary Workaround - if the fees are negative (should not happen in theory, but the data might be inaccurate)
     for (let i = 0; i < feesTokenAmounts.length; i++) {
         if (feesTokenAmounts[i] < 0) {
             feesTokenAmounts.fill(0);
@@ -355,15 +353,6 @@ const getDepositsOrWithdrawalsEthSum = (deposits: Deposit[] | Withdrawal[]) => {
     return valueEthSum;
 };
 
-const isZeroInArray = (arr: number[]) => {
-    arr.every(element => {
-        // check whether element passes condition
-        // if passed return true, if fails return false
-        if (element === 0) return true;
-    });
-
-    return false;
-};
 interface yieldTokenRewards {
     claimed: number;
     unclaimed: number;
@@ -492,7 +481,7 @@ const getCumulativeStats = (
     // yield USD
     // If there is zero for some yield token, it means that the price is not defined and I can't compute overall yield USD
     let yieldUsd = 0;
-    if (!isZeroInArray(yieldTokenPrices)) {
+    if (!validationUtils.isZeroInArray(yieldTokenPrices)) {
         yieldUsd = mathUtils.getTokenArrayValue(yieldTotalTokenAmounts, yieldTokenPrices);
     }
 
@@ -574,11 +563,11 @@ const mergeTokenSymbolsAndAmountsArrays = (
     return { timestamps: timestampsMerged, feesUsd: feesUsdMerged, errorDays: errorDays };
 };
 
+// Returns pools summary object for specified pool IDs
 const getPoolsSummaryObject = (
     allPools: AllPoolsGlobal,
-    filteredPoolIds: string[], // do summary from these pool Ids
+    filteredPoolIds: string[],
 ): SummaryStats => {
-    // TODO compute separately for Balancer and for Uniswap
     let feesUsdSum = 0;
     let feesTokenAmountsSum: { [key: string]: number } = {}; // {ETH: 5.6, DAI: 123.43, ...}
     let txCostUsdSum = 0;
@@ -693,9 +682,6 @@ const getPoolsSummaryObject = (
         yieldUsd: yieldUsdSum,
         txCostEth: txCostEthSum,
         txCostUsd: txCostUsdSum,
-        // The symbols for fees are the same as pooledTokenSymbols,
-        // but I am not 100% sure if they are always sorted the same way if I use Object.keys(object).
-        // TODO check if that's the case
         feesTokenSymbols: Object.keys(feesTokenAmountsSum),
         feesTokenAmounts: Object.values(feesTokenAmountsSum),
         feesUsd: feesUsdSum,
@@ -869,6 +855,7 @@ const getDailyRewards = (
     }
 };
 
+// TODO compute average yield rewards for the last month
 const getAverageDailyYieldRewardsSinceTimestamp = (timestamp: number, snapshots: Snap[]) => {
     console.log('--- YIELD ---');
     console.log('timestamp', timestamp);

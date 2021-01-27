@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import TokenLogo from '../TokenLogo';
 import InlineCircle from '../InlineCircle';
+import { TokenType } from '@types';
 
 // if equal to 1, logos are nex to each other.
 // if equal to 0, logo are stuck on top of each other
@@ -38,7 +39,7 @@ const getWrapperWidth = (tokenCount: number, logoSize: number, threshold: number
 };
 
 interface Props {
-    tokens: Array<string>; // ['usdt', 'wbtc', 'eth', 'dai', '...']
+    tokens: Array<TokenType>; // ['usdt', 'wbtc', 'eth', 'dai', '...']
     onChange?: any;
     margin?: boolean;
     size?: number;

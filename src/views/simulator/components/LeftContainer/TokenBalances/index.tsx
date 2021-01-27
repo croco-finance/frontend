@@ -2,6 +2,7 @@ import { TokenLogo } from '@components/ui';
 import { variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
+import { TokenType } from '@types';
 
 const Wrapper = styled.div``;
 const ItemWrapper = styled.div`
@@ -16,27 +17,18 @@ const ValueWrapper = styled.div`
     font-size: ${variables.FONT_SIZE.NORMAL};
 `;
 
-const getGridDimensions = (numberOfTokens: number) => {
-    if (numberOfTokens <= 4) {
-        return { rows: numberOfTokens, columns: 1 };
-    } else {
-        return { rows: 4, columns: 2 };
-    }
-};
-
 interface Props {
-    balances: { [key: string]: number };
+    balances: { [key in TokenType]: number };
     size?: number;
 }
 
 const TokenBalances = ({ balances, size = 20 }: Props) => {
-    const numberOfTokens = Object.keys(balances).length;
-
-    const { rows, columns } = getGridDimensions(numberOfTokens);
+    const tokens = Object.keys(balances) as Array<keyof typeof balances>;
+    const numberOfTokens = tokens.length;
 
     return (
         <Wrapper>
-            {Object.keys(balances).map((token, index) => {
+            {tokens.map(token => {
                 return (
                     <ItemWrapper>
                         <TokenLogo symbol={token} size={size} />

@@ -1,6 +1,6 @@
 import ethers from 'ethers';
 
-const isValidEthereumAddress = (address: string) => {
+export const isValidEthereumAddress = (address: string) => {
     try {
         const addressX = ethers.utils.getAddress(address.toLowerCase());
     } catch (e) {
@@ -10,12 +10,12 @@ const isValidEthereumAddress = (address: string) => {
 };
 
 // check if value ix hex (if starts with 0x)
-const isHex = num => {
+export const isHex = num => {
     return Boolean(num.match(/^0x[0-9a-f]+$/i));
 };
 
 // timestamps in milliseconds are expected
-const timestampsAreOnSameDay = (timestamps0: number, timestamp1: number) => {
+export const timestampsAreOnSameDay = (timestamps0: number, timestamp1: number) => {
     const date0 = new Date(timestamps0);
     const date1 = new Date(timestamp1);
 
@@ -26,4 +26,12 @@ const timestampsAreOnSameDay = (timestamps0: number, timestamp1: number) => {
     );
 };
 
-export { isValidEthereumAddress, isHex, timestampsAreOnSameDay };
+export const isZeroInArray = (arr: number[]) => {
+    arr.every(element => {
+        // check whether element passes condition
+        // if passed return true, if fails return false
+        if (element === 0) return true;
+    });
+
+    return false;
+};

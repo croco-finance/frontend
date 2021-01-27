@@ -181,7 +181,7 @@ export interface PoolItem {
     depositTimestamps: number[];
     depositTokenAmounts: number[][];
     depositEthAmounts: number[][];
-    tokenSymbols: string[];
+    tokenSymbols: TokenType[];
     snapshots: Snap[];
     dailyStats: DailyStats | undefined;
 }
@@ -291,7 +291,7 @@ export interface DailyFeesGraph {
     feesUsd: number;
 }
 
-export interface GraphData {
+export interface InteractionsGraphData {
     label: string;
     lastTimestamp: number;
     timestampPrev: number | null;

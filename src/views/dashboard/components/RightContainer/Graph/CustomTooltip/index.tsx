@@ -5,7 +5,7 @@ import { colors, variables } from '@config';
 import { FiatValue } from '@components/ui';
 import TooltipRow from './TooltipRow.ts';
 import { formatUtils } from '@utils';
-import { GraphData } from '@types';
+import { InteractionsGraphData } from '@types';
 
 const CustomTooltipWrapper = styled.div`
     display: flex;
@@ -91,7 +91,7 @@ interface Props extends TooltipProps {
 const CustomTooltip = (props: Props) => {
     if (props.active && props.payload && props.payload[0]) {
         const { dataKey, name } = props.payload[0];
-        const graphData: GraphData = props.payload[0].payload;
+        const graphData: InteractionsGraphData = props.payload[0].payload;
         const {
             lastTimestamp,
             timestampPrev,

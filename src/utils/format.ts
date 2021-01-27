@@ -1,5 +1,5 @@
 import { mathUtils } from '.';
-import { AllAddressesGlobal, PoolToken } from '@types';
+import { AllAddressesGlobal, PoolToken, TokenType } from '@types';
 
 const getFormattedUsdValue = (value: number) => {
     const formatter = new Intl.NumberFormat('en-US', {
@@ -101,7 +101,7 @@ const getFormattedCryptoValue = (value: number, roundDecimals: number = 4) => {
 };
 
 const getTokenSymbolArr = (tokensArr: any[]) => {
-    const tokenSymbolsArr = new Array(tokensArr.length);
+    const tokenSymbolsArr: TokenType[] = new Array(tokensArr.length);
     tokensArr.forEach((token, i) => {
         tokenSymbolsArr[i] = token.symbol;
     });

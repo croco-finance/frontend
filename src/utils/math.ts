@@ -1,5 +1,3 @@
-import { mathUtils } from '@utils';
-
 const countDecimals = value => {
     try {
         if (Math.floor(value) !== value) return value.toString().split('.')[1].length || 0;
@@ -10,11 +8,11 @@ const countDecimals = value => {
     return 0;
 };
 
-const getFirstTwoNonZeroDecimals = n => {
-    var log10 = n ? Math.floor(Math.log10(n)) : 0,
+const getFirstTwoNonZeroDecimals = (value: number) => {
+    var log10 = value ? Math.floor(Math.log10(value)) : 0,
         div = log10 < 0 ? Math.pow(10, 1 - log10) : 100;
 
-    return Math.round(n * div) / div;
+    return Math.round(value * div) / div;
 };
 
 const roundToNDecimals = (value: number, nDecimals: number) => {
@@ -29,7 +27,7 @@ const getAverageDailyRewards = (timeStampStartMillis, timeStampEndMillis, totalR
     return totalReward / differenceDays;
 };
 
-const getTokenArrayValue = (tokenBalances: Array<number>, tokenPrices: Array<number>) => {
+const getTokenArrayValue = (tokenBalances: number[], tokenPrices: number[]) => {
     if (tokenBalances.length !== tokenPrices.length) {
         throw 'Arrays have to have the same length';
     }
@@ -46,7 +44,7 @@ const sumArr = (arr: number[]) => {
     return arr.reduce((a, b) => a + b, 0);
 };
 
-const multiplyArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
+const multiplyArraysElementWise = (arr1: number[], arr2: number[]) => {
     // TODO make sure both arrays are the same length
     let result = new Array(arr1.length);
 
@@ -63,8 +61,11 @@ const getArrayAverage = (arr: number[]) => {
     return arraySum / arr.length;
 };
 
-const divideArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
-    // TODO make sure both arrays are the same length
+const divideArraysElementWise = (arr1: number[], arr2: number[]) => {
+    if (arr1.length !== arr2.length) {
+        throw 'Arrays have to have the same length';
+    }
+
     let result = new Array(arr1.length);
 
     arr1.forEach((num, i) => {
@@ -78,8 +79,10 @@ const divideArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
     return result;
 };
 
-const sumArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
-    // TODO make sure both arrays are the same length
+const sumArraysElementWise = (arr1: number[], arr2: number[]) => {
+    if (arr1.length !== arr2.length) {
+        throw 'Arrays have to have the same length';
+    }
     let result = new Array(arr1.length);
 
     arr1.forEach((num, i) => {
@@ -89,8 +92,10 @@ const sumArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
     return result;
 };
 
-const subtractArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => {
-    // TODO make sure both arrays are the same length
+const subtractArraysElementWise = (arr1: number[], arr2: number[]) => {
+    if (arr1.length !== arr2.length) {
+        throw 'Arrays have to have the same length';
+    }
     let result = new Array(arr1.length);
 
     arr1.forEach((num, i) => {
@@ -100,7 +105,7 @@ const subtractArraysElementWise = (arr1: Array<number>, arr2: Array<number>) => 
     return result;
 };
 
-const divideEachArrayElementByValue = (arr: Array<number>, value: number) => {
+const divideEachArrayElementByValue = (arr: number[], value: number) => {
     const modifiedArr = new Array(arr.length);
     for (let i = 0, length = arr.length; i < length; i++) {
         modifiedArr[i] = arr[i] / value;
@@ -109,7 +114,7 @@ const divideEachArrayElementByValue = (arr: Array<number>, value: number) => {
     return modifiedArr;
 };
 
-const multiplyEachArrayElementByValue = (arr: Array<number>, value: number) => {
+const multiplyEachArrayElementByValue = (arr: number[], value: number) => {
     const modifiedArr = new Array(arr.length);
     for (let i = 0, length = arr.length; i < length; i++) {
         modifiedArr[i] = arr[i] * value;

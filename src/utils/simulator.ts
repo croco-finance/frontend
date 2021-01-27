@@ -1,13 +1,13 @@
-import { types } from '@config';
+import { Exchange } from '@types';
 import { mathUtils } from '.';
 import { lossUtils } from '.';
 
 const getSimulationStats = (
-    currentTokenBalances: Array<number>,
-    currentFeesTokenAmounts: Array<number>,
-    newTokenPrices: Array<number>,
-    tokenWeights: Array<number>,
-    exchange: types.Exchange,
+    currentTokenBalances: number[],
+    currentFeesTokenAmounts: number[],
+    newTokenPrices: number[],
+    tokenWeights: number[],
+    exchange: Exchange,
 ) => {
     // make sure token weights sum is equal to 1
     // const weightsSum = mathUtils.sumArr(tokenWeights);

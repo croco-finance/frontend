@@ -1,3 +1,4 @@
+// This function is used for example when computing daily fees for
 const mergeStringNumberObjects = (
     obj0: { [key: string]: number },
     obj1: { [key: string]: number },
