@@ -213,7 +213,16 @@ const DifferentStrategy = ({
 
     const txCostRow = (
         <BoxRow
-            firstColumn="Transaction expenses"
+            firstColumn={
+                <div style={{ display: '-webkit-inline-box' }}>
+                    Transaction expenses
+                    <QuestionTooltip
+                        content={
+                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
+                        }
+                    />
+                </div>
+            }
             secondColumn={
                 <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
             }

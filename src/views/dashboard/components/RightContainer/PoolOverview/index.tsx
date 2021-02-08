@@ -1,10 +1,9 @@
-import { BoxRow, FiatValue, GrayBox, VerticalCryptoAmounts } from '@components/ui';
+import { BoxRow, FiatValue, GrayBox, VerticalCryptoAmounts, QuestionTooltip } from '@components/ui';
 import { variables } from '@config';
 import { useTheme } from '@hooks';
-import { AllPoolsGlobal, PoolItem, SummaryStats, CumulativeStats } from '@types';
+import { PoolItem } from '@types';
 import { formatUtils } from '@utils';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import 'tippy.js/dist/tippy.css'; // optional
 
@@ -131,7 +130,16 @@ const PoolOverview = ({ pool }: Props) => {
 
     const txCostRow = (
         <BoxRow
-            firstColumn="Transaction expenses"
+            firstColumn={
+                <div style={{ display: '-webkit-inline-box' }}>
+                    Transaction expenses
+                    <QuestionTooltip
+                        content={
+                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
+                        }
+                    />
+                </div>
+            }
             secondColumn={
                 <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
             }

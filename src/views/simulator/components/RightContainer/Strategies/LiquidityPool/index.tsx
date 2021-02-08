@@ -5,6 +5,7 @@ import {
     GrayBox,
     Icon,
     VerticalCryptoAmounts,
+    QuestionTooltip,
 } from '@components/ui';
 import { analytics, variables } from '@config';
 import { useTheme } from '@hooks';
@@ -184,7 +185,16 @@ const LiquidityPool = ({
 
     const txCostRow = (
         <BoxRow
-            firstColumn="Transaction expenses"
+            firstColumn={
+                <div style={{ display: '-webkit-inline-box' }}>
+                    Transaction expenses
+                    <QuestionTooltip
+                        content={
+                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
+                        }
+                    />
+                </div>
+            }
             secondColumn={
                 <VerticalCryptoAmounts tokenSymbols={['ETH']} tokenAmounts={[txCostEth]} />
             }
