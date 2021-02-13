@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { colors, variables, web3 } from '@config';
+import { colors, variables, web3, firebase } from '@config';
 import { Icon, Input, Spinner } from '@components/ui';
 import { useDispatch } from 'react-redux';
 import * as actionTypes from '@actionTypes';
@@ -132,11 +132,16 @@ const AddressModal = () => {
 
     const theme: any = useTheme();
 
-    const addNewAddress = () => {
+    const addNewAddress = async () => {
         const hexAddressProcessed = inputHexAddress.trim().toLowerCase();
-        // double check it's valid address
 
         dispatch({ type: actionTypes.ADD_NEW_ADDRESS, address: hexAddressProcessed, ens: ensName });
+
+        // save new address to Firebase
+        const firebaseRef = firebase.addresses(hexAddressProcessed);
+        const payload = await firebaseRef.set(true);
+
+        // clear the input
         setAddress('');
     };
 

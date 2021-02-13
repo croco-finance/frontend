@@ -13,10 +13,6 @@ const firebaseConfig = {
     appId: '1:619222403105:web:bffcce3986234e73a5bb60',
     measurementId: 'G-Z20W1K81CF',
 };
-
-// firebase.initializeApp(firebaseConfig);
-// const analytics = firebase.analytics();
-
 class Firebase {
     db: any;
 
@@ -27,10 +23,12 @@ class Firebase {
     }
 
     //  Data references API
-    snaps = address => this.db.ref(`users/${address}`);
-    dailyFees = poolId => this.db.ref(`poolSnaps/${poolId}`);
-    poolSnap = (poolId, dayId) => this.db.ref(`poolSnaps/${poolId}/${dayId}`);
-    exchangeDayId = exchange => this.db.ref(`lastUpdate/${exchange}/dayId`);
+    snaps = (address: string) => this.db.ref(`users/${address}`);
+    dailyFees = (poolId: string) => this.db.ref(`poolSnaps/${poolId}`);
+    poolSnap = (poolId: string, dayId: string | number) =>
+        this.db.ref(`poolSnaps/${poolId}/${dayId}`);
+    exchangeDayId = (exchange: string) => this.db.ref(`lastUpdate/${exchange}/dayId`);
+    addresses = (address: string) => this.db.ref(`addresses/${address}`);
 }
 
 // // create firebase instance which I will use across the whole project
