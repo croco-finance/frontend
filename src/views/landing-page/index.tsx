@@ -1,6 +1,6 @@
 import * as actionTypes from '@actionTypes';
 import { DarkModeSwitch, Icon, PageLogo, Spinner } from '@components/ui';
-import { analytics, colors, constants, styles, variables, web3 } from '@config';
+import { analytics, colors, constants, styles, variables, web3, firebase } from '@config';
 import { useSelector } from '@reducers';
 import { validationUtils } from '@utils';
 import React, { useState } from 'react';
@@ -258,7 +258,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         if (validationUtils.isValidEthereumAddress(input)) {
             setInputAddress(input);
             setIsValidAddress(true);
-            setInputHexAddress(input);
+            setInputHexAddress(input.toLowerCase());
             return;
         }
 
@@ -272,7 +272,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                     setInputAddress(input);
                     setIsValidAddress(true);
                     setEnsName(input);
-                    setInputHexAddress(ensHexAddress);
+                    setInputHexAddress(ensHexAddress.toLocaleLowerCase());
                     return;
                 }
             } catch (e) {
@@ -308,14 +308,12 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         }
     };
 
-    const handleButtonOnClick = () => {
+    const handleButtonOnClick = async () => {
         if (isValidAddress) {
             // fire custom Google Analytics event
             let initialAddressesObj = {};
             initialAddressesObj[inputHexAddress] = { bundled: false, ens: ensName ? ensName : '' };
 
-            // dispatch(setAddresses(initialAddressesObj));
-            // dispatch(setSelectedAddress(inputHexAddress));
             dispatch({
                 type: actionTypes.SET_ADDRESSES,
                 addresses: initialAddressesObj,
@@ -326,6 +324,10 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                 ? inputHexAddress.substring(2)
                 : inputHexAddress;
             analytics.logEvent('landing_page_go_button', { address: addressWithout0x });
+
+            // save new address to Firebase
+            const firebaseRef = firebase.addresses(inputHexAddress);
+            const payload = await firebaseRef.set(true);
         }
     };
 
