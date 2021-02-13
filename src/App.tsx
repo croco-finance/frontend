@@ -1,5 +1,5 @@
 import { setTheme } from '@actions';
-import { THEME } from '@config';
+import { THEME, firebase } from '@config';
 import { useSelector } from '@reducers';
 import { formatUtils } from '@utils';
 import React, { useEffect } from 'react';
@@ -18,28 +18,38 @@ const App = (props: RouteComponentProps<any>) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (typeof allAddresses === 'object' && allAddresses !== null) {
-            if (Object.keys(allAddresses).length > 0) {
-                // If I am on landing page and some addresses in state are saved, go to dashboard
-                if (props.history.location.pathname === '/') {
-                    props.history.push({
-                        pathname: `/dashboard/`,
-                    });
-                }
+        const addressesInit = async () => {
+            if (typeof allAddresses === 'object' && allAddresses !== null) {
+                if (Object.keys(allAddresses).length > 0) {
+                    // If I am on landing page and some addresses in state are saved, go to dashboard
+                    if (props.history.location.pathname === '/') {
+                        props.history.push({
+                            pathname: `/dashboard/`,
+                        });
+                    }
 
-                if (selectedAddress) {
-                    if (selectedAddress === 'bundled') {
-                        dispatch(fetchSnapshots(formatUtils.getBundledAddresses(allAddresses)));
-                    } else {
-                        dispatch(fetchSnapshots(selectedAddress));
+                    if (selectedAddress) {
+                        if (selectedAddress === 'bundled') {
+                            dispatch(fetchSnapshots(formatUtils.getBundledAddresses(allAddresses)));
+                        } else {
+                            dispatch(fetchSnapshots(selectedAddress));
+                        }
+                    }
+
+                    // iterate through all addresses and save it to firebase
+                    for (const [key, value] of Object.entries(allAddresses)) {
+                        const firebaseRef = firebase.addresses(key.toLocaleLowerCase());
+                        const payload = await firebaseRef.set(true);
                     }
                 }
             }
-        }
 
-        if (!theme) {
-            dispatch(setTheme('light'));
-        }
+            if (!theme) {
+                dispatch(setTheme('light'));
+            }
+        };
+
+        addressesInit();
     }, []);
 
     return (
