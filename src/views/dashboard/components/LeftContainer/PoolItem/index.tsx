@@ -6,6 +6,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import PoolItemCard from '../PoolItemCard';
+import { formatUtils } from '@utils';
 
 const Item = styled.div`
     display: flex;
@@ -114,7 +115,7 @@ const PoolItem = ({ poolId }: Props) => {
                                 <TokenLogo symbol={token.symbol} size={18} />
                                 <TokenSymbol>{token.symbol}</TokenSymbol>
                                 <TokenWeight isSelected={isSelected}>
-                                    {token.weight.toFixed(2)}%
+                                    {formatUtils.getFormattedPercentageValue(token.weight, true)}
                                 </TokenWeight>
                             </TokenItem>
                         );
