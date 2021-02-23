@@ -2,7 +2,8 @@ import { colors, variables, constants } from '@config';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@components/ui';
-import { FeedbackModal } from '@components/containers';
+import { useDispatch } from 'react-redux';
+import { openModal } from '../../../actions/modalActions';
 
 const Wrapper = styled.div`
     position: fixed;
@@ -102,7 +103,7 @@ const IconLinkWrapper = styled.a`
 
 const SocialButtonBubble = () => {
     const [isHovered, setIsHovered] = useState(false);
-    const [feedbackOpened, setFeedbackOpened] = useState(false);
+    const dispatch = useDispatch();
 
     return (
         <Wrapper
@@ -126,12 +127,10 @@ const SocialButtonBubble = () => {
                 <IconLinkWrapper rel="noreferrer" target="_blank" href={constants.DISCORD_LINK}>
                     <Icon icon="discord" size={18} />
                 </IconLinkWrapper>
-                <IconLinkWrapper onClick={() => setFeedbackOpened(true)}>
+                <IconLinkWrapper onClick={() => dispatch(openModal({ type: 'feedback' }))}>
                     <Icon icon="feedback" size={18} />
                 </IconLinkWrapper>
             </SocialIconsWrapper>
-
-            {feedbackOpened && <FeedbackModal />}
         </Wrapper>
     );
 };

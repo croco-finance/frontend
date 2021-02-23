@@ -9,8 +9,8 @@ const modalReducer = (state = initialState, action) => {
     switch (action.type) {
         case MODAL.OPEN:
             return {
-                modalType: action.modalType,
-                modalProps: action.modalProps,
+                modalType: action.payload.type,
+                modalProps: action.payload.props,
             };
 
         case MODAL.CLOSE: {

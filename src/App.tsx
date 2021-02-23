@@ -11,6 +11,7 @@ import { fetchSnapshots } from './store/actions/index';
 import Dashboard from './views/dashboard';
 import LandingPage from './views/landing-page';
 import Simulator from './views/simulator';
+import { ModalRoot } from '@components/modals';
 import './App.css';
 
 const App = (props: RouteComponentProps<any>) => {
@@ -54,6 +55,7 @@ const App = (props: RouteComponentProps<any>) => {
 
     return (
         <ThemeProvider theme={theme === 'light' ? THEME.light : THEME.dark}>
+            <ModalRoot />
             <Switch>
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/simulator" component={Simulator} />

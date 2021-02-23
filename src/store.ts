@@ -19,13 +19,12 @@ const persistedState = loadState();
 // const store = createStore(reducer, persistedState);
 const store = createStore(
     rootReducer,
-    { app: persistedState, modal: { modalType: undefined, modalProps: undefined } },
+    { app: persistedState, modal: { modalType: null, modalProps: {} } },
     composedEnhancer,
 );
 
 // subscribe() is a method that is natively present on state and is called when the state changes
 store.subscribe(() => {
-    console.log('store.subscribe');
     saveState({
         allAddresses: store.getState().app.allAddresses,
         selectedAddress: store.getState().app.selectedAddress,

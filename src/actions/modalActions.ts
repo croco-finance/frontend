@@ -17,7 +17,7 @@ export type ModalAction =
           payload: UserContextPayload;
       };
 
-export const onCancel = (): ModalAction => ({
+export const closeModal = (): ModalAction => ({
     type: MODAL.CLOSE,
 });
 

@@ -1,6 +1,6 @@
 import AddressModal from './AddressModal';
 import AddressSelect from './AddressSelect';
 import DailyFeesChart from './DailyFeesChart';
-import FeedbackModal from './FeedbackModal';
+import FeedbackView from './FeedbackView';
 
-export { AddressModal, AddressSelect, DailyFeesChart, FeedbackModal };
+export { AddressModal, AddressSelect, DailyFeesChart, FeedbackView };
