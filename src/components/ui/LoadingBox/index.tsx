@@ -47,7 +47,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const LoadingBox = ({ spinnerSize = 16, height = 260, children }: Props) => {
-    const theme = useSelector(state => state.theme);
+    const theme = useSelector(state => state.app.theme);
 
     return (
         <Wrapper height={height}>

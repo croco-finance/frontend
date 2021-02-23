@@ -152,7 +152,7 @@ export const changeSelectedPool = (poolId: string) => {
         } else {
             const state = store.getState();
 
-            if (state.allPools && state.allPools[poolId]) {
+            if (state.app.allPools && state.app.allPools[poolId]) {
                 dispatch(setSelectedPoolId(poolId));
             }
         }

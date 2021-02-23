@@ -84,7 +84,7 @@ const MaterialSlider = ({
     ...rest
 }: Props) => {
     // const theme: any = useTheme();
-    const theme = useSelector(state => state.theme);
+    const theme = useSelector(state => state.app.theme);
     const classes = useStyles();
 
     return (

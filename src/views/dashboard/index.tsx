@@ -22,10 +22,10 @@ import styled from 'styled-components';
 import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
-import { useDispatch, useSelector } from 'react-redux';
 import { AllAddressesGlobal, AppThemeColors } from '@types';
 import * as actionTypes from '@actionTypes';
 import { useTheme } from '@hooks';
+import { useSelector } from '@reducers';
 
 const Header = styled.div`
     width: 100%;
@@ -149,10 +149,10 @@ const PoolListWrapper = styled.div`
 `;
 
 const Dashboard = () => {
-    const allPoolsGlobal: AllAddressesGlobal = useSelector(state => state.allPools);
-    const isLoading = useSelector(state => state.loading);
-    const isFetchError = useSelector(state => state.error);
-    const noPoolsFound = useSelector(state => state.noPoolsFound);
+    const allPoolsGlobal = useSelector(state => state.app.allPools);
+    const isLoading = useSelector(state => state.app.loading);
+    const isFetchError = useSelector(state => state.app.error);
+    const noPoolsFound = useSelector(state => state.app.noPoolsFound);
     const theme = useTheme();
 
     let exceptionContent;

@@ -27,7 +27,7 @@ const SummaryHeadlineText = styled.div`
 type TabOptions = 'overview' | 'strategies';
 
 const RightContainer = () => {
-    const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state);
+    const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state.app);
     const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
 
     if (activePoolIds.length <= 0 && selectedPoolId === 'all') {

@@ -25,7 +25,7 @@ const IconWrapper = styled.div`
 
 const DarkModeSwitch = () => {
     const dispatch = useDispatch();
-    const theme = useSelector(state => state.theme);
+    const theme = useSelector(state => state.app.theme);
 
     return (
         <Wrapper>

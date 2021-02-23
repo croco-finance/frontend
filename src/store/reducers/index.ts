@@ -139,7 +139,12 @@ const reducer = (state = initialState, action) => {
     });
 };
 
-export function useSelector<T>(fn: (store: AppStateInterface) => T): T {
+type UseSelectorInterface = {
+    app: AppStateInterface;
+    modal: any;
+};
+
+export function useSelector<T>(fn: (store: UseSelectorInterface) => T): T {
     return fn(_useSelector(x => x));
 }
 

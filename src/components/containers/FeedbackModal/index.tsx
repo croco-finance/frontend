@@ -120,7 +120,7 @@ const MainInputWrapper = styled.div`
     flex-grow: 1;
 `;
 
-const AddressModal = () => {
+const FeedbackModal = () => {
     const dispatch = useDispatch();
     const { allAddresses, selectedAddress } = useSelector(state => state.app);
 
@@ -281,4 +281,4 @@ const AddressModal = () => {
     );
 };
 
-export default AddressModal;
+export default FeedbackModal;

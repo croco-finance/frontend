@@ -14,7 +14,7 @@ import Simulator from './views/simulator';
 import './App.css';
 
 const App = (props: RouteComponentProps<any>) => {
-    const { theme, selectedAddress, allAddresses } = useSelector(state => state);
+    const { theme, selectedAddress, allAddresses } = useSelector(state => state.app);
     const dispatch = useDispatch();
 
     useEffect(() => {

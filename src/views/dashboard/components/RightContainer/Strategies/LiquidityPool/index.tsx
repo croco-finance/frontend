@@ -81,8 +81,7 @@ const SubNote = styled.div`
 const CollapseWrapper = styled.div``;
 
 const LiquidityPool = () => {
-    const allPools = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const { allPools, selectedPoolId } = useSelector(state => state.app);
     let pool = allPools[selectedPoolId];
     const [isOpened, setIsOpened] = useState(false);
     const theme: any = useTheme();

@@ -70,7 +70,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const DailyFeesChart = ({ dailyStats, graphHeight = 380, noBorder = false }: Props) => {
-    const { loadingDaily, errorDaily } = useSelector(state => state);
+    const { loadingDaily, errorDaily } = useSelector(state => state.app);
     const theme: any = useTheme();
 
     const graphData = graphUtils.getDailyGraphData(dailyStats);

@@ -58,7 +58,7 @@ const StyledP = styled.p<{ textAlign: string }>`
 `;
 
 const Index = () => {
-    const theme = useSelector(state => state.theme);
+    const theme = useSelector(state => state.app.theme);
     return (
         <Wrapper>
             <FeaturesWrapper>
