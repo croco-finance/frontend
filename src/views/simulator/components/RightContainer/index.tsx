@@ -1,8 +1,8 @@
 import { PoolHeader, TabSelectHeader } from '@components/ui';
-import { AllPoolsGlobal, PoolItem } from '@types';
+import { useSelector } from '@reducers';
+import { PoolItem } from '@types';
 import { mathUtils, simulatorUtils } from '@utils';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Overview from './Overview';
 import Strategies from './Strategies';
@@ -34,8 +34,7 @@ const RightContainer = ({
     onTabChanged,
     selectedTab,
 }: Props) => {
-    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId: string = useSelector(state => state.selectedPoolId);
+    const { allPools, selectedPoolId } = useSelector(state => state.app);
     // const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
 
     // TODO make the following checks and computations cleaner

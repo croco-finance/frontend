@@ -1,11 +1,10 @@
-import { colors, variables } from '@config';
-import { mathUtils, statsComputations } from '@utils';
+import { QuestionTooltip } from '@components/ui';
+import { variables } from '@config';
+import { useSelector } from '@reducers';
+import { statsComputations } from '@utils';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import SummaryItem from '../SummaryItem';
-import { AllPoolsGlobal } from '@types';
-import { QuestionTooltip } from '@components/ui';
 
 const Wrapper = styled.div`
     padding-left: 0;
@@ -37,8 +36,7 @@ const Gains = styled(HeaderChild)``;
 const ItemsWrapper = styled.div``;
 
 const SummaryList = () => {
-    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
-    const activePoolIds = useSelector(state => state.activePoolIds);
+    const { allPools, activePoolIds } = useSelector(state => state.app);
 
     if (!allPools || Object.keys(allPools).length === 0) return null;
     const poolsSummaryInfo = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);

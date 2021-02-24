@@ -1,11 +1,10 @@
 import { FiatValue, TokenLogo } from '@components/ui';
-import { types, variables } from '@config';
+import { variables } from '@config';
+import { useSelector } from '@reducers';
 import { formatUtils } from '@utils';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import PriceChangeRow from './PriceChangeRow';
-
 const GRID_GAP = 5;
 
 const Wrapper = styled.div`
@@ -89,8 +88,7 @@ const SimulationBox = ({
     simulatedEthCoefficient,
     selectedTab,
 }: Props) => {
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const { allPools, selectedPoolId } = useSelector(state => state.app);
 
     if (!allPools[selectedPoolId]) {
         return null;
