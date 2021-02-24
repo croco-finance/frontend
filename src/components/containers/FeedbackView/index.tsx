@@ -20,17 +20,11 @@ const AddressInputWrapper = styled.div`
 
 const DexSelectWrapper = styled.div`
     margin: 10px 0;
+    // max-width: 20px;
 `;
 
 const TextareaWrapper = styled.div`
     margin: 10px 0;
-`;
-
-const ButtonWrapper = styled.div`
-    display: flex;
-    flex-grow: 1;
-    justify-content: center;
-    margin-top: 28px;
 `;
 
 const Textarea = styled.textarea`
@@ -63,6 +57,13 @@ const Textarea = styled.textarea`
     }
 `;
 
+const ButtonWrapper = styled.div`
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    margin-top: 32px;
+`;
+
 const SubmitInput = styled.input<{ disabled: boolean }>`
     background-color: ${props =>
         props.disabled ? props.theme.BUTTON_PRIMARY_BG_DISABLED : props.theme.BUTTON_PRIMARY_BG};
@@ -72,9 +73,8 @@ const SubmitInput = styled.input<{ disabled: boolean }>`
     padding: 8px 10px;
     font-size: ${variables.FONT_SIZE.NORMAL};
     border: none;
-    margin-left: 10px;
     cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-    width: 240px;
+    width: 220px;
     height: 50px;
     display: flex;
     align-items: center;
@@ -103,18 +103,13 @@ const dexOptions = [
 const FeedbackView = () => {
     // form fields
     const [address, setAddress] = useState('');
-    const [dex, setDex] = useState('');
+    const [dex, setDex] = useState(undefined);
     const [pair, setPair] = useState('');
     const [description, setDescription] = useState('');
-
-    const theme: any = useTheme();
 
     const submitFeedback = () => {
         alert('submit');
     };
-
-    const handleDexChange = () => {};
-    console.log('description', description);
 
     return (
         <Wrapper>
@@ -145,8 +140,10 @@ const FeedbackView = () => {
                         placeholder="Select exchange (optional)"
                         useWhiteBackground
                         useDarkBorder
-                        // value={dex}
                         options={dexOptions}
+                        isSearchable={false}
+                        onChange={option => setDex(option)}
+                        value={dex}
                     />
                 </DexSelectWrapper>
 

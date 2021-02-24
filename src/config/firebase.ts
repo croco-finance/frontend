@@ -29,6 +29,7 @@ class Firebase {
         this.db.ref(`poolSnaps/${poolId}/${dayId}`);
     exchangeDayId = (exchange: string) => this.db.ref(`lastUpdate/${exchange}/dayId`);
     addresses = (address: string) => this.db.ref(`addresses/${address}`);
+    feedback = (timestamp: string) => this.db.ref(`feedback/${timestamp}`);
 }
 
 // // create firebase instance which I will use across the whole project

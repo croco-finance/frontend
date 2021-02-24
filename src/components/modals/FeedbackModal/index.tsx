@@ -11,7 +11,7 @@ const FeedbackModal = (props: Props) => {
             cancelable
             onCancel={() => props.onCancel()}
             heading="Feedback form"
-            description="This feedback is 100% anonymous - we know only the information that you type in this form."
+            description="This feedback is 100% anonymous - we store only the information that you type in this form."
             showHeaderBorder={false}
             descriptionAlign="left"
         >
