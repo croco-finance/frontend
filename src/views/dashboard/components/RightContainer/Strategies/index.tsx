@@ -92,9 +92,8 @@ const TooltipHeadline = styled.div`
 `;
 
 const Strategies = () => {
-    const allPools = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    const activePoolIds = useSelector(state => state.activePoolIds);
+    const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state.app);
+
     let pool = allPools[selectedPoolId];
 
     if (activePoolIds.length <= 0 && selectedPoolId === 'all') {

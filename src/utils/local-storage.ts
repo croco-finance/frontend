@@ -19,5 +19,6 @@ export const saveState = state => {
         localStorage.setItem('state', serializedState);
     } catch {
         // ignore write errors
+        console.log('saveState failed');
     }
 };

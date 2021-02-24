@@ -64,7 +64,7 @@ const BalancerBanner = styled.div`
 `;
 
 const Overview = () => {
-    const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state);
+    const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state.app);
     const theme: any = useTheme();
 
     if (activePoolIds.length <= 0 && selectedPoolId === 'all') {

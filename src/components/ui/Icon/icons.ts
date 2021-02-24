@@ -32,6 +32,7 @@ export const ICONS = {
     croco_emoji: require('../../../data/images/icons/croco_emoji.svg'),
     heart: require('../../../data/images/icons/heart.svg'),
     croco_heart: require('../../../data/images/icons/croco_heart.svg'),
+    croco_logo: require('../../../data/images/icons/croco_logo.svg'),
 
     // themes
     dayMode: require('../../../data/images/icons/day-mode.svg'),

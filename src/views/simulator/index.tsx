@@ -18,12 +18,13 @@ import { useTheme } from '@hooks';
 import { AllPoolsGlobal } from '@types';
 import { formatUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import styled from 'styled-components';
 import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
 import RightContainer from './components/RightContainer';
+import { useSelector } from '@reducers';
 
 const Header = styled.div`
     padding: 0 20px;
@@ -201,13 +202,13 @@ const getInitialPriceCoeffs = (tokens: any) => {
 type TabOptions = 'overview' | 'strategies';
 
 const Simulator = () => {
-    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId: string = useSelector(state => state.selectedPoolId);
+    const allPools: AllPoolsGlobal = useSelector(state => state.app.allPools);
+    const selectedPoolId: string = useSelector(state => state.app.selectedPoolId);
     const dispatch = useDispatch();
     const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
-    const isLoading: boolean = useSelector(state => state.loading);
-    const isFetchError: boolean = useSelector(state => state.error);
-    const noPoolsFound: boolean = useSelector(state => state.noPoolsFound);
+    const isLoading: boolean = useSelector(state => state.app.loading);
+    const isFetchError: boolean = useSelector(state => state.app.error);
+    const noPoolsFound: boolean = useSelector(state => state.app.noPoolsFound);
     const theme: any = useTheme();
 
     // SIMULATOR FUNCTIONS

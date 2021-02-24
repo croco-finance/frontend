@@ -217,11 +217,11 @@ const SidePaddingWrapper = styled.div<{ sidePadding: [string, string, string, st
     }
 `;
 
-const Description = styled(SidePaddingWrapper)`
+const Description = styled(SidePaddingWrapper)<{ descriptionAlign: string }>`
     color: ${props => props.theme.FONT_LIGHT};
     font-size: ${variables.FONT_SIZE.SMALL};
     margin-bottom: 10px;
-    text-align: center;
+    text-align: ${props => props.descriptionAlign};
 `;
 
 const Content = styled(SidePaddingWrapper)<{ centerContent: boolean }>`
@@ -327,6 +327,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     onCancel?: () => void;
     showHeaderBorder?: boolean;
     centerContent?: boolean;
+    descriptionAlign?: string;
 }
 
 const Modal = ({
@@ -351,6 +352,7 @@ const Modal = ({
     contentPaddingSide = getContentPaddingSide(size, noPadding),
     showHeaderBorder = true,
     centerContent = false,
+    descriptionAlign = 'center',
     ...rest
 }: Props) => {
     const theme: any = useTheme();
@@ -385,7 +387,9 @@ const Modal = ({
             )}
 
             {description && (
-                <Description sidePadding={contentPaddingSide}>{description}</Description>
+                <Description sidePadding={contentPaddingSide} descriptionAlign={descriptionAlign}>
+                    {description}
+                </Description>
             )}
             <Content sidePadding={contentPaddingSide} centerContent={centerContent}>
                 {children}

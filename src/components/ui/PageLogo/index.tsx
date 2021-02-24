@@ -19,7 +19,7 @@ interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
 }
 
 const PageLogo = ({ height = 32 }: Props) => {
-    const theme = useSelector(state => state.theme);
+    const theme = useSelector(state => state.app.theme);
     return <SvgWrapper height={height} src={theme === 'light' ? Logo : LogoNight} />;
 };
 

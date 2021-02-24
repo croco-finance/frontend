@@ -1,12 +1,12 @@
 import * as actionTypes from '@actionTypes';
 import { FiatValue } from '@components/ui';
-import { colors, variables } from '@config';
-import { mathUtils, statsComputations } from '@utils';
+import { variables } from '@config';
+import { useSelector } from '@reducers';
+import { statsComputations } from '@utils';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import PoolItemCard from '../PoolItemCard';
-import { AllPoolsGlobal } from '@types';
 
 const Item = styled.div`
     display: flex;
@@ -62,9 +62,7 @@ interface Props {
 
 const SummaryItem = ({ headline }: Props) => {
     const dispatch = useDispatch();
-    const allPools: AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
-    const activePoolIds = useSelector(state => state.activePoolIds);
+    const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state.app);
 
     const poolsSummaryInfo = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
     const { feesUsd, yieldUsd, valueLockedUsd } = poolsSummaryInfo;

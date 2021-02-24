@@ -2,6 +2,9 @@ import { colors, variables, constants } from '@config';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@components/ui';
+import { useDispatch } from 'react-redux';
+import { openModal } from '../../../actions/modalActions';
+import { useSelector } from '@reducers';
 
 const Wrapper = styled.div`
     position: fixed;
@@ -13,6 +16,7 @@ const Wrapper = styled.div`
     border-radius: 100px;
     background-color: transparent;
     box-shadow: rgba(33, 35, 74, 0.11) 0px 2px 10px;
+    cursor: default;
 
     @media (max-width: ${variables.SCREEN_SIZE.LG}) {
         bottom: 0;
@@ -28,11 +32,11 @@ const FeedbackIconWrapper = styled.div`
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    padding: 20px;
-    background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
-    border-radius: 100px;
-    height: 46px;
-    width: 46px;
+    padding: 4px;
+    background-color: ${props => props.theme.BACKGROUND_DARK};
+    border: 1px solid ${props => props.theme.STROKE_GREY};
+    border-radius: 4px;
+    width: 128px;
 
     @media (max-width: ${variables.SCREEN_SIZE.LG}) {
         display: none;
@@ -42,19 +46,19 @@ const FeedbackIconWrapper = styled.div`
 const SocialIconsWrapper = styled.div<{ isHovered: boolean }>`
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    // justify-content: center;
     align-items: center;
     background-color: ${props => props.theme.BACKGROUND};
-    border-radius: 100px;
-    padding-bottom: 56px;
-    padding-top: 8px;
+    border-radius: 4px;
+    padding: 4px 12px 4px 12px;
     position: fixed;
-    bottom: 25px;
+    bottom: 55px;
+    border-bottom: 8px solid ${props => props.theme.BG_WHITE};
     right: 25px;
-    width: 46px;
+    width: 128px;
     max-height: ${props => (props.isHovered ? '500px' : '0px')};
     opacity: ${props => (props.isHovered ? '1' : '0')};
-    transition: ${props =>
+    // transition: ${props =>
         props.isHovered
             ? 'max-height 0.4s ease-out, opacity 0.3s cubic-bezier(0.04, 0.79, 0.32, 0.98)'
             : 'max-height 0.3s ease-out, opacity 0.2s cubic-bezier(0.97, 0.02, 1, 0.24)'};
@@ -81,11 +85,10 @@ const IconLinkWrapper = styled.a`
     text-decoration: none;
     cursor: pointer;
     margin: 5px 0;
-    height: 32px;
-    width: 32px;
+    height: 30px;
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
 
     &:hover {
         text-decoration: none;
@@ -99,8 +102,26 @@ const IconLinkWrapper = styled.a`
     }
 `;
 
+const FeedbackText = styled.div`
+    margin-left: 6px;
+    color: ${props => props.theme.FONT_MEDIUM};
+`;
+
+const SocialText = styled.div`
+    margin-left: 12px;
+    color: ${props => props.theme.FONT_LIGHT};
+`;
+
+const MediaText = styled(SocialText)`
+    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
+        display: none;
+    }
+`;
+
 const SocialButtonBubble = () => {
     const [isHovered, setIsHovered] = useState(false);
+    const dispatch = useDispatch();
+    const theme = useSelector(state => state.app.theme);
 
     return (
         <Wrapper
@@ -112,17 +133,32 @@ const SocialButtonBubble = () => {
             }}
         >
             <FeedbackIconWrapper>
-                <Icon icon={'feedback'} size={18} color={colors.WHITE} />
+                <Icon icon={'croco_logo'} size={16} />
+                <FeedbackText>Support</FeedbackText>
             </FeedbackIconWrapper>
             <SocialIconsWrapper isHovered={isHovered}>
                 <IconLinkWrapper rel="noreferrer" target="_blank" href={constants.TWITTER_LINK}>
-                    <Icon icon="twitter" size={18} />
+                    <Icon icon="twitter" size={16} />
+                    <MediaText>Twitter</MediaText>
                 </IconLinkWrapper>
-                <IconLinkWrapper rel="noreferrer" target="_blank" href={constants.TELEGRAM_LINK}>
-                    <Icon icon="telegram" size={18} />
-                </IconLinkWrapper>
+
                 <IconLinkWrapper rel="noreferrer" target="_blank" href={constants.DISCORD_LINK}>
-                    <Icon icon="discord" size={18} />
+                    <Icon icon="discord" size={16} />
+                    <MediaText>Discord</MediaText>
+                </IconLinkWrapper>
+
+                <IconLinkWrapper rel="noreferrer" target="_blank" href={constants.TELEGRAM_LINK}>
+                    <Icon icon="telegram" size={16} />
+                    <MediaText>Telegram</MediaText>
+                </IconLinkWrapper>
+
+                <IconLinkWrapper onClick={() => dispatch(openModal({ type: 'feedback' }))}>
+                    <Icon
+                        icon="feedback"
+                        size={15}
+                        color={theme === 'light' ? '#002439' : '#ccd6db'}
+                    />
+                    <SocialText>Feedback</SocialText>
                 </IconLinkWrapper>
             </SocialIconsWrapper>
         </Wrapper>

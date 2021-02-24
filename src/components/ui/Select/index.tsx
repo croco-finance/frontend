@@ -31,6 +31,7 @@ const selectStyle = (
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
+        padding: '2px 8px',
     }),
     control: (
         base: Record<string, any>,
@@ -109,8 +110,9 @@ const selectStyle = (
     placeholder: (base: Record<string, any>) => ({
         ...base,
         color: theme.FONT_LIGHT,
-        fontWeight: variables.FONT_WEIGHT.MEDIUM,
+        fontWeight: variables.FONT_WEIGHT.DEMI_BOLD,
         fontSize: variables.FONT_SIZE.NORMAL,
+        padding: '2px 8px',
     }),
 });
 

@@ -1,8 +1,8 @@
 import { FiatValue, TokenLogo } from '@components/ui';
-import { colors, variables, types } from '@config';
+import { variables } from '@config';
+import { useSelector } from '@reducers';
 import { formatUtils } from '@utils';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import OverviewRow from '../OverviewRow';
 
@@ -62,8 +62,7 @@ interface Props {
 
 const BalanceOverview = ({ iconSize = 20 }: Props) => {
     // const numberOfTokens = Object.keys(balances).length;
-    const allPools: types.AllPoolsGlobal = useSelector(state => state.allPools);
-    const selectedPoolId = useSelector(state => state.selectedPoolId);
+    const { allPools, selectedPoolId } = useSelector(state => state.app);
 
     if (!allPools[selectedPoolId]) {
         return null;

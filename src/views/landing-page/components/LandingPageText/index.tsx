@@ -27,7 +27,7 @@ const SvgWrapper = styled.img`
 `;
 
 const LandingPageText = () => {
-    const themeVariant = useSelector(state => state.theme);
+    const themeVariant = useSelector(state => state.app.theme);
     return (
         <SvgWrapper height={160} src={themeVariant === 'light' ? dayModeImage : nightModeImage} />
     );

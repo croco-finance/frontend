@@ -30,6 +30,7 @@ import SocialButtonBubble from './SocialButtonBubble';
 import DarkModeSwitch from './DarkModeSwitch';
 import Tooltip from './Tooltip';
 import QuestionTooltip from './QuestionTooltip';
+import Textarea from './Textarea';
 
 export {
     TokenLogo,
@@ -64,4 +65,5 @@ export {
     DarkModeSwitch,
     Tooltip,
     QuestionTooltip,
+    Textarea,
 };

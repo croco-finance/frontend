@@ -248,7 +248,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
     const [portisLoading, setPortisLoading] = useState(false);
     const [isValidAddress, setIsValidAddress] = useState(false);
     const [loadingEnsDomain, setLoadingEnsDomain] = useState(false);
-    const theme = useSelector(state => state.theme);
+    const theme = useSelector(state => state.app.theme);
 
     const handleAddressChange = async input => {
         setIsValidAddress(false);

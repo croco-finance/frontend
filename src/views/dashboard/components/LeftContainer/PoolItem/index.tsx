@@ -84,7 +84,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const PoolItem = ({ poolId }: Props) => {
     const dispatch = useDispatch();
-    const { allPools, selectedPoolId, theme } = useSelector(state => state);
+    const { allPools, selectedPoolId, theme } = useSelector(state => state.app);
 
     if (!allPools[poolId]) return null;
 

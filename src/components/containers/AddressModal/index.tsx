@@ -122,7 +122,7 @@ const MainInputWrapper = styled.div`
 
 const AddressModal = () => {
     const dispatch = useDispatch();
-    const { allAddresses, selectedAddress } = useSelector(state => state);
+    const { allAddresses, selectedAddress } = useSelector(state => state.app);
 
     const [ensName, setEnsName] = useState('');
     const [loadingEnsDomain, setLoadingEnsDomain] = useState(false);
