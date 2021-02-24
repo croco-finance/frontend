@@ -1,14 +1,23 @@
-import { Input, Select } from '@components/ui';
-import { colors, variables } from '@config';
-import { useTheme } from '@hooks';
+import { Input, Select, Spinner } from '@components/ui';
+import { colors, firebase, variables } from '@config';
+import { useSelector } from '@reducers';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Illustration from '../../../data/images/croco_thumb_up.svg';
+import IllustrationDark from '../../../data/images/croco_thumb_up_dark.svg';
 
 const Wrapper = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
     color: ${props => props.theme.FONT_DARK};
+`;
+
+const AnonymousNote = styled.div`
+    text-align: left;
+    font-size: ${variables.FONT_SIZE.SMALL};
+    color: ${props => props.theme.FONT_LIGHT};
+    margin-bottom: 14px;
 `;
 
 const AddressInputWrapper = styled.div`
@@ -62,9 +71,11 @@ const ButtonWrapper = styled.div`
     flex-grow: 1;
     justify-content: center;
     margin-top: 32px;
+    flex-direction: column;
+    align-items: center;
 `;
 
-const SubmitInput = styled.input<{ disabled: boolean }>`
+const AddButton = styled.button<{ disabled: boolean }>`
     background-color: ${props =>
         props.disabled ? props.theme.BUTTON_PRIMARY_BG_DISABLED : props.theme.BUTTON_PRIMARY_BG};
     color: ${props => (props.disabled ? props.theme.BUTTON_PRIMARY_FONT_DISABLED : colors.WHITE)};
@@ -85,6 +96,38 @@ const SubmitInput = styled.input<{ disabled: boolean }>`
     }
 `;
 
+const IllustrationWrapper = styled.img`
+    display: inline-block;
+    height: ${props => props.height}px;
+
+    div {
+        height: ${props => props.height}px;
+        line-height: ${props => props.height}px;
+    }
+`;
+
+const ThankYouMessage = styled.div`
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    font-size: ${variables.FONT_SIZE.NORMAL};
+    color: ${props => props.theme.FONT_DARK};
+    margin-bottom: 44px;
+`;
+
+const FeedbackSentContent = styled.div`
+    padding-bottom: 40px;
+`;
+
+const ErrorWrapper = styled.div`
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    font-size: ${variables.FONT_SIZE.SMALL};
+    color: ${props => props.theme.RED};
+    margin: 10px 0;
+`;
+
+interface Option {
+    value: string;
+    label: string;
+}
 const dexOptions = [
     {
         value: 'uniswap',
@@ -101,72 +144,140 @@ const dexOptions = [
 ];
 
 const FeedbackView = () => {
+    const theme = useSelector(state => state.app.theme);
+
     // form fields
     const [address, setAddress] = useState('');
-    const [dex, setDex] = useState(undefined);
+    const [dex, setDex] = useState<Option | undefined>(undefined);
     const [pair, setPair] = useState('');
     const [description, setDescription] = useState('');
 
-    const submitFeedback = () => {
-        alert('submit');
+    // validation
+    const [feedbackSent, setFeedbackSent] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const submitFeedback = async () => {
+        if (!isFeedbackTooShort() && !isFeedbackTooLong()) {
+            setLoading(true);
+            const timestampSec = Math.floor(Date.now() / 1000);
+            const firebaseRef = firebase.feedback(timestampSec.toString());
+
+            let feedbackObj: { [key: string]: string } = {
+                description: description.toString().trim(),
+            };
+
+            // send only the fields that are defined
+            if (address) feedbackObj = { ...feedbackObj, userAddress: address.toString().trim() };
+            if (dex) feedbackObj = { ...feedbackObj, exchange: dex.value.toString().trim() };
+            if (pair) feedbackObj = { ...feedbackObj, pair: pair.toString().trim() };
+
+            // send feedback
+            try {
+                await firebaseRef.set(feedbackObj);
+                setFeedbackSent(true);
+                setLoading(false);
+                resetForm();
+            } catch (e) {
+                console.log('Error while sending feedback');
+                setFeedbackSent(false);
+                setLoading(false);
+            }
+        }
+    };
+
+    const resetForm = () => {
+        setDex(undefined);
+        setPair('');
+        setDescription('');
+        setAddress('');
+    };
+
+    const isFeedbackTooShort = () => {
+        return description.trim().length < 1;
+    };
+
+    const isFeedbackTooLong = () => {
+        return description.trim().length > 5000;
     };
 
     return (
         <Wrapper>
-            <form onSubmit={submitFeedback}>
-                <TextareaWrapper>
-                    <Textarea
-                        placeholder="Describe your problem in as much detail as possible"
-                        value={description}
-                        onChange={event => {
-                            setDescription(event.target.value);
-                        }}
+            {feedbackSent ? (
+                <FeedbackSentContent>
+                    <ThankYouMessage>Thank you for your feedback!</ThankYouMessage>
+                    <IllustrationWrapper
+                        height={120}
+                        src={theme === 'light' ? Illustration : IllustrationDark}
                     />
-                </TextareaWrapper>
+                </FeedbackSentContent>
+            ) : (
+                <>
+                    <AnonymousNote>
+                        This feedback is 100% anonymous - we store only the information that you
+                        type in this form.
+                    </AnonymousNote>
+                    <TextareaWrapper>
+                        <Textarea
+                            placeholder="Describe your problem in as much detail as possible"
+                            value={description}
+                            onChange={event => {
+                                setDescription(event.target.value);
+                            }}
+                        />
+                    </TextareaWrapper>
 
-                <AddressInputWrapper>
-                    <Input
-                        placeholder="Enter related ENS domain or Ethereum address (optional)"
-                        onChange={event => {
-                            setAddress(event.target.value.trim());
-                        }}
-                        useWhiteBackground
-                        useDarkBorder
-                        value={address}
-                    />
-                </AddressInputWrapper>
-                <DexSelectWrapper>
-                    <Select
-                        placeholder="Select exchange (optional)"
-                        useWhiteBackground
-                        useDarkBorder
-                        options={dexOptions}
-                        isSearchable={false}
-                        onChange={option => setDex(option)}
-                        value={dex}
-                    />
-                </DexSelectWrapper>
+                    <AddressInputWrapper>
+                        <Input
+                            placeholder="Enter related ENS domain or Ethereum address (optional)"
+                            onChange={event => {
+                                setAddress(event.target.value.trim());
+                            }}
+                            useWhiteBackground
+                            useDarkBorder
+                            value={address}
+                        />
+                    </AddressInputWrapper>
+                    <DexSelectWrapper>
+                        <Select
+                            placeholder="Select exchange (optional)"
+                            useWhiteBackground
+                            useDarkBorder
+                            options={dexOptions}
+                            isSearchable={false}
+                            onChange={option => setDex(option)}
+                            value={dex}
+                        />
+                    </DexSelectWrapper>
 
-                <AddressInputWrapper>
-                    <Input
-                        placeholder="Pool pair - e.g. ETH/WBTC (optional)"
-                        onChange={event => {
-                            setPair(event.target.value);
-                        }}
-                        useWhiteBackground
-                        useDarkBorder
-                        value={pair}
-                    />
-                </AddressInputWrapper>
+                    <AddressInputWrapper>
+                        <Input
+                            placeholder="Pool pair - e.g. ETH/WBTC (optional)"
+                            onChange={event => {
+                                setPair(event.target.value);
+                            }}
+                            useWhiteBackground
+                            useDarkBorder
+                            value={pair}
+                        />
+                    </AddressInputWrapper>
 
-                <ButtonWrapper>
-                    <SubmitInput
-                        type="submit"
-                        value="Submit"
-                        disabled={description.trim().length < 1}
-                    />
-                </ButtonWrapper>
-            </form>
+                    <ButtonWrapper>
+                        <AddButton
+                            onClick={() => {
+                                submitFeedback();
+                            }}
+                            disabled={isFeedbackTooShort() || isFeedbackTooLong()}
+                        >
+                            {loading ? <Spinner size={14} color={colors.FONT_MEDIUM} /> : 'Submit'}
+                        </AddButton>
+                        {isFeedbackTooLong() && (
+                            <ErrorWrapper>
+                                Your feedback is too long (maximum of 5000 characters is allowed)
+                            </ErrorWrapper>
+                        )}
+                    </ButtonWrapper>
+                </>
+            )}
         </Wrapper>
     );
 };

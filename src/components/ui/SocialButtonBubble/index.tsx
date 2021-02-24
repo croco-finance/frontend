@@ -155,7 +155,7 @@ const SocialButtonBubble = () => {
                 <IconLinkWrapper onClick={() => dispatch(openModal({ type: 'feedback' }))}>
                     <Icon
                         icon="feedback"
-                        size={16}
+                        size={15}
                         color={theme === 'light' ? '#002439' : '#ccd6db'}
                     />
                     <SocialText>Feedback</SocialText>
