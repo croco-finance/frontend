@@ -144,10 +144,10 @@ const dexOptions = [
 ];
 
 const FeedbackView = () => {
-    const theme = useSelector(state => state.app.theme);
+    const { theme, selectedAddress } = useSelector(state => state.app);
 
     // form fields
-    const [address, setAddress] = useState('');
+    const [address, setAddress] = useState(selectedAddress);
     const [dex, setDex] = useState<Option | undefined>(undefined);
     const [pair, setPair] = useState('');
     const [description, setDescription] = useState('');
