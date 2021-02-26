@@ -33,6 +33,12 @@ export const TOKENS = {
     ren: require('../../../data/images/tokens/ren.svg'),
     '1inch': require('../../../data/images/tokens/1inch.svg'),
     meme: require('../../../data/images/tokens/meme.svg'),
+    wusd: require('../../../data/images/tokens/wusd.svg'),
+    alpha: require('../../../data/images/tokens/alpha.svg'),
+    vision: require('../../../data/images/tokens/vision.svg'),
+    tbtc: require('../../../data/images/tokens/tbtc.svg'),
+    crv: require('../../../data/images/tokens/crv.svg'),
+    cover: require('../../../data/images/tokens/cover.svg'),
 
     // unknown token
     unknown: require('../../../data/images/tokens/unknown.svg'),
@@ -45,4 +51,6 @@ export const TOKENS = {
     balancer: require('../../../data/images/exchanges/balancer.svg'),
     balancerdark: require('../../../data/images/exchanges/balancer-dark.svg'),
     sushidark: require('../../../data/images/exchanges/sushi-dark.svg'),
+    materia: require('../../../data/images/exchanges/materia.svg'),
+    materiadark: require('../../../data/images/exchanges/materia_dark.svg'),
 };
