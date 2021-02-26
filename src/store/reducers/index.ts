@@ -8,7 +8,7 @@ export const initialState: AppStateInterface = {
     selectedPoolId: '',
     allAddresses: {},
     selectedAddress: '',
-    dexToPoolMap: { BALANCER: [], UNI_V2: [], SUSHI: [] },
+    dexToPoolMap: { BALANCER: [], UNI_V2: [], SUSHI: [], MATERIA: [] },
     activePoolIds: [],
     inactivePoolIds: [],
     error: false,
