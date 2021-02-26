@@ -29,6 +29,7 @@ async function getSnaps(address: string): Promise<SnapStructure | null> {
 
         const dayIds: { [key in Exchange]?: number } = {};
         for (const [poolId, poolSnaps] of Object.entries(snaps)) {
+            filter0SnapsAfterNoUnstake(poolSnaps);
             filter0SameBlockSnaps(poolSnaps);
             let lastSnap = poolSnaps[poolSnaps.length - 1];
             if (lastSnap.liquidityTokenBalance !== 0) {
@@ -131,6 +132,16 @@ function parseSnap(snap: any): Snap {
     };
 }
 
+function filter0SnapsAfterNoUnstake(snaps: Snap[]) {
+    for (let i = 0; i < snaps.length - 1; i++) {
+        if (snaps[i].stakingService !== null && snaps[i].liquidityTokenBalance !== 0 && snaps[i + 1].stakingService === null && snaps[i + 1].liquidityTokenBalance === 0) {
+            // delete snap if there is a 0 snap after staked snap without unstaking (sometimes 0 snaps are created in the subgraph)
+            snaps.splice(i + 1, 1);
+            i--;
+        }
+    }
+}
+
 function filter0SameBlockSnaps(snaps: Snap[]) {
     for (let i = 0; i < snaps.length - 1; i++) {
         if (
@@ -142,8 +153,10 @@ function filter0SameBlockSnaps(snaps: Snap[]) {
                     snaps[i + 1].yieldReward = snaps[i].yieldReward;
                 }
                 snaps.splice(i, 1);
+                i--;
             } else if (snaps[i + 1].liquidityTokenBalance === 0) {
                 snaps.splice(i + 1, 1);
+                i--;
             } else {
                 // TODO: send log to firebase along with address
                 console.log('WARNING: incomplete stake edge case occured');
