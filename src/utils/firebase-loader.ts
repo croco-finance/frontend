@@ -49,7 +49,7 @@ async function getSnaps(address: string): Promise<SnapStructure | null> {
 
 function sortAndTransformSnaps(userData: any): SnapStructure {
     const snaps: SnapStructure = {};
-    for (const exchange of ['BALANCER', 'UNI_V2', 'SUSHI']) {
+    for (const exchange of Object.values(Exchange)) {
         if (userData.hasOwnProperty(exchange)) {
             let snaps_ = userData[exchange]['snaps'];
             if (snaps_ === undefined) {

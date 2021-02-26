@@ -21,6 +21,7 @@ export enum Exchange {
     UNI_V2 = 'UNI_V2',
     BALANCER = 'BALANCER',
     SUSHI = 'SUSHI',
+    MATERIA = 'MATERIA'
 }
 
 export enum StakingService {
