@@ -10,10 +10,12 @@ export const GOOGLE_ANALYTICS_TRACKING_ID = 'G-Z20W1K81CF';
 // Liquidity pools info
 export const BALANCER_POOLS_BASE_URL = 'https://pools.balancer.exchange/#/pool/';
 export const UNISWAP_POOLS_BASE_URL = 'https://info.uniswap.org/pair/';
-export const SUSHISWAP_POOLS_BASE_URL = 'https://sushiswap.fi/pairs/';
+export const SUSHISWAP_POOLS_BASE_URL = 'https://app.sushi.com/pair/';
+export const MATERIA_POOLS_BASE_URL = 'https://materia.exchange/#/add/';
 
 export const DEX_POOL_BASE_URLS: DexBaseUrls = {
     BALANCER: BALANCER_POOLS_BASE_URL,
     UNI_V2: UNISWAP_POOLS_BASE_URL,
     SUSHI: SUSHISWAP_POOLS_BASE_URL,
+    MATERIA: MATERIA_POOLS_BASE_URL,
 };

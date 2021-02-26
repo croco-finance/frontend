@@ -53,7 +53,12 @@ const Gains = styled(HeaderChild)``;
 
 const PoolList = () => {
     const { activePoolIds, dexToPoolMap } = useSelector(state => state.app);
-    const dexRenderingOrder: Array<keyof typeof Exchange> = ['UNI_V2', 'SUSHI', 'BALANCER'];
+    const dexRenderingOrder: Array<keyof typeof Exchange> = [
+        'UNI_V2',
+        'SUSHI',
+        'BALANCER',
+        'MATERIA',
+    ];
 
     const activePoolIdsOrdered: string[] = [];
     const inactivePoolIdsOrdered: string[] = [];

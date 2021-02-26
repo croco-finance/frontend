@@ -74,7 +74,7 @@ export const setPoolData = (
 
 export const resetPoolData = () => {
     return dispatch => {
-        dispatch(setPoolData({}, { BALANCER: [], UNI_V2: [], SUSHI: [] }, [], []));
+        dispatch(setPoolData({}, { BALANCER: [], UNI_V2: [], SUSHI: [], MATERIA: [] }, [], []));
     };
 };
 
@@ -219,7 +219,7 @@ export const fetchSnapshots = (addresses: string[] | string) => {
 
         // Process fetched snapshots
         // declare Redux variables
-        let dexToPoolMap: DexToPoolIdMap = { BALANCER: [], UNI_V2: [], SUSHI: [] };
+        let dexToPoolMap: DexToPoolIdMap = { BALANCER: [], UNI_V2: [], SUSHI: [], MATERIA: [] };
         let activePoolIds: string[] = [];
         let inactivePoolIds: string[] = [];
         const customPoolsObject: AllPoolsGlobal = {};

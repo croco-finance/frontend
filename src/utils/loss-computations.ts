@@ -13,7 +13,7 @@ const getIntervalFees = (
     exchange: Exchange,
 ) => {
     let tokenBalancesNoFees;
-    if (exchange === 'UNI_V2' || exchange === 'SUSHI') {
+    if (exchange === 'UNI_V2' || exchange === 'SUSHI' || exchange === 'MATERIA') {
         tokenBalancesNoFees = getNewBalancesUniswap(startTokenBalances, endTokenPrices);
     } else if (exchange === 'BALANCER') {
         tokenBalancesNoFees = getNewBalancesBalancer(
