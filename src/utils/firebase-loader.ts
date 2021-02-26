@@ -142,8 +142,10 @@ function filter0SameBlockSnaps(snaps: Snap[]) {
                     snaps[i + 1].yieldReward = snaps[i].yieldReward;
                 }
                 snaps.splice(i, 1);
+                i--;
             } else if (snaps[i + 1].liquidityTokenBalance === 0) {
                 snaps.splice(i + 1, 1);
+                i--;
             } else {
                 // TODO: send log to firebase along with address
                 console.log('WARNING: incomplete stake edge case occured');
