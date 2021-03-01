@@ -32,6 +32,12 @@ async function getSnaps(address: string): Promise<SnapStructure | null> {
             filter0SnapsAfterNoUnstake(poolSnaps);
             filter0SameBlockSnaps(poolSnaps);
             let lastSnap = poolSnaps[poolSnaps.length - 1];
+
+            if (lastSnap.exchange === Exchange.UNI_V2 && lastSnap.stakingService === StakingService.SUSHI) {
+                // Workaround to not show any migrated uni as active - I just set last snap LP balance to 0
+                lastSnap.liquidityTokenBalance = 0
+            }
+
             if (lastSnap.liquidityTokenBalance !== 0) {
                 if (!dayIds.hasOwnProperty(lastSnap.exchange)) {
                     const ref = firebase.exchangeDayId(lastSnap.exchange);
