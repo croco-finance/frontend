@@ -138,7 +138,7 @@ const DifferentStrategy = ({
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const handleExpandValue = (isOpened: boolean) => {
         setValueOpened(isOpened);

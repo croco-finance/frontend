@@ -84,7 +84,7 @@ const LiquidityPool = () => {
     const { allPools, selectedPoolId } = useSelector(state => state.app);
     let pool = allPools[selectedPoolId];
     const [isOpened, setIsOpened] = useState(false);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const handleExpand = (opened: boolean) => {
         setIsOpened(opened);

@@ -130,7 +130,7 @@ const AddressModal = () => {
     const [address, setAddress] = useState('');
     const [isValidAddress, setIsValidAddress] = useState(false);
 
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const addNewAddress = async () => {
         const hexAddressProcessed = inputHexAddress.trim().toLowerCase();

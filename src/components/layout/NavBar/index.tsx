@@ -57,7 +57,7 @@ const DarkModeSwitchWrapper = styled.div`
 `;
 
 const NavBar = () => {
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     return (
         <Wrapper>

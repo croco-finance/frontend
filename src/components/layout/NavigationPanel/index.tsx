@@ -144,7 +144,7 @@ const MobileMenuWrapper = styled.div`
 `;
 
 const NavigationPanel = props => {
-    const theme: any = useTheme();
+    const theme = useTheme();
     const dispatch = useDispatch();
     const themeApp = useSelector(state => state.app.theme);
     const { layoutSize } = useLayoutSize();

@@ -355,7 +355,7 @@ const Modal = ({
     descriptionAlign = 'center',
     ...rest
 }: Props) => {
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const modalWindow = (
         <ModalWindow

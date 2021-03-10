@@ -49,7 +49,7 @@ interface Props {
 }
 const PoolHeader = ({ tokenSymbolsArr, exchange, poolId }: Props) => {
     const poolUrl = constants.DEX_POOL_BASE_URLS[exchange] + poolId;
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     return (
         <Wrapper>

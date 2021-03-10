@@ -200,7 +200,7 @@ const Simulator = () => {
     const isLoading: boolean = useSelector(state => state.app.loading);
     const isFetchError: boolean = useSelector(state => state.app.error);
     const noPoolsFound: boolean = useSelector(state => state.app.noPoolsFound);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     // SIMULATOR FUNCTIONS
     const [simulatedPriceCoefficients, setSimulatedPriceCoefficients] = useState<number[]>(

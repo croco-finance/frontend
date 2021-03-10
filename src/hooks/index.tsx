@@ -3,10 +3,12 @@ import { useSelector } from '@reducers';
 import { useMemo, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { AppThemeColors } from '@types';
 
 export const useTheme = () => {
     const theme = useSCTheme();
-    return theme;
+    // probably not the right way how to get the proper type here
+    return theme as AppThemeColors;
 };
 
 export const useLayoutSize = () => {

@@ -131,7 +131,7 @@ const DifferentStrategy = ({
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const divergenceLoss = poolStrategyUsd - differentStrategyUsd - feesUsd - yieldUsd + txCostUsd;
 
