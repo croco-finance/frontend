@@ -7,6 +7,8 @@ import MainContainer from './MainContainer';
 import DashboardContainer from './DashboardContainer';
 import SimulatorContainer from './SimulatorContainer';
 import Modal from './Modal';
+import NavigationPanel from './NavigationPanel';
+import AppLayout from './AppLayout';
 
 export {
     NavBar,
@@ -18,4 +20,6 @@ export {
     DashboardContainer,
     SimulatorContainer,
     Modal,
+    NavigationPanel,
+    AppLayout,
 };

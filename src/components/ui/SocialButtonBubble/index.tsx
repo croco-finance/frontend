@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@components/ui';
 import { useDispatch } from 'react-redux';
-import { openModal } from '../../../actions/modalActions';
 import { useSelector } from '@reducers';
+import { openModal } from '@actions';
 
 const Wrapper = styled.div`
     position: fixed;

@@ -1,62 +1,23 @@
-import {
-    DashboardContainer,
-    LeftLayoutContainer,
-    RightLayoutContainer,
-    NavBar,
-    Modal,
-} from '@components/layout';
-import {
-    Input,
-    LoadingBox,
-    SocialButtonBubble,
-    Icon,
-    Select,
-    DarkModeSwitch,
-} from '@components/ui';
 import { AddressSelect } from '@components/containers';
-import { animations, colors, variables, styles } from '@config';
-import { validationUtils } from '@utils';
-import React, { useEffect, useState } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
-import styled from 'styled-components';
-import RightContainer from './components/RightContainer';
-import PoolList from './components/LeftContainer/PoolList';
-import SummaryList from './components/LeftContainer/SummaryList';
-import { AllAddressesGlobal, AppThemeColors } from '@types';
-import * as actionTypes from '@actionTypes';
+import { DashboardContainer, LeftLayoutContainer, RightLayoutContainer } from '@components/layout';
+import { LoadingBox } from '@components/ui';
+import { animations, colors, styles, variables } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
+import React from 'react';
+import { withRouter } from 'react-router';
+import styled from 'styled-components';
+import PoolList from './components/LeftContainer/PoolList';
+import SummaryList from './components/LeftContainer/SummaryList';
+import RightContainer from './components/RightContainer';
 
-const Header = styled.div`
-    width: 100%;
-    /* padding-bottom: 44px; */
-    /* max-width: 540px; */
-    display: flex;
-    justify-content: center;
-    background-color: ${props => props.theme.BACKGROUND};
-    padding: 0 20px;
-`;
-
-const DarkModeSwitchWrapper = styled.div`
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 8px;
-    right: 10px;
-
-    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
-        display: none;
-    }
-`;
-
-const HeaderContent = styled.div`
-    width: 100%;
-    max-width: 620px;
-    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
-
-    /* padding: 0 20px 40px 20px; */
-    /* border-bottom: 2px solid ${colors.BACKGROUND_DARK}; */
+const PageHeadline = styled.div`
+    color: ${props => props.theme.FONT_DARK};
+    font-size: ${variables.FONT_SIZE.H1};
+    font-weight: ${variables.FONT_WEIGHT.BOLD};
+    align-self: baseline;
+    margin-bottom: 30px;
+    margin-top: 12px;
 `;
 
 const ExceptionWrapper = styled.div`
@@ -97,16 +58,11 @@ const NoAddressNoPool = styled(ExceptionWrapper)`
 
 const AddressWrapper = styled.div`
     width: 100%;
-    max-width: 610px;
+    max-width: 540px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    padding: 0 5px;
-    /* padding: 6px;
-    border-radius: 8px;
-    background-color: ${colors.BACKGROUND_DARK}; */
+    margin-bottom: 14px;
 `;
 
 const LeftSubHeaderContent = styled.div`
@@ -192,19 +148,11 @@ const Dashboard = () => {
 
     return (
         <>
-            <DarkModeSwitchWrapper>
-                <DarkModeSwitch />
-            </DarkModeSwitchWrapper>
-
             <DashboardContainer>
-                <LeftLayoutContainer backgroundColor={'red'}>
-                    <Header>
-                        <HeaderContent>
-                            <NavBar />
-                        </HeaderContent>
-                    </Header>
+                <LeftLayoutContainer>
                     <LeftSubHeaderContent>
                         <AddressWrapper>
+                            <PageHeadline>Dashboard</PageHeadline>
                             <AddressSelect />
                         </AddressWrapper>
 
@@ -212,7 +160,7 @@ const Dashboard = () => {
                             ? exceptionContent
                             : !noPoolsSavedInRedux && (
                                   <PoolListWrapper>
-                                      <Headline>Your liquidity pools</Headline>
+                                      {/* <Headline>Your liquidity pools</Headline> */}
                                       <SummaryList />
                                       <PoolList />
                                   </PoolListWrapper>
@@ -227,7 +175,6 @@ const Dashboard = () => {
                         </RightNonExceptionContentWrapper>
                     )}
                 </RightLayoutContainer>
-                <SocialButtonBubble />
             </DashboardContainer>
         </>
     );

@@ -14,13 +14,10 @@ import { useSelector } from '@reducers';
 
 const Wrapper = styled.div`
     width: 100%;
-    max-width: 610px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 20px;
     margin-bottom: 30px;
-    padding: 0 5px;
     /* padding: 6px;
     border-radius: 8px;
     background-color: ${colors.BACKGROUND_DARK}; */

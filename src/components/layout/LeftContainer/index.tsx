@@ -3,8 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div<Props>`
-    width: 40%;
-    padding: 0;
+    width: 42%;
+    min-width: 404px;
+    padding-top: 10px;
     max-height: 100vh;
     height: 100vh;
     display: flex;

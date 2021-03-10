@@ -1,4 +1,4 @@
-import { MODAL } from '../actions/constants';
+import * as actionTypes from '@actionTypes';
 
 const initialState = {
     modalType: null,
@@ -7,13 +7,13 @@ const initialState = {
 
 const modalReducer = (state = initialState, action) => {
     switch (action.type) {
-        case MODAL.OPEN:
+        case actionTypes.OPEN_MODAL:
             return {
                 modalType: action.payload.type,
                 modalProps: action.payload.props,
             };
 
-        case MODAL.CLOSE: {
+        case actionTypes.CLOSE_MODAL: {
             return initialState;
         }
 

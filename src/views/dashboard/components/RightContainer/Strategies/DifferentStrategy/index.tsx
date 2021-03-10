@@ -15,7 +15,7 @@ import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;
-    max-width: 650px;
+    max-width: 680px;
     margin: 0 auto;
 `;
 
