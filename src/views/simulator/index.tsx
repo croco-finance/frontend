@@ -26,25 +26,13 @@ import SimulationBox from './components/LeftContainer/SimulationBox';
 import RightContainer from './components/RightContainer';
 import { useSelector } from '@reducers';
 
-const Header = styled.div`
-    padding: 0 20px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    background-color: ${props => props.theme.BACKGROUND};
-`;
-
-const DarkModeSwitchWrapper = styled.div`
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 8px;
-    right: 10px;
-
-    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
-        display: none;
-    }
+const PageHeadline = styled.div`
+    color: ${props => props.theme.FONT_DARK};
+    font-size: ${variables.FONT_SIZE.H1};
+    font-weight: ${variables.FONT_WEIGHT.BOLD};
+    align-self: baseline;
+    margin-bottom: 30px;
+    margin-top: 12px;
 `;
 
 const LeftSubHeaderContent = styled.div`
@@ -57,7 +45,7 @@ const LeftSubHeaderContent = styled.div`
     margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
     width: 100%;
     height: 100%;
-    max-width: 620px;
+    max-width: 580px;
     align-self: center;
     ${styles.scrollBarStyles};
 
@@ -107,11 +95,14 @@ const ErrorTextWrapper = styled(ExceptionWrapper)`
 
 const AddressWrapper = styled.div`
     width: 100%;
-    max-width: 620px;
+    // max-width: 540px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+`;
+
+const ContentWrapper = styled.div`
+    // max-width: 540px;
 `;
 
 const Section = styled.div`
@@ -130,7 +121,7 @@ const ChoosePoolWrapper = styled(Section)`
     display: flex;
     align-items: center;
     width: 100%;
-    margin-top: 40px;
+    margin-top: 10px;
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
         margin-top: 20px;
@@ -299,21 +290,14 @@ const Simulator = () => {
 
     return (
         <>
-            <DarkModeSwitchWrapper>
-                <DarkModeSwitch />
-            </DarkModeSwitchWrapper>
             <SimulatorContainer>
                 <LeftLayoutContainer backgroundColor={theme.BACKGROUND}>
-                    <Header>
-                        <HeaderContent>
-                            <NavBar></NavBar>
-                        </HeaderContent>
-                    </Header>
                     <LeftSubHeaderContent>
                         <AddressWrapper>
+                            <PageHeadline>Simulator</PageHeadline>
                             <AddressSelect />
                         </AddressWrapper>
-
+                        {/* <ContentWrapper> */}
                         {exceptionContent ? (
                             exceptionContent
                         ) : allPools && Object.keys(allPools).length > 0 ? (
@@ -369,6 +353,7 @@ const Simulator = () => {
                                 </SimulationBoxWrapper>
                             </>
                         )}
+                        {/* </ContentWrapper> */}
                     </LeftSubHeaderContent>
                 </LeftLayoutContainer>
                 <RightLayoutContainer>
@@ -382,7 +367,6 @@ const Simulator = () => {
                         sliderDefaultEthCoeff={sliderDefaultEthPriceCoefficient}
                     />
                 </RightLayoutContainer>
-                <SocialButtonBubble />
             </SimulatorContainer>
         </>
     );

@@ -8,7 +8,7 @@ import SummaryItem from '../SummaryItem';
 
 const Wrapper = styled.div`
     padding-left: 0;
-    margin-bottom: 65px;
+    margin-bottom: 45px;
     width: 100%;
 `;
 

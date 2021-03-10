@@ -6,6 +6,7 @@ import * as simulatorUtils from './simulator';
 import * as formatUtils from './format';
 import * as graphUtils from './graph';
 import * as helperUtils from './helpers';
+import * as stringUtils from './string';
 import { getSnaps } from './firebase-loader';
 import { setUnclaimed } from './unclaimed-loader';
 import { loadState, saveState } from './local-storage';
@@ -25,4 +26,5 @@ export {
     saveState,
     getDailyFees,
     helperUtils,
+    stringUtils,
 };

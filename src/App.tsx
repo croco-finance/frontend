@@ -12,11 +12,16 @@ import Dashboard from './views/dashboard';
 import LandingPage from './views/landing-page';
 import Simulator from './views/simulator';
 import { ModalRoot } from '@components/modals';
+import { AppLayout } from '@components/layout';
+import { useLayoutSize } from '@hooks';
+import Resize from './support/Resize';
 import './App.css';
 
 const App = (props: RouteComponentProps<any>) => {
     const { theme, selectedAddress, allAddresses } = useSelector(state => state.app);
     const dispatch = useDispatch();
+    const { layoutSize } = useLayoutSize();
+    console.log('APP layout size: ', layoutSize);
 
     useEffect(() => {
         const addressesInit = async () => {
@@ -55,12 +60,15 @@ const App = (props: RouteComponentProps<any>) => {
 
     return (
         <ThemeProvider theme={theme === 'light' ? THEME.light : THEME.dark}>
+            <Resize />
             <ModalRoot />
-            <Switch>
-                <Route path="/dashboard" component={Dashboard} />
-                <Route path="/simulator" component={Simulator} />
-                <Route path="/" component={LandingPage} />
-            </Switch>
+            <AppLayout>
+                <Switch>
+                    <Route path="/dashboard" component={Dashboard} />
+                    <Route path="/simulator" component={Simulator} />
+                    <Route path="/" component={LandingPage} />
+                </Switch>
+            </AppLayout>
         </ThemeProvider>
     );
 };

@@ -1,4 +1,4 @@
-import { MODAL } from './constants';
+import * as actionTypes from '@actionTypes';
 
 export type UserContextPayload =
     | {
@@ -10,18 +10,18 @@ export type UserContextPayload =
 
 export type ModalAction =
     | {
-          type: typeof MODAL.CLOSE;
+          type: typeof actionTypes.CLOSE_MODAL;
       }
     | {
-          type: typeof MODAL.OPEN;
+          type: typeof actionTypes.OPEN_MODAL;
           payload: UserContextPayload;
       };
 
 export const closeModal = (): ModalAction => ({
-    type: MODAL.CLOSE,
+    type: actionTypes.CLOSE_MODAL,
 });
 
 export const openModal = (payload: UserContextPayload): ModalAction => ({
-    type: MODAL.OPEN,
+    type: actionTypes.OPEN_MODAL,
     payload,
 });

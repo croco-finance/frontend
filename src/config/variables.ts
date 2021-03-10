@@ -2,7 +2,7 @@ export const SCREEN_SIZE = {
     UNAVAILABLE: '260px', // not supported
     SM: '576px', // phones
     MD: '768px', // tablets
-    LG: '992px', // laptops/desktops
+    LG: '1040px', // laptops/desktops
     XL: '1200px', // extra Large laptops/desktops
 } as const;
 

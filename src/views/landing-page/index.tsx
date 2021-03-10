@@ -335,7 +335,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         <>
             <MainWrapper>
                 <ContentWrapper>
-                    <TopBar>
+                    {/* <TopBar>
                         <PageLogoWrapper>
                             <PageLogo height={20} />
                         </PageLogoWrapper>
@@ -365,7 +365,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                                 <DarkModeSwitch />
                             </DarkModeSwitchWrapper>
                         </CommunityIconsWrapper>
-                    </TopBar>
+                    </TopBar> */}
 
                     <AnimatedWrapper>
                         {/* <Fade direction="up" delay={400} triggerOnce> */}

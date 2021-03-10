@@ -5,7 +5,7 @@ import { Icon, Input, Spinner } from '@components/ui';
 import { useDispatch } from 'react-redux';
 import * as actionTypes from '@actionTypes';
 import { validationUtils } from '@utils';
-import { resetPoolData } from '../../../store/actions/snapshots';
+import { resetPoolData } from '@actions';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
 

@@ -33,6 +33,10 @@ export const ICONS = {
     heart: require('../../../data/images/icons/heart.svg'),
     croco_heart: require('../../../data/images/icons/croco_heart.svg'),
     croco_logo: require('../../../data/images/icons/croco_logo.svg'),
+    filter: require('../../../data/images/icons/filter.svg'),
+    pools: require('../../../data/images/icons/pools.svg'),
+    dashboard: require('../../../data/images/icons/dashboard.svg'),
+    hamburger_menu: require('../../../data/images/icons/hamburger_menu.svg'),
 
     // themes
     dayMode: require('../../../data/images/icons/day-mode.svg'),
