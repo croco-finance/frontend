@@ -171,7 +171,7 @@ const Strategies = ({
     exchange,
     lastWeekAverageDailyRewardsUsd,
 }: Props) => {
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const graphData = graphUtils.getStrategiesGraphData(
         poolStrategyUsd,

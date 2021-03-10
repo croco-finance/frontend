@@ -75,7 +75,7 @@ interface Props {
 }
 
 const PoolOverview = ({ pool }: Props) => {
-    const theme: any = useTheme();
+    const theme = useTheme();
     let { pooledTokens, isActive, hasYieldReward, intervalStats } = pool;
 
     const {

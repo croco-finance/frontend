@@ -26,7 +26,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const InfoBox = ({ children, iconSize = 16, className }: Props) => {
-    const theme: any = useTheme();
+    const theme = useTheme();
     return (
         <Wrapper className={className}>
             <Icon icon="info" color={theme.PURPLE} size={iconSize} />

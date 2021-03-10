@@ -73,7 +73,7 @@ interface Props {
 }
 
 const SummaryOverview = ({ summary }: Props) => {
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const {
         valueLockedUsd,

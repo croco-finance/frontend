@@ -141,7 +141,7 @@ const Overview = ({
     isActive,
     lastWeekAverageDailyRewardsUsd,
 }: Props) => {
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const tokenBalancesDiff = mathUtils.subtractArraysElementWise(
         simulatedPooledTokenBalances,

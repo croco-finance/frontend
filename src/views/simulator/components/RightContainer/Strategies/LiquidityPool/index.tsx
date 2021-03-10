@@ -117,7 +117,7 @@ const LiquidityPool = ({
     hasYieldReward,
 }: Props) => {
     const [isOpened, setIsOpened] = useState(false);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const endTimeText = isActive
         ? 'Value today'

@@ -84,7 +84,7 @@ interface AddressOption {
 const AddressSelect = () => {
     const dispatch = useDispatch();
     const { allAddresses, selectedAddress } = useSelector(state => state.app);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     // save setting before the "Manage addresses" modal is opened
     const bundledAddressesSnapBeforeModalOpened = useRef<string[]>([]);
