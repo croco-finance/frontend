@@ -1,8 +1,8 @@
+import { variables } from '@config';
+import { useTheme } from '@hooks';
 import React from 'react';
 import ReactSelect, { Props as SelectProps } from 'react-select';
 import styled from 'styled-components';
-import { colors, variables } from '@config';
-import { useTheme } from '@hooks';
 
 const selectStyle = (
     isSearchable: boolean,

@@ -1,16 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
-import { Select, Icon } from '@components/ui';
-import { Modal } from '@components/layout';
-import { colors } from '@config';
-import { useDispatch } from 'react-redux';
-import { AllAddressesGlobal, AddressData } from '@types';
-import { validationUtils, formatUtils, mathUtils } from '@utils';
-import * as actionTypes from '@actionTypes';
+import { fetchSnapshots, setSelectedAddress } from '@actions';
 import { AddressModal } from '@components/containers';
-import { fetchSnapshots, setSelectedPoolId, setSelectedAddress } from '@actions';
+import { Modal } from '@components/layout';
+import { Icon, Select } from '@components/ui';
+import { colors } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
+import { AllAddressesGlobal } from '@types';
+import { formatUtils, mathUtils, validationUtils } from '@utils';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -145,21 +144,26 @@ const AddressSelect = () => {
         }
     }, [showAddressModal]);
 
-    const ens = allAddresses[selectedAddress] ? allAddresses[selectedAddress].ens : '';
-    let value = buildAddressOption(selectedAddress, ens);
+    const getSelectedAddressValue = (address: string | null) => {
+        if (address === 'bundled') {
+            return {
+                value: 'bundled',
+                label: 'Bundled Wallets',
+            };
+        } else if (address === '' || address === null) {
+            // if null is selected, the placeholder is shown
+            return null;
+        }
 
-    if (selectedAddress === 'bundled') {
-        value = {
-            value: 'bundled',
-            label: 'Bundled Wallets',
-        };
-    }
+        const ens = allAddresses[address] ? allAddresses[address].ens : '';
+        return buildAddressOption(address, ens);
+    };
 
     return (
         <Wrapper>
             <Select
                 options={buildAddressOptions(allAddresses)}
-                value={selectedAddress === null ? null : value} // I want to clean the select when user deletes just selected address
+                value={getSelectedAddressValue(selectedAddress)} // I want to clean the select when user deletes just selected address
                 onChange={(option: AddressOption) => {
                     handleAddressChange(option.value);
                 }}
