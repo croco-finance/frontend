@@ -20,8 +20,6 @@ import './App.css';
 const App = (props: RouteComponentProps<any>) => {
     const { theme, selectedAddress, allAddresses } = useSelector(state => state.app);
     const dispatch = useDispatch();
-    const { layoutSize } = useLayoutSize();
-    console.log('APP layout size: ', layoutSize);
 
     useEffect(() => {
         const addressesInit = async () => {

@@ -1,20 +1,10 @@
 import { changeSelectedPool } from '@actions';
 import { AddressSelect } from '@components/containers';
-import {
-    LeftLayoutContainer,
-    NavBar,
-    RightLayoutContainer,
-    SimulatorContainer,
-} from '@components/layout';
-import {
-    DarkModeSwitch,
-    InfoBox,
-    LoadingBox,
-    MultipleTokenSelect,
-    SocialButtonBubble,
-} from '@components/ui';
-import { styles, types, variables, analytics } from '@config';
+import { LeftLayoutContainer, RightLayoutContainer, SimulatorContainer } from '@components/layout';
+import { InfoBox, LoadingBox, MultipleTokenSelect } from '@components/ui';
+import { analytics, styles, types, variables } from '@config';
 import { useTheme } from '@hooks';
+import { useSelector } from '@reducers';
 import { AllPoolsGlobal } from '@types';
 import { formatUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
@@ -24,7 +14,6 @@ import styled from 'styled-components';
 import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
 import RightContainer from './components/RightContainer';
-import { useSelector } from '@reducers';
 
 const PageHeadline = styled.div`
     color: ${props => props.theme.FONT_DARK};
