@@ -1,6 +1,7 @@
 import { variables } from '@config';
 import { useSelector } from '@reducers';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import OverviewImage from '../../../../../src/data/images/landing-page/overview.svg';
 import OverviewImageDark from '../../../../../src/data/images/landing-page/overview_dark.svg';
@@ -57,6 +58,23 @@ const StyledP = styled.p<{ textAlign: string }>`
     }
 `;
 
+const SimulatorButton = styled(Link)`
+    cursor: pointer;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    width: 70px;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: end;
+`;
+
 const Index = () => {
     const theme = useSelector(state => state.app.theme);
     return (
@@ -98,6 +116,13 @@ const Index = () => {
                         Try by yourself how changes in token prices affect pool value and divergence
                         loss.
                     </StyledP>
+                    <SimulatorButton
+                        to={{
+                            pathname: `/simulator`,
+                        }}
+                    >
+                        Open
+                    </SimulatorButton>
                 </Feature>
             </FeaturesWrapper>
         </Wrapper>
