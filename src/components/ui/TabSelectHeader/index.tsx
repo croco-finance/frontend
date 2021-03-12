@@ -45,41 +45,41 @@ const Button = styled.div<{ selected: boolean; disabled?: boolean }>`
     height: 100%;
     align-items: center;
 `;
-
-type TabOptions = 'overview' | 'strategies';
-
 interface Props {
     headline?: React.ReactNode;
     onSelectTab?: any;
     hideTabs?: boolean;
+    tabHeadlines: string[];
+    tabIds: string[];
 }
 
-const TabSelectHeader = ({ headline, onSelectTab, hideTabs = false }: Props) => {
-    const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
+const TabSelectHeader = ({
+    headline,
+    onSelectTab,
+    hideTabs = false,
+    tabHeadlines,
+    tabIds,
+}: Props) => {
+    const [selectedTab, setSelectedTab] = useState(tabIds[0]);
 
     return (
         <Header>
             <Headline>{headline}</Headline>
             {!hideTabs && (
                 <ButtonsWrapper>
-                    <Button
-                        onClick={() => {
-                            onSelectTab('overview');
-                            setSelectedTab('overview');
-                        }}
-                        selected={selectedTab === 'overview'}
-                    >
-                        <span>Overview</span>
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            onSelectTab('strategies');
-                            setSelectedTab('strategies');
-                        }}
-                        selected={selectedTab === 'strategies'}
-                    >
-                        <span>Compare strategies</span>
-                    </Button>
+                    {tabIds.map((id, i) => {
+                        return (
+                            <Button
+                                onClick={() => {
+                                    onSelectTab(id);
+                                    setSelectedTab(id);
+                                }}
+                                selected={selectedTab === id}
+                            >
+                                <span>{tabHeadlines[i]}</span>
+                            </Button>
+                        );
+                    })}
                 </ButtonsWrapper>
             )}
         </Header>

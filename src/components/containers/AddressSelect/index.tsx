@@ -169,7 +169,7 @@ const AddressSelect = () => {
                 }}
                 useWhiteBackground
                 useDarkBorder
-                placeholder="Select Ethereum address..."
+                placeholder="Select your Ethereum address..."
                 isSearchable={false}
             />
 

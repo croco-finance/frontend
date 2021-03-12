@@ -14,7 +14,7 @@ const Wrapper = styled.div`
     width: 100%;
 `;
 
-type TabOptions = 'overview' | 'strategies';
+type TabOptions = 'il' | 'strategies';
 
 interface Props {
     simulatedPooledTokensCoeffs: Array<number>;
@@ -187,9 +187,11 @@ const RightContainer = ({
                     />
                 }
                 onSelectTab={tabName => onTabChanged(tabName)}
+                tabHeadlines={['Impermanent loss', 'Strategies']}
+                tabIds={['il', 'strategies']}
             />
 
-            {selectedTab === 'overview' && (
+            {selectedTab === 'il' && (
                 <Overview
                     isActive={isActive}
                     tokenSymbols={tokenSymbols}

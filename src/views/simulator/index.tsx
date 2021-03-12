@@ -179,13 +179,13 @@ const getInitialPriceCoeffs = (tokens: any) => {
     return coefficients;
 };
 
-type TabOptions = 'overview' | 'strategies';
+type TabOptions = 'il' | 'strategies';
 
 const Simulator = () => {
     const allPools: AllPoolsGlobal = useSelector(state => state.app.allPools);
     const selectedPoolId: string = useSelector(state => state.app.selectedPoolId);
     const dispatch = useDispatch();
-    const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
+    const [selectedTab, setSelectedTab] = useState<TabOptions>('il');
     const isLoading: boolean = useSelector(state => state.app.loading);
     const isFetchError: boolean = useSelector(state => state.app.error);
     const noPoolsFound: boolean = useSelector(state => state.app.noPoolsFound);
@@ -285,6 +285,7 @@ const Simulator = () => {
                         <AddressWrapper>
                             <PageHeadline>Simulator</PageHeadline>
                             <AddressSelect />
+                            {/* <AddPoolButton>Add Custom Pools</AddPoolButton> */}
                         </AddressWrapper>
                         {/* <ContentWrapper> */}
                         {exceptionContent ? (
