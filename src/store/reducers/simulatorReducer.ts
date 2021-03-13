@@ -7,9 +7,11 @@ export const initialState: SimulatorStateInterface = {
     // selected mode
     simulationMode: 'positions',
     // simulation data
+    poolId: '',
     tokenSymbols: [],
     tokenWeights: [],
     tokenPricesUsd: [],
+    userTokenBalances: [],
     ethPriceUsd: 0,
     yieldTokenSymbol: null,
     simulatedTokenCoefficients: [],
@@ -26,8 +28,18 @@ export const initialState: SimulatorStateInterface = {
 const simulatorReducer = (state = initialState, action) => {
     return produce(state, draft => {
         switch (action.type) {
-            // NOTE: we do not need 'break' statements because we return in every case
+            case actionTypes.SET_NEW_SIMULATION_POOL_DATA: {
+                draft.poolId = action.payload.poolId;
+                draft.tokenSymbols = action.payload.tokenSymbols;
+                draft.tokenWeights = action.payload.tokenWeights;
+                draft.yieldTokenSymbol = action.payload.yieldTokenSymbol;
+                draft.ethPriceUsd = action.payload.ethPriceUsd;
+                draft.tokenPricesUsd = action.payload.tokenPricesUsd;
+                draft.userTokenBalances = action.payload.userTokenBalances;
+                break;
+            }
 
+            // NOTE: we do not need 'break' statements because we return in every case
             case actionTypes.FETCH_POOL_SNAP_INIT: {
                 draft.poolSnapFetchError = false;
                 draft.poolSnapLoading = true;
@@ -44,6 +56,15 @@ const simulatorReducer = (state = initialState, action) => {
                 draft.poolSnapData = action.payload;
                 draft.poolSnapLoading = false;
                 draft.poolSnapError = false;
+                break;
+            }
+
+            case actionTypes.CLEAR_POOL_SNAP_DATA: {
+                draft.poolSnapData = null;
+                break;
+            }
+            case actionTypes.SET_SIMULATION_MODE: {
+                draft.simulationMode = action.mode;
                 break;
             }
 
