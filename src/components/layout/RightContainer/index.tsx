@@ -5,7 +5,7 @@ import RightContentWrapper from '../RightContentWrapper';
 import { styles } from '@config';
 
 const Wrapper = styled.div`
-    width: 58%;
+    width: 57%;
     padding-top: 10px;
     max-height: 100vh;
     overflow-y: auto;

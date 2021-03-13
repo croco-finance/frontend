@@ -1,6 +1,7 @@
 import { colors, variables } from '@config';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useTheme } from '@hooks';
 
 const Headline = styled.div`
     display: flex;
@@ -30,27 +31,30 @@ const ButtonsWrapper = styled.div`
     }
 `;
 
-const Button = styled.div<{ selected: boolean; disabled?: boolean }>`
+const Button = styled.div<{ selected: boolean; disabled?: boolean; color: string; bold: boolean }>`
     display: flex;
     flex-grow: 1;
-    color: ${props => (props.selected ? colors.GREEN : props.theme.FONT_LIGHT)};
+    color: ${props => (props.selected ? props.color : props.theme.FONT_LIGHT)};
     border-bottom: 2px solid;
-    border-color: ${props => (props.selected ? colors.GREEN : 'transparent')};
+    border-color: ${props => (props.selected ? props.color : 'transparent')};
     cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-    padding: 0 20px;
+    padding: 0 14px;
     box-sizing: border-box;
     margin-bottom: -1px;
-    font-weight: ${variables.FONT_WEIGHT.REGULAR};
+    font-weight: ${props =>
+        props.bold ? variables.FONT_WEIGHT.MEDIUM : variables.FONT_WEIGHT.REGULAR};
     position: relative;
     height: 100%;
     align-items: center;
 `;
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
     headline?: React.ReactNode;
-    onSelectTab?: any;
+    onSelectTab: any;
     hideTabs?: boolean;
     tabHeadlines: string[];
     tabIds: string[];
+    focusColor?: string;
+    bold?: boolean;
 }
 
 const TabSelectHeader = ({
@@ -59,17 +63,23 @@ const TabSelectHeader = ({
     hideTabs = false,
     tabHeadlines,
     tabIds,
+    focusColor,
+    bold = false,
+    className,
 }: Props) => {
     const [selectedTab, setSelectedTab] = useState(tabIds[0]);
+    const theme = useTheme();
 
     return (
-        <Header>
-            <Headline>{headline}</Headline>
+        <Header className={className}>
+            {headline && <Headline>{headline}</Headline>}
             {!hideTabs && (
                 <ButtonsWrapper>
                     {tabIds.map((id, i) => {
                         return (
                             <Button
+                                color={focusColor ? focusColor : theme.GREEN}
+                                bold={bold}
                                 onClick={() => {
                                     onSelectTab(id);
                                     setSelectedTab(id);

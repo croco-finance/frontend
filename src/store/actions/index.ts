@@ -8,3 +8,4 @@ export { setAddresses, setSelectedAddress } from './addressActions';
 export { setTheme } from './appActions';
 export { openModal, closeModal } from './modalActions';
 export { updateWindowSize } from './resizeActions';
+export { fetchPoolSnap } from './simulatorActions';
