@@ -16,7 +16,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 30px;
+    // margin-bottom: 30px;
     /* padding: 6px;
     border-radius: 8px;
     background-color: ${colors.BACKGROUND_DARK}; */
@@ -80,7 +80,11 @@ interface AddressOption {
     label: string;
 }
 
-const AddressSelect = () => {
+interface Props {
+    isSelectedNull?: boolean;
+}
+
+const AddressSelect = ({ isSelectedNull }: Props) => {
     const dispatch = useDispatch();
     const { allAddresses, selectedAddress } = useSelector(state => state.app);
     const theme = useTheme();
@@ -145,6 +149,7 @@ const AddressSelect = () => {
     }, [showAddressModal]);
 
     const getSelectedAddressValue = (address: string | null) => {
+        if (isSelectedNull) return null;
         if (address === 'bundled') {
             return {
                 value: 'bundled',

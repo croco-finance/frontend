@@ -1,15 +1,14 @@
-import { AppStateInterface } from '@types';
+import { AppStateInterface, SimulatorStateInterface, ResizeStateInterface } from '@types';
 import { useSelector as _useSelector } from 'react-redux';
 import appReducer from './appReducer';
 import resizeReducer from './resizeReducer';
+import simulatorReducer from './simulatorReducer';
 
-type ResizeInterface = {
-    size: 'XLARGE' | 'LARGE' | 'NORMAL' | 'UNAVAILABLE' | 'TINY' | 'SMALL';
-};
 type UseSelectorInterface = {
     app: AppStateInterface;
     modal: any;
-    resize: ResizeInterface;
+    resize: ResizeStateInterface;
+    simulator: SimulatorStateInterface;
 };
 
 export function useSelector<T>(fn: (store: UseSelectorInterface) => T): T {
@@ -17,4 +16,4 @@ export function useSelector<T>(fn: (store: UseSelectorInterface) => T): T {
 }
 
 export default appReducer;
-export { resizeReducer };
+export { resizeReducer, simulatorReducer };

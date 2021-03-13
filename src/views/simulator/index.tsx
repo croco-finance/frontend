@@ -1,12 +1,19 @@
-import { changeSelectedPool } from '@actions';
+import { changeSelectedPool, fetchPoolSnap } from '@actions';
 import { AddressSelect } from '@components/containers';
 import { LeftLayoutContainer, RightLayoutContainer, SimulatorContainer } from '@components/layout';
-import { InfoBox, LoadingBox, MultipleTokenSelect } from '@components/ui';
-import { analytics, styles, types, variables } from '@config';
+import {
+    InfoBox,
+    LoadingBox,
+    MultipleTokenSelect,
+    Input,
+    Spinner,
+    TabSelectHeader,
+} from '@components/ui';
+import { analytics, styles, types, variables, colors } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
-import { AllPoolsGlobal } from '@types';
-import { formatUtils } from '@utils';
+import { AllPoolsGlobal, TokenType } from '@types';
+import { formatUtils, validationUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -34,7 +41,7 @@ const LeftSubHeaderContent = styled.div`
     margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
     width: 100%;
     height: 100%;
-    max-width: 580px;
+    max-width: 600px;
     align-self: center;
     ${styles.scrollBarStyles};
 
@@ -42,12 +49,6 @@ const LeftSubHeaderContent = styled.div`
         // because choose pool options are not visible on mobile screen
         min-height: 60vh;
     }
-`;
-
-const HeaderContent = styled.div`
-    width: 100%;
-    max-width: 620px;
-    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
 `;
 
 const ExceptionWrapper = styled.div`
@@ -64,11 +65,16 @@ const ExceptionWrapper = styled.div`
     line-height: 26px;
 `;
 
+const StyledTabSelectHeader = styled(TabSelectHeader)`
+    margin-bottom: 20px;
+    border-color: ${props => props.theme.STROKE_GREY};
+`;
 const NoPoolFoundInfo = styled(ExceptionWrapper)`
     color: ${props => props.theme.FONT_MEDIUM};
 `;
 
 const ErrorTextWrapper = styled(ExceptionWrapper)`
+    color: ${props => props.theme.FONT_DARK};
     & > button {
         color: white;
         background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
@@ -84,14 +90,23 @@ const ErrorTextWrapper = styled(ExceptionWrapper)`
 
 const AddressWrapper = styled.div`
     width: 100%;
-    // max-width: 540px;
     display: flex;
     flex-direction: column;
     align-items: center;
 `;
 
-const ContentWrapper = styled.div`
-    // max-width: 540px;
+const PoolDataEntryWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    // background-color: ${props => props.theme.BACKGROUND_DARK};
+`;
+
+const SelectLabel = styled.div`
+    color: ${props => props.theme.FONT_MEDIUM};
+    padding-bottom: 10px;
+    align-self: end;
 `;
 
 const Section = styled.div`
@@ -100,16 +115,12 @@ const Section = styled.div`
     margin-top: 40px;
 `;
 
-const SectionLabel = styled.div`
-    width: 140px;
-    font-size: ${variables.FONT_SIZE.NORMAL};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-`;
-
 const ChoosePoolWrapper = styled(Section)`
     display: flex;
     align-items: center;
+    align-self: baseline;
     width: 100%;
+    max-width: 492px;
     margin-top: 10px;
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
@@ -117,17 +128,51 @@ const ChoosePoolWrapper = styled(Section)`
     }
 `;
 
+const PoolImportWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-bottom: 24px;
+`;
+
+const PoolImportInputWrapper = styled.div`
+    display: flex;
+`;
+
+const AddPoolButton = styled.button<{ disabled: boolean }>`
+    background-color: ${props =>
+        props.disabled ? props.theme.BUTTON_PRIMARY_BG_DISABLED : props.theme.BUTTON_PRIMARY_BG};
+    color: ${props => (props.disabled ? props.theme.BUTTON_PRIMARY_FONT_DISABLED : 'white')};
+    border-radius: 5px;
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    font-size: ${variables.FONT_SIZE.NORMAL};
+    padding: 12px;
+    border: none;
+    margin-left: 10px;
+    cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:focus {
+        outline: 0;
+    }
+
+    &:hover {
+        background-color: ${props =>
+            props.disabled
+                ? props.theme.BUTTON_PRIMARY_BG_DISABLED
+                : props.theme.BUTTON_PRIMARY_BG_HOVER};
+    }
+`;
+
 const MultipleSelectWrapper = styled.div`
     flex-grow: 1;
 `;
 
-const PoolSelectLabel = styled(SectionLabel)`
-    color: ${props => props.theme.FONT_DARK};
-`;
-
 const OverviewWrapper = styled.div`
-    margin: 20px 0 30px 0;
-    padding: 20px 20px;
+    margin: 6px 0 30px 0;
+    padding: 16px;
     width: 100%;
 `;
 
@@ -136,6 +181,30 @@ const SimulationBoxWrapper = styled.div`
     padding: 28px;
     border-radius: 10px;
     width: 100%;
+`;
+
+const PoolInvestmentWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+`;
+
+const PoolInvestmentLabel = styled.div`
+    display: flex;
+    color: ${props => props.theme.FONT_DARK};
+    margin-right: 12px;
+    padding-left: 6px;
+`;
+
+const PoolInvestmentInputWrapper = styled.div`
+    width: 120px;
+`;
+
+const InvestedCurrency = styled.div`
+    text-transform: uppercase;
+    color: ${props => props.theme.FONT_LIGHT};
+    margin-left: 10px;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
 const buildPoolOption = (poolData: types.PoolItem, uniquePoolId: string) => {
@@ -165,7 +234,10 @@ const buildPoolOptions = (pools: AllPoolsGlobal) => {
     const poolOptions = new Array(poolsCount);
 
     poolKeys.forEach((poolId, i) => {
-        poolOptions[i] = buildPoolOption(pools[poolId], poolId);
+        // allow to choose active pools
+        if (pools[poolId].isActive) {
+            poolOptions[i] = buildPoolOption(pools[poolId], poolId);
+        }
     });
 
     return poolOptions;
@@ -180,15 +252,37 @@ const getInitialPriceCoeffs = (tokens: any) => {
 };
 
 type TabOptions = 'il' | 'strategies';
+type ImportPoolTabOptions = 'positions' | 'import';
 
 const Simulator = () => {
-    const allPools: AllPoolsGlobal = useSelector(state => state.app.allPools);
+    const allPools = useSelector(state => state.app.allPools);
     const selectedPoolId: string = useSelector(state => state.app.selectedPoolId);
     const dispatch = useDispatch();
     const [selectedTab, setSelectedTab] = useState<TabOptions>('il');
     const isLoading: boolean = useSelector(state => state.app.loading);
     const isFetchError: boolean = useSelector(state => state.app.error);
     const noPoolsFound: boolean = useSelector(state => state.app.noPoolsFound);
+
+    // save if I am using user's pool or data for imported pool
+    const [poolUsed, setPoolUsed] = useState<ImportPoolTabOptions>('positions');
+
+    // pool import
+    const { poolSnapFetchError, poolSnapLoading, poolSnapError, poolSnapData } = useSelector(
+        state => state.simulator,
+    );
+    const [importedPoolAddress, setImportedPoolAddress] = useState('');
+    const [isImportedPoolAddressValid, setIsImportedPoolAddressValid] = useState(false);
+
+    // imported pool investment
+    const [importedPoolInvestment, setImportedPoolInvestment] = useState('');
+    const [importedTokenWeights, setImportedTokenWeights] = useState<number[]>([]);
+    const [importedTokenBalances, setImportedTokenBalances] = useState<number[]>([]);
+    const [importedTokenPricesUsd, setImportedTokenPricesUsd] = useState<number[]>([]);
+    const [importedTokenSymbols, setImportedTokenSymbols] = useState<TokenType[]>([]);
+
+    // overview data
+
+    // theme
     const theme = useTheme();
 
     // SIMULATOR FUNCTIONS
@@ -245,8 +339,63 @@ const Simulator = () => {
         setSelectedTab(tab);
     };
 
+    const handleInvestedAmountChanged = (amount: string) => {
+        if (!poolSnapData) return;
+        // compute how much tokens the user have according to the invested amount
+
+        const tokenCounts = poolSnapData.tokens.length;
+        const investedAmountTotal = parseInt(amount);
+        const investedAmountsUsd: number[] = new Array(tokenCounts);
+        const userTokenBalances: number[] = new Array(tokenCounts);
+        const tokenSymbols: TokenType[] = new Array(tokenCounts);
+
+        console.log('poolSnapData', poolSnapData);
+        const tokenWeights: number[] = new Array(tokenCounts);
+        const tokenPricesUsd: number[] = new Array(tokenCounts);
+
+        if (poolSnapData) {
+            poolSnapData.tokens.forEach((token, i) => {
+                const investedToToken = token.weight * investedAmountTotal;
+                tokenWeights[i] = token.weight;
+                tokenPricesUsd[i] = token.priceUsd;
+                investedAmountsUsd[i] = investedToToken;
+                userTokenBalances[i] = investedToToken / token.priceUsd;
+                tokenSymbols[i] = token.token.symbol as TokenType;
+                console.log('token.priceUsd', token.priceUsd);
+            });
+
+            setImportedTokenWeights(tokenWeights);
+            setImportedTokenBalances(userTokenBalances);
+            setImportedTokenSymbols(tokenSymbols);
+            setImportedTokenPricesUsd(tokenPricesUsd);
+
+            console.log('handleInvestedAmountChanged');
+            console.log('tokenWeights', tokenWeights);
+            console.log('tokenPricesUsd', tokenPricesUsd);
+            console.log('userTokenBalances', userTokenBalances);
+            console.log('tokenSymbols', tokenSymbols);
+        }
+    };
+
+    const handlePoolImportTabChange = (tabName: ImportPoolTabOptions) => {
+        setPoolUsed(tabName);
+    };
+
     const refreshPage = () => {
         window.location.reload();
+    };
+
+    // import pool
+    const handleImportAddressChange = input => {
+        setImportedPoolAddress(input);
+
+        // check for ETH address validity
+        if (validationUtils.isValidEthereumAddress(input)) {
+            setIsImportedPoolAddressValid(true);
+            return;
+        } else {
+            setIsImportedPoolAddressValid(false);
+        }
     };
 
     let exceptionContent;
@@ -277,55 +426,165 @@ const Simulator = () => {
         );
     }
 
+    // Get the right values for simulation (position vs import)
+    // const tokenWeights =
+    //     poolUsed === 'positions' ? allPools[selectedPoolId].tokenWeights : importedTokenWeights;
+
+    // const tokenPricesUsd =
+    //     poolUsed === 'positions'
+    //         ? allPools[selectedPoolId].cumulativeStats.tokenPricesEnd
+    //         : importedTokenPricesUsd;
+
+    // const tokenBalances =
+    //     poolUsed === 'positions'
+    //         ? allPools[selectedPoolId].cumulativeStats.tokenBalances
+    //         : importedTokenBalances;
+
+    // const tokenSymbols =
+    //     poolUsed === 'positions' ? allPools[selectedPoolId].tokenSymbols : importedTokenSymbols;
+
     return (
         <>
             <SimulatorContainer>
                 <LeftLayoutContainer backgroundColor={theme.BACKGROUND}>
                     <LeftSubHeaderContent>
-                        <AddressWrapper>
-                            <PageHeadline>Simulator</PageHeadline>
-                            <AddressSelect />
-                            {/* <AddPoolButton>Add Custom Pools</AddPoolButton> */}
-                        </AddressWrapper>
-                        {/* <ContentWrapper> */}
-                        {exceptionContent ? (
-                            exceptionContent
-                        ) : allPools && Object.keys(allPools).length > 0 ? (
-                            <ChoosePoolWrapper>
-                                <PoolSelectLabel>Choose pool:</PoolSelectLabel>
-                                <MultipleSelectWrapper>
-                                    <MultipleTokenSelect
-                                        options={buildPoolOptions(allPools)}
-                                        onChange={(option: PoolOption) => {
-                                            if (option)
-                                                dispatch(changeSelectedPool(option.value.poolId));
-                                        }}
-                                        selected={buildPoolOption(
-                                            allPools[selectedPoolId],
-                                            selectedPoolId,
-                                        )}
-                                        useWhiteBackground
-                                        useDarkBorder
-                                    ></MultipleTokenSelect>
-                                </MultipleSelectWrapper>
-                            </ChoosePoolWrapper>
-                        ) : null}
+                        {/* <AddressWrapper> */}
+                        <PageHeadline>Simulator</PageHeadline>
+                        <StyledTabSelectHeader
+                            focusColor={theme.FONT_DARK}
+                            bold
+                            onSelectTab={tabName => handlePoolImportTabChange(tabName)}
+                            tabHeadlines={['Your positions', 'Import pool']}
+                            tabIds={['positions', 'import']}
+                        />
 
-                        {allPools && allPools[selectedPoolId] && !exceptionContent && (
-                            <>
-                                {!allPools[selectedPoolId].isActive ? (
-                                    <InfoBox>
-                                        You have already withdrawn all funds from this pool. Below
-                                        you see prices and balances at the time of your withdrawal.
-                                    </InfoBox>
-                                ) : null}
-                            </>
-                        )}
+                        <PoolDataEntryWrapper>
+                            {poolUsed === 'positions' ? (
+                                <>
+                                    <SelectLabel>Choose from your active positions</SelectLabel>
+                                    <AddressSelect />
+                                    {exceptionContent ? null : allPools &&
+                                      Object.keys(allPools).length > 0 ? (
+                                        <ChoosePoolWrapper>
+                                            <MultipleSelectWrapper>
+                                                <MultipleTokenSelect
+                                                    options={buildPoolOptions(allPools)}
+                                                    onChange={(option: PoolOption) => {
+                                                        if (option) {
+                                                            dispatch(
+                                                                changeSelectedPool(
+                                                                    option.value.poolId,
+                                                                ),
+                                                            );
+                                                        }
+                                                    }}
+                                                    selected={buildPoolOption(
+                                                        allPools[selectedPoolId],
+                                                        selectedPoolId,
+                                                    )}
+                                                    useWhiteBackground
+                                                    useDarkBorder
+                                                    placeholder={'Select pool...'}
+                                                ></MultipleTokenSelect>
+                                            </MultipleSelectWrapper>
+                                        </ChoosePoolWrapper>
+                                    ) : null}
+                                </>
+                            ) : (
+                                <PoolImportWrapper>
+                                    <SelectLabel>
+                                        Import pool by its address (from Uniswap, Balancer or
+                                        Sushiswap)
+                                    </SelectLabel>
+                                    <PoolImportInputWrapper>
+                                        <Input
+                                            placeholder="Pool address (e.g. 0xbb2b8038a1640196fbe3e38816f3e67cba72d940)"
+                                            onChange={event => {
+                                                handleImportAddressChange(
+                                                    event.target.value.trim(),
+                                                );
+                                                setImportedPoolAddress(event.target.value.trim());
+                                            }}
+                                            useWhiteBackground
+                                            useDarkBorder
+                                            value={importedPoolAddress}
+                                        />
+                                        <AddPoolButton
+                                            disabled={!isImportedPoolAddressValid}
+                                            onClick={() => {
+                                                dispatch(fetchPoolSnap(importedPoolAddress));
+                                                setPoolUsed('import');
+                                            }}
+                                        >
+                                            {poolSnapLoading ? (
+                                                <Spinner size={14} color={colors.FONT_MEDIUM} />
+                                            ) : (
+                                                'Use'
+                                            )}
+                                        </AddPoolButton>
+                                    </PoolImportInputWrapper>
+                                    {poolSnapData &&
+                                        isImportedPoolAddressValid &&
+                                        poolUsed === 'import' && (
+                                            <PoolInvestmentWrapper>
+                                                <PoolInvestmentLabel>
+                                                    Type how much you want to invest to the pool
+                                                </PoolInvestmentLabel>
+
+                                                <PoolInvestmentInputWrapper>
+                                                    <Input
+                                                        onChange={event => {
+                                                            handleInvestedAmountChanged(
+                                                                event.target.value.trim(),
+                                                            );
+                                                            setImportedPoolInvestment(
+                                                                event.target.value.trim(),
+                                                            );
+                                                        }}
+                                                        useWhiteBackground
+                                                        useDarkBorder
+                                                        value={importedPoolInvestment}
+                                                    />
+                                                </PoolInvestmentInputWrapper>
+                                                <InvestedCurrency>USD</InvestedCurrency>
+                                            </PoolInvestmentWrapper>
+                                        )}
+
+                                    {poolSnapError && <div>Error fetching pool snap</div>}
+                                </PoolImportWrapper>
+                            )}
+                        </PoolDataEntryWrapper>
+                        {/* </AddressWrapper> */}
+
+                        {exceptionContent ? exceptionContent : null}
 
                         {allPools && allPools[selectedPoolId] && !exceptionContent && (
                             <>
                                 <OverviewWrapper>
-                                    <BalanceOverview />
+                                    <BalanceOverview
+                                        tokenWeights={
+                                            poolUsed === 'positions'
+                                                ? allPools[selectedPoolId].tokenWeights
+                                                : importedTokenWeights
+                                        }
+                                        tokenPricesUsd={
+                                            poolUsed === 'positions'
+                                                ? allPools[selectedPoolId].cumulativeStats
+                                                      .tokenPricesEnd
+                                                : importedTokenPricesUsd
+                                        }
+                                        tokenBalances={
+                                            poolUsed === 'positions'
+                                                ? allPools[selectedPoolId].cumulativeStats
+                                                      .tokenBalances
+                                                : importedTokenBalances
+                                        }
+                                        tokenSymbols={
+                                            poolUsed === 'positions'
+                                                ? allPools[selectedPoolId].tokenSymbols
+                                                : importedTokenSymbols
+                                        }
+                                    />
                                 </OverviewWrapper>
                                 <SimulationBoxWrapper>
                                     <SimulationBox
@@ -343,7 +602,6 @@ const Simulator = () => {
                                 </SimulationBoxWrapper>
                             </>
                         )}
-                        {/* </ContentWrapper> */}
                     </LeftSubHeaderContent>
                 </LeftLayoutContainer>
                 <RightLayoutContainer>

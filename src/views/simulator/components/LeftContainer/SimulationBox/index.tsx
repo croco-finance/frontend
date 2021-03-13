@@ -77,6 +77,11 @@ interface Props {
     onNewDefaultValue: any;
     selectedTab: string;
     onNewDefaultEthValue: any;
+    // tokenSymbolsArr: string[];
+    // poolId: string;
+    // yieldToken: any;
+    // tokenPrices: number[];
+    // ethPrice: number;
 }
 const SimulationBox = ({
     onChange,
@@ -154,7 +159,7 @@ const SimulationBox = ({
                         );
                     })}
                     {/* If WETH not among pooled tokens, show ETH slider as well */}
-                    {indexOfWeth === -1 && selectedTab !== 'overview' && (
+                    {indexOfWeth === -1 && selectedTab !== 'il' && (
                         <PriceChangeRow
                             key={`${poolId}ETH`}
                             onSliderChange={newValue => {

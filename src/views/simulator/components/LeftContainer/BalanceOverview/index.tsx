@@ -1,10 +1,10 @@
 import { FiatValue, TokenLogo } from '@components/ui';
 import { variables } from '@config';
-import { useSelector } from '@reducers';
 import { formatUtils } from '@utils';
 import React from 'react';
 import styled from 'styled-components';
 import OverviewRow from '../OverviewRow';
+import { TokenType } from '@types';
 
 const GRID_GAP = 5;
 
@@ -57,21 +57,20 @@ const XScrollWrapper = styled.div`
 `;
 
 interface Props {
-    iconSize?: number;
+    tokenWeights: number[];
+    tokenPricesUsd: number[];
+    tokenBalances: number[];
+    tokenSymbols: TokenType[];
 }
 
-const BalanceOverview = ({ iconSize = 20 }: Props) => {
-    // const numberOfTokens = Object.keys(balances).length;
-    const { allPools, selectedPoolId } = useSelector(state => state.app);
+const BalanceOverview = ({ tokenWeights, tokenPricesUsd, tokenBalances, tokenSymbols }: Props) => {
+    const numberOfTokens = tokenSymbols.length;
 
-    if (!allPools[selectedPoolId]) {
-        return null;
-    }
-
-    const { pooledTokens, isActive } = allPools[selectedPoolId];
-
-    const { tokenBalances, tokenPricesEnd } = allPools[selectedPoolId].cumulativeStats;
-    const numberOfTokens = pooledTokens.length;
+    console.log('BalanceOverview');
+    console.log('tokenWeights', tokenWeights);
+    console.log('tokenPricesUsd', tokenPricesUsd);
+    console.log('tokenBalances', tokenBalances);
+    console.log('tokenSymbols', tokenSymbols);
 
     return (
         <Wrapper>
@@ -81,27 +80,27 @@ const BalanceOverview = ({ iconSize = 20 }: Props) => {
                         firstColumn="Token"
                         secondColumn="Weight"
                         thirdColumn="Your balance"
-                        fourthColumn={isActive ? 'Current price' : 'Withdrawal price'}
+                        fourthColumn="Today's price"
                         color="light"
                     />
                 </HeaderWrapper>
                 <TokenInfoWrapper rowsCount={numberOfTokens}>
-                    {pooledTokens.map((token, i) => {
+                    {tokenSymbols.map((symbol, i) => {
                         return (
                             <OverviewRow
                                 key={i}
                                 firstColumn={
                                     <TokenWrapper>
-                                        <TokenLogo symbol={token.symbol} size={iconSize} />
-                                        <TokenSymbol>{token.symbol}</TokenSymbol>
+                                        <TokenLogo symbol={symbol} size={20} />
+                                        <TokenSymbol>{symbol}</TokenSymbol>
                                     </TokenWrapper>
                                 }
                                 secondColumn={formatUtils.getFormattedPercentageValue(
-                                    token.weight,
+                                    tokenWeights[i],
                                     true,
                                 )}
                                 thirdColumn={tokenBalances[i].toFixed(4)}
-                                fourthColumn={<FiatValue value={tokenPricesEnd[i]} />}
+                                fourthColumn={<FiatValue value={tokenPricesUsd[i]} />}
                                 color="medium"
                             />
                         );

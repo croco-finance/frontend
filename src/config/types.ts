@@ -21,7 +21,7 @@ export enum Exchange {
     UNI_V2 = 'UNI_V2',
     BALANCER = 'BALANCER',
     SUSHI = 'SUSHI',
-    MATERIA = 'MATERIA'
+    MATERIA = 'MATERIA',
 }
 
 export enum StakingService {
@@ -265,6 +265,29 @@ export interface AppStateInterface {
     noPoolsFound: boolean;
     theme: AppThemeVariant;
 }
+
+export interface SimulatorStateInterface {
+    // simulation mode
+    simulationMode: 'positions' | 'import';
+    // pool import
+    poolSnapFetchError: boolean;
+    poolSnapLoading: boolean;
+    poolSnapError: boolean;
+    poolSnapData: DailyData | null;
+    // simulation data
+    tokenSymbols: string[];
+    tokenWeights: number[];
+    tokenPricesUsd: number[];
+    ethPriceUsd: number;
+    yieldTokenSymbol: string | null;
+    simulatedTokenCoefficients: number[];
+    simulatedEthCoefficient: number;
+    investedAmount: number;
+}
+
+export type ResizeStateInterface = {
+    size: 'XLARGE' | 'LARGE' | 'NORMAL' | 'UNAVAILABLE' | 'TINY' | 'SMALL';
+};
 
 export type AppThemeVariant = 'light' | 'dark';
 
