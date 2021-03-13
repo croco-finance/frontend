@@ -275,14 +275,16 @@ export interface SimulatorStateInterface {
     poolSnapError: boolean;
     poolSnapData: DailyData | null;
     // simulation data
-    tokenSymbols: string[];
+    poolId: string;
+    tokenSymbols: TokenType[];
     tokenWeights: number[];
     tokenPricesUsd: number[];
     ethPriceUsd: number;
-    yieldTokenSymbol: string | null;
+    yieldTokenSymbol: TokenType | null;
     simulatedTokenCoefficients: number[];
     simulatedEthCoefficient: number;
     investedAmount: number;
+    userTokenBalances: number[];
 }
 
 export type ResizeStateInterface = {

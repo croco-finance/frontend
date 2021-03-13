@@ -1,4 +1,11 @@
-import { changeSelectedPool, fetchPoolSnap } from '@actions';
+import {
+    changeSelectedPool,
+    setSelectedPoolId,
+    fetchPoolSnap,
+    setNewSimulationPoolData,
+    resetPoolSnapData,
+    setSimulationMode,
+} from '@actions';
 import { AddressSelect } from '@components/containers';
 import { LeftLayoutContainer, RightLayoutContainer, SimulatorContainer } from '@components/layout';
 import {
@@ -12,7 +19,7 @@ import {
 import { analytics, styles, types, variables, colors } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
-import { AllPoolsGlobal, TokenType } from '@types';
+import { AllPoolsGlobal, TokenType, SimulatorStateInterface } from '@types';
 import { formatUtils, validationUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -41,7 +48,7 @@ const LeftSubHeaderContent = styled.div`
     margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
     width: 100%;
     height: 100%;
-    max-width: 600px;
+    max-width: 620px;
     align-self: center;
     ${styles.scrollBarStyles};
 
@@ -88,13 +95,6 @@ const ErrorTextWrapper = styled(ExceptionWrapper)`
     }
 `;
 
-const AddressWrapper = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
-
 const PoolDataEntryWrapper = styled.div`
     width: 100%;
     display: flex;
@@ -120,7 +120,7 @@ const ChoosePoolWrapper = styled(Section)`
     align-items: center;
     align-self: baseline;
     width: 100%;
-    max-width: 492px;
+    max-width: 511px;
     margin-top: 10px;
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {
@@ -262,25 +262,27 @@ const Simulator = () => {
     const isLoading: boolean = useSelector(state => state.app.loading);
     const isFetchError: boolean = useSelector(state => state.app.error);
     const noPoolsFound: boolean = useSelector(state => state.app.noPoolsFound);
-
-    // save if I am using user's pool or data for imported pool
-    const [poolUsed, setPoolUsed] = useState<ImportPoolTabOptions>('positions');
-
     // pool import
-    const { poolSnapFetchError, poolSnapLoading, poolSnapError, poolSnapData } = useSelector(
-        state => state.simulator,
-    );
     const [importedPoolAddress, setImportedPoolAddress] = useState('');
     const [isImportedPoolAddressValid, setIsImportedPoolAddressValid] = useState(false);
-
-    // imported pool investment
     const [importedPoolInvestment, setImportedPoolInvestment] = useState('');
-    const [importedTokenWeights, setImportedTokenWeights] = useState<number[]>([]);
-    const [importedTokenBalances, setImportedTokenBalances] = useState<number[]>([]);
-    const [importedTokenPricesUsd, setImportedTokenPricesUsd] = useState<number[]>([]);
-    const [importedTokenSymbols, setImportedTokenSymbols] = useState<TokenType[]>([]);
+    const [isUsePoolActive, setIsUsePoolActive] = useState(false);
 
-    // overview data
+    // simulation pool data
+    const {
+        poolId,
+        tokenSymbols,
+        tokenWeights,
+        yieldTokenSymbol,
+        ethPriceUsd,
+        tokenPricesUsd,
+        userTokenBalances,
+        simulationMode,
+        poolSnapFetchError,
+        poolSnapLoading,
+        poolSnapError,
+        poolSnapData,
+    } = useSelector(state => state.simulator);
 
     // theme
     const theme = useTheme();
@@ -348,8 +350,6 @@ const Simulator = () => {
         const investedAmountsUsd: number[] = new Array(tokenCounts);
         const userTokenBalances: number[] = new Array(tokenCounts);
         const tokenSymbols: TokenType[] = new Array(tokenCounts);
-
-        console.log('poolSnapData', poolSnapData);
         const tokenWeights: number[] = new Array(tokenCounts);
         const tokenPricesUsd: number[] = new Array(tokenCounts);
 
@@ -361,41 +361,70 @@ const Simulator = () => {
                 investedAmountsUsd[i] = investedToToken;
                 userTokenBalances[i] = investedToToken / token.priceUsd;
                 tokenSymbols[i] = token.token.symbol as TokenType;
-                console.log('token.priceUsd', token.priceUsd);
             });
 
-            setImportedTokenWeights(tokenWeights);
-            setImportedTokenBalances(userTokenBalances);
-            setImportedTokenSymbols(tokenSymbols);
-            setImportedTokenPricesUsd(tokenPricesUsd);
-
-            console.log('handleInvestedAmountChanged');
-            console.log('tokenWeights', tokenWeights);
-            console.log('tokenPricesUsd', tokenPricesUsd);
-            console.log('userTokenBalances', userTokenBalances);
-            console.log('tokenSymbols', tokenSymbols);
+            dispatch(
+                setNewSimulationPoolData(
+                    importedPoolAddress,
+                    tokenSymbols,
+                    tokenWeights,
+                    null,
+                    tokenPricesUsd,
+                    poolSnapData.ethPrice,
+                    userTokenBalances,
+                ),
+            );
         }
     };
 
     const handlePoolImportTabChange = (tabName: ImportPoolTabOptions) => {
-        setPoolUsed(tabName);
+        dispatch(setSimulationMode(tabName));
+        // reset pool data
+        dispatch(resetPoolSnapData());
+        // reset selected Pool ID
+        dispatch(setSelectedPoolId(''));
+        // reset pool investment amount
+        setImportedPoolInvestment('');
     };
 
-    const refreshPage = () => {
-        window.location.reload();
+    const handlePoolSelectionChange = (poolId: string) => {
+        const pool = allPools[poolId];
+        const { yieldToken, tokenWeights, tokenSymbols } = pool;
+        const { tokenPricesEnd, ethPriceEnd, tokenBalances } = pool.cumulativeStats;
+        const yieldTokenSymbol = yieldToken?.symbol;
+
+        dispatch(
+            setNewSimulationPoolData(
+                poolId,
+                tokenSymbols,
+                tokenWeights,
+                yieldTokenSymbol,
+                tokenPricesEnd,
+                ethPriceEnd,
+                tokenBalances,
+            ),
+        );
     };
 
     // import pool
     const handleImportAddressChange = input => {
+        dispatch(resetPoolSnapData());
+        setImportedPoolInvestment('');
         setImportedPoolAddress(input);
+        setIsUsePoolActive(false);
 
         // check for ETH address validity
         if (validationUtils.isValidEthereumAddress(input)) {
             setIsImportedPoolAddressValid(true);
+            setIsUsePoolActive(true);
             return;
         } else {
             setIsImportedPoolAddressValid(false);
         }
+    };
+
+    const refreshPage = () => {
+        window.location.reload();
     };
 
     let exceptionContent;
@@ -426,29 +455,12 @@ const Simulator = () => {
         );
     }
 
-    // Get the right values for simulation (position vs import)
-    // const tokenWeights =
-    //     poolUsed === 'positions' ? allPools[selectedPoolId].tokenWeights : importedTokenWeights;
-
-    // const tokenPricesUsd =
-    //     poolUsed === 'positions'
-    //         ? allPools[selectedPoolId].cumulativeStats.tokenPricesEnd
-    //         : importedTokenPricesUsd;
-
-    // const tokenBalances =
-    //     poolUsed === 'positions'
-    //         ? allPools[selectedPoolId].cumulativeStats.tokenBalances
-    //         : importedTokenBalances;
-
-    // const tokenSymbols =
-    //     poolUsed === 'positions' ? allPools[selectedPoolId].tokenSymbols : importedTokenSymbols;
-
+    const showData = poolId && tokenSymbols && tokenWeights && ethPriceUsd && tokenPricesUsd;
     return (
         <>
             <SimulatorContainer>
                 <LeftLayoutContainer backgroundColor={theme.BACKGROUND}>
                     <LeftSubHeaderContent>
-                        {/* <AddressWrapper> */}
                         <PageHeadline>Simulator</PageHeadline>
                         <StyledTabSelectHeader
                             focusColor={theme.FONT_DARK}
@@ -459,7 +471,7 @@ const Simulator = () => {
                         />
 
                         <PoolDataEntryWrapper>
-                            {poolUsed === 'positions' ? (
+                            {simulationMode === 'positions' ? (
                                 <>
                                     <SelectLabel>Choose from your active positions</SelectLabel>
                                     <AddressSelect />
@@ -471,6 +483,9 @@ const Simulator = () => {
                                                     options={buildPoolOptions(allPools)}
                                                     onChange={(option: PoolOption) => {
                                                         if (option) {
+                                                            handlePoolSelectionChange(
+                                                                option.value.poolId,
+                                                            );
                                                             dispatch(
                                                                 changeSelectedPool(
                                                                     option.value.poolId,
@@ -510,22 +525,23 @@ const Simulator = () => {
                                             value={importedPoolAddress}
                                         />
                                         <AddPoolButton
-                                            disabled={!isImportedPoolAddressValid}
+                                            disabled={!isUsePoolActive}
                                             onClick={() => {
                                                 dispatch(fetchPoolSnap(importedPoolAddress));
-                                                setPoolUsed('import');
+                                                dispatch(setSimulationMode('import'));
+                                                setIsUsePoolActive(false);
                                             }}
                                         >
                                             {poolSnapLoading ? (
                                                 <Spinner size={14} color={colors.FONT_MEDIUM} />
                                             ) : (
-                                                'Use'
+                                                'Import'
                                             )}
                                         </AddPoolButton>
                                     </PoolImportInputWrapper>
-                                    {poolSnapData &&
-                                        isImportedPoolAddressValid &&
-                                        poolUsed === 'import' && (
+                                    {simulationMode === 'import' &&
+                                        poolSnapData &&
+                                        !isUsePoolActive && (
                                             <PoolInvestmentWrapper>
                                                 <PoolInvestmentLabel>
                                                     Type how much you want to invest to the pool
@@ -554,36 +570,17 @@ const Simulator = () => {
                                 </PoolImportWrapper>
                             )}
                         </PoolDataEntryWrapper>
-                        {/* </AddressWrapper> */}
 
                         {exceptionContent ? exceptionContent : null}
 
-                        {allPools && allPools[selectedPoolId] && !exceptionContent && (
+                        {showData && !exceptionContent && (
                             <>
                                 <OverviewWrapper>
                                     <BalanceOverview
-                                        tokenWeights={
-                                            poolUsed === 'positions'
-                                                ? allPools[selectedPoolId].tokenWeights
-                                                : importedTokenWeights
-                                        }
-                                        tokenPricesUsd={
-                                            poolUsed === 'positions'
-                                                ? allPools[selectedPoolId].cumulativeStats
-                                                      .tokenPricesEnd
-                                                : importedTokenPricesUsd
-                                        }
-                                        tokenBalances={
-                                            poolUsed === 'positions'
-                                                ? allPools[selectedPoolId].cumulativeStats
-                                                      .tokenBalances
-                                                : importedTokenBalances
-                                        }
-                                        tokenSymbols={
-                                            poolUsed === 'positions'
-                                                ? allPools[selectedPoolId].tokenSymbols
-                                                : importedTokenSymbols
-                                        }
+                                        tokenWeights={tokenWeights}
+                                        tokenPricesUsd={tokenPricesUsd}
+                                        tokenBalances={userTokenBalances}
+                                        tokenSymbols={tokenSymbols}
                                     />
                                 </OverviewWrapper>
                                 <SimulationBoxWrapper>
@@ -598,6 +595,11 @@ const Simulator = () => {
                                         }
                                         simulatedCoefficients={simulatedPriceCoefficients}
                                         simulatedEthCoefficient={simulatedEthPriceCoefficient}
+                                        tokenSymbols={tokenSymbols}
+                                        poolId={poolId}
+                                        yieldTokenSymbol={yieldTokenSymbol}
+                                        tokenPrices={tokenPricesUsd}
+                                        ethPrice={ethPriceUsd}
                                     />
                                 </SimulationBoxWrapper>
                             </>

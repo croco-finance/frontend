@@ -1,7 +1,6 @@
 import { FiatValue, TokenLogo } from '@components/ui';
 import { variables } from '@config';
-import { useSelector } from '@reducers';
-import { formatUtils } from '@utils';
+import { TokenType } from '@types';
 import React from 'react';
 import styled from 'styled-components';
 import PriceChangeRow from './PriceChangeRow';
@@ -77,11 +76,11 @@ interface Props {
     onNewDefaultValue: any;
     selectedTab: string;
     onNewDefaultEthValue: any;
-    // tokenSymbolsArr: string[];
-    // poolId: string;
-    // yieldToken: any;
-    // tokenPrices: number[];
-    // ethPrice: number;
+    tokenSymbols: TokenType[];
+    poolId: string;
+    yieldTokenSymbol: TokenType | null;
+    tokenPrices: number[];
+    ethPrice: number;
 }
 const SimulationBox = ({
     onChange,
@@ -92,28 +91,22 @@ const SimulationBox = ({
     onNewDefaultEthValue,
     simulatedEthCoefficient,
     selectedTab,
+    tokenSymbols,
+    poolId,
+    yieldTokenSymbol,
+    tokenPrices,
+    ethPrice,
 }: Props) => {
-    const { allPools, selectedPoolId } = useSelector(state => state.app);
-
-    if (!allPools[selectedPoolId]) {
-        return null;
-    }
-
-    const pool = allPools[selectedPoolId];
-    const { pooledTokens, poolId, yieldToken } = pool;
-    const { tokenPricesEnd, ethPriceEnd } = pool.cumulativeStats;
-    const tokenSymbolsArr = formatUtils.getTokenSymbolArr(pooledTokens);
-    const yieldTokenSymbol = yieldToken?.symbol;
-
     // find out if WETH is among pooled tokens. If not, the index will be -1
-    const indexOfWeth = tokenSymbolsArr.indexOf('weth');
+    const indexOfWeth = tokenSymbols.indexOf('weth');
 
     // get index of yield token
-    const indexOfYield = tokenSymbolsArr.indexOf(yieldTokenSymbol);
+    let indexOfYield = -1;
+    if (yieldTokenSymbol) indexOfYield = tokenSymbols.indexOf(yieldTokenSymbol);
 
     const simulatedEthPrice = simulatedEthCoefficient
-        ? ethPriceEnd * simulatedEthCoefficient
-        : ethPriceEnd;
+        ? ethPrice * simulatedEthCoefficient
+        : ethPrice;
 
     return (
         <Wrapper>
@@ -125,8 +118,7 @@ const SimulationBox = ({
 
             <XScrollWrapper>
                 <GridWrapper>
-                    {pooledTokens.map((token, i) => {
-                        const tokenSymbol = token.symbol;
+                    {tokenSymbols.map((tokenSymbol, i) => {
                         return (
                             <PriceChangeRow
                                 // make sure the id is unique to the pool and the token. We want the token sliders
@@ -150,9 +142,7 @@ const SimulationBox = ({
                                     </TokenWrapper>
                                 }
                                 fourthColumn={
-                                    <FiatValue
-                                        value={tokenPricesEnd[i] * simulatedCoefficients[i]}
-                                    />
+                                    <FiatValue value={tokenPrices[i] * simulatedCoefficients[i]} />
                                 }
                                 color="dark"
                             />

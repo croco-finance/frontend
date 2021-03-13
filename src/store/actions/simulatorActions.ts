@@ -1,5 +1,5 @@
 import * as actionTypes from '@actionTypes';
-import { DailyData, PoolToken } from '@types';
+import { DailyData, PoolToken, TokenType, SimulatorStateInterface } from '@types';
 import { getLastPoolSnap } from '@utils';
 
 // parse snap - strings to numbers
@@ -41,8 +41,13 @@ export const fetchPoolSnapFailed = () => {
 export const fetchPoolSnapSuccess = (poolId: string, payload: any) => {
     return {
         type: actionTypes.FETCH_POOL_SNAP_SUCCESS,
-        poolId: poolId,
         payload: payload,
+    };
+};
+
+export const clearPoolSnapData = (poolId: string, payload: any) => {
+    return {
+        type: actionTypes.CLEAR_POOL_SNAP_DATA,
     };
 };
 
@@ -57,7 +62,32 @@ export const fetchPoolSnap = (address: string) => {
             const fetchedPoolData = await getLastPoolSnap(queryAddress);
             if (fetchedPoolData) {
                 // parse
-                dispatch(fetchPoolSnapSuccess(address, parsePoolSnap(fetchedPoolData)));
+                const parsedPoolData = parsePoolSnap(fetchedPoolData);
+                dispatch(fetchPoolSnapSuccess(address, parsedPoolData));
+
+                const tokenCounts = parsedPoolData.tokens.length;
+                const tokenSymbols: TokenType[] = new Array(tokenCounts);
+                const tokenWeights: number[] = new Array(tokenCounts);
+                const tokenPricesUsd: number[] = new Array(tokenCounts);
+
+                parsedPoolData.tokens.forEach((token, i) => {
+                    tokenWeights[i] = token.weight;
+                    tokenPricesUsd[i] = token.priceUsd;
+                    tokenSymbols[i] = token.token.symbol as TokenType;
+                });
+
+                // set pool data besides user's balances
+                dispatch(
+                    setNewSimulationPoolData(
+                        queryAddress,
+                        tokenSymbols,
+                        tokenWeights,
+                        null,
+                        tokenPricesUsd,
+                        parsedPoolData.ethPrice,
+                        new Array(tokenCounts).fill(0),
+                    ),
+                );
             } else {
                 console.log('Did not find any pool snap');
             }
@@ -65,5 +95,42 @@ export const fetchPoolSnap = (address: string) => {
             dispatch(fetchPoolSnapFailed());
             console.log("ERROR: Couldn't fetch latest pool snap.");
         }
+    };
+};
+
+// setting simulation values
+export const setNewSimulationPoolData = (
+    poolId: string,
+    tokenSymbols: string[],
+    tokenWeights: number[],
+    yieldTokenSymbol: string | null,
+    tokenPricesUsd: number[],
+    ethPriceUsd: number,
+    userTokenBalances: number[],
+) => {
+    return {
+        type: actionTypes.SET_NEW_SIMULATION_POOL_DATA,
+        payload: {
+            poolId,
+            tokenSymbols,
+            tokenWeights,
+            yieldTokenSymbol,
+            tokenPricesUsd,
+            ethPriceUsd,
+            userTokenBalances,
+        },
+    };
+};
+
+export const resetPoolSnapData = () => {
+    return dispatch => {
+        dispatch(setNewSimulationPoolData('', [], [], null, [], 0, []));
+    };
+};
+
+export const setSimulationMode = (mode: SimulatorStateInterface['simulationMode']) => {
+    return {
+        type: actionTypes.SET_SIMULATION_MODE,
+        mode: mode,
     };
 };
