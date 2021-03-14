@@ -145,6 +145,10 @@ const dexOptions = [
         value: 'materia',
         label: `Materia`,
     },
+    {
+        value: 'none',
+        label: `No Exchange`,
+    },
 ];
 
 const FeedbackView = () => {

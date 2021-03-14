@@ -6,10 +6,11 @@ import styled from 'styled-components';
 import PoolItem from '../PoolItem';
 import { Exchange } from '@types';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ maxWidth: string }>`
     padding-left: 0;
     margin-bottom: 65px;
     width: 100%;
+    max-width: ${props => props.maxWidth};
 `;
 
 const ActiveExchange = styled.div`
@@ -51,7 +52,11 @@ const Value = styled(HeaderChild)``;
 
 const Gains = styled(HeaderChild)``;
 
-const PoolList = () => {
+interface Props {
+    cardMaxWidth?: string;
+}
+
+const PoolList = ({ cardMaxWidth = '100%' }: Props) => {
     const { activePoolIds, dexToPoolMap } = useSelector(state => state.app);
     const dexRenderingOrder: Array<keyof typeof Exchange> = [
         'UNI_V2',
@@ -76,7 +81,7 @@ const PoolList = () => {
     });
 
     return (
-        <Wrapper>
+        <Wrapper maxWidth={cardMaxWidth}>
             {activePoolIdsOrdered.length > 0 ? (
                 <>
                     <Header>

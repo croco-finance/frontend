@@ -6,10 +6,11 @@ import React from 'react';
 import styled from 'styled-components';
 import SummaryItem from '../SummaryItem';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ maxWidth: string }>`
     padding-left: 0;
     margin-bottom: 45px;
     width: 100%;
+    max-width: ${props => props.maxWidth};
 `;
 
 const Header = styled.div`
@@ -27,15 +28,13 @@ const HeaderChild = styled.div`
     justify-content: center;
 `;
 
-const Exchange = styled(HeaderChild)``;
-
-const Value = styled(HeaderChild)``;
-
-const Gains = styled(HeaderChild)``;
-
 const ItemsWrapper = styled.div``;
 
-const SummaryList = () => {
+interface Props {
+    cardMaxWidth?: string;
+}
+
+const SummaryList = ({ cardMaxWidth = '100%' }: Props) => {
     const { allPools, activePoolIds } = useSelector(state => state.app);
 
     if (!allPools || Object.keys(allPools).length === 0) return null;
@@ -48,13 +47,13 @@ const SummaryList = () => {
     }
 
     return (
-        <Wrapper>
+        <Wrapper maxWidth={cardMaxWidth}>
             <Header>
-                <Exchange>Pools</Exchange>
-                <Value>Value</Value>
-                <Gains>
+                <HeaderChild>Pools</HeaderChild>
+                <HeaderChild>Value</HeaderChild>
+                <HeaderChild>
                     Reward <QuestionTooltip content={'fees + yield'} />
-                </Gains>
+                </HeaderChild>
             </Header>
             <ItemsWrapper>
                 <SummaryItem

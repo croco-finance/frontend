@@ -11,6 +11,8 @@ import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
 import RightContainer from './components/RightContainer';
 
+const POOL_CARD_MAX_WIDTH = '530px';
+
 const PageHeadline = styled.div`
     color: ${props => props.theme.FONT_DARK};
     font-size: ${variables.FONT_SIZE.H1};
@@ -18,6 +20,27 @@ const PageHeadline = styled.div`
     align-self: baseline;
     margin-bottom: 30px;
     margin-top: 12px;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        margin-bottom: 20px;
+    }
+`;
+const PoolsWrapper = styled.div`
+    // margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    ${styles.scrollBarStyles};
+    margin-top: 20px;
+    // padding-right: 34px;
+    // max-width: 580px;
+    align-items: baseline;
+    padding-left: 10px;
+    padding-right: 10px;
 `;
 
 const ExceptionWrapper = styled.div`
@@ -31,6 +54,24 @@ const ExceptionWrapper = styled.div`
     text-align: center;
     padding: 20px;
     line-height: 26px;
+`;
+
+const LeftContentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px 10px 10px;
+    margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
+    width: 100%;
+    height: 100%;
+    max-width: 620px;
+    align-self: center;
+    ${styles.scrollBarStyles};
+
+    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
+        // because choose pool options are not visible on mobile screen
+        min-height: 60vh;
+    }
 `;
 
 const NoPoolFoundInfo = styled(ExceptionWrapper)`
@@ -58,22 +99,10 @@ const NoAddressNoPool = styled(ExceptionWrapper)`
 
 const AddressWrapper = styled.div`
     width: 100%;
-    max-width: 540px;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 14px;
-`;
-
-const LeftSubHeaderContent = styled.div`
-    margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-y: auto;
-    overflow-x: hidden;
-    ${styles.scrollBarStyles};
 `;
 
 const RightNonExceptionContentWrapper = styled.div`
@@ -81,35 +110,11 @@ const RightNonExceptionContentWrapper = styled.div`
     width: 100%;
 `;
 
-const Headline = styled.div`
-    /* align-self: baseline; */
-    padding-top: 0px;
-    margin-bottom: 50px;
-    padding-left: 20px;
-    color: ${props => props.theme.FONT_MEDIUM};
-    font-size: ${variables.FONT_SIZE.H3};
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        margin-bottom: 30px;
-    }
-`;
-
-const PoolListWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    width: 100%;
-    max-width: 540px;
-`;
-
 const Dashboard = () => {
     const allPoolsGlobal = useSelector(state => state.app.allPools);
     const isLoading = useSelector(state => state.app.loading);
     const isFetchError = useSelector(state => state.app.error);
     const noPoolsFound = useSelector(state => state.app.noPoolsFound);
-    const theme = useTheme();
 
     let exceptionContent;
     let rightWrapperContent;
@@ -149,23 +154,23 @@ const Dashboard = () => {
     return (
         <>
             <DashboardContainer>
-                <LeftLayoutContainer maxHeightMobileScreen="80vh">
-                    <LeftSubHeaderContent>
+                <LeftLayoutContainer maxHeightMobileScreen="75vh">
+                    <LeftContentWrapper>
                         <AddressWrapper>
                             <PageHeadline>Dashboard</PageHeadline>
                             <AddressSelect />
                         </AddressWrapper>
-
-                        {exceptionContent
-                            ? exceptionContent
-                            : !noPoolsSavedInRedux && (
-                                  <PoolListWrapper>
-                                      {/* <Headline>Your liquidity pools</Headline> */}
-                                      <SummaryList />
-                                      <PoolList />
-                                  </PoolListWrapper>
-                              )}
-                    </LeftSubHeaderContent>
+                        <PoolsWrapper>
+                            {exceptionContent
+                                ? exceptionContent
+                                : !noPoolsSavedInRedux && (
+                                      <>
+                                          <SummaryList cardMaxWidth={POOL_CARD_MAX_WIDTH} />
+                                          <PoolList cardMaxWidth={POOL_CARD_MAX_WIDTH} />
+                                      </>
+                                  )}
+                        </PoolsWrapper>
+                    </LeftContentWrapper>
                 </LeftLayoutContainer>
                 <RightLayoutContainer>
                     {rightWrapperContent}

@@ -16,10 +16,6 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    // margin-bottom: 30px;
-    /* padding: 6px;
-    border-radius: 8px;
-    background-color: ${colors.BACKGROUND_DARK}; */
 `;
 
 const ManageAddressesButton = styled.button`

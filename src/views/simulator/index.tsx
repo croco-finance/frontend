@@ -35,9 +35,13 @@ const PageHeadline = styled.div`
     align-self: baseline;
     margin-bottom: 30px;
     margin-top: 12px;
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        margin-bottom: 20px;
+    }
 `;
 
-const LeftSubHeaderContent = styled.div`
+const LeftContentWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -415,7 +419,7 @@ const Simulator = () => {
         <>
             <SimulatorContainer>
                 <LeftLayoutContainer backgroundColor={theme.BACKGROUND}>
-                    <LeftSubHeaderContent>
+                    <LeftContentWrapper>
                         <PageHeadline>Simulator</PageHeadline>
                         <StyledTabSelectHeader
                             selected={simulationMode}
@@ -570,7 +574,7 @@ const Simulator = () => {
                                 </SimulationBoxWrapper>
                             </>
                         )}
-                    </LeftSubHeaderContent>
+                    </LeftContentWrapper>
                 </LeftLayoutContainer>
                 <RightLayoutContainer>
                     {showData && (
