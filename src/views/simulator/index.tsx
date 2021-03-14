@@ -241,16 +241,19 @@ const buildPoolOptions = (pools: AllPoolsGlobal) => {
 };
 
 type PoolOption = ReturnType<typeof buildPoolOption>;
-type TabOptions = 'il' | 'strategies';
+type StatisticsTabOptions = 'il' | 'strategies';
 
 const Simulator = () => {
+    // theme
+    const theme = useTheme();
+    // pool data
     const allPools = useSelector(state => state.app.allPools);
-    const selectedPoolId: string = useSelector(state => state.app.selectedPoolId);
+    const selectedPoolId = useSelector(state => state.app.selectedPoolId);
     const dispatch = useDispatch();
-    const [selectedTab, setSelectedTab] = useState<TabOptions>('il');
-    const isLoading: boolean = useSelector(state => state.app.loading);
-    const isFetchError: boolean = useSelector(state => state.app.error);
-    const noPoolsFound: boolean = useSelector(state => state.app.noPoolsFound);
+    const [selectedTab, setSelectedTab] = useState<StatisticsTabOptions>('il');
+    const isLoading = useSelector(state => state.app.loading);
+    const isFetchError = useSelector(state => state.app.error);
+    const noPoolsFound = useSelector(state => state.app.noPoolsFound);
     // pool import
     const [importedPoolAddress, setImportedPoolAddress] = useState('');
     const [isImportedPoolAddressValid, setIsImportedPoolAddressValid] = useState(false);
@@ -279,10 +282,7 @@ const Simulator = () => {
         defaultSliderEthCoefficient,
     } = useSelector(state => state.simulator);
 
-    // theme
-    const theme = useTheme();
-
-    const handleTabChange = (tab: TabOptions) => {
+    const handleTabChange = (tab: StatisticsTabOptions) => {
         analytics.logEvent(`simulator_${tab}_view`);
         setSelectedTab(tab);
     };
@@ -418,6 +418,7 @@ const Simulator = () => {
                     <LeftSubHeaderContent>
                         <PageHeadline>Simulator</PageHeadline>
                         <StyledTabSelectHeader
+                            selected={simulationMode}
                             focusColor={theme.FONT_DARK}
                             bold
                             onSelectTab={tabName => handlePoolImportTabChange(tabName)}

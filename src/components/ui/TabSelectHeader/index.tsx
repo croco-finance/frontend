@@ -54,6 +54,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     tabIds: string[];
     focusColor?: string;
     bold?: boolean;
+    selected: string;
 }
 
 const TabSelectHeader = ({
@@ -65,8 +66,8 @@ const TabSelectHeader = ({
     focusColor,
     bold = false,
     className,
+    selected,
 }: Props) => {
-    const [selectedTab, setSelectedTab] = useState(tabIds[0]);
     const theme = useTheme();
 
     return (
@@ -81,9 +82,8 @@ const TabSelectHeader = ({
                                 bold={bold}
                                 onClick={() => {
                                     onSelectTab(id);
-                                    setSelectedTab(id);
                                 }}
-                                selected={selectedTab === id}
+                                selected={selected === id}
                             >
                                 <span>{tabHeadlines[i]}</span>
                             </Button>
