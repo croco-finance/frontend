@@ -108,8 +108,6 @@ const SimulationBox = ({
         ? ethPrice * simulatedEthCoefficient
         : ethPrice;
 
-    console.log('tokenPrices', tokenPrices);
-    console.log('simulatedCoefficients', simulatedCoefficients);
     return (
         <Wrapper>
             <Title>Simulation Box</Title>

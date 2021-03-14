@@ -149,7 +149,7 @@ const Dashboard = () => {
     return (
         <>
             <DashboardContainer>
-                <LeftLayoutContainer>
+                <LeftLayoutContainer maxHeightMobileScreen="80vh">
                     <LeftSubHeaderContent>
                         <AddressWrapper>
                             <PageHeadline>Dashboard</PageHeadline>

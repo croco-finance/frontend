@@ -15,6 +15,7 @@ export const initialState: SimulatorStateInterface = {
     ethPriceUsd: 0,
     yieldTokenSymbol: null,
     investedAmount: 0,
+    exchange: null,
     // pool snap data
     poolSnapFetchError: false,
     poolSnapLoading: false,
@@ -40,15 +41,16 @@ const simulatorReducer = (state = initialState, action) => {
                 draft.ethPriceUsd = action.payload.ethPriceUsd;
                 draft.tokenPricesUsd = action.payload.tokenPricesUsd;
                 draft.userTokenBalances = action.payload.userTokenBalances;
-                // simulated coeffs
-                draft.simulatedTokenCoefficients = new Array(
-                    action.payload.tokenSymbols.length,
-                ).fill(1);
+                draft.exchange = action.payload.exchange;
+                break;
+            }
+
+            case actionTypes.RESET_SIMULATION_COEFFICIENTS: {
+                const tokenCount = action.tokensCount;
+                draft.simulatedTokenCoefficients = new Array(tokenCount).fill(1);
                 draft.simulatedEthCoefficient = 1;
                 draft.simulatedYieldCoefficient = 1;
-                draft.defaultSliderTokenCoefficients = new Array(
-                    action.payload.tokenSymbols.length,
-                ).fill(1);
+                draft.defaultSliderTokenCoefficients = new Array(tokenCount).fill(1);
                 draft.defaultSliderEthCoefficient = 1;
                 break;
             }

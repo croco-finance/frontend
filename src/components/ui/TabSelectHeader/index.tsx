@@ -12,7 +12,6 @@ const Header = styled.div`
     display: flex;
     width: 100%;
     align-items: center;
-    /* padding: 0 10px 10px 10px; */
     align-items: center;
     border-bottom: 1px solid ${props => props.theme.BACKGROUND_DARK};
     margin-bottom: 30px;
@@ -49,7 +48,7 @@ const Button = styled.div<{ selected: boolean; disabled?: boolean; color: string
 `;
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     headline?: React.ReactNode;
-    onSelectTab: any;
+    onSelectTab?: any;
     hideTabs?: boolean;
     tabHeadlines: string[];
     tabIds: string[];

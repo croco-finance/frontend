@@ -1,6 +1,6 @@
 import { PoolHeader, TabSelectHeader } from '@components/ui';
 import { useSelector } from '@reducers';
-import { PoolItem } from '@types';
+import { PoolItem, CumulativeStats } from '@types';
 import { mathUtils, simulatorUtils } from '@utils';
 import React from 'react';
 import styled from 'styled-components';
@@ -24,6 +24,7 @@ interface Props {
     sliderDefaultEthCoeff: number;
     onTabChanged: any;
     selectedTab: TabOptions;
+    pool: PoolItem;
 }
 const RightContainer = ({
     simulatedPooledTokensCoeffs,
@@ -33,33 +34,88 @@ const RightContainer = ({
     sliderDefaultEthCoeff,
     onTabChanged,
     selectedTab,
+    pool,
 }: Props) => {
-    const { allPools, selectedPoolId } = useSelector(state => state.app);
-    // const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
+    // simulation pool data
+    const {
+        simulationMode,
+        tokenSymbols,
+        tokenWeights,
+        poolId,
+        yieldTokenSymbol,
+        ethPriceUsd,
+        tokenPricesUsd,
+        userTokenBalances,
+        exchange,
+    } = useSelector(state => state.simulator);
+    if (!exchange) return null;
 
-    // TODO make the following checks and computations cleaner
-    if (!allPools) {
-        return null;
-        // <SelectPoolWrapper>Please input your Ethereum address on the left</SelectPoolWrapper>
+    if (simulationMode === 'import') {
+        // Get simulated prices of pooled tokens and ETH
+        const simulatedPooledTokenPrices = mathUtils.multiplyArraysElementWise(
+            tokenPricesUsd,
+            simulatedPooledTokensCoeffs,
+        );
+
+        // Get simulated values for last interval
+        let simulatedValues = simulatorUtils.getSimulationStats(
+            userTokenBalances,
+            new Array(userTokenBalances.length).fill(0),
+            simulatedPooledTokenPrices,
+            tokenWeights,
+            exchange,
+        );
+        let {
+            simulatedTokenBalances,
+            simulatedFeesUsd,
+            simulatedPoolValueUsd,
+            simulatedHodlValueUsd,
+            impLossRel,
+            impLossUsd,
+        } = simulatedValues;
+        return (
+            <Wrapper>
+                <TabSelectHeader
+                    headline={
+                        <PoolHeader
+                            tokenSymbolsArr={tokenSymbols}
+                            exchange={exchange}
+                            poolId={poolId}
+                        />
+                    }
+                    tabIds={[]}
+                    tabHeadlines={[]}
+                />
+                <Overview
+                    isActive={false}
+                    tokenSymbols={tokenSymbols}
+                    tokenBalances={userTokenBalances}
+                    simulatedPooledTokenBalances={simulatedTokenBalances}
+                    endPoolValueUsd={mathUtils.getTokenArrayValue(
+                        userTokenBalances,
+                        tokenPricesUsd,
+                    )}
+                    simulatedPoolValueUsd={simulatedPoolValueUsd}
+                    simulatedHodlValueUsd={simulatedHodlValueUsd}
+                    tokenPricesEnd={tokenPricesUsd}
+                    sliderDefaultCoeffs={sliderDefaultCoeffs}
+                    lastIntSimulatedFeesUsd={simulatedFeesUsd}
+                    lastIntYieldUsd={0}
+                    lastSnapTimestampStart={0}
+                    lastSnapTimestampEnd={Date.now()}
+                    impLossUsd={impLossUsd}
+                    impLossRel={impLossRel}
+                    lastWeekAverageDailyRewardsUsd={0}
+                />
+            </Wrapper>
+        );
     }
-
-    // just in case the Pool summary is selected, return the following message
-    if (selectedPoolId === 'all' || !selectedPoolId || !allPools[selectedPoolId]) {
-        // return <SelectPoolWrapper>Select your pool</SelectPoolWrapper>;
-        return null;
-    }
-
-    const pool: PoolItem = allPools[selectedPoolId];
 
     let {
-        poolId,
         isActive,
-        exchange,
-        tokenWeights,
         depositTimestamps,
         depositTokenAmounts,
         depositEthAmounts,
-        tokenSymbols,
         hasYieldReward,
     } = pool;
 
@@ -187,8 +243,12 @@ const RightContainer = ({
                     />
                 }
                 onSelectTab={tabName => onTabChanged(tabName)}
-                tabHeadlines={['Impermanent loss', 'Strategies']}
-                tabIds={['il', 'strategies']}
+                tabHeadlines={
+                    simulationMode === 'positions'
+                        ? ['Impermanent loss', 'Strategies']
+                        : ['Impermanent loss']
+                }
+                tabIds={simulationMode === 'positions' ? ['il', 'strategies'] : ['il']}
             />
 
             {selectedTab === 'il' && (
@@ -212,7 +272,8 @@ const RightContainer = ({
                 />
             )}
 
-            {selectedTab === 'strategies' && (
+            {/* Double check you don't show strategy when imported pool is present */}
+            {selectedTab === 'strategies' && simulationMode === 'positions' && (
                 <Strategies
                     exchange={exchange}
                     poolStrategyUsd={poolStrategyUsd}

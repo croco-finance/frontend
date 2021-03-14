@@ -141,6 +141,10 @@ const dexOptions = [
         value: 'balancer',
         label: `Balancer`,
     },
+    {
+        value: 'materia',
+        label: `Materia`,
+    },
 ];
 
 const FeedbackView = () => {

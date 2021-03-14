@@ -1,5 +1,5 @@
 import * as actionTypes from '@actionTypes';
-import { DailyData, PoolToken, TokenType, SimulatorStateInterface } from '@types';
+import { DailyData, PoolToken, TokenType, SimulatorStateInterface, Exchange } from '@types';
 import { getLastPoolSnap } from '@utils';
 import store from '../../store';
 
@@ -87,8 +87,11 @@ export const fetchPoolSnap = (address: string) => {
                         tokenPricesUsd,
                         parsedPoolData.ethPrice,
                         new Array(tokenCounts).fill(0),
+                        parsedPoolData.exchange,
                     ),
                 );
+                // set simulation coefficients
+                dispatch(resetSimulationCoefficients(tokenCounts));
             } else {
                 console.log('Did not find any pool snap');
             }
@@ -108,6 +111,7 @@ export const setNewSimulationPoolData = (
     tokenPricesUsd: number[],
     ethPriceUsd: number,
     userTokenBalances: number[],
+    exchange: SimulatorStateInterface['exchange'],
 ) => {
     return {
         type: actionTypes.SET_NEW_SIMULATION_POOL_DATA,
@@ -119,13 +123,14 @@ export const setNewSimulationPoolData = (
             tokenPricesUsd,
             ethPriceUsd,
             userTokenBalances,
+            exchange,
         },
     };
 };
 
 export const resetPoolSnapData = () => {
     return dispatch => {
-        dispatch(setNewSimulationPoolData('', [], [], null, [], 0, []));
+        dispatch(setNewSimulationPoolData('', [], [], null, [], 0, [], null));
     };
 };
 
@@ -135,12 +140,6 @@ export const setSimulationMode = (mode: SimulatorStateInterface['simulationMode'
         mode: mode,
     };
 };
-
-export const SET_TOKEN_COEFFICIENTS = 'SET_TOKEN_COEFFICIENTS';
-export const SET_ETH_COEFFICIENT = 'SET_ETH_COEFFICIENT';
-export const SET_YIELD_COEFFICIENT = 'SET_YIELD_COEFFICIENT';
-export const SET_SLIDER_TOKEN_COEFFICIENTS = 'SET_SLIDER_TOKEN_COEFFICIENTS';
-export const SET_SLIDER_ETH_COEFFICIENT = 'SET_SLIDER_ETH_COEFFICIENT';
 
 // update price coefficients
 export const setTokenCoefficients = (newValue, index) => {
@@ -185,5 +184,12 @@ export const setDefaultSliderEthCoefficient = newValue => {
     return {
         type: actionTypes.SET_DEFAULT_SLIDER_ETH_COEFFICIENTS,
         coefficient: newValue,
+    };
+};
+
+export const resetSimulationCoefficients = tokensCount => {
+    return {
+        type: actionTypes.RESET_SIMULATION_COEFFICIENTS,
+        tokensCount: tokensCount,
     };
 };

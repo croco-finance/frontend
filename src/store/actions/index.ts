@@ -18,4 +18,5 @@ export {
     setYieldCoefficient,
     setDefaultSliderTokenCoefficient,
     setDefaultSliderEthCoefficient,
+    resetSimulationCoefficients,
 } from './simulatorActions';

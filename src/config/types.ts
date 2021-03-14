@@ -283,6 +283,7 @@ export interface SimulatorStateInterface {
     yieldTokenSymbol: TokenType | null;
     investedAmount: number;
     userTokenBalances: number[];
+    exchange: Exchange | null;
     // simulated price coefficients
     simulatedTokenCoefficients: number[];
     simulatedEthCoefficient: number;

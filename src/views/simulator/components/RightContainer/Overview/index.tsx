@@ -178,6 +178,7 @@ const Overview = ({
                                     : formatUtils.getFormattedDateFromTimestamp(
                                           lastSnapTimestampEnd,
                                           'MONTH_DAY_YEAR',
+                                          true,
                                       )
                             }
                             thirdColumn={<RightPaddingWrapper>Simulated</RightPaddingWrapper>}
