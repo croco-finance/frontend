@@ -254,6 +254,7 @@ const FeedbackView = () => {
                             isSearchable={false}
                             onChange={option => setDex(option)}
                             value={dex}
+                            maxDropdownHeight="100px"
                         />
                     </DexSelectWrapper>
 

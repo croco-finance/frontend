@@ -1,4 +1,4 @@
-import { variables } from '@config';
+import { variables, styles } from '@config';
 import { useTheme } from '@hooks';
 import React from 'react';
 import ReactSelect, { Props as SelectProps } from 'react-select';
@@ -14,6 +14,7 @@ const selectStyle = (
     useWhiteBackground: boolean,
     useDarkBorder: boolean,
     theme: any,
+    maxDropdownHeight: string,
 ) => ({
     singleValue: (base: Record<string, any>) => ({
         ...base,
@@ -86,6 +87,34 @@ const selectStyle = (
         background: theme.BG_WHITE,
         // border: `1px solid ${colors.BLACK80}`,
         borderRadius: '4px',
+        maxHeight: maxDropdownHeight,
+        '::-webkit-scrollbar': {
+            backgroundColor: theme.SCROLLBAR_BACKGROUND,
+            width: '8px',
+            borderRadius: '8px',
+        },
+        /* background of the scrollbar except button or resizer */
+        '::-webkit-scrollbar-track': {
+            backgroundColor: 'transparent',
+        },
+        /* scrollbar itself */
+        '::-webkit-scrollbar-thumb': {
+            /* 7F7F7F for mac-like color */
+            backgroundColor: theme.SCROLLBAR_THUMB,
+            borderRadius: '10px',
+            border: `1px solid ${theme.SCROLLBAR_THUMB}`,
+        },
+
+        '::-webkit-scrollbar-thumb:hover': {
+            /* 7F7F7F for mac-like color */
+            backgroundColor: theme.SCROLLBAR_THUMB_HOVER,
+            border: `1px solid ${theme.SCROLLBAR_THUMB_HOVER_BORDER}`,
+        },
+
+        /* set button(top and bottom of the scrollbar) */
+        '::-webkit-scrollbar-button': {
+            display: 'none',
+        },
     }),
     option: (base: Record<string, any>, { isFocused }: { isFocused: boolean }) => ({
         ...base,
@@ -121,6 +150,10 @@ const Wrapper = styled.div<Props>`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+
+    // .react-select__menu-list {
+    //     ${styles.scrollBarStyles}
+    // }
 `;
 
 interface Props extends Omit<SelectProps, 'components'> {
@@ -133,6 +166,7 @@ interface Props extends Omit<SelectProps, 'components'> {
     noBorder?: boolean;
     useWhiteBackground?: boolean;
     useDarkBorder?: boolean;
+    maxDropdownHeight?: string;
 }
 
 const Select = ({
@@ -147,6 +181,7 @@ const Select = ({
     noBorder = false,
     useWhiteBackground = false,
     useDarkBorder = false,
+    maxDropdownHeight = '260px',
     ...props
 }: Props) => {
     const theme = useTheme();
@@ -163,6 +198,7 @@ const Select = ({
                     useWhiteBackground,
                     useDarkBorder,
                     theme,
+                    maxDropdownHeight,
                 )}
                 isSearchable={isSearchable}
                 {...props}
