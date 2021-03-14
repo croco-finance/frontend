@@ -1,25 +1,23 @@
 import {
     changeSelectedPool,
-    setSelectedPoolId,
     fetchPoolSnap,
-    setNewSimulationPoolData,
     resetPoolSnapData,
+    setNewSimulationPoolData,
+    setSelectedPoolId,
     setSimulationMode,
+    setTokenCoefficients,
+    setEthCoefficient,
+    setYieldCoefficient,
+    setDefaultSliderTokenCoefficient,
+    setDefaultSliderEthCoefficient,
 } from '@actions';
 import { AddressSelect } from '@components/containers';
 import { LeftLayoutContainer, RightLayoutContainer, SimulatorContainer } from '@components/layout';
-import {
-    InfoBox,
-    LoadingBox,
-    MultipleTokenSelect,
-    Input,
-    Spinner,
-    TabSelectHeader,
-} from '@components/ui';
-import { analytics, styles, types, variables, colors } from '@config';
+import { Input, LoadingBox, MultipleTokenSelect, Spinner, TabSelectHeader } from '@components/ui';
+import { analytics, colors, styles, types, variables } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
-import { AllPoolsGlobal, TokenType, SimulatorStateInterface } from '@types';
+import { AllPoolsGlobal, TokenType } from '@types';
 import { formatUtils, validationUtils } from '@utils';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -158,7 +156,7 @@ const AddPoolButton = styled.button<{ disabled: boolean }>`
         outline: 0;
     }
 
-    &:hover {
+    &:hover {setNewPrices
         background-color: ${props =>
             props.disabled
                 ? props.theme.BUTTON_PRIMARY_BG_DISABLED
@@ -282,59 +280,16 @@ const Simulator = () => {
         poolSnapLoading,
         poolSnapError,
         poolSnapData,
+        // simulation coeffs
+        simulatedTokenCoefficients,
+        simulatedEthCoefficient,
+        simulatedYieldCoefficient,
+        defaultSliderTokenCoefficients,
+        defaultSliderEthCoefficient,
     } = useSelector(state => state.simulator);
 
     // theme
     const theme = useTheme();
-
-    // SIMULATOR FUNCTIONS
-    const [simulatedPriceCoefficients, setSimulatedPriceCoefficients] = useState<number[]>(
-        allPools && allPools[selectedPoolId]
-            ? getInitialPriceCoeffs(allPools[selectedPoolId].pooledTokens)
-            : [],
-    );
-
-    const [simulatedEthPriceCoefficient, setSimulatedEthPriceCoefficient] = useState(1);
-    const [simulatedYieldPriceCoefficient, setSimulatedYieldPriceCoefficient] = useState(1);
-
-    const [sliderDefaultCoeffs, setSliderDefaultCoeffs]: any = useState(
-        allPools && allPools[selectedPoolId]
-            ? getInitialPriceCoeffs(allPools[selectedPoolId].pooledTokens)
-            : [],
-    );
-
-    const [sliderDefaultEthPriceCoefficient, setSliderDefaultEthPriceCoefficient] = useState(1);
-
-    const setNewPrices = (newValue, index) => {
-        const coefficientsArrCopy = [...simulatedPriceCoefficients];
-        coefficientsArrCopy[index] = newValue;
-        setSimulatedPriceCoefficients(coefficientsArrCopy);
-    };
-
-    const setNewEthPrice = newValue => {
-        setSimulatedEthPriceCoefficient(newValue);
-    };
-
-    const setNewYieldPrice = newValue => {
-        setSimulatedYieldPriceCoefficient(newValue);
-    };
-
-    const setNewDefaultCoeffs = (newValue, index) => {
-        const coefficientsArrCopy = [...simulatedPriceCoefficients];
-        coefficientsArrCopy[index] = newValue;
-        setSliderDefaultCoeffs(coefficientsArrCopy);
-    };
-
-    useEffect(() => {
-        if (allPools && allPools[selectedPoolId]) {
-            const newPool = allPools[selectedPoolId];
-            setSimulatedPriceCoefficients(getInitialPriceCoeffs(newPool.pooledTokens));
-            setSliderDefaultCoeffs(getInitialPriceCoeffs(newPool.pooledTokens));
-            setSimulatedEthPriceCoefficient(1);
-            setSliderDefaultEthPriceCoefficient(1);
-            setSimulatedYieldPriceCoefficient(1);
-        }
-    }, [selectedPoolId]);
 
     const handleTabChange = (tab: TabOptions) => {
         analytics.logEvent(`simulator_${tab}_view`);
@@ -586,15 +541,25 @@ const Simulator = () => {
                                 <SimulationBoxWrapper>
                                     <SimulationBox
                                         selectedTab={selectedTab}
-                                        onChange={setNewPrices}
-                                        onEthChange={setNewEthPrice}
-                                        onYieldChange={setNewYieldPrice}
-                                        onNewDefaultValue={setNewDefaultCoeffs}
-                                        onNewDefaultEthValue={newValue =>
-                                            setSliderDefaultEthPriceCoefficient(newValue)
+                                        onChange={(newValue, index) =>
+                                            dispatch(setTokenCoefficients(newValue, index))
                                         }
-                                        simulatedCoefficients={simulatedPriceCoefficients}
-                                        simulatedEthCoefficient={simulatedEthPriceCoefficient}
+                                        onEthChange={newValue =>
+                                            dispatch(setEthCoefficient(newValue))
+                                        }
+                                        onYieldChange={newValue =>
+                                            dispatch(setYieldCoefficient(newValue))
+                                        }
+                                        onNewDefaultValue={(newValue, index) =>
+                                            dispatch(
+                                                setDefaultSliderTokenCoefficient(newValue, index),
+                                            )
+                                        }
+                                        onNewDefaultEthValue={newValue =>
+                                            dispatch(setDefaultSliderEthCoefficient(newValue))
+                                        }
+                                        simulatedCoefficients={simulatedTokenCoefficients}
+                                        simulatedEthCoefficient={simulatedEthCoefficient}
                                         tokenSymbols={tokenSymbols}
                                         poolId={poolId}
                                         yieldTokenSymbol={yieldTokenSymbol}
@@ -610,11 +575,11 @@ const Simulator = () => {
                     <RightContainer
                         onTabChanged={tab => handleTabChange(tab)}
                         selectedTab={selectedTab}
-                        simulatedPooledTokensCoeffs={simulatedPriceCoefficients}
-                        sliderDefaultCoeffs={sliderDefaultCoeffs}
-                        simulatedEthCoeff={simulatedEthPriceCoefficient}
-                        simulatedYieldCoeff={simulatedYieldPriceCoefficient}
-                        sliderDefaultEthCoeff={sliderDefaultEthPriceCoefficient}
+                        simulatedPooledTokensCoeffs={simulatedTokenCoefficients}
+                        sliderDefaultCoeffs={defaultSliderTokenCoefficients}
+                        simulatedEthCoeff={simulatedEthCoefficient}
+                        simulatedYieldCoeff={simulatedYieldCoefficient}
+                        sliderDefaultEthCoeff={defaultSliderEthCoefficient}
                     />
                 </RightLayoutContainer>
             </SimulatorContainer>

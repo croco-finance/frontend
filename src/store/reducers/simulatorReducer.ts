@@ -14,14 +14,18 @@ export const initialState: SimulatorStateInterface = {
     userTokenBalances: [],
     ethPriceUsd: 0,
     yieldTokenSymbol: null,
-    simulatedTokenCoefficients: [],
-    simulatedEthCoefficient: 0,
     investedAmount: 0,
     // pool snap data
     poolSnapFetchError: false,
     poolSnapLoading: false,
     poolSnapError: false,
     poolSnapData: null,
+    // simulated coefficient
+    simulatedTokenCoefficients: [],
+    simulatedEthCoefficient: 1,
+    simulatedYieldCoefficient: 1,
+    defaultSliderTokenCoefficients: [],
+    defaultSliderEthCoefficient: 1,
 };
 
 // the argument is previous state. For the forst run it is initial state
@@ -36,6 +40,16 @@ const simulatorReducer = (state = initialState, action) => {
                 draft.ethPriceUsd = action.payload.ethPriceUsd;
                 draft.tokenPricesUsd = action.payload.tokenPricesUsd;
                 draft.userTokenBalances = action.payload.userTokenBalances;
+                // simulated coeffs
+                draft.simulatedTokenCoefficients = new Array(
+                    action.payload.tokenSymbols.length,
+                ).fill(1);
+                draft.simulatedEthCoefficient = 1;
+                draft.simulatedYieldCoefficient = 1;
+                draft.defaultSliderTokenCoefficients = new Array(
+                    action.payload.tokenSymbols.length,
+                ).fill(1);
+                draft.defaultSliderEthCoefficient = 1;
                 break;
             }
 
@@ -65,6 +79,26 @@ const simulatorReducer = (state = initialState, action) => {
             }
             case actionTypes.SET_SIMULATION_MODE: {
                 draft.simulationMode = action.mode;
+                break;
+            }
+            case actionTypes.SET_TOKEN_COEFFICIENTS: {
+                draft.simulatedTokenCoefficients = action.coefficients;
+                break;
+            }
+            case actionTypes.SET_ETH_COEFFICIENT: {
+                draft.simulatedEthCoefficient = action.coefficient;
+                break;
+            }
+            case actionTypes.SET_YIELD_COEFFICIENT: {
+                draft.simulatedYieldCoefficient = action.coefficient;
+                break;
+            }
+            case actionTypes.SET_DEFAULT_SLIDER_TOKEN_COEFFICIENTS: {
+                draft.defaultSliderTokenCoefficients = action.coefficients;
+                break;
+            }
+            case actionTypes.SET_DEFAULT_SLIDER_ETH_COEFFICIENTS: {
+                draft.defaultSliderEthCoefficient = action.coefficient;
                 break;
             }
 

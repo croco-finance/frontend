@@ -13,4 +13,9 @@ export {
     setNewSimulationPoolData,
     resetPoolSnapData,
     setSimulationMode,
+    setTokenCoefficients,
+    setEthCoefficient,
+    setYieldCoefficient,
+    setDefaultSliderTokenCoefficient,
+    setDefaultSliderEthCoefficient,
 } from './simulatorActions';
