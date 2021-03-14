@@ -76,6 +76,7 @@ const RightContainer = ({
         return (
             <Wrapper>
                 <TabSelectHeader
+                    selected=""
                     headline={
                         <PoolHeader
                             tokenSymbolsArr={tokenSymbols}
@@ -235,6 +236,7 @@ const RightContainer = ({
     return (
         <Wrapper>
             <TabSelectHeader
+                selected={selectedTab}
                 headline={
                     <PoolHeader
                         tokenSymbolsArr={tokenSymbols}
