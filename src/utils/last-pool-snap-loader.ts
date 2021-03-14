@@ -7,11 +7,6 @@ const getLastPoolSnap = async poolId => {
     const ref = firebase.poolSnap(poolId, todayId);
     const payload = await ref.once('value');
 
-    console.log('poolId', poolId);
-    console.log('todayId', todayId);
-
-    console.log('payload today', payload);
-
     // try if there is a snap from today
     if (payload.exists()) {
         return payload.val();
@@ -20,8 +15,6 @@ const getLastPoolSnap = async poolId => {
         const yesterdayId = Math.floor(currentTimestampMillis - 24 * 3600 * 1000) / divisor;
         const refYesterday = firebase.poolSnap(poolId, yesterdayId);
         const payloadYesterday = await refYesterday.once('value');
-
-        console.log('payload yesterday', payloadYesterday);
 
         if (payloadYesterday.exists()) {
             return payloadYesterday.val();

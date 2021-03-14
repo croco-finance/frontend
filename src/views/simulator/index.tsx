@@ -2,14 +2,15 @@ import {
     changeSelectedPool,
     fetchPoolSnap,
     resetPoolSnapData,
+    setDefaultSliderEthCoefficient,
+    setDefaultSliderTokenCoefficient,
+    setEthCoefficient,
     setNewSimulationPoolData,
     setSelectedPoolId,
     setSimulationMode,
     setTokenCoefficients,
-    setEthCoefficient,
     setYieldCoefficient,
-    setDefaultSliderTokenCoefficient,
-    setDefaultSliderEthCoefficient,
+    resetSimulationCoefficients,
 } from '@actions';
 import { AddressSelect } from '@components/containers';
 import { LeftLayoutContainer, RightLayoutContainer, SimulatorContainer } from '@components/layout';
@@ -17,9 +18,9 @@ import { Input, LoadingBox, MultipleTokenSelect, Spinner, TabSelectHeader } from
 import { analytics, colors, styles, types, variables } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
-import { AllPoolsGlobal, TokenType } from '@types';
+import { AllPoolsGlobal, SimulatorStateInterface, TokenType } from '@types';
 import { formatUtils, validationUtils } from '@utils';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import styled from 'styled-components';
@@ -40,8 +41,6 @@ const LeftSubHeaderContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: auto;
-    overflow-x: hidden;
     padding: 0 10px 10px 10px;
     margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
     width: 100%;
@@ -242,15 +241,7 @@ const buildPoolOptions = (pools: AllPoolsGlobal) => {
 };
 
 type PoolOption = ReturnType<typeof buildPoolOption>;
-
-const getInitialPriceCoeffs = (tokens: any) => {
-    let coefficients = new Array(tokens.length);
-    coefficients.fill(1);
-    return coefficients;
-};
-
 type TabOptions = 'il' | 'strategies';
-type ImportPoolTabOptions = 'positions' | 'import';
 
 const Simulator = () => {
     const allPools = useSelector(state => state.app.allPools);
@@ -280,7 +271,7 @@ const Simulator = () => {
         poolSnapLoading,
         poolSnapError,
         poolSnapData,
-        // simulation coeffs
+        // simulation coefficients
         simulatedTokenCoefficients,
         simulatedEthCoefficient,
         simulatedYieldCoefficient,
@@ -327,12 +318,16 @@ const Simulator = () => {
                     tokenPricesUsd,
                     poolSnapData.ethPrice,
                     userTokenBalances,
+                    poolSnapData.exchange,
                 ),
             );
         }
     };
 
-    const handlePoolImportTabChange = (tabName: ImportPoolTabOptions) => {
+    const handlePoolImportTabChange = (tabName: SimulatorStateInterface['simulationMode']) => {
+        // reset simulation coefficients
+        dispatch(resetSimulationCoefficients(simulatedTokenCoefficients.length));
+        // set new simulation state
         dispatch(setSimulationMode(tabName));
         // reset pool data
         dispatch(resetPoolSnapData());
@@ -340,6 +335,8 @@ const Simulator = () => {
         dispatch(setSelectedPoolId(''));
         // reset pool investment amount
         setImportedPoolInvestment('');
+        // change selected tab to impermanent loss view
+        setSelectedTab('il');
     };
 
     const handlePoolSelectionChange = (poolId: string) => {
@@ -357,8 +354,11 @@ const Simulator = () => {
                 tokenPricesEnd,
                 ethPriceEnd,
                 tokenBalances,
+                pool.exchange,
             ),
         );
+
+        dispatch(resetSimulationCoefficients(tokenBalances.length));
     };
 
     // import pool
@@ -572,15 +572,18 @@ const Simulator = () => {
                     </LeftSubHeaderContent>
                 </LeftLayoutContainer>
                 <RightLayoutContainer>
-                    <RightContainer
-                        onTabChanged={tab => handleTabChange(tab)}
-                        selectedTab={selectedTab}
-                        simulatedPooledTokensCoeffs={simulatedTokenCoefficients}
-                        sliderDefaultCoeffs={defaultSliderTokenCoefficients}
-                        simulatedEthCoeff={simulatedEthCoefficient}
-                        simulatedYieldCoeff={simulatedYieldCoefficient}
-                        sliderDefaultEthCoeff={defaultSliderEthCoefficient}
-                    />
+                    {showData && (
+                        <RightContainer
+                            onTabChanged={tab => handleTabChange(tab)}
+                            selectedTab={selectedTab}
+                            simulatedPooledTokensCoeffs={simulatedTokenCoefficients}
+                            sliderDefaultCoeffs={defaultSliderTokenCoefficients}
+                            simulatedEthCoeff={simulatedEthCoefficient}
+                            simulatedYieldCoeff={simulatedYieldCoefficient}
+                            sliderDefaultEthCoeff={defaultSliderEthCoefficient}
+                            pool={allPools[selectedPoolId]}
+                        />
+                    )}
                 </RightLayoutContainer>
             </SimulatorContainer>
         </>

@@ -65,13 +65,6 @@ interface Props {
 
 const BalanceOverview = ({ tokenWeights, tokenPricesUsd, tokenBalances, tokenSymbols }: Props) => {
     const numberOfTokens = tokenSymbols.length;
-
-    console.log('BalanceOverview');
-    console.log('tokenWeights', tokenWeights);
-    console.log('tokenPricesUsd', tokenPricesUsd);
-    console.log('tokenBalances', tokenBalances);
-    console.log('tokenSymbols', tokenSymbols);
-
     return (
         <Wrapper>
             <XScrollWrapper>

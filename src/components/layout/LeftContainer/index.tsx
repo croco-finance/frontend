@@ -15,7 +15,7 @@ const Wrapper = styled.div<Props>`
 
     @media (max-width: ${variables.SCREEN_SIZE.LG}) {
         width: 100%;
-        max-height: 80vh;
+        max-height: ${props => props.maxHeightMobileScreen};
         height: auto;
         border-bottom: 10px solid ${props => props.theme.STROKE_GREY};
     }
@@ -24,8 +24,13 @@ const Wrapper = styled.div<Props>`
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
     backgroundColor?: string;
+    maxHeightMobileScreen?: string;
 }
 
-const LeftContainer = ({ children }: Props) => <Wrapper>{children}</Wrapper>;
+const LeftContainer = ({
+    children,
+    backgroundColor,
+    maxHeightMobileScreen = 'fit-content',
+}: Props) => <Wrapper maxHeightMobileScreen={maxHeightMobileScreen}>{children}</Wrapper>;
 
 export default LeftContainer;
