@@ -281,10 +281,14 @@ export interface SimulatorStateInterface {
     tokenPricesUsd: number[];
     ethPriceUsd: number;
     yieldTokenSymbol: TokenType | null;
-    simulatedTokenCoefficients: number[];
-    simulatedEthCoefficient: number;
     investedAmount: number;
     userTokenBalances: number[];
+    // simulated price coefficients
+    simulatedTokenCoefficients: number[];
+    simulatedEthCoefficient: number;
+    simulatedYieldCoefficient: number;
+    defaultSliderTokenCoefficients: number[];
+    defaultSliderEthCoefficient: number;
 }
 
 export type ResizeStateInterface = {

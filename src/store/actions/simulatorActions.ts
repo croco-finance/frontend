@@ -1,6 +1,7 @@
 import * as actionTypes from '@actionTypes';
 import { DailyData, PoolToken, TokenType, SimulatorStateInterface } from '@types';
 import { getLastPoolSnap } from '@utils';
+import store from '../../store';
 
 // parse snap - strings to numbers
 const parsePoolSnap = (snap): DailyData => {
@@ -132,5 +133,57 @@ export const setSimulationMode = (mode: SimulatorStateInterface['simulationMode'
     return {
         type: actionTypes.SET_SIMULATION_MODE,
         mode: mode,
+    };
+};
+
+export const SET_TOKEN_COEFFICIENTS = 'SET_TOKEN_COEFFICIENTS';
+export const SET_ETH_COEFFICIENT = 'SET_ETH_COEFFICIENT';
+export const SET_YIELD_COEFFICIENT = 'SET_YIELD_COEFFICIENT';
+export const SET_SLIDER_TOKEN_COEFFICIENTS = 'SET_SLIDER_TOKEN_COEFFICIENTS';
+export const SET_SLIDER_ETH_COEFFICIENT = 'SET_SLIDER_ETH_COEFFICIENT';
+
+// update price coefficients
+export const setTokenCoefficients = (newValue, index) => {
+    const state = store.getState();
+
+    const coefficientsArrCopy = [...state.simulator.simulatedTokenCoefficients];
+    coefficientsArrCopy[index] = newValue;
+
+    return {
+        type: actionTypes.SET_TOKEN_COEFFICIENTS,
+        coefficients: coefficientsArrCopy,
+    };
+};
+
+export const setEthCoefficient = newValue => {
+    return {
+        type: actionTypes.SET_ETH_COEFFICIENT,
+        coefficient: newValue,
+    };
+};
+
+export const setYieldCoefficient = newValue => {
+    return {
+        type: actionTypes.SET_YIELD_COEFFICIENT,
+        coefficient: newValue,
+    };
+};
+
+export const setDefaultSliderTokenCoefficient = (newValue, index) => {
+    const state = store.getState();
+
+    const coefficientsArrCopy = [...state.simulator.simulatedTokenCoefficients];
+    coefficientsArrCopy[index] = newValue;
+
+    return {
+        type: actionTypes.SET_DEFAULT_SLIDER_TOKEN_COEFFICIENTS,
+        coefficients: coefficientsArrCopy,
+    };
+};
+
+export const setDefaultSliderEthCoefficient = newValue => {
+    return {
+        type: actionTypes.SET_DEFAULT_SLIDER_ETH_COEFFICIENTS,
+        coefficient: newValue,
     };
 };
