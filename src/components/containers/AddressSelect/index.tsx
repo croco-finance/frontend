@@ -2,7 +2,6 @@ import { fetchSnapshots, setSelectedAddress } from '@actions';
 import { AddressModal } from '@components/containers';
 import { Modal } from '@components/layout';
 import { Icon, Select } from '@components/ui';
-import { colors } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
 import { AllAddressesGlobal } from '@types';

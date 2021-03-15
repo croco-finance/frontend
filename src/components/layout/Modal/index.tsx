@@ -1,9 +1,9 @@
 /* stylelint-disable indentation */
+import { Icon } from '@components/ui';
+import { variables } from '@config';
+import { useTheme } from '@hooks';
 import * as React from 'react';
 import styled, { css } from 'styled-components';
-import { Icon } from '@components/ui';
-import { variables, colors } from '@config';
-import { useTheme } from '@hooks';
 
 // each item in array corresponds to a screen size  [SM, MD, LG, XL]
 const ZERO_PADDING: [string, string, string, string] = ['0px', '0px', '0px', '0px'];

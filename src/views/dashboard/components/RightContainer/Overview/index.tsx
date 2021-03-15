@@ -1,3 +1,4 @@
+import { DailyFeesChart } from '@components/containers';
 import { InfoBox } from '@components/ui';
 import { colors, variables } from '@config';
 import { useTheme } from '@hooks';
@@ -9,7 +10,6 @@ import styled from 'styled-components';
 import Graph from '../Graph';
 import PoolOverview from '../PoolOverview';
 import SummaryOverview from '../SummaryOverview';
-import { DailyFeesChart } from '@components/containers';
 
 const Wrapper = styled.div`
     display: flex;

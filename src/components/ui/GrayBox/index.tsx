@@ -1,6 +1,6 @@
+import { colors } from '@config';
 import React from 'react';
 import styled from 'styled-components';
-import { colors, variables } from '@config';
 
 const Wrapper = styled.div`
     min-width: fit-content;

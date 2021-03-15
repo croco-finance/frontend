@@ -1,10 +1,9 @@
 import * as actionTypes from '@actionTypes';
-import { DarkModeSwitch, Icon, PageLogo, Spinner } from '@components/ui';
-import { analytics, colors, constants, styles, variables, web3, firebase } from '@config';
+import { Icon, Spinner } from '@components/ui';
+import { analytics, colors, firebase, styles, variables, web3 } from '@config';
 import { useSelector } from '@reducers';
 import { validationUtils } from '@utils';
 import React, { useState } from 'react';
-import { Fade } from 'react-awesome-reveal';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';

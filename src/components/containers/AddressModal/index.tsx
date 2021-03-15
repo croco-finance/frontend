@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { colors, variables, web3, firebase } from '@config';
-import { Icon, Input, Spinner } from '@components/ui';
-import { useDispatch } from 'react-redux';
-import * as actionTypes from '@actionTypes';
-import { validationUtils } from '@utils';
 import { resetPoolData } from '@actions';
+import * as actionTypes from '@actionTypes';
+import { Icon, Input, Spinner } from '@components/ui';
+import { colors, firebase, variables, web3 } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
+import { validationUtils } from '@utils';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
     position: relative;

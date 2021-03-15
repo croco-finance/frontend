@@ -1,7 +1,6 @@
 import produce from 'immer';
 import * as actionTypes from '@actionTypes';
 import { AppStateInterface } from '@types';
-import { useDispatch as _useDispatch, useSelector as _useSelector } from 'react-redux';
 
 export const initialState: AppStateInterface = {
     allPools: {},

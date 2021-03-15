@@ -1,15 +1,13 @@
-import { variables, constants } from '@config';
-import logo from '@data/images/logo.svg';
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { DarkModeSwitch, NoTextLogo, PageLogo, Icon } from '@components/ui';
-import { Link, NavLink } from 'react-router-dom';
-import { useTheme } from '@hooks';
-import { useDispatch } from 'react-redux';
 import { openModal } from '@actions';
+import { DarkModeSwitch, Icon, PageLogo } from '@components/ui';
+import { analytics, constants, variables } from '@config';
+import { useLayoutSize, useTheme } from '@hooks';
 import { useSelector } from '@reducers';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { matchPath, withRouter } from 'react-router';
-import { useLayoutSize } from '@hooks';
+import { Link, NavLink } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
     display: flex;
@@ -165,7 +163,12 @@ const NavigationPanel = props => {
                     activeStyle={{
                         color: theme.NAV_ACTIVE_FONT,
                     }}
-                    onClick={() => setMobileMenuOpened(false)}
+                    onClick={() => {
+                        setMobileMenuOpened(false);
+                        analytics.logEvent('navbar_view_change', {
+                            changedTo: 'dashboard',
+                        });
+                    }}
                 >
                     {!hideNavIcons && (
                         <NavIcon
@@ -185,7 +188,12 @@ const NavigationPanel = props => {
                     activeStyle={{
                         color: theme.NAV_ACTIVE_FONT,
                     }}
-                    onClick={() => setMobileMenuOpened(false)}
+                    onClick={() => {
+                        setMobileMenuOpened(false);
+                        analytics.logEvent('navbar_view_change', {
+                            changedTo: 'simulator',
+                        });
+                    }}
                 >
                     {!hideNavIcons && (
                         <NavIcon
@@ -243,7 +251,12 @@ const NavigationPanel = props => {
                 to={{
                     pathname: '/',
                 }}
-                onClick={() => setMobileMenuOpened(false)}
+                onClick={() => {
+                    setMobileMenuOpened(false);
+                    analytics.logEvent('navbar_view_change', {
+                        changedTo: 'landing_page',
+                    });
+                }}
             >
                 <AppLogo>
                     <PageLogo height={20} />

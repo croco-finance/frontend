@@ -98,10 +98,7 @@ const CustomTooltip = (props: Props) => {
             timestamp,
             poolValues,
             poolValuePrev,
-            feesUsd,
             yieldUsd,
-            txCostUsd,
-            impLossUsd,
         } = graphData;
 
         props.setHighlightedAreaId(dataKey, timestamp);

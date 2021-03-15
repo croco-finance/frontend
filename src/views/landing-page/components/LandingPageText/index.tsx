@@ -1,12 +1,9 @@
 import { variables } from '@config';
+import nightModeImage from '@data/images/landing-page/landing-page-text-dark.svg';
+import dayModeImage from '@data/images/landing-page/landing-page-text.svg';
+import { useSelector } from '@reducers';
 import React from 'react';
 import styled from 'styled-components';
-import LandingPage from '../..';
-import dayModeImage from '../../../../data/images/landing-page/landing-page-text.svg';
-import nightModeImage from '../../../../data/images/landing-page/landing-page-text-dark.svg';
-import { useSelector } from '@reducers';
-
-import { AppThemeVariant } from '@types';
 
 const SvgWrapper = styled.img`
     display: inline-block;
