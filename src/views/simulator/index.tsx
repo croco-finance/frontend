@@ -136,8 +136,7 @@ const PoolImportInputWrapper = styled.div`
 const PoolInvestmentWrapper = styled.div`
     display: flex;
     align-items: center;
-    padding: 14px;
-    padding: 14px;
+    padding: 8px 14px 20px 14px;
     width: 100%;
 }
 `;
@@ -568,9 +567,9 @@ const Simulator = () => {
                                             onClick={() => {
                                                 dispatch(fetchPoolSnap(importedPoolAddress));
                                                 dispatch(setSimulationMode('import'));
-                                                // analytics.logEvent('import_pool', {
-                                                //     poolAddress: importedPoolAddress,
-                                                // });
+                                                analytics.logEvent('import_pool', {
+                                                    poolAddress: importedPoolAddress,
+                                                });
                                             }}
                                         >
                                             {poolSnapLoading ? (
