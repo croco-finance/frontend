@@ -53,7 +53,7 @@ const PoolHeader = ({ tokenSymbolsArr, exchange, poolId }: Props) => {
 
     return (
         <Wrapper>
-            <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />
+            <MultipleTokenLogo exchangeSymbol={exchange} size={18} tokens={tokenSymbolsArr} />
             <Text>{formatUtils.tokenArrToCommaSeparatedString(tokenSymbolsArr)}</Text>
             <CustomLink url={poolUrl} iconSize={16} color={theme.FONT_MEDIUM}>
                 <IconWrapper>
