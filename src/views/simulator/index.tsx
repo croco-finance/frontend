@@ -51,6 +51,7 @@ const LeftContentWrapper = styled.div`
     height: 100%;
     max-width: 620px;
     align-self: center;
+    overflow-y: auto;
     ${styles.scrollBarStyles};
 
     @media (max-width: ${variables.SCREEN_SIZE.LG}) {
@@ -415,6 +416,12 @@ const Simulator = () => {
     }
 
     const showData = poolId && tokenSymbols && tokenWeights && ethPriceUsd && tokenPricesUsd;
+    console.log('poolId', poolId);
+    console.log('tokenSymbols', tokenSymbols);
+    console.log('tokenWeights', tokenWeights);
+    console.log('ethPriceUsd', ethPriceUsd);
+    console.log('tokenPricesUsd', tokenPricesUsd);
+
     return (
         <>
             <SimulatorContainer>
@@ -490,6 +497,9 @@ const Simulator = () => {
                                                 dispatch(fetchPoolSnap(importedPoolAddress));
                                                 dispatch(setSimulationMode('import'));
                                                 setIsUsePoolActive(false);
+                                                // analytics.logEvent('import_pool', {
+                                                //     poolAddress: importedPoolAddress,
+                                                // });
                                             }}
                                         >
                                             {poolSnapLoading ? (

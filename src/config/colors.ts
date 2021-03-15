@@ -79,7 +79,7 @@ export const THEME = {
         NAV_ACTIVE_FONT: '#002237',
 
         // Scrollbar
-        SCROLLBAR_BACKGROUND: '#e0e1e8',
+        SCROLLBAR_BACKGROUND: '#e8e8ec',
         SCROLLBAR_THUMB: '#cbd1dc',
         SCROLLBAR_THUMB_HOVER: '#bfc7d6',
         SCROLLBAR_THUMB_HOVER_BORDER: '#bec8da',

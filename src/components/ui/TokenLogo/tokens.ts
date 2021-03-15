@@ -39,6 +39,10 @@ export const TOKENS = {
     tbtc: require('../../../data/images/tokens/tbtc.svg'),
     crv: require('../../../data/images/tokens/crv.svg'),
     cover: require('../../../data/images/tokens/cover.svg'),
+    cream: require('../../../data/images/tokens/cream.svg'),
+    badger: require('../../../data/images/tokens/badger.svg'),
+    uma: require('../../../data/images/tokens/uma.svg'),
+    gno: require('../../../data/images/tokens/gno.svg'),
 
     // unknown token
     unknown: require('../../../data/images/tokens/unknown.svg'),

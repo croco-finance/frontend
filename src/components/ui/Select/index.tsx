@@ -150,10 +150,6 @@ const Wrapper = styled.div<Props>`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-
-    // .react-select__menu-list {
-    //     ${styles.scrollBarStyles}
-    // }
 `;
 
 interface Props extends Omit<SelectProps, 'components'> {
