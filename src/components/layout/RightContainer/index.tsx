@@ -1,8 +1,7 @@
-import { colors, variables } from '@config';
+import { styles, variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
 import RightContentWrapper from '../RightContentWrapper';
-import { styles } from '@config';
 
 const Wrapper = styled.div`
     width: 57%;
@@ -33,17 +32,6 @@ const RightLayout = styled.div`
     display: flex;
     justify-content: center;
 `;
-
-const LeftFillContainer = styled.div`
-    width: 120px;
-    flex-shrink: 10;
-`;
-
-const RightFillContainer = styled.div`
-    width: 120px;
-    flex-shrink: 10;
-`;
-
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
     backgroundColor?: string;
@@ -52,9 +40,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 const RightContainer = ({ children }: Props) => (
     <Wrapper>
         <RightLayout>
-            {/* <LeftFillContainer /> */}
             <RightContentWrapper>{children}</RightContentWrapper>
-            {/* <RightFillContainer /> */}
         </RightLayout>
     </Wrapper>
 );

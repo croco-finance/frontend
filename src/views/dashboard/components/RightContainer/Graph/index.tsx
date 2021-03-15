@@ -1,19 +1,17 @@
-import styled, { css } from 'styled-components';
-import { colors, variables } from '@config';
+import { variables } from '@config';
+import { AppThemeColors, InteractionsGraphData } from '@types';
 import { formatUtils } from '@utils';
 import React, { PureComponent } from 'react';
 import {
-    AreaChart,
     Area,
+    AreaChart,
+    CartesianGrid,
+    ResponsiveContainer,
+    Tooltip,
     XAxis,
     YAxis,
-    CartesianGrid,
-    Tooltip,
-    Label,
-    ResponsiveContainer,
 } from 'recharts';
-
-import { InteractionsGraphData, AppThemeColors } from '@types';
+import styled from 'styled-components';
 import CustomTooltip from './CustomTooltip';
 
 const formatter = new Intl.NumberFormat('en-US', {

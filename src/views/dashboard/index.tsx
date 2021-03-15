@@ -1,6 +1,6 @@
 import { AddressSelect } from '@components/containers';
 import { DashboardContainer, LeftLayoutContainer, RightLayoutContainer } from '@components/layout';
-import { LoadingBox } from '@components/ui';
+import { LoadingBox, SadCrocoBox, QuestionTooltip } from '@components/ui';
 import { animations, styles, variables } from '@config';
 import { useSelector } from '@reducers';
 import React from 'react';
@@ -25,7 +25,6 @@ const PageHeadline = styled.div`
     }
 `;
 const PoolsWrapper = styled.div`
-    // margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
     height: 100%;
     width: 100%;
     display: flex;
@@ -35,8 +34,6 @@ const PoolsWrapper = styled.div`
     overflow-x: hidden;
     ${styles.scrollBarStyles};
     margin-top: 20px;
-    // padding-right: 34px;
-    // max-width: 580px;
     align-items: baseline;
     padding-left: 10px;
     padding-right: 10px;
@@ -47,12 +44,36 @@ const ExceptionWrapper = styled.div`
     height: 260px;
     align-items: center;
     justify-content: center;
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     flex-direction: column;
     margin-top: 24px;
     text-align: center;
     padding: 20px;
     line-height: 26px;
+`;
+
+const NoAddressNoPool = styled(ExceptionWrapper)`
+    width: 100%;
+    height: 100px;
+    color: ${props => props.theme.FONT_LIGHT};
+    font-size: ${variables.FONT_SIZE.H3};
+`;
+
+const RefreshPageDescWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const RefreshButton = styled.button`
+    color: white;
+    background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 16px auto 0 auto;
+    outline: none;
 `;
 
 const LeftContentWrapper = styled.div`
@@ -73,29 +94,6 @@ const LeftContentWrapper = styled.div`
     }
 `;
 
-const NoPoolFoundInfo = styled(ExceptionWrapper)`
-    color: ${props => props.theme.FONT_MEDIUM};
-`;
-
-const ErrorTextWrapper = styled(ExceptionWrapper)`
-    & > button {
-        color: white;
-        background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
-        font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin: 16px auto 0 auto;
-        outline: none;
-    }
-`;
-
-const NoAddressNoPool = styled(ExceptionWrapper)`
-    color: ${props => props.theme.FONT_LIGHT};
-    font-size: ${variables.FONT_SIZE.H2};
-`;
-
 const AddressWrapper = styled.div`
     width: 100%;
     display: flex;
@@ -109,46 +107,57 @@ const RightNonExceptionContentWrapper = styled.div`
     width: 100%;
 `;
 
+const StyledQuestionTooltip = styled(QuestionTooltip)`
+    display: inline-block;
+`;
+
 const Dashboard = () => {
-    const allPoolsGlobal = useSelector(state => state.app.allPools);
+    const { allPools, selectedAddress } = useSelector(state => state.app);
     const isLoading = useSelector(state => state.app.loading);
     const isFetchError = useSelector(state => state.app.error);
     const noPoolsFound = useSelector(state => state.app.noPoolsFound);
-
-    let exceptionContent;
-    let rightWrapperContent;
-    const noPoolsSavedInRedux = allPoolsGlobal ? Object.keys(allPoolsGlobal).length === 0 : true;
+    const noPoolsSavedInRedux = allPools ? Object.keys(allPools).length === 0 : true;
 
     const refreshPage = () => {
         window.location.reload();
     };
 
-    if (isFetchError) {
-        exceptionContent = (
-            <ErrorTextWrapper>
-                An error occurred while fetching data :(
-                <button onClick={refreshPage}>Try again</button>
-            </ErrorTextWrapper>
-        );
-    }
+    const getExceptionContent = () => {
+        if (isLoading) {
+            return <LoadingBox>Wait a moment. We are getting pool data...</LoadingBox>;
+        }
 
-    if (isLoading) {
-        exceptionContent = <LoadingBox>Wait a moment. We are getting pool data...</LoadingBox>;
-    } else if (noPoolsFound) {
-        exceptionContent = (
-            <NoPoolFoundInfo>
-                We didn't find any pools associated with this address.
-                <br />
-                Don't forget that we support only Uniswap, SushiSwap and Balancer at this time.
-            </NoPoolFoundInfo>
-        );
-    }
+        if (isFetchError) {
+            return (
+                <SadCrocoBox>
+                    <RefreshPageDescWrapper>
+                        An error occurred while fetching data :(
+                        <RefreshButton onClick={refreshPage}>Try again</RefreshButton>
+                    </RefreshPageDescWrapper>
+                </SadCrocoBox>
+            );
+        }
 
-    if (noPoolsSavedInRedux && !exceptionContent) {
-        rightWrapperContent = (
-            <NoAddressNoPool>Input valid Ethereum address first!</NoAddressNoPool>
-        );
-    }
+        if (!selectedAddress) {
+            return <NoAddressNoPool>Input valid Ethereum address first</NoAddressNoPool>;
+        }
+
+        if (!allPools || noPoolsSavedInRedux || noPoolsFound) {
+            return (
+                <SadCrocoBox>
+                    Sorry, Croco could not find any pools for this address :(
+                    <StyledQuestionTooltip
+                        content={
+                            'We track only pools on Uniswap, SushiSwap, Balancer and Materia exchanges.'
+                        }
+                    />
+                </SadCrocoBox>
+            );
+        }
+        return null;
+    };
+
+    let exceptionContent = getExceptionContent();
 
     return (
         <>
@@ -172,8 +181,7 @@ const Dashboard = () => {
                     </LeftContentWrapper>
                 </LeftLayoutContainer>
                 <RightLayoutContainer>
-                    {rightWrapperContent}
-                    {!exceptionContent && !noPoolsSavedInRedux && (
+                    {!exceptionContent && (
                         <RightNonExceptionContentWrapper>
                             <RightContainer />
                         </RightNonExceptionContentWrapper>
