@@ -511,7 +511,16 @@ const Simulator = () => {
     };
 
     let exceptionContent = getExceptionContent();
-    const showData = poolId && tokenSymbols && tokenWeights && ethPriceUsd && tokenPricesUsd;
+    let showData: any =
+        poolId &&
+        tokenSymbols &&
+        tokenWeights &&
+        ethPriceUsd &&
+        tokenPricesUsd &&
+        !isLoading &&
+        !poolSnapLoading;
+    if (simulationMode === 'positions' && (!selectedPoolId || selectedPoolId === 'all'))
+        showData = false;
     return (
         <>
             <SimulatorContainer>
