@@ -68,20 +68,6 @@ const LeftContentWrapper = styled.div`
     }
 `;
 
-const ExceptionWrapper = styled.div`
-    display: flex;
-    height: 260px;
-    align-items: center;
-    justify-content: center;
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    flex-direction: column;
-    background-color: ${props => props.theme.BACKGROUND};
-    margin-top: 24px;
-    text-align: center;
-    padding: 20px;
-    line-height: 26px;
-`;
-
 const StyledTabSelectHeader = styled(TabSelectHeader)`
     margin-bottom: 20px;
     border-color: ${props => props.theme.STROKE_GREY};
@@ -141,11 +127,37 @@ const PoolImportWrapper = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding-bottom: 24px;
 `;
 
 const PoolImportInputWrapper = styled.div`
     display: flex;
+`;
+
+const PoolInvestmentWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 14px;
+    padding: 14px;
+    width: 100%;
+}
+`;
+
+const PoolInvestmentLabel = styled.div`
+    display: flex;
+    color: ${props => props.theme.FONT_DARK};
+    margin-right: 12px;
+    padding-left: 6px;
+`;
+
+const PoolInvestmentInputWrapper = styled.div`
+    width: 120px;
+`;
+
+const InvestedCurrency = styled.div`
+    text-transform: uppercase;
+    color: ${props => props.theme.FONT_LIGHT};
+    margin-left: 10px;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
 const AddPoolButton = styled.button<{ disabled: boolean }>`
@@ -190,30 +202,6 @@ const SimulationBoxWrapper = styled.div`
     padding: 28px;
     border-radius: 10px;
     width: 100%;
-`;
-
-const PoolInvestmentWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 16px;
-`;
-
-const PoolInvestmentLabel = styled.div`
-    display: flex;
-    color: ${props => props.theme.FONT_DARK};
-    margin-right: 12px;
-    padding-left: 6px;
-`;
-
-const PoolInvestmentInputWrapper = styled.div`
-    width: 120px;
-`;
-
-const InvestedCurrency = styled.div`
-    text-transform: uppercase;
-    color: ${props => props.theme.FONT_LIGHT};
-    margin-left: 10px;
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 `;
 
 const StyledQuestionTooltip = styled(QuestionTooltip)`
@@ -263,7 +251,7 @@ const Simulator = () => {
     // theme
     const themeColors = useTheme();
     // pool data
-    const { allPools, selectedPoolId, theme } = useSelector(state => state.app);
+    const { allPools, selectedPoolId } = useSelector(state => state.app);
     const dispatch = useDispatch();
     const [selectedTab, setSelectedTab] = useState<StatisticsTabOptions>('il');
     const isLoading = useSelector(state => state.app.loading);
@@ -273,7 +261,6 @@ const Simulator = () => {
     const [importedPoolAddress, setImportedPoolAddress] = useState('');
     const [isImportedPoolAddressValid, setIsImportedPoolAddressValid] = useState(false);
     const [importedPoolInvestment, setImportedPoolInvestment] = useState('');
-    const [isUsePoolActive, setIsUsePoolActive] = useState(false);
 
     // when the page is loaded, reset everything
     useEffect(() => {
@@ -324,7 +311,6 @@ const Simulator = () => {
         simulationMode,
         poolSnapFetchError,
         poolSnapLoading,
-        poolSnapError,
         poolSnapData,
         // simulation coefficients
         simulatedTokenCoefficients,
@@ -395,8 +381,6 @@ const Simulator = () => {
         setImportedPoolInvestment('');
         // change selected tab to impermanent loss view
         setSelectedTab('il');
-        // allow to import pool
-        setIsUsePoolActive(false);
     };
 
     const handlePoolSelectionChange = (poolId: string) => {
@@ -426,12 +410,10 @@ const Simulator = () => {
         dispatch(resetPoolSnapData());
         setImportedPoolInvestment('');
         setImportedPoolAddress(input);
-        setIsUsePoolActive(false);
 
         // check for ETH address validity
         if (validationUtils.isValidEthereumAddress(input)) {
             setIsImportedPoolAddressValid(true);
-            setIsUsePoolActive(true);
             return;
         } else {
             setIsImportedPoolAddressValid(false);
@@ -508,11 +490,6 @@ const Simulator = () => {
 
     let exceptionContent = getExceptionContent();
     const showData = poolId && tokenSymbols && tokenWeights && ethPriceUsd && tokenPricesUsd;
-    // console.log('poolId', poolId);
-    // console.log('tokenSymbols', tokenSymbols);
-    // console.log('tokenWeights', tokenWeights);
-    // console.log('ethPriceUsd', ethPriceUsd);
-    // console.log('tokenPricesUsd', tokenPricesUsd);
     return (
         <>
             <SimulatorContainer>
@@ -567,7 +544,7 @@ const Simulator = () => {
                                 <PoolImportWrapper>
                                     <SelectLabel>
                                         Import pool by its address (from Uniswap, Balancer or
-                                        Sushiswap)
+                                        SushiSwap)
                                         <StyledQuestionTooltip
                                             content={
                                                 'Often you can find pool address in url. E.g. info.uniswap.org/pair/0x...'
@@ -587,13 +564,10 @@ const Simulator = () => {
                                             value={importedPoolAddress}
                                         />
                                         <AddPoolButton
-                                            disabled={
-                                                !isUsePoolActive || !isImportedPoolAddressValid
-                                            }
+                                            disabled={!(isImportedPoolAddressValid && !showData)}
                                             onClick={() => {
                                                 dispatch(fetchPoolSnap(importedPoolAddress));
                                                 dispatch(setSimulationMode('import'));
-                                                setIsUsePoolActive(false);
                                                 // analytics.logEvent('import_pool', {
                                                 //     poolAddress: importedPoolAddress,
                                                 // });
@@ -606,29 +580,6 @@ const Simulator = () => {
                                             )}
                                         </AddPoolButton>
                                     </PoolImportInputWrapper>
-                                    {simulationMode === 'import' && showData && !isUsePoolActive && (
-                                        <PoolInvestmentWrapper>
-                                            <PoolInvestmentLabel>
-                                                Type how much you want to invest to the pool
-                                            </PoolInvestmentLabel>
-
-                                            <PoolInvestmentInputWrapper>
-                                                <Input
-                                                    onChange={event => {
-                                                        handleInvestedAmountChanged(
-                                                            event.target.value.trim(),
-                                                        );
-                                                    }}
-                                                    useWhiteBackground
-                                                    useDarkBorder
-                                                    value={importedPoolInvestment}
-                                                />
-                                            </PoolInvestmentInputWrapper>
-                                            <InvestedCurrency>USD</InvestedCurrency>
-                                        </PoolInvestmentWrapper>
-                                    )}
-
-                                    {poolSnapError && <div>Error fetching pool snap</div>}
                                 </PoolImportWrapper>
                             )}
                         </PoolDataEntryWrapper>
@@ -637,6 +588,27 @@ const Simulator = () => {
 
                         {showData && !exceptionContent && (
                             <>
+                                {simulationMode === 'import' && (
+                                    <PoolInvestmentWrapper>
+                                        <PoolInvestmentLabel>
+                                            Type how much you want to invest to the pool
+                                        </PoolInvestmentLabel>
+
+                                        <PoolInvestmentInputWrapper>
+                                            <Input
+                                                onChange={event => {
+                                                    handleInvestedAmountChanged(
+                                                        event.target.value.trim(),
+                                                    );
+                                                }}
+                                                useWhiteBackground
+                                                useDarkBorder
+                                                value={importedPoolInvestment}
+                                            />
+                                        </PoolInvestmentInputWrapper>
+                                        <InvestedCurrency>USD</InvestedCurrency>
+                                    </PoolInvestmentWrapper>
+                                )}
                                 <OverviewWrapper>
                                     <BalanceOverview
                                         tokenWeights={tokenWeights}

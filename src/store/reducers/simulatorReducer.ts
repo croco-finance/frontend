@@ -19,7 +19,6 @@ export const initialState: SimulatorStateInterface = {
     // pool snap data
     poolSnapFetchError: false,
     poolSnapLoading: false,
-    poolSnapError: false,
     poolSnapData: null,
     // simulated coefficient
     simulatedTokenCoefficients: [],
@@ -71,7 +70,7 @@ const simulatorReducer = (state = initialState, action) => {
             case actionTypes.FETCH_POOL_SNAP_SUCCESS: {
                 draft.poolSnapData = action.payload;
                 draft.poolSnapLoading = false;
-                draft.poolSnapError = false;
+                draft.poolSnapFetchError = false;
                 break;
             }
 
