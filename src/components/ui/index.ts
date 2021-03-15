@@ -31,6 +31,7 @@ import DarkModeSwitch from './DarkModeSwitch';
 import Tooltip from './Tooltip';
 import QuestionTooltip from './QuestionTooltip';
 import Textarea from './Textarea';
+import SadCrocoBox from './SadCrocoBox';
 
 export {
     TokenLogo,
@@ -66,4 +67,5 @@ export {
     Tooltip,
     QuestionTooltip,
     Textarea,
+    SadCrocoBox,
 };

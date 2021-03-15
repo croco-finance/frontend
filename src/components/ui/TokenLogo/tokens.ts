@@ -43,6 +43,7 @@ export const TOKENS = {
     badger: require('../../../data/images/tokens/badger.svg'),
     uma: require('../../../data/images/tokens/uma.svg'),
     gno: require('../../../data/images/tokens/gno.svg'),
+    index: require('../../../data/images/tokens/index.svg'),
 
     // unknown token
     unknown: require('../../../data/images/tokens/unknown.svg'),
