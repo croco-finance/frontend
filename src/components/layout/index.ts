@@ -1,4 +1,3 @@
-import NavBar from './NavBar';
 import LeftLayoutContainer from './LeftContainer';
 import RightLayoutContainer from './RightContainer';
 import RightFillContainer from './RightFillContainer';
@@ -11,7 +10,6 @@ import NavigationPanel from './NavigationPanel';
 import AppLayout from './AppLayout';
 
 export {
-    NavBar,
     LeftLayoutContainer,
     RightLayoutContainer,
     RightFillContainer,

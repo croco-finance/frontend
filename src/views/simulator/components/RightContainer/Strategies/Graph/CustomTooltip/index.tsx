@@ -1,10 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { TooltipProps } from 'recharts';
-import { colors, variables, types } from '@config';
 import { FiatValue } from '@components/ui';
+import { colors, variables } from '@config';
+import React from 'react';
+import { TooltipProps } from 'recharts';
+import styled from 'styled-components';
 import TooltipRow from './TooltipRow';
-import { formatUtils } from '@utils';
 
 const CustomTooltipWrapper = styled.div`
     display: flex;

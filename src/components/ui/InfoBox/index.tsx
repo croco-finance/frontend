@@ -1,8 +1,8 @@
+import { Icon } from '@components/ui';
+import { variables } from '@config';
+import { useTheme } from '@hooks';
 import React from 'react';
 import styled from 'styled-components';
-import { colors, variables } from '@config';
-import { Icon } from '@components/ui';
-import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;

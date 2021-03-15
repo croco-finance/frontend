@@ -2,12 +2,11 @@ import { changeSelectedPool } from '@actions';
 import { FiatValue, TokenLogo } from '@components/ui';
 import { variables } from '@config';
 import { useSelector } from '@reducers';
+import { formatUtils } from '@utils';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import PoolItemCard from '../PoolItemCard';
-import { formatUtils } from '@utils';
-import { useLayoutSize } from '@hooks';
 
 const Item = styled.div`
     display: flex;

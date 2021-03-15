@@ -1,8 +1,7 @@
 import { AddressSelect } from '@components/containers';
 import { DashboardContainer, LeftLayoutContainer, RightLayoutContainer } from '@components/layout';
 import { LoadingBox } from '@components/ui';
-import { animations, colors, styles, variables } from '@config';
-import { useTheme } from '@hooks';
+import { animations, styles, variables } from '@config';
 import { useSelector } from '@reducers';
 import React from 'react';
 import { withRouter } from 'react-router';

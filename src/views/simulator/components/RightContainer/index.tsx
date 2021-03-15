@@ -1,6 +1,6 @@
 import { PoolHeader, TabSelectHeader } from '@components/ui';
 import { useSelector } from '@reducers';
-import { PoolItem, CumulativeStats } from '@types';
+import { PoolItem } from '@types';
 import { mathUtils, simulatorUtils } from '@utils';
 import React from 'react';
 import styled from 'styled-components';

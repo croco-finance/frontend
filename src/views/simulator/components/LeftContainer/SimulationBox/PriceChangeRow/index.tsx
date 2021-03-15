@@ -1,5 +1,5 @@
 import { Input, MaterialSlider } from '@components/ui';
-import { colors, variables } from '@config';
+import { variables } from '@config';
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 

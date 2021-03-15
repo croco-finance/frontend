@@ -1,8 +1,7 @@
+import { styles, variables } from '@config';
+import { formatUtils, mathUtils } from '@utils';
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { colors, variables, styles } from '@config';
-import { formatUtils, mathUtils } from '@utils';
-import { SignedValue } from '@components/ui';
 
 const rightAlignedStyles = css`
     text-align: right;

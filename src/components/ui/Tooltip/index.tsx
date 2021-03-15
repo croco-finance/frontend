@@ -1,8 +1,6 @@
-import styled, { css } from 'styled-components';
-import React, { ReactNode } from 'react';
 import Tippy, { TippyProps } from '@tippyjs/react';
-// import { tippy } from './tippy.style';
-import { colors, variables } from '@config';
+import React, { ReactNode } from 'react';
+import styled from 'styled-components';
 import 'tippy.js/dist/tippy.css'; // optional
 
 const Wrapper = styled.div``;
