@@ -1,5 +1,7 @@
 import { setTheme } from '@actions';
-import { THEME, firebase } from '@config';
+import { AppLayout } from '@components/layout';
+import { ModalRoot } from '@components/modals';
+import { firebase, THEME } from '@config';
 import { useSelector } from '@reducers';
 import { formatUtils } from '@utils';
 import React, { useEffect } from 'react';
@@ -7,15 +9,12 @@ import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import './App.css';
 import { fetchSnapshots } from './store/actions/index';
+import Resize from './support/Resize';
 import Dashboard from './views/dashboard';
 import LandingPage from './views/landing-page';
 import Simulator from './views/simulator';
-import { ModalRoot } from '@components/modals';
-import { AppLayout } from '@components/layout';
-import { useLayoutSize } from '@hooks';
-import Resize from './support/Resize';
-import './App.css';
 
 const App = (props: RouteComponentProps<any>) => {
     const { theme, selectedAddress, allAddresses } = useSelector(state => state.app);

@@ -73,6 +73,26 @@ const StyledTabSelectHeader = styled(TabSelectHeader)`
     border-color: ${props => props.theme.STROKE_GREY};
 `;
 
+const ExceptionWrapper = styled.div`
+    display: flex;
+    height: 260px;
+    align-items: center;
+    justify-content: center;
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    flex-direction: column;
+    margin-top: 24px;
+    text-align: center;
+    padding: 20px;
+    line-height: 26px;
+`;
+
+const NoAddressNoPool = styled(ExceptionWrapper)`
+    width: 100%;
+    height: 100px;
+    color: ${props => props.theme.FONT_LIGHT};
+    font-size: ${variables.FONT_SIZE.H3};
+`;
+
 const RefreshPageDescWrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -95,7 +115,6 @@ const PoolDataEntryWrapper = styled.div`
     display: flex;
     flex-direction: column;
     padding: 14px;
-    // background-color: ${props => props.theme.BACKGROUND_DARK};
 `;
 
 const SelectLabel = styled.div`
@@ -250,7 +269,7 @@ const Simulator = () => {
     // theme
     const themeColors = useTheme();
     // pool data
-    const { allPools, selectedPoolId } = useSelector(state => state.app);
+    const { allPools, selectedPoolId, selectedAddress } = useSelector(state => state.app);
     const dispatch = useDispatch();
     const [selectedTab, setSelectedTab] = useState<StatisticsTabOptions>('il');
     const isLoading = useSelector(state => state.app.loading);
@@ -425,6 +444,10 @@ const Simulator = () => {
 
     const getExceptionContent = () => {
         if (simulationMode === 'positions') {
+            if (!selectedAddress) {
+                return <NoAddressNoPool>Input valid Ethereum address first</NoAddressNoPool>;
+            }
+
             if (isLoading) {
                 return <LoadingBox>Wait a moment. We are getting pool data...</LoadingBox>;
             }
