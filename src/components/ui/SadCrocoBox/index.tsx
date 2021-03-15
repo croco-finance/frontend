@@ -1,9 +1,8 @@
-import { useSelector } from '@reducers';
 import React from 'react';
 import styled from 'styled-components';
-import IllustrationDark from '../../../data/images/loading-illustration-dark.svg';
-import Illustration from '../../../data/images/loading-illustration.svg';
-import Spinner from '../Spinner';
+import Illustration from '@data/images/sad_croco.svg';
+import IllustrationDark from '@data/images/sad_croco_dark.svg';
+import { useSelector } from '@reducers';
 
 const Wrapper = styled.div<{ height: number }>`
     display: flex;
@@ -17,7 +16,7 @@ const Wrapper = styled.div<{ height: number }>`
     padding: 20px;
 `;
 
-const SpinnerDescription = styled.div`
+const Headline = styled.div`
     color: ${props => props.theme.FONT_LIGHT};
     margin: 40px auto 0 auto;
     display: flex;
@@ -34,31 +33,20 @@ const SvgWrapper = styled.img`
     }
 `;
 
-const SpinnerWrapper = styled.div`
-    /* margin: 40px 0; */
-    margin-right: 10px;
-`;
-
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
-    spinnerSize?: number;
     height?: number;
 }
 
-const LoadingBox = ({ spinnerSize = 16, height = 260, children }: Props) => {
+const SadCrocoBox = ({ height = 260, children, className }: Props) => {
     const theme = useSelector(state => state.app.theme);
 
     return (
-        <Wrapper height={height}>
-            <SpinnerDescription>
-                <SpinnerWrapper>
-                    <Spinner size={spinnerSize} />
-                </SpinnerWrapper>
-                {children}
-            </SpinnerDescription>
+        <Wrapper height={height} className={className}>
+            <Headline>{children}</Headline>
             <SvgWrapper height={140} src={theme === 'light' ? Illustration : IllustrationDark} />
         </Wrapper>
     );
 };
 
-export default LoadingBox;
+export default SadCrocoBox;

@@ -24,7 +24,7 @@ interface Props {
     sliderDefaultEthCoeff: number;
     onTabChanged: any;
     selectedTab: TabOptions;
-    pool: PoolItem;
+    pool: PoolItem | undefined;
 }
 const RightContainer = ({
     simulatedPooledTokensCoeffs,
@@ -111,6 +111,8 @@ const RightContainer = ({
             </Wrapper>
         );
     }
+
+    if (!pool) return null;
 
     let {
         isActive,
