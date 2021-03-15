@@ -272,7 +272,6 @@ export interface SimulatorStateInterface {
     // pool import
     poolSnapFetchError: boolean;
     poolSnapLoading: boolean;
-    poolSnapError: boolean;
     poolSnapData: DailyData | null;
     // simulation data
     poolId: string;
