@@ -1,24 +1,20 @@
 import { firebase } from '@config';
 
 const getLastPoolSnap = async poolId => {
-    const divisor = 86400000; // i will divide current timestamp by this number to get Firebase key
-    const currentTimestampMillis = Date.now();
-    const todayId = Math.floor(currentTimestampMillis / divisor);
-    const ref = firebase.poolSnap(poolId, todayId);
+    // load all days
+    const ref = firebase.dailyFees(poolId);
     const payload = await ref.once('value');
 
-    // try if there is a snap from today
     if (payload.exists()) {
-        return payload.val();
-    } else {
-        // try snap from yesterday (24 * 3600 * 1000 milliseconds sooner)
-        const yesterdayId = Math.floor(currentTimestampMillis - 24 * 3600 * 1000) / divisor;
-        const refYesterday = firebase.poolSnap(poolId, yesterdayId);
-        const payloadYesterday = await refYesterday.once('value');
+        const data = payload.val();
+        const keysNumbers = Object.keys(data).map(Number);
+        const maxDayId = Math.max(...keysNumbers);
+        return data[maxDayId];
 
-        if (payloadYesterday.exists()) {
-            return payloadYesterday.val();
-        }
+        // TODO you can check if the maxDayId is today's timestamps
+        // const divisor = 86400000; // i will divide current timestamp by this number to get Firebase key
+        // const currentTimestampMillis = Date.now();
+        // const todayId = Math.floor(currentTimestampMillis / divisor);
     }
 
     // if no snap found, return null
