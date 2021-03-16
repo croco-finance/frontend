@@ -595,7 +595,7 @@ const Simulator = () => {
                                         >
                                             SushiSwap
                                         </DexPairLink>{' '}
-                                        or
+                                        or{' '}
                                         <DexPairLink
                                             rel="noreferrer"
                                             target="_blank"
