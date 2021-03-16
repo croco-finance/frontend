@@ -14,9 +14,6 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'plugin:import/typescript',
         'prettier',
-        'prettier/babel',
-        'prettier/@typescript-eslint',
-        'prettier/react',
     ],
     settings: {
         react: {
@@ -92,5 +89,8 @@ module.exports = {
         '@typescript-eslint/no-empty-function': 'off',
         'no-useless-constructor': 'off',
         '@typescript-eslint/no-useless-constructor': 'error',
+        // note you must disable the base rule as it can report incorrect errors
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": ["error"]
     },
 };
