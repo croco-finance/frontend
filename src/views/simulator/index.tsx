@@ -23,7 +23,7 @@ import {
     QuestionTooltip,
     SadCrocoBox,
 } from '@components/ui';
-import { analytics, colors, styles, types, variables } from '@config';
+import { analytics, colors, styles, types, variables, constants } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
 import { AllPoolsGlobal, SimulatorStateInterface, TokenType } from '@types';
@@ -224,6 +224,11 @@ const SimulationBoxWrapper = styled.div`
 
 const StyledQuestionTooltip = styled(QuestionTooltip)`
     display: inline-block;
+`;
+
+const DexPairLink = styled.a`
+    color: ${props => props.theme.BLUE};
+    text-decoration: none;
 `;
 
 const buildPoolOption = (poolData: types.PoolItem, uniquePoolId: string) => {
@@ -574,11 +579,34 @@ const Simulator = () => {
                             ) : (
                                 <PoolImportWrapper>
                                     <SelectLabel>
-                                        Import pool by its address (from Uniswap, Balancer or
-                                        SushiSwap)
+                                        Import pool by its address (from{' '}
+                                        <DexPairLink
+                                            rel="noreferrer"
+                                            target="_blank"
+                                            href={constants.DEX_POOLS_BASE_URLS.UNI_V2}
+                                        >
+                                            Uniswap
+                                        </DexPairLink>
+                                        ,{' '}
+                                        <DexPairLink
+                                            rel="noreferrer"
+                                            target="_blank"
+                                            href={constants.DEX_POOLS_BASE_URLS.SUSHI}
+                                        >
+                                            SushiSwap
+                                        </DexPairLink>{' '}
+                                        or
+                                        <DexPairLink
+                                            rel="noreferrer"
+                                            target="_blank"
+                                            href={constants.DEX_POOLS_BASE_URLS.BALANCER}
+                                        >
+                                            Balancer
+                                        </DexPairLink>
+                                        )
                                         <StyledQuestionTooltip
                                             content={
-                                                'Often you can find pool address in url. E.g. info.uniswap.org/pair/0x...'
+                                                'Usually you can find pool address in the url. E.g. info.uniswap.org/pair/0x...'
                                             }
                                         />
                                     </SelectLabel>
