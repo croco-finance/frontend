@@ -284,10 +284,12 @@ const Overview = ({
                             }
                             thirdColumn={
                                 <ImpLossRel>
-                                    {formatUtils.getFormattedPercentageValue(
-                                        Math.abs(impLossRel) < 0.00001 ? 0 : impLossRel,
-                                        false,
-                                    )}
+                                    {!impLossUsd
+                                        ? '0%'
+                                        : formatUtils.getFormattedPercentageValue(
+                                              Math.abs(impLossRel) < 0.00001 ? 0 : impLossRel,
+                                              false,
+                                          )}
                                 </ImpLossRel>
                             }
                         />
