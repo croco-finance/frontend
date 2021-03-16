@@ -88,7 +88,7 @@ const RightContainer = ({
                     tabHeadlines={[]}
                 />
                 <Overview
-                    isActive={false}
+                    isActive={true}
                     tokenSymbols={tokenSymbols}
                     tokenBalances={userTokenBalances}
                     simulatedPooledTokenBalances={simulatedTokenBalances}

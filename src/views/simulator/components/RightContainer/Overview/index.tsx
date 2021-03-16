@@ -239,7 +239,7 @@ const Overview = ({
                 <ImpLossHeader>Impermanent loss compared to HODLing pooled tokens</ImpLossHeader>
                 <GrayBox
                     padding={[15, 20, 15, 20]}
-                    borderRadius={isActive ? [10, 10, 0, 0] : [10, 10, 10, 10]}
+                    borderRadius={!isNaN(estDaysLeftStaking) ? [10, 10, 0, 0] : [10, 10, 10, 10]}
                     bottomBarBorderRadius={[0, 0, 10, 10]}
                     backgroundColor={theme.BACKGROUND}
                     bottomBar={
