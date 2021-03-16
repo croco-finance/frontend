@@ -34,7 +34,7 @@ const GridWrapper = styled.div`
     /* padding: 0px 10px; */
 `;
 
-interface Props extends TooltipProps {
+interface Props extends TooltipProps<any, any> {
     // inherited from TooltipProps
     payload?: any;
     active?: boolean;

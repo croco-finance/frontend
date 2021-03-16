@@ -77,7 +77,7 @@ const PoolShareValueWrapper = styled.div`
     color: #b1bac5;
 `;
 
-interface Props extends TooltipProps {
+interface Props extends TooltipProps<any, any> {
     onShow?: (index: number) => void;
     feesUsd?: number;
     yieldUsd?: number;

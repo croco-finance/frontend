@@ -55,7 +55,7 @@ const TokenFeesGridWrapper = styled(GridWrapper)`
     padding-top: 5px;
     margin top: 8px;`;
 
-interface Props extends TooltipProps {
+interface Props extends TooltipProps<any, any> {
     // inherited from TooltipProps
     payload?: any;
     active?: boolean;

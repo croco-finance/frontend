@@ -33,7 +33,7 @@
         "react-svg": "^11.0.44",
         "react-switch": "^5.0.1",
         "react-use": "^17.2.1",
-        "recharts": "^1.8.5",
+        "recharts": "^2.0.8",
         "redux": "^4.0.5",
         "redux-devtools-extension": "^2.13.9",
         "redux-thunk": "^2.3.0",
@@ -65,7 +65,7 @@
         ]
     },
     "devDependencies": {
-        "react-app-rewire-alias": "^0.1.6",
+        "react-app-rewire-alias": "^1.0.1",
         "react-app-rewired": "^2.1.8"
     }
 }
