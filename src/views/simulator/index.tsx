@@ -691,7 +691,11 @@ const Simulator = () => {
                             simulatedEthCoeff={simulatedEthCoefficient}
                             simulatedYieldCoeff={simulatedYieldCoefficient}
                             sliderDefaultEthCoeff={defaultSliderEthCoefficient}
-                            pool={allPools[selectedPoolId]}
+                            pool={
+                                selectedPoolId && allPools[selectedPoolId]
+                                    ? allPools[selectedPoolId]
+                                    : undefined
+                            }
                         />
                     )}
                 </RightLayoutContainer>
