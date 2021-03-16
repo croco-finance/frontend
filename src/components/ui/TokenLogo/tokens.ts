@@ -44,6 +44,8 @@ export const TOKENS = {
     uma: require('../../../data/images/tokens/uma.svg'),
     gno: require('../../../data/images/tokens/gno.svg'),
     index: require('../../../data/images/tokens/index.svg'),
+    perp: require('../../../data/images/tokens/perp.svg'),
+    susd: require('../../../data/images/tokens/susd.svg'),
 
     // unknown token
     unknown: require('../../../data/images/tokens/unknown.svg'),
