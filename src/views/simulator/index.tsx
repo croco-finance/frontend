@@ -235,17 +235,17 @@ const buildPoolOption = (poolData: types.PoolItem, uniquePoolId: string) => {
     if (poolData) {
         // pool.poolId is not unique in case there are more addresses with deposits in the same pool
         const tokens = poolData.pooledTokens;
-        let value = { poolId: uniquePoolId, tokens: new Array(tokens.length) };
+        const value = { poolId: uniquePoolId, tokens: new Array(tokens.length) };
         let label = '';
 
         tokens.forEach((token, i) => {
-            let tokenWeight = formatUtils.getFormattedPercentageValue(token.weight, true);
-            label = label + ` ${token.symbol.toUpperCase()} ${tokenWeight},`;
+            const tokenWeight = formatUtils.getFormattedPercentageValue(token.weight, true);
+            label += ` ${token.symbol.toUpperCase()} ${tokenWeight},`;
             value.tokens[i] = token.symbol;
         });
 
         return {
-            value: value,
+            value,
             label: label.slice(0, -1), // remove last char, which is '|',
         };
     }
@@ -287,39 +287,43 @@ const Simulator = () => {
 
     // when the page is loaded, reset everything
     useEffect(() => {
-        // dispatch(resetPoolSnapData());
-        dispatch(setSimulationMode('positions'));
-        if (
-            allPools &&
-            selectedPoolId &&
-            allPools[selectedPoolId] &&
-            allPools[selectedPoolId].isActive
-        ) {
-            const pool = allPools[selectedPoolId];
-            const { yieldToken, tokenWeights, tokenSymbols } = pool;
-            const { tokenPricesEnd, ethPriceEnd, tokenBalances } = pool.cumulativeStats;
-            const yieldTokenSymbol = yieldToken?.symbol;
+        const initSimulator = () => {
+            dispatch(setSimulationMode('positions'));
+            if (
+                allPools &&
+                selectedPoolId &&
+                allPools[selectedPoolId] &&
+                allPools[selectedPoolId].isActive
+            ) {
+                const pool = allPools[selectedPoolId];
+                const { yieldToken, tokenWeights, tokenSymbols } = pool;
+                const { tokenPricesEnd, ethPriceEnd, tokenBalances } = pool.cumulativeStats;
+                const yieldTokenSymbol = yieldToken?.symbol;
 
-            dispatch(
-                setNewSimulationPoolData(
-                    pool.poolId,
-                    tokenSymbols,
-                    tokenWeights,
-                    yieldTokenSymbol,
-                    tokenPricesEnd,
-                    ethPriceEnd,
-                    tokenBalances,
-                    pool.exchange,
-                ),
-            );
+                dispatch(
+                    setNewSimulationPoolData(
+                        pool.poolId,
+                        tokenSymbols,
+                        tokenWeights,
+                        yieldTokenSymbol,
+                        tokenPricesEnd,
+                        ethPriceEnd,
+                        tokenBalances,
+                        pool.exchange,
+                    ),
+                );
 
-            dispatch(resetSimulationCoefficients(tokenBalances.length));
-        } else {
-            // reset pool data
-            dispatch(resetPoolSnapData());
-            // reset selected Pool ID
-            dispatch(setSelectedPoolId(''));
-        }
+                dispatch(resetSimulationCoefficients(tokenBalances.length));
+            } else {
+                // reset pool data
+                dispatch(resetPoolSnapData());
+                // reset selected Pool ID
+                dispatch(setSelectedPoolId(''));
+            }
+        };
+
+        initSimulator();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // simulation pool data
@@ -357,7 +361,7 @@ const Simulator = () => {
         // compute how much tokens the user have according to the invested amount
 
         const tokenCounts = poolSnapData.tokens.length;
-        const investedAmountTotal = parseInt(amount);
+        const investedAmountTotal = parseInt(amount, 10);
         const investedAmountsUsd: number[] = new Array(tokenCounts);
         const userTokenBalances: number[] = new Array(tokenCounts);
         const tokenSymbols: TokenType[] = new Array(tokenCounts);
@@ -438,9 +442,9 @@ const Simulator = () => {
         if (validationUtils.isValidEthereumAddress(input)) {
             setIsImportedPoolAddressValid(true);
             return;
-        } else {
-            setIsImportedPoolAddressValid(false);
         }
+
+        setIsImportedPoolAddressValid(false);
     };
 
     const refreshPage = () => {
@@ -472,11 +476,7 @@ const Simulator = () => {
                 return (
                     <SadCrocoBox>
                         Sorry, Croco could not find any pools for this address :(
-                        <StyledQuestionTooltip
-                            content={
-                                'We track only pools on Uniswap, SushiSwap, Balancer and Materia exchanges.'
-                            }
-                        />
+                        <StyledQuestionTooltip content="We track only pools on Uniswap, SushiSwap, Balancer and Materia exchanges." />
                     </SadCrocoBox>
                 );
             }
@@ -485,11 +485,7 @@ const Simulator = () => {
                 return (
                     <SadCrocoBox>
                         Sorry, Croco could not find any pools for this address :(
-                        <StyledQuestionTooltip
-                            content={
-                                'We track only pools on Uniswap, SushiSwap, Balancer and Materia exchanges.'
-                            }
-                        />
+                        <StyledQuestionTooltip content="We track only pools on Uniswap, SushiSwap, Balancer and Materia exchanges." />
                     </SadCrocoBox>
                 );
             }
@@ -515,7 +511,7 @@ const Simulator = () => {
         return null;
     };
 
-    let exceptionContent = getExceptionContent();
+    const exceptionContent = getExceptionContent();
     let showData: any =
         poolId &&
         tokenSymbols &&
@@ -546,8 +542,9 @@ const Simulator = () => {
                                 <>
                                     <SelectLabel>Choose from your active positions</SelectLabel>
                                     <AddressSelect />
-                                    {exceptionContent ? null : allPools &&
-                                      Object.keys(allPools).length > 0 ? (
+                                    {!exceptionContent &&
+                                    allPools &&
+                                    Object.keys(allPools).length > 0 ? (
                                         <ChoosePoolWrapper>
                                             <MultipleSelectWrapper>
                                                 <MultipleTokenSelect
@@ -570,8 +567,8 @@ const Simulator = () => {
                                                     )}
                                                     useWhiteBackground
                                                     useDarkBorder
-                                                    placeholder={'Select pool...'}
-                                                ></MultipleTokenSelect>
+                                                    placeholder="Select pool..."
+                                                />
                                             </MultipleSelectWrapper>
                                         </ChoosePoolWrapper>
                                     ) : null}
@@ -604,11 +601,7 @@ const Simulator = () => {
                                             Balancer
                                         </DexPairLink>
                                         )
-                                        <StyledQuestionTooltip
-                                            content={
-                                                'Usually you can find pool address in the url. E.g. info.uniswap.org/pair/0x...'
-                                            }
-                                        />
+                                        <StyledQuestionTooltip content="Usually you can find pool address in the url. E.g. info.uniswap.org/pair/0x..." />
                                     </SelectLabel>
                                     <PoolImportInputWrapper>
                                         <Input
@@ -643,7 +636,7 @@ const Simulator = () => {
                             )}
                         </PoolDataEntryWrapper>
 
-                        {exceptionContent ? exceptionContent : null}
+                        {exceptionContent && exceptionContent}
 
                         {showData && !exceptionContent && (
                             <>

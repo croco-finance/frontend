@@ -68,6 +68,7 @@
         ]
     },
     "devDependencies": {
+        "prettier": "^2.2.1",
         "react-app-rewire-alias": "^1.0.1",
         "react-app-rewired": "^2.1.8"
     }
