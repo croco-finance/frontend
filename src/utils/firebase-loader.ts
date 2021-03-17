@@ -38,7 +38,7 @@ async function getSnaps(address: string): Promise<SnapStructure | null> {
                     const ref = firebase.exchangeDayId(lastSnap.exchange);
                     dayIds[lastSnap.exchange] = (await ref.once('value')).val();
                 }
-                const dayId = <number>dayIds[lastSnap.exchange];
+                const dayId = dayIds[lastSnap.exchange] as number;
                 let currentSnap = await getCurrentSnap(poolId, lastSnap, dayId);
                 if (currentSnap !== null) {
                     poolSnaps.push(currentSnap);

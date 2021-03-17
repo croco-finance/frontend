@@ -41,9 +41,9 @@ async function setUnclaimed(
                 lastSnap.stakingService === StakingService.UNI_V2 ||
                 lastSnap.stakingService === StakingService.INDEX
             ) {
-                let contractAddress = (<{ [key: string]: string }>(
-                    stakingContracts[lastSnap.stakingService]
-                ))[poolId];
+                let contractAddress = (
+                    stakingContracts[lastSnap.stakingService] as { [key: string]: string }
+                )[poolId];
                 const contract = new ethers.Contract(contractAddress, stakingRewardsAbi, provider);
                 unclaimed = await contract.earned(address);
             } else if (lastSnap.stakingService === StakingService.SUSHI) {
