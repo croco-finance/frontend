@@ -1,3 +1,1 @@
-export const getNumberFromPxString = (size: string): number => {
-    return parseInt(size.replace('px', ''), 10);
-};
+export const getNumberFromPxString = (size: string): number => parseInt(size.replace('px', ''), 10);

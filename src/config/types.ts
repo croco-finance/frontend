@@ -237,7 +237,7 @@ export interface DailyStats {
     timestamps: number[];
     feesUsd: number[];
     tokenSymbols: string[] | undefined;
-    feesTokenAmounts: number[] | undefined;
+    feesTokenAmounts: number[][] | undefined;
     averageDailyFeesUsd: number | undefined;
     averageDailyYieldUsd: number | undefined;
 }

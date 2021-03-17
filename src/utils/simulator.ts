@@ -1,6 +1,5 @@
 import { Exchange } from '@types';
-import { mathUtils } from '.';
-import { lossUtils } from '.';
+import { mathUtils, lossUtils } from '@utils';
 
 const getSimulationStats = (
     currentTokenBalances: number[],
@@ -12,7 +11,7 @@ const getSimulationStats = (
     // make sure token weights sum is equal to 1
     // const weightsSum = mathUtils.sumArr(tokenWeights);
 
-    let newTokenBalances;
+    let newTokenBalances: number[] = [];
     if (exchange === 'UNI_V2' || exchange === 'SUSHI' || exchange === 'MATERIA') {
         newTokenBalances = lossUtils.getNewBalancesUniswap(currentTokenBalances, newTokenPrices);
     } else if (exchange === 'BALANCER') {
@@ -48,7 +47,7 @@ const getSimulationStats = (
         simulatedTokenBalances: newTokenBalances,
         simulatedPoolValueUsd: newPoolValueUsd,
         simulatedFeesUsd: newFeesUsd,
-        simulatedFeesTokenAmounts: simulatedFeesTokenAmounts,
+        simulatedFeesTokenAmounts,
         simulatedHodlValueUsd: hodlValueUsd,
         impLossRel: lossUtils.getRelativeImpLoss(newPoolValueUsd, hodlValueUsd),
         impLossUsd: hodlValueUsd - newPoolValueUsd,
