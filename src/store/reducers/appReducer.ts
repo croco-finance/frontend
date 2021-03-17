@@ -19,8 +19,8 @@ export const initialState: AppStateInterface = {
 };
 
 // the argument is previous state. For the forst run it is initial state
-const appReducer = (state = initialState, action) => {
-    return produce(state, draft => {
+const appReducer = (state = initialState, action): AppStateInterface =>
+    produce(state, draft => {
         switch (action.type) {
             // NOTE: we do not need 'break' statements because we return in every case
             case actionTypes.SET_POOL_DATA:
@@ -45,7 +45,7 @@ const appReducer = (state = initialState, action) => {
             }
 
             case actionTypes.SET_BUNDLED_ADDRESS: {
-                const bundled = state.allAddresses[action.address].bundled;
+                const { bundled } = state.allAddresses[action.address];
                 draft.allAddresses[action.address].bundled = !bundled;
                 break;
             }
@@ -122,7 +122,7 @@ const appReducer = (state = initialState, action) => {
             }
 
             case actionTypes.FETCH_DAILY_SUCCESS: {
-                draft.allPools[action.poolId]['dailyStats'] = action.payload;
+                draft.allPools[action.poolId].dailyStats = action.payload;
                 draft.loadingDaily = false;
                 draft.errorDaily = false;
                 break;
@@ -136,6 +136,5 @@ const appReducer = (state = initialState, action) => {
                 return draft;
         }
     });
-};
 
 export default appReducer;

@@ -55,8 +55,8 @@ export const initialState: State = {
     screenHeight: null,
 };
 
-const resizeReducer = (state: State = initialState, action): State => {
-    return produce(state, draft => {
+const resizeReducer = (state: State = initialState, action): State =>
+    produce(state, draft => {
         switch (action.type) {
             case actionTypes.UPDATE_WINDOW_SIZE:
                 draft.size = getSize(action.screenWidth);
@@ -66,6 +66,5 @@ const resizeReducer = (state: State = initialState, action): State => {
             // no default
         }
     });
-};
 
 export default resizeReducer;

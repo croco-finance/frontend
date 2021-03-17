@@ -29,8 +29,8 @@ export const initialState: SimulatorStateInterface = {
 };
 
 // the argument is previous state. For the forst run it is initial state
-const simulatorReducer = (state = initialState, action) => {
-    return produce(state, draft => {
+const simulatorReducer = (state = initialState, action): SimulatorStateInterface =>
+    produce(state, draft => {
         switch (action.type) {
             case actionTypes.SET_NEW_SIMULATION_POOL_DATA: {
                 draft.poolId = action.payload.poolId;
@@ -107,6 +107,5 @@ const simulatorReducer = (state = initialState, action) => {
                 return draft;
         }
     });
-};
 
 export default simulatorReducer;
