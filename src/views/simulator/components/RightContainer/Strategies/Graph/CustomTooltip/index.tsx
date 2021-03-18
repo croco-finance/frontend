@@ -49,15 +49,15 @@ const CustomTooltip = (props: Props) => {
                 <GridWrapper>
                     <TooltipRow
                         firstColumn="Being LP"
-                        secondColumn={<FiatValue value={poolValue ? poolValue : 0} />}
+                        secondColumn={<FiatValue value={poolValue || 0} />}
                     />
                     <TooltipRow
                         firstColumn="Tokens HODL"
-                        secondColumn={<FiatValue value={hodlValue ? hodlValue : 0} />}
+                        secondColumn={<FiatValue value={hodlValue || 0} />}
                     />
                     <TooltipRow
                         firstColumn="ETH HODL"
-                        secondColumn={<FiatValue value={ethHodlValue ? ethHodlValue : 0} />}
+                        secondColumn={<FiatValue value={ethHodlValue || 0} />}
                     />
                 </GridWrapper>
             </CustomTooltipWrapper>

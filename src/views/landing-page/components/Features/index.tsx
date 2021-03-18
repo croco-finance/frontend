@@ -1,14 +1,15 @@
+/* eslint-disable import/extensions */
 import { variables } from '@config';
 import { useSelector } from '@reducers';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import OverviewImage from '../../../../../src/data/images/landing-page/overview.svg';
-import OverviewImageDark from '../../../../../src/data/images/landing-page/overview_dark.svg';
-import PoolsImage from '../../../../../src/data/images/landing-page/pools.svg';
-import PoolsImageDark from '../../../../../src/data/images/landing-page/pools_dark.svg';
-import SimulatorImage from '../../../../../src/data/images/landing-page/simulator.svg';
-import SimulatorImageDark from '../../../../../src/data/images/landing-page/simulator_dark.svg';
+import OverviewImage from '@data/images/landing-page/overview.svg';
+import OverviewImageDark from '@data/images/landing-page/overview_dark.svg';
+import PoolsImage from '@data/images/landing-page/pools.svg';
+import PoolsImageDark from '@data/images/landing-page/pools_dark.svg';
+import SimulatorImage from '@data/images/landing-page/simulator.svg';
+import SimulatorImageDark from '@data/images/landing-page/simulator_dark.svg';
 import Feature from '../Feature';
 
 const Wrapper = styled.div`
@@ -97,7 +98,7 @@ const Index = () => {
                     image={theme === 'light' ? OverviewImage : OverviewImageDark}
                     imageSize={240}
                     imageSizeSmall={170}
-                    flip={true}
+                    flip
                 >
                     <StyledH1 textAlign="left">Compare strategies</StyledH1>
                     <StyledP textAlign="left">

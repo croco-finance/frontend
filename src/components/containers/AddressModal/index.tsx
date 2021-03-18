@@ -146,7 +146,7 @@ const AddressModal = () => {
     };
 
     const setBundleAddress = address => {
-        dispatch({ type: actionTypes.SET_BUNDLED_ADDRESS, address: address });
+        dispatch({ type: actionTypes.SET_BUNDLED_ADDRESS, address });
     };
 
     const deleteAddress = address => {
@@ -156,7 +156,7 @@ const AddressModal = () => {
             dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: null });
         }
 
-        dispatch({ type: actionTypes.DELETE_ADDRESS, address: address });
+        dispatch({ type: actionTypes.DELETE_ADDRESS, address });
     };
 
     const handleAddressChange = async input => {
@@ -273,7 +273,8 @@ const AddressModal = () => {
                                     )}
                                 </InputWrapper>
                             );
-                        } else return null;
+                        }
+                        return null;
                     })}
                 </>
             )}

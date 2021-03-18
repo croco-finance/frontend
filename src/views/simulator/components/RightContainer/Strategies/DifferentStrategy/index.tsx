@@ -88,11 +88,8 @@ interface Props {
     strategyName: string;
     depositsHeadline: string;
     poolStrategyUsd: number;
-    feesUsd: number;
     yieldUsd: number;
-    txCostUsd: number;
     differentStrategyUsd: number;
-    feesTokenAmounts: number[];
     tokenSymbols: string[];
     txCostEth: number;
     depositTimestampsArr: number[];
@@ -216,11 +213,7 @@ const DifferentStrategy = ({
             firstColumn={
                 <div style={{ display: '-webkit-inline-box' }}>
                     Transaction expenses
-                    <QuestionTooltip
-                        content={
-                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
-                        }
-                    />
+                    <QuestionTooltip content="Amount of ETH you spent for all pool deposit and withdrawal transactions" />
                 </div>
             }
             secondColumn={
@@ -327,7 +320,7 @@ const DifferentStrategy = ({
                                 <BoxRow
                                     firstColumn="Pool deposits"
                                     secondColumn={depositsHeadline}
-                                    thirdColumn={'Simulated value'}
+                                    thirdColumn="Simulated value"
                                     columnColors={['light', 'light', 'light']}
                                 />
                             </RewardsExpensesHeader>

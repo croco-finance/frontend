@@ -13,7 +13,7 @@ const SvgWrapper = styled.div<{ size: number; color?: string; hoverColor?: strin
         line-height: ${props => props.size}px;
     }
 
-    & > div > div > svg > path {
+    & > div > svg {
         ${props =>
             props.color
                 ? css`
@@ -22,7 +22,26 @@ const SvgWrapper = styled.div<{ size: number; color?: string; hoverColor?: strin
                 : null}
     }
 
-    &:hover > div > div > svg > path {
+    & > div > svg > path {
+        ${props =>
+            props.color
+                ? css`
+                      fill: ${props.color} !important;
+                  `
+                : null}
+    }
+
+    &:hover > div > svg {
+        ${props =>
+            props.hoverColor
+                ? css`
+                      transition: 0.2s;
+                      fill: ${props.hoverColor} !important;
+                  `
+                : null}
+    }
+
+    &:hover > div > svg > path {
         ${props =>
             props.hoverColor
                 ? css`
@@ -40,25 +59,18 @@ interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
     hoverColor?: string;
 }
 
-const Icon = ({ icon, className, size = 32, color, hoverColor, ...rest }: Props) => {
-    return (
-        <SvgWrapper
-            className={className}
-            size={size}
-            color={color}
-            hoverColor={hoverColor}
-            {...rest}
-        >
-            <ReactSVG
-                src={ICONS[icon]}
-                beforeInjection={(svg: any) => {
-                    svg.setAttribute('width', `${size}px`);
-                    svg.setAttribute('height', `${size}px`);
-                }}
-                loading={() => <span className="loading" />}
-            />
-        </SvgWrapper>
-    );
-};
+const Icon = ({ icon, className, size = 32, color, hoverColor, ...rest }: Props) => (
+    <SvgWrapper className={className} size={size} color={color} hoverColor={hoverColor} {...rest}>
+        <ReactSVG
+            src={ICONS[icon].default}
+            fill="#00ff00"
+            beforeInjection={(svg: any) => {
+                svg.setAttribute('width', `${size}px`);
+                svg.setAttribute('height', `${size}px`);
+            }}
+            loading={() => <span className="loading" />}
+        />
+    </SvgWrapper>
+);
 
 export default Icon;

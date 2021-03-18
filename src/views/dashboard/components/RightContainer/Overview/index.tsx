@@ -71,9 +71,9 @@ const Overview = () => {
         return null;
     }
 
-    let activePoolsSummary = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
+    const activePoolsSummary = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
 
-    let historyGraphData =
+    const historyGraphData =
         selectedPoolId === 'all'
             ? undefined
             : graphUtils.getInteractionsGraphData(allPools[selectedPoolId].intervalStats);
@@ -81,6 +81,8 @@ const Overview = () => {
     let exchange;
     let poolId;
     let dailyStats;
+
+    console.log('allPools[selectedPoolId]', allPools[selectedPoolId]);
 
     // stats for daily fee chart
     if (selectedPoolId === 'all') {
@@ -97,11 +99,11 @@ const Overview = () => {
     let poolOverview;
     if (allPools && selectedPoolId === 'all' && activePoolsSummary) {
         poolOverview = <SummaryOverview summary={activePoolsSummary} />;
-    } else {
-        if (allPools && allPools[selectedPoolId]) {
-            poolOverview = <PoolOverview pool={allPools[selectedPoolId]} />;
-        }
+    } else if (allPools && allPools[selectedPoolId]) {
+        poolOverview = <PoolOverview pool={allPools[selectedPoolId]} />;
     }
+
+    console.log('dailyStats', dailyStats);
 
     return (
         <Wrapper>

@@ -1,12 +1,12 @@
-import { colors, variables, types } from '@config';
-import React from 'react';
+import { InfoBox, QuestionTooltip } from '@components/ui';
+import { variables } from '@config';
 import { useSelector } from '@reducers';
-import styled from 'styled-components';
-import { graphUtils, formatUtils } from '@utils';
-import LiquidityPool from './LiquidityPool';
-import DifferentStrategy from './DifferentStrategy';
-import { QuestionTooltip, InfoBox } from '@components/ui';
+import { formatUtils } from '@utils';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import DifferentStrategy from './DifferentStrategy';
+import LiquidityPool from './LiquidityPool';
 
 const Wrapper = styled.div`
     display: flex;
@@ -94,16 +94,15 @@ const TooltipHeadline = styled.div`
 const Strategies = () => {
     const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state.app);
 
-    let pool = allPools[selectedPoolId];
+    const pool = allPools[selectedPoolId];
 
     if (activePoolIds.length <= 0 && selectedPoolId === 'all') {
         return null;
     }
 
-    let {
+    const {
         pooledTokens,
         isActive,
-        yieldToken,
         intervalStats,
         depositTimestamps,
         depositTokenAmounts,
@@ -119,7 +118,6 @@ const Strategies = () => {
         txCostUsd,
         ethPriceEnd,
         feesTokenAmounts,
-        yieldTotalTokenAmount,
         poolStrategyUsd,
         tokensHodlStrategyTokenAmounts,
         ethHodlStrategyUsd,
@@ -143,9 +141,13 @@ const Strategies = () => {
         exchange = allPools[selectedPoolId].exchange;
     }
 
-    const lastWeekAverageDailyRewardsUsd = dailyStats
-        ? dailyStats.averageDailyFeesUsd + dailyStats.averageDailyYieldUsd
-        : 0;
+    let lastWeekAverageDailyRewardsUsd = 0;
+    if (dailyStats && dailyStats.averageDailyFeesUsd && !dailyStats.averageDailyYieldUsd) {
+        lastWeekAverageDailyRewardsUsd = dailyStats.averageDailyFeesUsd;
+    } else if (dailyStats && dailyStats.averageDailyFeesUsd && dailyStats.averageDailyYieldUsd) {
+        lastWeekAverageDailyRewardsUsd =
+            dailyStats.averageDailyFeesUsd + dailyStats.averageDailyYieldUsd;
+    }
 
     return (
         <Wrapper>
@@ -214,7 +216,7 @@ const Strategies = () => {
             <StrategyItemWrapper>
                 <DifferentStrategy
                     strategyName="tokens_hodl"
-                    depositsHeadline={'Crypto'}
+                    depositsHeadline="Crypto"
                     endTimeText={endTimeText}
                     tokenSymbols={tokenSymbolsArr}
                     poolStrategyUsd={poolStrategyUsd}
@@ -223,8 +225,6 @@ const Strategies = () => {
                     txCostUsd={txCostUsd}
                     differentStrategyUsd={tokensHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
-                    yieldTotalTokenAmount={yieldTotalTokenAmount}
-                    yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
                     lastWeekAverageDailyRewardsUsd={lastWeekAverageDailyRewardsUsd}
                     depositTimestampsArr={depositTimestamps}
@@ -256,7 +256,7 @@ const Strategies = () => {
             <StrategyItemWrapper>
                 <DifferentStrategy
                     strategyName="eth_hodl"
-                    depositsHeadline={'ETH value'}
+                    depositsHeadline="ETH value"
                     endTimeText={endTimeText}
                     tokenSymbols={tokenSymbolsArr}
                     poolStrategyUsd={poolStrategyUsd}
@@ -265,8 +265,6 @@ const Strategies = () => {
                     txCostUsd={txCostUsd}
                     differentStrategyUsd={ethHodlStrategyUsd}
                     feesTokenAmounts={feesTokenAmounts}
-                    yieldTotalTokenAmount={yieldTotalTokenAmount}
-                    yieldTokenSymbol={yieldToken ? yieldToken.symbol : undefined}
                     txCostEth={txCostEth}
                     lastWeekAverageDailyRewardsUsd={lastWeekAverageDailyRewardsUsd}
                     depositTimestampsArr={depositTimestamps}

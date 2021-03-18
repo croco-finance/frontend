@@ -283,15 +283,12 @@ const Strategies = ({
             <StrategyItemWrapper>
                 <DifferentStrategy
                     strategyName="tokens_hodl"
-                    depositsHeadline={'Tokens'}
+                    depositsHeadline="Tokens"
                     tokenSymbols={tokenSymbols}
                     poolStrategyUsd={poolStrategyUsd}
-                    feesUsd={feesUsd}
                     yieldUsd={yieldUsd}
-                    txCostUsd={txCostUsd}
                     differentStrategyUsd={tokensHodlStrategyUsd}
                     simulatedDifferentStrategyUsd={simulatedTokensHodlStrategyUsd}
-                    feesTokenAmounts={feesTokenAmounts}
                     txCostEth={txCostEth}
                     depositTimestampsArr={depositTimestampsArr}
                     depositTokenAmountsArr={depositTokenAmountsArr}
@@ -337,15 +334,12 @@ const Strategies = ({
             <StrategyItemWrapper>
                 <DifferentStrategy
                     strategyName="eth_hodl"
-                    depositsHeadline={'ETH value'}
+                    depositsHeadline="ETH value"
                     tokenSymbols={tokenSymbols}
                     poolStrategyUsd={poolStrategyUsd}
-                    feesUsd={feesUsd}
                     yieldUsd={yieldUsd}
-                    txCostUsd={txCostUsd}
                     differentStrategyUsd={ethHodlStrategyUsd}
                     simulatedDifferentStrategyUsd={simulatedEthHodlStrategyUsd}
-                    feesTokenAmounts={feesTokenAmounts}
                     txCostEth={txCostEth}
                     depositTimestampsArr={depositTimestampsArr}
                     depositTokenAmountsArr={depositEthAmountsArr}

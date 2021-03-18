@@ -22,13 +22,11 @@ interface Props {
     bottom: React.ReactNode;
 }
 
-const DoubleValue = ({ top, bottom }: Props) => {
-    return (
-        <Wrapper>
-            <Top>{top}</Top>
-            <Bottom>{bottom}</Bottom>
-        </Wrapper>
-    );
-};
+const DoubleValue = ({ top, bottom }: Props) => (
+    <Wrapper>
+        <Top>{top}</Top>
+        <Bottom>{bottom}</Bottom>
+    </Wrapper>
+);
 
 export default DoubleValue;

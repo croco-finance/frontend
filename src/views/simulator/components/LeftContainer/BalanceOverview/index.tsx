@@ -78,26 +78,24 @@ const BalanceOverview = ({ tokenWeights, tokenPricesUsd, tokenBalances, tokenSym
                     />
                 </HeaderWrapper>
                 <TokenInfoWrapper rowsCount={numberOfTokens}>
-                    {tokenSymbols.map((symbol, i) => {
-                        return (
-                            <OverviewRow
-                                key={i}
-                                firstColumn={
-                                    <TokenWrapper>
-                                        <TokenLogo symbol={symbol} size={20} />
-                                        <TokenSymbol>{symbol}</TokenSymbol>
-                                    </TokenWrapper>
-                                }
-                                secondColumn={formatUtils.getFormattedPercentageValue(
-                                    tokenWeights[i],
-                                    true,
-                                )}
-                                thirdColumn={tokenBalances[i].toFixed(4)}
-                                fourthColumn={<FiatValue value={tokenPricesUsd[i]} />}
-                                color="medium"
-                            />
-                        );
-                    })}
+                    {tokenSymbols.map((symbol, i) => (
+                        <OverviewRow
+                            key={symbol}
+                            firstColumn={
+                                <TokenWrapper>
+                                    <TokenLogo symbol={symbol} size={20} />
+                                    <TokenSymbol>{symbol}</TokenSymbol>
+                                </TokenWrapper>
+                            }
+                            secondColumn={formatUtils.getFormattedPercentageValue(
+                                tokenWeights[i],
+                                true,
+                            )}
+                            thirdColumn={tokenBalances[i].toFixed(4)}
+                            fourthColumn={<FiatValue value={tokenPricesUsd[i]} />}
+                            color="medium"
+                        />
+                    ))}
                 </TokenInfoWrapper>
             </XScrollWrapper>
         </Wrapper>

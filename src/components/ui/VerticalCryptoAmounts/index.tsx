@@ -69,8 +69,8 @@ const VerticalCryptoAmounts = ({
     maxWidth = 100,
     maxHeight = 160,
 }: Props) => {
-    let tokenSymbolsRendered = tokenSymbols;
-    let tokenAmountsRendered = tokenAmounts;
+    const tokenSymbolsRendered = tokenSymbols;
+    const tokenAmountsRendered = tokenAmounts;
 
     // if the user passed just one symbol/amount, convert that number to array so that I can loop through it
     // if (!Array.isArray(props.tokenSymbols)) {

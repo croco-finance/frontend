@@ -52,16 +52,11 @@ const SummaryList = ({ cardMaxWidth = '100%' }: Props) => {
                 <HeaderChild>Pools</HeaderChild>
                 <HeaderChild>Value</HeaderChild>
                 <HeaderChild>
-                    Reward <QuestionTooltip content={'fees + yield'} />
+                    Reward <QuestionTooltip content="fees + yield" />
                 </HeaderChild>
             </Header>
             <ItemsWrapper>
-                <SummaryItem
-                    headline="All active positions"
-                    value={valueLockedUsd}
-                    gainsAbsolute={feesUsd + yieldUsd - txCostUsd}
-                    roi={5}
-                />
+                <SummaryItem headline="All active positions" />
             </ItemsWrapper>
         </Wrapper>
     );

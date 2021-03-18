@@ -1,4 +1,4 @@
-import { BoxRow, FiatValue, GrayBox, VerticalCryptoAmounts, QuestionTooltip } from '@components/ui';
+import { BoxRow, FiatValue, GrayBox, QuestionTooltip, VerticalCryptoAmounts } from '@components/ui';
 import { variables } from '@config';
 import { useTheme } from '@hooks';
 import { PoolItem } from '@types';
@@ -76,7 +76,7 @@ interface Props {
 
 const PoolOverview = ({ pool }: Props) => {
     const theme = useTheme();
-    let { pooledTokens, isActive, hasYieldReward, intervalStats } = pool;
+    const { pooledTokens, isActive, hasYieldReward, intervalStats } = pool;
 
     const {
         feesUsd,
@@ -133,11 +133,7 @@ const PoolOverview = ({ pool }: Props) => {
             firstColumn={
                 <div style={{ display: '-webkit-inline-box' }}>
                     Transaction expenses
-                    <QuestionTooltip
-                        content={
-                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
-                        }
-                    />
+                    <QuestionTooltip content="Amount of ETH you spent for all pool deposit and withdrawal transactions" />
                 </div>
             }
             secondColumn={

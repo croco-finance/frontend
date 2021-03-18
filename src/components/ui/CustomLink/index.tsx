@@ -16,14 +16,12 @@ interface Props {
     color?: string;
 }
 
-const CustomLink = ({ children, url, ...rest }: Props) => {
-    return (
-        <Wrapper>
-            <StyledLink target="_blank" href={url}>
-                {children}
-            </StyledLink>
-        </Wrapper>
-    );
-};
+const CustomLink = ({ children, url, ...rest }: Props) => (
+    <Wrapper>
+        <StyledLink target="_blank" href={url}>
+            {children}
+        </StyledLink>
+    </Wrapper>
+);
 
 export default CustomLink;

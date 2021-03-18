@@ -1,5 +1,5 @@
 import React from 'react';
-import { CryptoValue, FiatValue } from '..';
+import { CryptoValue, FiatValue } from '@components/ui';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     showCrypto?: boolean;
@@ -32,17 +32,16 @@ const CryptoFiatValue = ({
                 symbol={cryptoSymbol}
             />
         );
-    } else {
-        return (
-            <FiatValue
-                value={fiatValue}
-                usePlusSymbol={usePlusSymbol}
-                colorized={colorized}
-                useBadgeStyle={useBadgeStyle}
-                currency={fiatSymbol}
-            />
-        );
     }
+    return (
+        <FiatValue
+            value={fiatValue}
+            usePlusSymbol={usePlusSymbol}
+            colorized={colorized}
+            useBadgeStyle={useBadgeStyle}
+            currency={fiatSymbol}
+        />
+    );
 };
 
 export default CryptoFiatValue;

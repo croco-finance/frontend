@@ -1,20 +1,17 @@
-import styled, { css } from 'styled-components';
 import { colors, variables } from '@config';
-import { formatUtils } from '@utils';
+import { AppThemeColors } from '@types';
 import React, { PureComponent } from 'react';
 import {
-    AreaChart,
     Area,
+    AreaChart,
+    CartesianGrid,
+    Legend,
+    ResponsiveContainer,
+    Tooltip,
     XAxis,
     YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-    Legend,
 } from 'recharts';
-
-import { AppThemeColors } from '@types';
-
+import styled from 'styled-components';
 import CustomTooltip from './CustomTooltip';
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -23,9 +20,7 @@ const formatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
 });
 
-const getYAxisMaxValue = value => {
-    return Math.round(value / 1000) * 1000 + 1000;
-};
+const getYAxisMaxValue = value => Math.round(value / 1000) * 1000 + 1000;
 
 const LegendItem = styled.span`
     font-size: ${variables.FONT_SIZE.NORMAL};
@@ -45,11 +40,11 @@ interface State {
 }
 
 class Graph extends PureComponent<Props, State> {
-    constructor(props) {
-        super(props);
+    valueToUsd(value) {
+        return formatter.format(value);
     }
 
-    renderColorfulLegendText(value, entry) {
+    renderColorfulLegendText(value, entry): React.ReactNode {
         let legendText = '';
         switch (value) {
             case 'poolValue':
@@ -60,13 +55,10 @@ class Graph extends PureComponent<Props, State> {
                 break;
             case 'ethHodlValue':
                 legendText = 'ETH HODL value';
+            // no default
         }
 
         return <LegendItem style={{ color: colors.FONT_MEDIUM }}>{legendText}&nbsp;</LegendItem>;
-    }
-
-    valueToUsd(value) {
-        return formatter.format(value);
     }
     render() {
         const { data, maxPossibleValue, theme } = this.props;
@@ -101,33 +93,33 @@ class Graph extends PureComponent<Props, State> {
                     />
 
                     <Area
-                        key={'poolValue'}
+                        key="poolValue"
                         isAnimationActive={false}
-                        dataKey={'poolValue'}
+                        dataKey="poolValue"
                         strokeWidth={1}
                         fillOpacity={0.5}
                         fill={theme.GRAPH_1_DARK}
                         stroke={theme.GRAPH_1_DARK}
                     />
                     <Area
-                        key={'hodlValue'}
+                        key="hodlValue"
                         isAnimationActive={false}
-                        dataKey={'hodlValue'}
+                        dataKey="hodlValue"
                         strokeWidth={2.5}
                         fillOpacity={0}
                         fill={theme.BLUE}
-                        stroke={'#a600ffff'}
+                        stroke="#a600ffff"
                         // stroke={colors.BLUE}
                         strokeDasharray="6 3"
                     />
                     <Area
-                        key={'ethHodlValue'}
+                        key="ethHodlValue"
                         isAnimationActive={false}
-                        dataKey={'ethHodlValue'}
+                        dataKey="ethHodlValue"
                         strokeWidth={2.5}
                         fillOpacity={0}
                         fill={theme.BLUE}
-                        stroke={'#00cbe8'}
+                        stroke="#00cbe8"
                         // stroke={colors.BLUE}
                         strokeDasharray="6 3"
                     />
@@ -160,7 +152,7 @@ class Graph extends PureComponent<Props, State> {
                         domain={[0, getYAxisMaxValue(maxPossibleValue)]}
                         stroke={theme.FONT_MEDIUM}
                         tickFormatter={this.valueToUsd}
-                    ></YAxis>
+                    />
                 </AreaChart>
             </ResponsiveContainer>
         );

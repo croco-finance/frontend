@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import React from 'react';
 import styled from 'styled-components';
 import Illustration from '@data/images/sad_croco.svg';

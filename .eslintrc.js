@@ -47,7 +47,7 @@ module.exports = {
         'import/no-unresolved': 'off',
         'import/extensions': ['error', 'never'],
         'import/no-extraneous-dependencies': 'off',
-        'import/no-cycle': 'off',
+        'import/no-cycle': 'error',
         'import/no-anonymous-default-export': [
             'error',
             {
@@ -92,8 +92,14 @@ module.exports = {
         '@typescript-eslint/no-empty-function': 'off',
         'no-useless-constructor': 'off',
         '@typescript-eslint/no-useless-constructor': 'error',
+        // valid case of class method overloads in typescript
+        'no-dupe-class-members': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
+        //  Missing return type on function
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
         // note you must disable the base rule as it can report incorrect errors
         'no-use-before-define': 'off',
         '@typescript-eslint/no-use-before-define': ['error'],
+        'require-await': ['error'],
     },
 };

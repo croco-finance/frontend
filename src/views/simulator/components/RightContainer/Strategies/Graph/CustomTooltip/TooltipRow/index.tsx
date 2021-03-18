@@ -34,7 +34,6 @@ interface Props {
     firstColumn?: React.ReactNode;
     secondColumn?: React.ReactNode;
     thirdColumn?: React.ReactNode;
-    color?: 'light' | 'medium' | 'dark';
     showThreeCols?: boolean;
     columnColors?: Array<'light' | 'medium' | 'dark'>;
 }
@@ -46,22 +45,20 @@ const TooltipRow = ({
     thirdColumn,
     showThreeCols = false,
     columnColors = ['medium', 'medium', 'medium'],
-}: Props) => {
-    return (
-        <>
-            <Col textAlign="left" color={columnColors[0]}>
-                {firstColumn}
+}: Props) => (
+    <>
+        <Col textAlign="left" color={columnColors[0]}>
+            {firstColumn}
+        </Col>
+        <Col textAlign="right" color={columnColors[1]}>
+            {secondColumn}
+        </Col>
+        {showThreeCols && (
+            <Col textAlign="right" color={columnColors[2]}>
+                {thirdColumn}
             </Col>
-            <Col textAlign="right" color={columnColors[1]}>
-                {secondColumn}
-            </Col>
-            {showThreeCols && (
-                <Col textAlign="right" color={columnColors[2]}>
-                    {thirdColumn}
-                </Col>
-            )}
-        </>
-    );
-};
+        )}
+    </>
+);
 
 export default TooltipRow;

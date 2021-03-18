@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import { variables } from '@config';
 import nightModeImage from '@data/images/landing-page/landing-page-text-dark.svg';
 import dayModeImage from '@data/images/landing-page/landing-page-text.svg';

@@ -74,7 +74,7 @@ const CustomTooltip = (props: Props) => {
                     <TooltipGridWrapper>
                         <TooltipRow
                             firstColumn="Fees USD"
-                            secondColumn={<FiatValue value={feesUsd ? feesUsd : 0} />}
+                            secondColumn={<FiatValue value={feesUsd || 0} />}
                         />
                     </TooltipGridWrapper>
                     {feesTokenAmounts && (

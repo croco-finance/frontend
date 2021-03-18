@@ -40,15 +40,13 @@ const ExchangeLogoWrapper = styled.div`
 const getWrapperWidth = (tokenCount: number, logoSize: number, threshold: number) => {
     if (tokenCount <= threshold) {
         return tokenCount * logoSize * LOGO_PACING;
-    } else {
-        return (threshold + 1) * logoSize * LOGO_PACING + 8;
     }
+    return (threshold + 1) * logoSize * LOGO_PACING + 8;
 };
 
 interface Props {
     tokens: Array<TokenType>; // ['usdt', 'wbtc', 'eth', 'dai', '...']
     exchangeSymbol?: any;
-    onChange?: any;
     margin?: boolean;
     size?: number;
     threshold?: number; // how many icons to show before showing three dots
@@ -76,22 +74,21 @@ const MultipleTokenLogo = ({
                     if (index < threshold) {
                         return (
                             <Logo
-                                key={index}
+                                key={token}
                                 symbol={token}
                                 size={size}
                                 index={index}
                                 zIndex={tokenCount - index}
                             />
                         );
-                    } else {
-                        return (
-                            <ThreeDots key={index}>
-                                <InlineCircle size={size} />
-                                <InlineCircle size={size} />
-                                <InlineCircle size={size} />
-                            </ThreeDots>
-                        );
                     }
+                    return (
+                        <ThreeDots key={token}>
+                            <InlineCircle size={size} />
+                            <InlineCircle size={size} />
+                            <InlineCircle size={size} />
+                        </ThreeDots>
+                    );
                 })}
             </TokenWrapper>
         </>

@@ -94,12 +94,12 @@ const PoolList = ({ cardMaxWidth = '100%' }: Props) => {
                         <Value>Value</Value>
                         <Gains>
                             Reward
-                            <QuestionTooltip content={'fees + yield'} />
+                            <QuestionTooltip content="fees + yield" />
                         </Gains>
                     </Header>
-                    {activePoolIdsOrdered.map(poolId => {
-                        return <PoolItem key={poolId} poolId={poolId} />;
-                    })}
+                    {activePoolIdsOrdered.map(poolId => (
+                        <PoolItem key={poolId} poolId={poolId} />
+                    ))}
                 </>
             ) : null}
 
@@ -111,13 +111,13 @@ const PoolList = ({ cardMaxWidth = '100%' }: Props) => {
                                 Past positions
                             </InactiveHeadline>
                         </ExchangeHeader>
-                        <Value>{''}</Value>
+                        <Value />
                         <Gains>{activePoolIds.length === 0 ? 'Reward' : ''}</Gains>
                     </Header>
 
-                    {inactivePoolIdsOrdered.map(poolId => {
-                        return <PoolItem key={poolId} poolId={poolId} />;
-                    })}
+                    {inactivePoolIdsOrdered.map(poolId => (
+                        <PoolItem key={poolId} poolId={poolId} />
+                    ))}
                 </>
             ) : null}
         </Wrapper>

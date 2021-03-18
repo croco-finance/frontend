@@ -574,7 +574,7 @@ const getPoolsSummaryObject = (
     let totalValueLockedUsd = 0;
     const pooledTokenAmountsSum: { [key: string]: number } = {};
     let tokenSymbolsDailySum: string[] | undefined;
-    let feesTokenAmountsDailySum: number[] | undefined;
+    let feesTokenAmountsDailySum: number[][] | undefined;
     let feesTimestampsDailySum: number[] | undefined;
     let feesUsdDailySum: number[] | undefined;
     let yieldRewardsMerged: { [key: string]: number } = {};
@@ -621,28 +621,27 @@ const getPoolsSummaryObject = (
             feesTokenAmountsDailySum = pool.dailyStats.feesTokenAmounts;
             feesTimestampsDailySum = pool.dailyStats.timestamps;
             feesUsdDailySum = pool.dailyStats.feesUsd;
-        } else {
-            // One pool is already processed and this is another one
-            if (
-                pool.dailyStats &&
-                tokenSymbolsDailySum &&
-                feesTokenAmountsDailySum &&
-                feesTimestampsDailySum &&
-                feesUsdDailySum
-            ) {
-                const { timestamps, feesUsd, errorDays } = mergeTokenSymbolsAndAmountsArrays(
-                    feesUsdDailySum,
-                    pool.dailyStats.feesUsd,
-                    feesTimestampsDailySum,
-                    pool.dailyStats.timestamps,
-                );
+        }
+        // One pool is already processed and this is another one
+        if (
+            pool.dailyStats &&
+            tokenSymbolsDailySum &&
+            feesTokenAmountsDailySum &&
+            feesTimestampsDailySum &&
+            feesUsdDailySum
+        ) {
+            const { timestamps, feesUsd, errorDays } = mergeTokenSymbolsAndAmountsArrays(
+                feesUsdDailySum,
+                pool.dailyStats.feesUsd,
+                feesTimestampsDailySum,
+                pool.dailyStats.timestamps,
+            );
 
-                feesTimestampsDailySum = timestamps;
-                feesUsdDailySum = feesUsd;
-                errorDaysDailyFees = helperUtils.getUniqueItemsFromArray(
-                    errorDaysDailyFees.concat(errorDays),
-                );
-            }
+            feesTimestampsDailySum = timestamps;
+            feesUsdDailySum = feesUsd;
+            errorDaysDailyFees = helperUtils.getUniqueItemsFromArray(
+                errorDaysDailyFees.concat(errorDays),
+            );
         }
 
         // double check you sum only non-NaN values
@@ -691,6 +690,8 @@ const getDailyRewards = (
     dailyData: { [key: number]: DailyData },
     poolItem: PoolItem,
 ): DailyStats | undefined => {
+    console.log('getDailyRewards()');
+
     const { exchange, snapshots, tokenWeights, tokenSymbols } = poolItem;
     const userTokenBalancesDaily: number[][] = [];
     const tokenPricesDaily: number[][] = [];
@@ -820,6 +821,10 @@ const getDailyRewards = (
         usdFeesArr.push(feesUsd);
         statsTimestamps.push(dayTimestamps[i + 1]);
     }
+
+    console.log('tokenFeesArr', tokenFeesArr);
+    console.log('usdFeesArr', usdFeesArr);
+    console.log('statsTimestamps', statsTimestamps);
 
     // compute average rewards of from last N samples (N included)
     const statDaysCount = statsTimestamps.length;

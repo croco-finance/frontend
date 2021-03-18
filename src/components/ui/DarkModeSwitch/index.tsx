@@ -36,7 +36,7 @@ const DarkModeSwitch = () => {
                         dispatch(setTheme('dark'));
                     }}
                 >
-                    <Icon icon={'darkMode'} size={20} />
+                    <Icon icon="darkMode" size={20} />
                 </IconWrapper>
             ) : (
                 <IconWrapper
@@ -45,7 +45,7 @@ const DarkModeSwitch = () => {
                         dispatch(setTheme('light'));
                     }}
                 >
-                    <Icon icon={'dayMode'} size={20} />
+                    <Icon icon="dayMode" size={20} />
                 </IconWrapper>
             )}
         </Wrapper>

@@ -69,15 +69,13 @@ interface Props {
     image: string;
 }
 
-const Index = ({ children, flip, image, imageSize, imageSizeSmall }: Props) => {
-    return (
-        <Feature flip={flip}>
-            <StyledText flip={flip}>{children}</StyledText>
-            <ImageWrapper>
-                <FeatureImage src={image} size={imageSize} sizeSmall={imageSizeSmall} />
-            </ImageWrapper>
-        </Feature>
-    );
-};
+const Index = ({ children, flip, image, imageSize, imageSizeSmall }: Props) => (
+    <Feature flip={flip}>
+        <StyledText flip={flip}>{children}</StyledText>
+        <ImageWrapper>
+            <FeatureImage src={image} size={imageSize} sizeSmall={imageSizeSmall} />
+        </ImageWrapper>
+    </Feature>
+);
 
 export default Index;

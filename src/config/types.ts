@@ -220,6 +220,7 @@ export interface Deposit {
     valueEth: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Withdrawal extends Deposit {}
 export interface DailyData {
     block: number;
@@ -242,7 +243,7 @@ export interface DailyStats {
     averageDailyYieldUsd: number | undefined;
 }
 
-export type AllPoolsGlobal = { [key: string]: PoolItem } | {};
+export type AllPoolsGlobal = { [key: string]: PoolItem } | Record<string, never>;
 export interface AddressData {
     bundled: boolean;
     ens: string;

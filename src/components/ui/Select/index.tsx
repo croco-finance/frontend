@@ -1,4 +1,4 @@
-import { variables, styles } from '@config';
+import { variables } from '@config';
 import { useTheme } from '@hooks';
 import React from 'react';
 import ReactSelect, { Props as SelectProps } from 'react-select';
@@ -37,29 +37,27 @@ const selectStyle = (
     control: (
         base: Record<string, any>,
         { isDisabled, isFocused }: { isDisabled: boolean; isFocused: boolean },
-    ) => {
-        return {
-            ...base,
-            minHeight: 'initial',
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: variables.FONT_SIZE.SMALL,
-            height: variant === 'small' ? '36px' : '48px',
+    ) => ({
+        ...base,
+        minHeight: 'initial',
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: variables.FONT_SIZE.SMALL,
+        height: variant === 'small' ? '36px' : '48px',
+        borderRadius: '4px',
+        borderWidth: noBorder ? 0 : '2px',
+        borderColor: useDarkBorder ? theme.STROKE_GREY : theme.BACKGROUND,
+        boxShadow: 'none',
+        backgroundColor: useWhiteBackground ? theme.BG_WHITE : theme.BACKGROUND,
+        // transition: 'border 250ms ease-out',
+        '&:hover, &:focus': {
+            cursor: 'pointer',
             borderRadius: '4px',
-            borderWidth: noBorder ? 0 : '2px',
-            borderColor: useDarkBorder ? theme.STROKE_GREY : theme.BACKGROUND,
-            boxShadow: 'none',
-            backgroundColor: useWhiteBackground ? theme.BG_WHITE : theme.BACKGROUND,
-            // transition: 'border 250ms ease-out',
-            '&:hover, &:focus': {
-                cursor: 'pointer',
-                borderRadius: '4px',
-                // borderColor: colors.PASTEL_BLUE_MEDIUM,
-                borderColor: '#96b7ff',
-                // backgroundColor: ' #f7f9ff',
-            },
-        };
-    },
+            // borderColor: colors.PASTEL_BLUE_MEDIUM,
+            borderColor: '#96b7ff',
+            // backgroundColor: ' #f7f9ff',
+        },
+    }),
     indicatorSeparator: () => ({
         display: 'none',
     }),

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import * as actionTypes from '@actionTypes';
 import { FiatValue } from '@components/ui';
 import { variables } from '@config';
@@ -55,9 +57,6 @@ const StyledPoolItemCard = styled(PoolItemCard)<{ isSelected: boolean }>`
 
 interface Props {
     headline: React.ReactNode;
-    value: number;
-    gainsAbsolute: number;
-    roi: number;
 }
 
 const SummaryItem = ({ headline }: Props) => {
@@ -67,7 +66,7 @@ const SummaryItem = ({ headline }: Props) => {
     const poolsSummaryInfo = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
     const { feesUsd, yieldUsd, valueLockedUsd } = poolsSummaryInfo;
 
-    let isSelected = selectedPoolId === 'all';
+    const isSelected = selectedPoolId === 'all';
 
     const handleOnClick = (e, exchangeId) => {
         // TODO make exchange specific later

@@ -15,7 +15,7 @@ const SvgWrapper = styled.img`
 `;
 
 interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
-    size?: number;
+    height?: number;
 }
 
 const PageLogo = ({ height = 32 }: Props) => {

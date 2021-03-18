@@ -146,18 +146,14 @@ const Dashboard = () => {
             return (
                 <SadCrocoBox>
                     Sorry, Croco could not find any pools for this address :(
-                    <StyledQuestionTooltip
-                        content={
-                            'We track only pools on Uniswap, SushiSwap, Balancer and Materia exchanges.'
-                        }
-                    />
+                    <StyledQuestionTooltip content="We track only pools on Uniswap, SushiSwap, Balancer and Materia exchanges." />
                 </SadCrocoBox>
             );
         }
         return null;
     };
 
-    let exceptionContent = getExceptionContent();
+    const exceptionContent = getExceptionContent();
 
     return (
         <>
@@ -169,14 +165,13 @@ const Dashboard = () => {
                             <AddressSelect />
                         </AddressWrapper>
                         <PoolsWrapper>
-                            {exceptionContent
-                                ? exceptionContent
-                                : !noPoolsSavedInRedux && (
-                                      <>
-                                          <SummaryList cardMaxWidth={POOL_CARD_MAX_WIDTH} />
-                                          <PoolList cardMaxWidth={POOL_CARD_MAX_WIDTH} />
-                                      </>
-                                  )}
+                            {exceptionContent ||
+                                (!noPoolsSavedInRedux && (
+                                    <>
+                                        <SummaryList cardMaxWidth={POOL_CARD_MAX_WIDTH} />
+                                        <PoolList cardMaxWidth={POOL_CARD_MAX_WIDTH} />
+                                    </>
+                                ))}
                         </PoolsWrapper>
                     </LeftContentWrapper>
                 </LeftLayoutContainer>

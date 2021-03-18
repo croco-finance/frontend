@@ -164,6 +164,15 @@ const FeedbackView = () => {
     const [feedbackSent, setFeedbackSent] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const isFeedbackTooShort = () => description.trim().length < 1;
+    const isFeedbackTooLong = () => description.trim().length > 5000;
+
+    const resetForm = () => {
+        setDex(undefined);
+        setPair('');
+        setDescription('');
+        setAddress('');
+    };
     const submitFeedback = async () => {
         if (!isFeedbackTooShort() && !isFeedbackTooLong()) {
             setLoading(true);
@@ -191,21 +200,6 @@ const FeedbackView = () => {
                 setLoading(false);
             }
         }
-    };
-
-    const resetForm = () => {
-        setDex(undefined);
-        setPair('');
-        setDescription('');
-        setAddress('');
-    };
-
-    const isFeedbackTooShort = () => {
-        return description.trim().length < 1;
-    };
-
-    const isFeedbackTooLong = () => {
-        return description.trim().length > 5000;
     };
 
     return (

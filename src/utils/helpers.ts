@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 // This function is used for example when computing daily fees for
 const mergeStringNumberObjects = (
     obj0: { [key: string]: number },
@@ -27,9 +28,9 @@ const mergeStringNumberObjects = (
 };
 
 const getUniqueItemsFromArray = (array: Array<any>) => {
-    var a = array.concat();
-    for (var i = 0; i < a.length; ++i) {
-        for (var j = i + 1; j < a.length; ++j) {
+    const a = array.concat();
+    for (let i = 0; i < a.length; ++i) {
+        for (let j = i + 1; j < a.length; ++j) {
             if (a[i] === a[j]) a.splice(j--, 1);
         }
     }

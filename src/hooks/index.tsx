@@ -21,7 +21,5 @@ export const useLayoutSize = () => {
 export const useActions = <M extends ActionCreatorsMapObject<any>>(actions: M) => {
     const dispatch = useDispatch();
     const ref = useRef(actions);
-    return useMemo(() => {
-        return bindActionCreators(ref.current, dispatch);
-    }, [dispatch, ref]);
+    return useMemo(() => bindActionCreators(ref.current, dispatch), [dispatch, ref]);
 };

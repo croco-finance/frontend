@@ -76,6 +76,8 @@ interface Props {
 
 const PriceChangeRow = ({
     firstColumn,
+    secondColumn,
+    thirdColumn,
     fourthColumn,
     onSliderChange,
     onDefaultSliderValueChange,
@@ -92,7 +94,7 @@ const PriceChangeRow = ({
     };
 
     const handleInputChange = event => {
-        let typedValueFloat = parseFloat(event.target.value);
+        const typedValueFloat = parseFloat(event.target.value);
 
         // TODO handle the situation when user types in empty string
         // if (!isNaN(typedValueFloat)) {
@@ -140,7 +142,7 @@ const PriceChangeRow = ({
                     </SliderRightLabel>
                 </SliderWrapper>
             </Col>
-            <Col textAlign="right" color={'dark'}>
+            <Col textAlign="right" color="dark">
                 {fourthColumn}
             </Col>
         </>

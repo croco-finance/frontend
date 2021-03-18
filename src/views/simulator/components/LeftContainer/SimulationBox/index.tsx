@@ -4,6 +4,7 @@ import { TokenType } from '@types';
 import React from 'react';
 import styled from 'styled-components';
 import PriceChangeRow from './PriceChangeRow';
+
 const GRID_GAP = 5;
 
 const Wrapper = styled.div`
@@ -118,36 +119,34 @@ const SimulationBox = ({
 
             <XScrollWrapper>
                 <GridWrapper>
-                    {tokenSymbols.map((tokenSymbol, i) => {
-                        return (
-                            <PriceChangeRow
-                                // make sure the id is unique to the pool and the token. We want the token sliders
-                                // to re/render if in the new pool are the same tokens as in the previous pool
-                                key={`${poolId}${tokenSymbol}`}
-                                onSliderChange={newValue => {
-                                    onChange(newValue, i);
+                    {tokenSymbols.map((tokenSymbol, i) => (
+                        <PriceChangeRow
+                            // make sure the id is unique to the pool and the token. We want the token sliders
+                            // to re/render if in the new pool are the same tokens as in the previous pool
+                            key={`${poolId}${tokenSymbol}`}
+                            onSliderChange={newValue => {
+                                onChange(newValue, i);
 
-                                    // if it is WETH slider, increase price of ETH as well
-                                    if (i === indexOfWeth) onEthChange(newValue);
-                                    if (i === indexOfYield) onYieldChange(newValue);
-                                }}
-                                onDefaultSliderValueChange={newValue => {
-                                    onNewDefaultValue(newValue, i);
-                                    if (i === indexOfWeth) onNewDefaultEthValue(newValue);
-                                }}
-                                firstColumn={
-                                    <TokenWrapper>
-                                        <TokenLogo symbol={tokenSymbol} size={22} />
-                                        <TokenSymbol>{tokenSymbol}</TokenSymbol>
-                                    </TokenWrapper>
-                                }
-                                fourthColumn={
-                                    <FiatValue value={tokenPrices[i] * simulatedCoefficients[i]} />
-                                }
-                                color="dark"
-                            />
-                        );
-                    })}
+                                // if it is WETH slider, increase price of ETH as well
+                                if (i === indexOfWeth) onEthChange(newValue);
+                                if (i === indexOfYield) onYieldChange(newValue);
+                            }}
+                            onDefaultSliderValueChange={newValue => {
+                                onNewDefaultValue(newValue, i);
+                                if (i === indexOfWeth) onNewDefaultEthValue(newValue);
+                            }}
+                            firstColumn={
+                                <TokenWrapper>
+                                    <TokenLogo symbol={tokenSymbol} size={22} />
+                                    <TokenSymbol>{tokenSymbol}</TokenSymbol>
+                                </TokenWrapper>
+                            }
+                            fourthColumn={
+                                <FiatValue value={tokenPrices[i] * simulatedCoefficients[i]} />
+                            }
+                            color="dark"
+                        />
+                    ))}
                     {/* If WETH not among pooled tokens, show ETH slider as well */}
                     {indexOfWeth === -1 && selectedTab !== 'il' && (
                         <PriceChangeRow
@@ -158,7 +157,7 @@ const SimulationBox = ({
                             onDefaultSliderValueChange={newValue => onNewDefaultEthValue(newValue)}
                             firstColumn={
                                 <TokenWrapper>
-                                    <TokenLogo symbol={'eth'} size={22} />
+                                    <TokenLogo symbol="eth" size={22} />
                                     <TokenSymbol>ETH</TokenSymbol>
                                 </TokenWrapper>
                             }

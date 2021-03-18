@@ -296,9 +296,9 @@ const Simulator = () => {
                 allPools[selectedPoolId].isActive
             ) {
                 const pool = allPools[selectedPoolId];
-                const { yieldToken, tokenWeights, tokenSymbols } = pool;
+                const { tokenWeights, tokenSymbols } = pool;
                 const { tokenPricesEnd, ethPriceEnd, tokenBalances } = pool.cumulativeStats;
-                const yieldTokenSymbol = yieldToken?.symbol;
+                const yieldTokenSymbol = '';
 
                 dispatch(
                     setNewSimulationPoolData(
@@ -412,9 +412,9 @@ const Simulator = () => {
 
     const handlePoolSelectionChange = (poolId: string) => {
         const pool = allPools[poolId];
-        const { yieldToken, tokenWeights, tokenSymbols } = pool;
+        const { tokenWeights, tokenSymbols } = pool;
         const { tokenPricesEnd, ethPriceEnd, tokenBalances } = pool.cumulativeStats;
-        const yieldTokenSymbol = yieldToken?.symbol;
+        const yieldTokenSymbol = '';
 
         dispatch(
             setNewSimulationPoolData(

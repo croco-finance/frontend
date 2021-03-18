@@ -16,7 +16,7 @@ export const THEME = {
         BUTTON_PRIMARY_BG_DISABLED: '#e7e9ed',
         BUTTON_PRIMARY_FONT_DISABLED: '#ffffff',
 
-        //Secondary
+        // Secondary
         BUTTON_SECONDARY_BG: '#deeefd',
         BUTTON_SECONDARY_FONT: '#0084ff',
         BUTTON_SECONDARY_BG_HOVER: '#0084ff',

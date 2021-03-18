@@ -188,11 +188,7 @@ const LiquidityPool = ({
             firstColumn={
                 <div style={{ display: '-webkit-inline-box' }}>
                     Transaction expenses
-                    <QuestionTooltip
-                        content={
-                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
-                        }
-                    />
+                    <QuestionTooltip content="Amount of ETH you spent for all pool deposit and withdrawal transactions" />
                 </div>
             }
             secondColumn={

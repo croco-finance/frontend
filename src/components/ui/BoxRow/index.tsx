@@ -43,6 +43,7 @@ const Col = styled.div<RowContentProps>`
                 return css`
                     color: ${props.theme.FONT_DARK};
                 `;
+            // no default
         }
     }}
 
@@ -64,7 +65,7 @@ interface Props {
     customColor?: string;
 }
 
-const BoxRow = ({
+const BoxRow: React.FC<Props> = ({
     // set default values
     firstColumn,
     secondColumn,
@@ -73,42 +74,28 @@ const BoxRow = ({
     columnColors = ['medium', 'medium', 'medium', 'medium'],
     columnAlignment = ['left', 'right', 'right', 'left'],
     customColor,
-}: Props) => {
-    return (
-        <>
-            <Col textAlign={columnAlignment[0]} color={columnColors[0]} customColor={customColor}>
-                {firstColumn}
+}) => (
+    <>
+        <Col textAlign={columnAlignment[0]} color={columnColors[0]} customColor={customColor}>
+            {firstColumn}
+        </Col>
+        {secondColumn ? (
+            <Col textAlign={columnAlignment[1]} color={columnColors[1]} customColor={customColor}>
+                {secondColumn}
             </Col>
-            {secondColumn ? (
-                <Col
-                    textAlign={columnAlignment[1]}
-                    color={columnColors[1]}
-                    customColor={customColor}
-                >
-                    {secondColumn}
-                </Col>
-            ) : null}
+        ) : null}
 
-            {thirdColumn ? (
-                <Col
-                    textAlign={columnAlignment[2]}
-                    color={columnColors[2]}
-                    customColor={customColor}
-                >
-                    {thirdColumn}
-                </Col>
-            ) : null}
-            {fourthColumn ? (
-                <Col
-                    textAlign={columnAlignment[3]}
-                    color={columnColors[3]}
-                    customColor={customColor}
-                >
-                    {fourthColumn}
-                </Col>
-            ) : null}
-        </>
-    );
-};
+        {thirdColumn ? (
+            <Col textAlign={columnAlignment[2]} color={columnColors[2]} customColor={customColor}>
+                {thirdColumn}
+            </Col>
+        ) : null}
+        {fourthColumn ? (
+            <Col textAlign={columnAlignment[3]} color={columnColors[3]} customColor={customColor}>
+                {fourthColumn}
+            </Col>
+        ) : null}
+    </>
+);
 
 export default BoxRow;

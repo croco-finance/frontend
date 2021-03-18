@@ -58,14 +58,14 @@ const RightContainer = ({
         );
 
         // Get simulated values for last interval
-        let simulatedValues = simulatorUtils.getSimulationStats(
+        const simulatedValues = simulatorUtils.getSimulationStats(
             userTokenBalances,
             new Array(userTokenBalances.length).fill(0),
             simulatedPooledTokenPrices,
             tokenWeights,
             exchange,
         );
-        let {
+        const {
             simulatedTokenBalances,
             simulatedFeesUsd,
             simulatedPoolValueUsd,
@@ -88,7 +88,7 @@ const RightContainer = ({
                     tabHeadlines={[]}
                 />
                 <Overview
-                    isActive={true}
+                    isActive
                     tokenSymbols={tokenSymbols}
                     tokenBalances={userTokenBalances}
                     simulatedPooledTokenBalances={simulatedTokenBalances}
@@ -114,7 +114,7 @@ const RightContainer = ({
 
     if (!pool) return null;
 
-    let {
+    const {
         isActive,
         depositTimestamps,
         depositTokenAmounts,
@@ -145,7 +145,7 @@ const RightContainer = ({
         yieldTotalTokenAmounts,
     } = pool.cumulativeStats;
 
-    let lastWeekAverageDailyRewardsUsd: number | undefined = undefined;
+    let lastWeekAverageDailyRewardsUsd: number | undefined;
     if (pool.dailyStats) lastWeekAverageDailyRewardsUsd = pool.dailyStats.averageDailyFeesUsd;
 
     // Get simulated prices of pooled tokens and ETH
@@ -165,14 +165,14 @@ const RightContainer = ({
     const lastSnapFeesTokenAmounts = lastIntervalStat.feesTokenAmounts;
 
     // Get simulated values for last interval
-    let simulatedValues = simulatorUtils.getSimulationStats(
+    const simulatedValues = simulatorUtils.getSimulationStats(
         tokenBalances,
         lastSnapFeesTokenAmounts,
         simulatedPooledTokenPrices,
         tokenWeights,
         exchange,
     );
-    let {
+    const {
         simulatedTokenBalances,
         simulatedFeesUsd,
         simulatedFeesTokenAmounts,
@@ -208,15 +208,15 @@ const RightContainer = ({
 
     // YIELD AND TX COST
     // TODO support simulated yield price for multiple tokens
-    let simulatedYieldUsd = yieldTotalTokenAmounts[0] * simulatedYieldPrice; //TODO check if yield among pooled tokens
+    let simulatedYieldUsd = yieldTotalTokenAmounts[0] * simulatedYieldPrice; // TODO check if yield among pooled tokens
     if (!simulatedYieldUsd) simulatedYieldUsd = 0;
 
     const simulatedTxCostUsd = txCostEth * simulatedEthPrice;
 
     // STRATEGIES
     // if pool is not active, do not add "simulatedPoolValueUsd"
-    let simulatedCurrentPoolValueUsd = isActive ? simulatedPoolValueUsd : 0;
-    let simulatedPoolStrategyUsd =
+    const simulatedCurrentPoolValueUsd = isActive ? simulatedPoolValueUsd : 0;
+    const simulatedPoolStrategyUsd =
         simulatedCurrentPoolValueUsd +
         simulatedWithdrawalsUsd +
         simulatedYieldUsd -
@@ -318,7 +318,7 @@ const RightContainer = ({
                     ethHodlStrategyUsd={ethHodlStrategyUsd}
                     tokensHodlStrategyTokenAmounts={tokensHodlStrategyTokenAmounts}
                     ethHodlStrategyEth={ethHodlStrategyEth}
-                    //slider
+                    // slider
                     sliderDefaultCoeffs={sliderDefaultCoeffs}
                     sliderDefaultEthCoeff={sliderDefaultEthCoeff}
                 />

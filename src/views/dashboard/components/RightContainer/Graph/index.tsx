@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { variables } from '@config';
 import { AppThemeColors, InteractionsGraphData } from '@types';
 import { formatUtils } from '@utils';
@@ -29,7 +30,7 @@ const getYAxisMaxValue = data => {
     });
 
     // Increase the max value by 5% and round value to thousands
-    maxValue = maxValue + 0.05 * maxValue;
+    maxValue += 0.05 * maxValue;
     maxValue = Math.round(maxValue / 1000) * 1000;
 
     return maxValue;
@@ -90,15 +91,14 @@ const getBarColor = (
         //     return colors.GRAPH_1_DARK;
         // }
         return theme.GRAPH_1_DARK;
-    } else {
-        // not highlighted
-        // if (isYieldArea(data)) {
-        //     return '#e9bcf9';
-        // } else {
-        //     return colors.GRAPH_1_LIGHT;
-        // }
-        return theme.GRAPH_1_LIGHT;
     }
+    // not highlighted
+    // if (isYieldArea(data)) {
+    //     return '#e9bcf9';
+    // } else {
+    //     return colors.GRAPH_1_LIGHT;
+    // }
+    return theme.GRAPH_1_LIGHT;
 };
 
 const getBarStrokeColor = (
@@ -115,15 +115,14 @@ const getBarStrokeColor = (
         //     return colors.GRAPH_1_DARK;
         // }
         return theme.GRAPH_1_STROKE_DARK;
-    } else {
-        // not highlighted
-        // if (isYieldArea(data)) {
-        //     return '#dca7f0';
-        // } else {
-        //     return colors.GRAPH_1_STROKE_LIGHT;
-        // }
-        return theme.GRAPH_1_STROKE_LIGHT;
     }
+    // not highlighted
+    // if (isYieldArea(data)) {
+    //     return '#dca7f0';
+    // } else {
+    //     return colors.GRAPH_1_STROKE_LIGHT;
+    // }
+    return theme.GRAPH_1_STROKE_LIGHT;
 };
 
 interface Props {
@@ -220,10 +219,10 @@ class Graph extends PureComponent<Props, State> {
                             )
                         }
                         tickFormatter={value => getFormattedXAxisLabel(value)}
-                        orientation={'top'}
+                        orientation="top"
                         interval={data.length > 20 ? 2 : 0}
                         stroke={theme.STROKE_GREY}
-                    ></XAxis>
+                    />
 
                     <XAxis
                         xAxisId={1}
@@ -267,7 +266,7 @@ class Graph extends PureComponent<Props, State> {
                                 fill: theme.FONT_MEDIUM,
                             },
                         }}
-                    ></YAxis>
+                    />
                 </AreaChart>
             </ResponsiveContainer>
         );

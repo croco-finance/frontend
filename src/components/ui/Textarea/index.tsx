@@ -40,23 +40,19 @@ const Area = styled.textarea<Props>`
 `;
 
 interface Props extends React.InputHTMLAttributes<HTMLTextAreaElement> {
-    isDisabled?: boolean;
-    addonAlign?: 'left' | 'right';
     noBorder?: boolean;
     useWhiteBackground?: boolean;
     useDarkBorder?: boolean;
     height?: number;
 }
 
-const Textarea = (props: Props) => {
-    return (
-        <Area
-            height={props.height}
-            useWhiteBackground={props.useWhiteBackground}
-            noBorder={props.noBorder}
-            useDarkBorder={props.useDarkBorder}
-            placeholder={props.placeholder}
-        />
-    );
-};
+const Textarea = (props: Props) => (
+    <Area
+        height={props.height}
+        useWhiteBackground={props.useWhiteBackground}
+        noBorder={props.noBorder}
+        useDarkBorder={props.useDarkBorder}
+        placeholder={props.placeholder}
+    />
+);
 export default Textarea;

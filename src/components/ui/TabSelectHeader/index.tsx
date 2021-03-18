@@ -1,7 +1,7 @@
-import { colors, variables } from '@config';
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import { variables } from '@config';
 import { useTheme } from '@hooks';
+import React from 'react';
+import styled from 'styled-components';
 
 const Headline = styled.div`
     display: flex;
@@ -75,20 +75,18 @@ const TabSelectHeader = ({
             {headline && <Headline>{headline}</Headline>}
             {!hideTabs && (
                 <ButtonsWrapper>
-                    {tabIds.map((id, i) => {
-                        return (
-                            <Button
-                                color={focusColor ? focusColor : theme.GREEN}
-                                bold={bold}
-                                onClick={() => {
-                                    onSelectTab(id);
-                                }}
-                                selected={selected === id}
-                            >
-                                <span>{tabHeadlines[i]}</span>
-                            </Button>
-                        );
-                    })}
+                    {tabIds.map((id, i) => (
+                        <Button
+                            color={focusColor || theme.GREEN}
+                            bold={bold}
+                            onClick={() => {
+                                onSelectTab(id);
+                            }}
+                            selected={selected === id}
+                        >
+                            <span>{tabHeadlines[i]}</span>
+                        </Button>
+                    ))}
                 </ButtonsWrapper>
             )}
         </Header>

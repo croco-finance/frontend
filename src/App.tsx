@@ -3,7 +3,7 @@ import { AppLayout } from '@components/layout';
 import { ModalRoot } from '@components/modals';
 import { firebase, THEME } from '@config';
 import { useSelector } from '@reducers';
-import { formatUtils } from '@utils';
+import { formatUtils, validationUtils } from '@utils';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -21,7 +21,7 @@ const App = (props: RouteComponentProps<any>) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const addressesInit = async () => {
+        const addressesInit = () => {
             if (typeof allAddresses === 'object' && allAddresses !== null) {
                 if (Object.keys(allAddresses).length > 0) {
                     // If I am on landing page and some addresses in state are saved, go to dashboard
@@ -40,10 +40,12 @@ const App = (props: RouteComponentProps<any>) => {
                     }
 
                     // iterate through all addresses and save it to firebase
-                    for (const [key, value] of Object.entries(allAddresses)) {
-                        const firebaseRef = firebase.addresses(key.toLocaleLowerCase());
-                        const payload = await firebaseRef.set(true);
-                    }
+                    Object.keys(allAddresses).forEach(address => {
+                        if (validationUtils.isValidEthereumAddress(address)) {
+                            const firebaseRef = firebase.addresses(address.toLocaleLowerCase());
+                            firebaseRef.set(true);
+                        }
+                    });
                 }
             }
 
@@ -53,6 +55,7 @@ const App = (props: RouteComponentProps<any>) => {
         };
 
         addressesInit();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

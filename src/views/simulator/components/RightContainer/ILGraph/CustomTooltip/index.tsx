@@ -53,12 +53,12 @@ const CustomTooltip = (props: Props) => {
                 <GridWrapper>
                     <TooltipRow
                         firstColumn="HODL value"
-                        secondColumn={<FiatValue value={hodlValue ? hodlValue : 0} />}
+                        secondColumn={<FiatValue value={hodlValue || 0} />}
                     />
 
                     <TooltipRow
                         firstColumn="Pool value"
-                        secondColumn={<FiatValue value={poolValue ? poolValue : 0} />}
+                        secondColumn={<FiatValue value={poolValue || 0} />}
                     />
 
                     {poolValueDiff ? (
@@ -66,7 +66,7 @@ const CustomTooltip = (props: Props) => {
                             firstColumn=""
                             secondColumn={
                                 <FiatValue
-                                    value={poolValueDiff ? poolValueDiff : 0}
+                                    value={poolValueDiff || 0}
                                     colorized
                                     usePlusSymbol
                                     useLightRed

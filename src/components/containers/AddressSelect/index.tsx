@@ -35,29 +35,30 @@ const ManageAddressesButton = styled.button`
     }
 `;
 
-const buildAddressOption = (address: string, ens: string) => {
-    return {
-        value: address,
-        label: ens ? ens : address,
-    };
-};
+const buildAddressOption = (address: string, ens: string): AddressOption => ({
+    value: address,
+    label: ens || address,
+});
 
 const buildAddressOptions = (addresses: AllAddressesGlobal) => {
     if (!addresses) return null;
 
     let numberOfBundled = 0;
-    const options = new Array();
+    const options: AddressOption[] = [];
 
     // get how many bundled addresses there are
-    for (const [address, value] of Object.entries(addresses)) {
+    Object.keys(addresses).forEach(address => {
+        // addresses are 0xabc, 0xefg, ... and "bundled".
         if (address !== 'bundled') {
+            const { bundled, ens } = addresses[address];
+
             // check if the address has bundled tag
-            if (value.bundled) numberOfBundled += 1;
+            if (bundled) numberOfBundled += 1;
 
             // push address option
-            options.push(buildAddressOption(address, value.ens));
+            options.push(buildAddressOption(address, ens));
         }
-    }
+    });
 
     // add bundled option if more than 1 bundled addresses is present
     if (numberOfBundled > 1) {
@@ -122,17 +123,16 @@ const AddressSelect = ({ isSelectedNull }: Props) => {
                 if (!addressesAreEqual && bundledAddressesCount > 1) {
                     dispatch(fetchSnapshots(currentBundled));
                 }
-            } else {
-                // if there is only one address in allAddresses and it's different from previously selected address, select it automatically
-                if (
-                    addressesCount === 1 &&
-                    (addressSelectedBeforeModalOpened.current !== selectedAddress ||
-                        selectedAddress === null)
-                ) {
-                    const addressToSelect = Object.keys(allAddresses)[0];
-                    dispatch(setSelectedAddress(addressToSelect));
-                    dispatch(fetchSnapshots(addressToSelect));
-                }
+            }
+            // if there is only one address in allAddresses and it's different from previously selected address, select it automatically
+            if (
+                addressesCount === 1 &&
+                (addressSelectedBeforeModalOpened.current !== selectedAddress ||
+                    selectedAddress === null)
+            ) {
+                const addressToSelect = Object.keys(allAddresses)[0];
+                dispatch(setSelectedAddress(addressToSelect));
+                dispatch(fetchSnapshots(addressToSelect));
             }
         } else {
             // if the modal is going to be opened, take snapshot
@@ -141,6 +141,7 @@ const AddressSelect = ({ isSelectedNull }: Props) => {
             );
             addressSelectedBeforeModalOpened.current = selectedAddress;
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showAddressModal]);
 
     const getSelectedAddressValue = (address: string | null) => {
@@ -150,7 +151,8 @@ const AddressSelect = ({ isSelectedNull }: Props) => {
                 value: 'bundled',
                 label: 'Bundled Wallets',
             };
-        } else if (address === '' || address === null) {
+        }
+        if (address === '' || address === null) {
             // if null is selected, the placeholder is shown
             return null;
         }
@@ -185,7 +187,7 @@ const AddressSelect = ({ isSelectedNull }: Props) => {
                 <Modal
                     cancelable
                     onCancel={() => setShowAddressModal(false)}
-                    heading={'Manage addresses'}
+                    heading="Manage addresses"
                     showHeaderBorder={false}
                 >
                     <AddressModal />

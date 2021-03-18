@@ -76,6 +76,8 @@ const DailyFeesChart = ({ dailyStats, graphHeight = 380, noBorder = false }: Pro
     const graphData = graphUtils.getDailyGraphData(dailyStats);
     const { feesUsd, errorDays } = dailyStats;
 
+    console.log('graphData', graphData);
+
     const earnedSinceText = graphData
         ? formatUtils.getFormattedDateFromTimestamp(graphData[0].timestamp, 'MONTH_DAY')
         : '...';
@@ -93,11 +95,7 @@ const DailyFeesChart = ({ dailyStats, graphHeight = 380, noBorder = false }: Pro
                 <>
                     <GraphHeadline>
                         {`Daily fees earned since ${earnedSinceText}`}
-                        <QuestionTooltip
-                            content={
-                                'Includes only rewards from trading fees (yield rewards are not included). Fee value is computed for token prices at the particular day.'
-                            }
-                        />
+                        <QuestionTooltip content="Includes only rewards from trading fees (yield rewards are not included). Fee value is computed for token prices at the particular day." />
                     </GraphHeadline>
                     {errorDays.length > 0 && (
                         <StyledInfoBox iconSize={14}>
@@ -117,7 +115,7 @@ const DailyFeesChart = ({ dailyStats, graphHeight = 380, noBorder = false }: Pro
                                 averageFees={mathUtils.getArrayAverage(feesUsd)}
                                 theme={theme}
                                 height={graphHeight}
-                            ></FeesGraph>
+                            />
                             <StyledGrayBox
                                 backgroundColor={theme.BACKGROUND}
                                 padding={[10, 10, 10, 10]}
