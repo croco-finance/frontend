@@ -243,7 +243,8 @@ export interface DailyStats {
     averageDailyYieldUsd: number | undefined;
 }
 
-export type AllPoolsGlobal = { [key: string]: PoolItem } | Record<string, never>;
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type AllPoolsGlobal = { [key: string]: PoolItem } | {};
 export interface AddressData {
     bundled: boolean;
     ens: string;

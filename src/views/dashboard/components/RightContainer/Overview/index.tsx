@@ -82,8 +82,6 @@ const Overview = () => {
     let poolId;
     let dailyStats;
 
-    console.log('allPools[selectedPoolId]', allPools[selectedPoolId]);
-
     // stats for daily fee chart
     if (selectedPoolId === 'all') {
         dailyStats = activePoolsSummary.dailyStats;

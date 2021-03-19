@@ -1,7 +1,15 @@
 /* eslint-disable no-await-in-loop */
 import * as actionTypes from '@actionTypes';
 import { analytics, ethersProvider } from '@config';
-import { AllPoolsGlobal, DailyStats, DexToPoolIdMap, PoolToken, Snap, SnapStructure } from '@types';
+import {
+    AllPoolsGlobal,
+    DailyStats,
+    DexToPoolIdMap,
+    PoolItem,
+    PoolToken,
+    Snap,
+    SnapStructure,
+} from '@types';
 import {
     formatUtils,
     getDailyFees,
@@ -128,6 +136,49 @@ export const changeSelectedPool = (poolId: string) => dispatch => {
     }
 };
 
+const getDailyDataForPool = async (poolItem: PoolItem) => {
+    const response = await getDailyFees(poolItem.poolId);
+    if (response) {
+        const { snapshots, exchange, tokenWeights, tokenSymbols } = poolItem;
+
+        const dailyStats = statsComputations.getDailyRewards(
+            response,
+            snapshots,
+            exchange,
+            tokenWeights,
+            tokenSymbols,
+        );
+
+        return dailyStats;
+    }
+
+    console.log(`Did not get valid response in fetchDailyFees() for poolId: ${poolItem.poolId}`);
+
+    return null;
+};
+
+const getDailyDataObject = async (allPoolsGlobal: AllPoolsGlobal) => {
+    const ids = Object.keys(allPoolsGlobal);
+    const fetchedDailyData = {};
+
+    // You have to use for loop if you want to use await in a loop.
+    // Do not use forEach()
+    for (let i = 0; i < ids.length; i++) {
+        const id = ids[i];
+        const poolItem = allPoolsGlobal[id];
+        const { isActive } = poolItem;
+
+        if (isActive) {
+            const data = await getDailyDataForPool(poolItem);
+            if (data) {
+                fetchedDailyData[id] = data;
+            }
+        }
+    }
+
+    return fetchedDailyData;
+};
+
 export const fetchSnapshots = (addresses: string[] | string) => async dispatch => {
     dispatch(fetchSnapsInit());
 
@@ -223,6 +274,12 @@ export const fetchSnapshots = (addresses: string[] | string) => async dispatch =
             const { exchange } = snapshotsArr[0];
             dexToPoolMap[exchange].push(id);
 
+            // token weights and token symbols
+            const tokenWeights = formatUtils.getTokenWeightsArr(snapshotsArr[0].tokens);
+            const tokenSymbols = formatUtils.getTokenSymbolArr(
+                getPooledTokensInfo(snapshotsArr[0].tokens),
+            );
+
             // Create new pool object
             customPoolsObject[id] = {
                 exchange,
@@ -234,48 +291,33 @@ export const fetchSnapshots = (addresses: string[] | string) => async dispatch =
                 pooledTokens: getPooledTokensInfo(snapshotsArr[0].tokens),
                 intervalStats,
                 cumulativeStats,
-                tokenWeights: formatUtils.getTokenWeightsArr(snapshotsArr[0].tokens),
+                tokenWeights,
                 deposits,
                 withdrawals,
                 depositTimestamps,
                 depositTokenAmounts,
                 depositEthAmounts,
-                tokenSymbols: formatUtils.getTokenSymbolArr(
-                    getPooledTokensInfo(snapshotsArr[0].tokens),
-                ),
+                tokenSymbols,
                 snapshots: snapshotsArr,
                 dailyStats: undefined,
             };
         }
     });
+
     // fetch daily fees for all active pools
     dispatch(fetchDailyInit());
+    let dailyStats;
     try {
-        Object.keys(customPoolsObject).forEach(async id => {
-            const poolItem = customPoolsObject[id];
-            const { poolId, isActive } = poolItem;
-
-            // fetch daily data only for active pools
-            if (isActive) {
-                try {
-                    const response = await getDailyFees(poolId);
-                    if (response) {
-                        const dailyStats = statsComputations.getDailyRewards(response, poolItem);
-                        poolItem.dailyStats = dailyStats;
-                    } else {
-                        // TODO save ID of the pool for which the fetch failed
-                        dispatch(fetchDailyFailed());
-                        console.log('Did not get valid response in fetchDailyFees()');
-                    }
-                } catch (e) {
-                    console.log('Failed to fetch daily data for pool ID: ', poolId);
-                }
-            }
-        });
+        dailyStats = await getDailyDataObject(customPoolsObject);
     } catch (e) {
         console.log('Error while fetching daily data for pools');
         dispatch(fetchDailyFailed());
     }
+
+    // assign daily data to Global object
+    Object.keys(dailyStats).forEach(id => {
+        if (dailyStats[id]) customPoolsObject[id].dailyStats = { ...dailyStats[id] };
+    });
 
     dispatch(fetchSnapsSuccess(customPoolsObject, dexToPoolMap, activePoolIds, inactivePoolIds));
 };

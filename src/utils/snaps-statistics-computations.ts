@@ -4,6 +4,7 @@ import {
     DailyData,
     DailyStats,
     Deposit,
+    Exchange,
     IntervalStats,
     PoolItem,
     Snap,
@@ -583,7 +584,7 @@ const getPoolsSummaryObject = (
     // iterate through all specified pool IDs
     for (let i = 0; i < filteredPoolIds.length; i++) {
         const poolId = filteredPoolIds[i];
-        const pool: PoolItem = allPools[poolId];
+        const pool = allPools[poolId];
         const { cumulativeStats, pooledTokens, yieldRewards } = pool;
         const {
             currentPoolValueUsd,
@@ -688,11 +689,13 @@ const getPoolsSummaryObject = (
 
 const getDailyRewards = (
     dailyData: { [key: number]: DailyData },
-    poolItem: PoolItem,
+    snapshots: Snap[],
+    exchange: PoolItem['exchange'],
+    tokenWeights: PoolItem['tokenWeights'],
+    tokenSymbols: PoolItem['tokenSymbols'],
 ): DailyStats | undefined => {
     console.log('getDailyRewards()');
 
-    const { exchange, snapshots, tokenWeights, tokenSymbols } = poolItem;
     const userTokenBalancesDaily: number[][] = [];
     const tokenPricesDaily: number[][] = [];
     const tokenFeesArr: number[][] | undefined = [];
@@ -821,10 +824,6 @@ const getDailyRewards = (
         usdFeesArr.push(feesUsd);
         statsTimestamps.push(dayTimestamps[i + 1]);
     }
-
-    console.log('tokenFeesArr', tokenFeesArr);
-    console.log('usdFeesArr', usdFeesArr);
-    console.log('statsTimestamps', statsTimestamps);
 
     // compute average rewards of from last N samples (N included)
     const statDaysCount = statsTimestamps.length;
