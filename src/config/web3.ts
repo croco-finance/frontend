@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import Portis from '@portis/web3';
 import { constants } from '@config';
-import ethers from 'ethers';
+import { ethers } from 'ethers';
 
 const portis = new Portis(constants.PORTIS_DAPP_KEY, 'mainnet');
 

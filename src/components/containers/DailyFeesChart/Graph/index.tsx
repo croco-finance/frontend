@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import styled, { css } from 'styled-components';
 import { colors, variables } from '@config';
 import { formatUtils } from '@utils';
@@ -11,7 +12,6 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    Label,
     ResponsiveContainer,
     ReferenceLine,
 } from 'recharts';
@@ -39,12 +39,7 @@ interface Props {
     averageFees?: number;
 }
 
-class FeesGraph extends PureComponent<Props, {}> {
-    constructor(props) {
-        super(props);
-        this.state = { highlightedAreaId: null };
-    }
-
+class FeesGraph extends PureComponent<Props, 'unknown'> {
     render() {
         const { data, theme, height, averageFees } = this.props;
 
@@ -78,14 +73,14 @@ class FeesGraph extends PureComponent<Props, {}> {
                         }
                         stroke={colors.FONT_MEDIUM}
                         interval={0}
-                    ></XAxis>
+                    />
 
                     <YAxis
                         tick={{ fontSize: variables.FONT_SIZE.SMALL }}
                         stroke={colors.FONT_MEDIUM}
                         tickFormatter={formatUtils.getFormattedUsdValue}
                         domain={[0, 'auto']}
-                    ></YAxis>
+                    />
 
                     <Tooltip
                         cursor={{ stroke: '#4366b1ff', strokeWidth: 1 }}
@@ -102,7 +97,7 @@ class FeesGraph extends PureComponent<Props, {}> {
                             }}
                             stroke={theme.PURPLE}
                             strokeDasharray="3 3"
-                            isFront={true}
+                            isFront
                         />
                     )}
                 </AreaChart>

@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import reducer from './store/reducers';
+import reducer, { resizeReducer, simulatorReducer } from './store/reducers';
 import modalReducer from './reducers/modalReducer';
 
 import { loadState, saveState } from '@utils';
@@ -9,6 +9,8 @@ import { loadState, saveState } from '@utils';
 const rootReducer = combineReducers({
     app: reducer,
     modal: modalReducer,
+    resize: resizeReducer,
+    simulator: simulatorReducer,
     /* other reducers... */
 });
 

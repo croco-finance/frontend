@@ -1,7 +1,6 @@
+import { variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
-import { LeftFillContainer, MainContainer, RightFillContainer } from '..';
-import { variables } from '@config';
 
 const Wrapper = styled.div`
     display: flex;

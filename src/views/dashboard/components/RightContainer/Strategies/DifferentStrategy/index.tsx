@@ -15,7 +15,7 @@ import { useTheme } from '@hooks';
 
 const Wrapper = styled.div`
     width: 100%;
-    max-width: 650px;
+    max-width: 680px;
     margin: 0 auto;
 `;
 
@@ -92,9 +92,7 @@ interface Props {
     txCostUsd: number;
     differentStrategyUsd: number;
     feesTokenAmounts: number[];
-    yieldTotalTokenAmount: number;
     tokenSymbols: string[];
-    yieldTokenSymbol: string | undefined;
     txCostEth: number;
     lastWeekAverageDailyRewardsUsd: number;
     depositTimestampsArr: number[];
@@ -131,7 +129,7 @@ const DifferentStrategy = ({
 }: Props) => {
     const [valueOpened, setValueOpened] = useState(false);
     const [diffOpened, setDiffOpened] = useState(false);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const divergenceLoss = poolStrategyUsd - differentStrategyUsd - feesUsd - yieldUsd + txCostUsd;
 
@@ -200,11 +198,7 @@ const DifferentStrategy = ({
             firstColumn={
                 <div style={{ display: '-webkit-inline-box' }}>
                     Transaction expenses
-                    <QuestionTooltip
-                        content={
-                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
-                        }
-                    />
+                    <QuestionTooltip content="Amount of ETH you spent for all pool deposit and withdrawal transactions" />
                 </div>
             }
             secondColumn={

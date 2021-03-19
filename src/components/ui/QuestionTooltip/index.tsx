@@ -27,10 +27,10 @@ const QuestionTooltip = ({
     content,
     ...rest
 }: Props) => {
-    const theme: any = useTheme();
+    const theme = useTheme();
     return (
         <Tippy duration={duration} content={content}>
-            <IconWrapper>
+            <IconWrapper className={className}>
                 <Icon icon="question" color={theme.FONT_LIGHT} size={16} />
             </IconWrapper>
         </Tippy>

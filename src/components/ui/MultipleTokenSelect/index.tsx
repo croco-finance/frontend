@@ -1,27 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { MultipleTokenLogo, Select } from '..';
+import { MultipleTokenLogo, Select } from '@components/ui';
 
 const Wrapper = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
 `;
-
-interface Option {
-    value: any;
-    label: string;
-}
-const TokenOption = ({ value, label }: Option) => {
-    return (
-        <OptionWrapper>
-            <LogoWrapper>
-                <MultipleTokenLogo size={20} tokens={value.tokens} />
-            </LogoWrapper>
-            <div>{label}</div>
-        </OptionWrapper>
-    );
-};
 
 const OptionWrapper = styled.div`
     display: flex;
@@ -36,6 +21,18 @@ const LogoWrapper = styled.div`
     align-items: center;
 `;
 
+interface Option {
+    value: any;
+    label: string;
+}
+const TokenOption = ({ value, label }: Option) => (
+    <OptionWrapper>
+        <LogoWrapper>
+            <MultipleTokenLogo size={20} tokens={value.tokens} />
+        </LogoWrapper>
+        <div>{label}</div>
+    </OptionWrapper>
+);
 interface Props {
     selected?: any;
     options?: any; // ['usdt', 'wbtc', 'eth', 'dai', '...']
@@ -43,6 +40,7 @@ interface Props {
     isSearchable?: boolean;
     useWhiteBackground?: boolean;
     useDarkBorder?: boolean;
+    placeholder?: string;
 }
 
 const MultipleTokenSelect = ({
@@ -52,21 +50,21 @@ const MultipleTokenSelect = ({
     isSearchable = false,
     useWhiteBackground = false,
     useDarkBorder = false,
-}: Props) => {
-    return (
-        <Wrapper>
-            <Select
-                withDropdownIndicator
-                options={options}
-                onChange={onChange}
-                isSearchable={isSearchable}
-                formatOptionLabel={TokenOption}
-                value={selected}
-                useWhiteBackground={useWhiteBackground}
-                useDarkBorder={useDarkBorder}
-            />
-        </Wrapper>
-    );
-};
+    placeholder,
+}: Props) => (
+    <Wrapper>
+        <Select
+            withDropdownIndicator
+            options={options}
+            onChange={onChange}
+            isSearchable={isSearchable}
+            formatOptionLabel={TokenOption}
+            value={selected}
+            useWhiteBackground={useWhiteBackground}
+            useDarkBorder={useDarkBorder}
+            placeholder={placeholder}
+        />
+    </Wrapper>
+);
 
 export default MultipleTokenSelect;

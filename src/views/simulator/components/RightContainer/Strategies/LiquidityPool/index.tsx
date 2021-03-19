@@ -16,7 +16,7 @@ import DoubleValue from '../DoubleValue';
 
 const Wrapper = styled.div`
     width: 100%;
-    max-width: 650px;
+    max-width: 680px;
     margin: 0 auto;
 `;
 
@@ -117,7 +117,7 @@ const LiquidityPool = ({
     hasYieldReward,
 }: Props) => {
     const [isOpened, setIsOpened] = useState(false);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const endTimeText = isActive
         ? 'Value today'
@@ -188,11 +188,7 @@ const LiquidityPool = ({
             firstColumn={
                 <div style={{ display: '-webkit-inline-box' }}>
                     Transaction expenses
-                    <QuestionTooltip
-                        content={
-                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
-                        }
-                    />
+                    <QuestionTooltip content="Amount of ETH you spent for all pool deposit and withdrawal transactions" />
                 </div>
             }
             secondColumn={

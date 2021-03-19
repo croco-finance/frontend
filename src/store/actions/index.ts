@@ -1,3 +1,22 @@
-export { fetchSnapshots, setSelectedPoolId, changeSelectedPool } from './snapshots';
-export { setAddresses, setSelectedAddress } from './addresses';
+export {
+    fetchSnapshots,
+    setSelectedPoolId,
+    changeSelectedPool,
+    resetPoolData,
+} from './snapshotActions';
+export { setAddresses, setSelectedAddress } from './addressActions';
 export { setTheme } from './appActions';
+export { openModal, closeModal } from './modalActions';
+export { updateWindowSize } from './resizeActions';
+export {
+    fetchPoolSnap,
+    setNewSimulationPoolData,
+    resetPoolSnapData,
+    setSimulationMode,
+    setTokenCoefficients,
+    setEthCoefficient,
+    setYieldCoefficient,
+    setDefaultSliderTokenCoefficient,
+    setDefaultSliderEthCoefficient,
+    resetSimulationCoefficients,
+} from './simulatorActions';

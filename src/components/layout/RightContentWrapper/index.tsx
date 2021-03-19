@@ -5,9 +5,9 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 20px 10px 0 10px;
+    padding: 0px 10px 0 10px;
     width: 100%;
-    max-width: 650px;
+    max-width: 680px;
     align-items: center;
     flex-grow: 1;
     flex-shrink: 0.1;

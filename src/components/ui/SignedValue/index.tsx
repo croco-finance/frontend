@@ -5,7 +5,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const SignedValue = ({ value, className }: Props) => {
-    if (isNaN(value)) {
+    if (Number.isNaN(value)) {
         return '-';
     }
 

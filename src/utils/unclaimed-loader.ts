@@ -1,3 +1,6 @@
+/* eslint-disable no-continue */
+/* eslint-disable prefer-const */
+/* eslint-disable no-await-in-loop */
 import { Exchange, RewardContracts, SnapStructure, StakingService } from '@types';
 import { ethers } from 'ethers';
 
@@ -26,6 +29,7 @@ async function setUnclaimed(
     address: string,
     snaps: SnapStructure,
 ): Promise<void> {
+    // eslint-disable-next-line no-restricted-syntax
     for (const [poolId, poolSnaps] of Object.entries(snaps)) {
         const lastSnap = poolSnaps[poolSnaps.length - 1];
         if (lastSnap.stakingService !== null) {
@@ -41,9 +45,9 @@ async function setUnclaimed(
                 lastSnap.stakingService === StakingService.UNI_V2 ||
                 lastSnap.stakingService === StakingService.INDEX
             ) {
-                let contractAddress = (<{ [key: string]: string }>(
-                    stakingContracts[lastSnap.stakingService]
-                ))[poolId];
+                let contractAddress = (stakingContracts[lastSnap.stakingService] as {
+                    [key: string]: string;
+                })[poolId];
                 const contract = new ethers.Contract(contractAddress, stakingRewardsAbi, provider);
                 unclaimed = await contract.earned(address);
             } else if (lastSnap.stakingService === StakingService.SUSHI) {

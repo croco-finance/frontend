@@ -14,7 +14,7 @@ const Wrapper = styled.div`
     width: 100%;
 `;
 
-type TabOptions = 'overview' | 'strategies';
+type TabOptions = 'il' | 'strategies';
 
 interface Props {
     simulatedPooledTokensCoeffs: Array<number>;
@@ -24,6 +24,7 @@ interface Props {
     sliderDefaultEthCoeff: number;
     onTabChanged: any;
     selectedTab: TabOptions;
+    pool: PoolItem | undefined;
 }
 const RightContainer = ({
     simulatedPooledTokensCoeffs,
@@ -33,33 +34,91 @@ const RightContainer = ({
     sliderDefaultEthCoeff,
     onTabChanged,
     selectedTab,
+    pool,
 }: Props) => {
-    const { allPools, selectedPoolId } = useSelector(state => state.app);
-    // const [selectedTab, setSelectedTab] = useState<TabOptions>('overview');
-
-    // TODO make the following checks and computations cleaner
-    if (!allPools) {
-        return null;
-        // <SelectPoolWrapper>Please input your Ethereum address on the left</SelectPoolWrapper>
-    }
-
-    // just in case the Pool summary is selected, return the following message
-    if (selectedPoolId === 'all' || !selectedPoolId || !allPools[selectedPoolId]) {
-        // return <SelectPoolWrapper>Select your pool</SelectPoolWrapper>;
-        return null;
-    }
-
-    const pool: PoolItem = allPools[selectedPoolId];
-
-    let {
-        poolId,
-        isActive,
-        exchange,
+    // simulation pool data
+    const {
+        simulationMode,
+        tokenSymbols,
         tokenWeights,
+        poolId,
+        yieldTokenSymbol,
+        ethPriceUsd,
+        tokenPricesUsd,
+        userTokenBalances,
+        exchange,
+    } = useSelector(state => state.simulator);
+    if (!exchange) return null;
+
+    if (simulationMode === 'import') {
+        // Get simulated prices of pooled tokens and ETH
+        const simulatedPooledTokenPrices = mathUtils.multiplyArraysElementWise(
+            tokenPricesUsd,
+            simulatedPooledTokensCoeffs,
+        );
+
+        // Get simulated values for last interval
+        const simulatedValues = simulatorUtils.getSimulationStats(
+            userTokenBalances,
+            new Array(userTokenBalances.length).fill(0),
+            simulatedPooledTokenPrices,
+            tokenWeights,
+            exchange,
+        );
+        const {
+            simulatedTokenBalances,
+            simulatedFeesUsd,
+            simulatedPoolValueUsd,
+            simulatedHodlValueUsd,
+            impLossRel,
+            impLossUsd,
+        } = simulatedValues;
+        return (
+            <Wrapper>
+                <TabSelectHeader
+                    selected=""
+                    headline={
+                        <PoolHeader
+                            tokenSymbolsArr={tokenSymbols}
+                            exchange={exchange}
+                            poolId={poolId}
+                        />
+                    }
+                    tabIds={[]}
+                    tabHeadlines={[]}
+                />
+                <Overview
+                    isActive
+                    tokenSymbols={tokenSymbols}
+                    tokenBalances={userTokenBalances}
+                    simulatedPooledTokenBalances={simulatedTokenBalances}
+                    endPoolValueUsd={mathUtils.getTokenArrayValue(
+                        userTokenBalances,
+                        tokenPricesUsd,
+                    )}
+                    simulatedPoolValueUsd={simulatedPoolValueUsd}
+                    simulatedHodlValueUsd={simulatedHodlValueUsd}
+                    tokenPricesEnd={tokenPricesUsd}
+                    sliderDefaultCoeffs={sliderDefaultCoeffs}
+                    lastIntSimulatedFeesUsd={simulatedFeesUsd}
+                    lastIntYieldUsd={0}
+                    lastSnapTimestampStart={0}
+                    lastSnapTimestampEnd={Date.now()}
+                    impLossUsd={impLossUsd}
+                    impLossRel={impLossRel}
+                    lastWeekAverageDailyRewardsUsd={0}
+                />
+            </Wrapper>
+        );
+    }
+
+    if (!pool) return null;
+
+    const {
+        isActive,
         depositTimestamps,
         depositTokenAmounts,
         depositEthAmounts,
-        tokenSymbols,
         hasYieldReward,
     } = pool;
 
@@ -86,7 +145,7 @@ const RightContainer = ({
         yieldTotalTokenAmounts,
     } = pool.cumulativeStats;
 
-    let lastWeekAverageDailyRewardsUsd: number | undefined = undefined;
+    let lastWeekAverageDailyRewardsUsd: number | undefined;
     if (pool.dailyStats) lastWeekAverageDailyRewardsUsd = pool.dailyStats.averageDailyFeesUsd;
 
     // Get simulated prices of pooled tokens and ETH
@@ -106,14 +165,14 @@ const RightContainer = ({
     const lastSnapFeesTokenAmounts = lastIntervalStat.feesTokenAmounts;
 
     // Get simulated values for last interval
-    let simulatedValues = simulatorUtils.getSimulationStats(
+    const simulatedValues = simulatorUtils.getSimulationStats(
         tokenBalances,
         lastSnapFeesTokenAmounts,
         simulatedPooledTokenPrices,
         tokenWeights,
         exchange,
     );
-    let {
+    const {
         simulatedTokenBalances,
         simulatedFeesUsd,
         simulatedFeesTokenAmounts,
@@ -149,15 +208,15 @@ const RightContainer = ({
 
     // YIELD AND TX COST
     // TODO support simulated yield price for multiple tokens
-    let simulatedYieldUsd = yieldTotalTokenAmounts[0] * simulatedYieldPrice; //TODO check if yield among pooled tokens
+    let simulatedYieldUsd = yieldTotalTokenAmounts[0] * simulatedYieldPrice; // TODO check if yield among pooled tokens
     if (!simulatedYieldUsd) simulatedYieldUsd = 0;
 
     const simulatedTxCostUsd = txCostEth * simulatedEthPrice;
 
     // STRATEGIES
     // if pool is not active, do not add "simulatedPoolValueUsd"
-    let simulatedCurrentPoolValueUsd = isActive ? simulatedPoolValueUsd : 0;
-    let simulatedPoolStrategyUsd =
+    const simulatedCurrentPoolValueUsd = isActive ? simulatedPoolValueUsd : 0;
+    const simulatedPoolStrategyUsd =
         simulatedCurrentPoolValueUsd +
         simulatedWithdrawalsUsd +
         simulatedYieldUsd -
@@ -179,6 +238,7 @@ const RightContainer = ({
     return (
         <Wrapper>
             <TabSelectHeader
+                selected={selectedTab}
                 headline={
                     <PoolHeader
                         tokenSymbolsArr={tokenSymbols}
@@ -187,9 +247,15 @@ const RightContainer = ({
                     />
                 }
                 onSelectTab={tabName => onTabChanged(tabName)}
+                tabHeadlines={
+                    simulationMode === 'positions'
+                        ? ['Impermanent loss', 'Strategies']
+                        : ['Impermanent loss']
+                }
+                tabIds={simulationMode === 'positions' ? ['il', 'strategies'] : ['il']}
             />
 
-            {selectedTab === 'overview' && (
+            {selectedTab === 'il' && (
                 <Overview
                     isActive={isActive}
                     tokenSymbols={tokenSymbols}
@@ -210,7 +276,8 @@ const RightContainer = ({
                 />
             )}
 
-            {selectedTab === 'strategies' && (
+            {/* Double check you don't show strategy when imported pool is present */}
+            {selectedTab === 'strategies' && simulationMode === 'positions' && (
                 <Strategies
                     exchange={exchange}
                     poolStrategyUsd={poolStrategyUsd}
@@ -251,7 +318,7 @@ const RightContainer = ({
                     ethHodlStrategyUsd={ethHodlStrategyUsd}
                     tokensHodlStrategyTokenAmounts={tokensHodlStrategyTokenAmounts}
                     ethHodlStrategyEth={ethHodlStrategyEth}
-                    //slider
+                    // slider
                     sliderDefaultCoeffs={sliderDefaultCoeffs}
                     sliderDefaultEthCoeff={sliderDefaultEthCoeff}
                 />

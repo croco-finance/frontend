@@ -26,11 +26,11 @@ import NoTextLogo from './NoTextLogo';
 import TextBadge from './TextBadge';
 import CollapsibleContainer from './CollapsibleContainer';
 import InfoBox from './InfoBox';
-import SocialButtonBubble from './SocialButtonBubble';
 import DarkModeSwitch from './DarkModeSwitch';
 import Tooltip from './Tooltip';
 import QuestionTooltip from './QuestionTooltip';
 import Textarea from './Textarea';
+import SadCrocoBox from './SadCrocoBox';
 
 export {
     TokenLogo,
@@ -61,9 +61,9 @@ export {
     TextBadge,
     CollapsibleContainer,
     InfoBox,
-    SocialButtonBubble,
     DarkModeSwitch,
     Tooltip,
     QuestionTooltip,
     Textarea,
+    SadCrocoBox,
 };

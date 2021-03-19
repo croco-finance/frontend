@@ -1,10 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { TooltipProps } from 'recharts';
-import { colors, variables, types } from '@config';
 import { FiatValue } from '@components/ui';
+import { colors, variables } from '@config';
+import React from 'react';
+import { TooltipProps } from 'recharts';
+import styled from 'styled-components';
 import TooltipRow from './TooltipRow';
-import { formatUtils } from '@utils';
 
 const CustomTooltipWrapper = styled.div`
     display: flex;
@@ -35,7 +34,7 @@ const GridWrapper = styled.div`
     /* padding: 0px 10px; */
 `;
 
-interface Props extends TooltipProps {
+interface Props extends TooltipProps<any, any> {
     // inherited from TooltipProps
     payload?: any;
     active?: boolean;
@@ -54,12 +53,12 @@ const CustomTooltip = (props: Props) => {
                 <GridWrapper>
                     <TooltipRow
                         firstColumn="HODL value"
-                        secondColumn={<FiatValue value={hodlValue ? hodlValue : 0} />}
+                        secondColumn={<FiatValue value={hodlValue || 0} />}
                     />
 
                     <TooltipRow
                         firstColumn="Pool value"
-                        secondColumn={<FiatValue value={poolValue ? poolValue : 0} />}
+                        secondColumn={<FiatValue value={poolValue || 0} />}
                     />
 
                     {poolValueDiff ? (
@@ -67,7 +66,7 @@ const CustomTooltip = (props: Props) => {
                             firstColumn=""
                             secondColumn={
                                 <FiatValue
-                                    value={poolValueDiff ? poolValueDiff : 0}
+                                    value={poolValueDiff || 0}
                                     colorized
                                     usePlusSymbol
                                     useLightRed

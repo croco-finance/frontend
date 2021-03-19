@@ -1,3 +1,4 @@
+import { DailyFeesChart } from '@components/containers';
 import { InfoBox } from '@components/ui';
 import { colors, variables } from '@config';
 import { useTheme } from '@hooks';
@@ -9,7 +10,6 @@ import styled from 'styled-components';
 import Graph from '../Graph';
 import PoolOverview from '../PoolOverview';
 import SummaryOverview from '../SummaryOverview';
-import { DailyFeesChart } from '@components/containers';
 
 const Wrapper = styled.div`
     display: flex;
@@ -65,15 +65,15 @@ const BalancerBanner = styled.div`
 
 const Overview = () => {
     const { allPools, selectedPoolId, activePoolIds } = useSelector(state => state.app);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     if (activePoolIds.length <= 0 && selectedPoolId === 'all') {
         return null;
     }
 
-    let activePoolsSummary = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
+    const activePoolsSummary = statsComputations.getPoolsSummaryObject(allPools, activePoolIds);
 
-    let historyGraphData =
+    const historyGraphData =
         selectedPoolId === 'all'
             ? undefined
             : graphUtils.getInteractionsGraphData(allPools[selectedPoolId].intervalStats);
@@ -97,11 +97,11 @@ const Overview = () => {
     let poolOverview;
     if (allPools && selectedPoolId === 'all' && activePoolsSummary) {
         poolOverview = <SummaryOverview summary={activePoolsSummary} />;
-    } else {
-        if (allPools && allPools[selectedPoolId]) {
-            poolOverview = <PoolOverview pool={allPools[selectedPoolId]} />;
-        }
+    } else if (allPools && allPools[selectedPoolId]) {
+        poolOverview = <PoolOverview pool={allPools[selectedPoolId]} />;
     }
+
+    console.log('dailyStats', dailyStats);
 
     return (
         <Wrapper>

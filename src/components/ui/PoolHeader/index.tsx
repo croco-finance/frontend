@@ -49,11 +49,11 @@ interface Props {
 }
 const PoolHeader = ({ tokenSymbolsArr, exchange, poolId }: Props) => {
     const poolUrl = constants.DEX_POOL_BASE_URLS[exchange] + poolId;
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     return (
         <Wrapper>
-            <MultipleTokenLogo size={18} tokens={tokenSymbolsArr} />
+            <MultipleTokenLogo exchangeSymbol={exchange} size={18} tokens={tokenSymbolsArr} />
             <Text>{formatUtils.tokenArrToCommaSeparatedString(tokenSymbolsArr)}</Text>
             <CustomLink url={poolUrl} iconSize={16} color={theme.FONT_MEDIUM}>
                 <IconWrapper>

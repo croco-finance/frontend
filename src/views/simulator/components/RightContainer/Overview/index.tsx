@@ -8,7 +8,7 @@ import ILGraph from '../ILGraph';
 
 const Wrapper = styled.div`
     width: 100%;
-    max-width: 650px;
+    max-width: 680px;
     margin: 0 auto;
 `;
 
@@ -141,7 +141,7 @@ const Overview = ({
     isActive,
     lastWeekAverageDailyRewardsUsd,
 }: Props) => {
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const tokenBalancesDiff = mathUtils.subtractArraysElementWise(
         simulatedPooledTokenBalances,
@@ -178,6 +178,7 @@ const Overview = ({
                                     : formatUtils.getFormattedDateFromTimestamp(
                                           lastSnapTimestampEnd,
                                           'MONTH_DAY_YEAR',
+                                          true,
                                       )
                             }
                             thirdColumn={<RightPaddingWrapper>Simulated</RightPaddingWrapper>}
@@ -238,12 +239,14 @@ const Overview = ({
                 <ImpLossHeader>Impermanent loss compared to HODLing pooled tokens</ImpLossHeader>
                 <GrayBox
                     padding={[15, 20, 15, 20]}
-                    borderRadius={isActive ? [10, 10, 0, 0] : [10, 10, 10, 10]}
+                    borderRadius={
+                        !Number.isNaN(estDaysLeftStaking) ? [10, 10, 0, 0] : [10, 10, 10, 10]
+                    }
                     bottomBarBorderRadius={[0, 0, 10, 10]}
                     backgroundColor={theme.BACKGROUND}
                     bottomBar={
                         isActive &&
-                        !isNaN(estDaysLeftStaking) &&
+                        !Number.isNaN(estDaysLeftStaking) &&
                         estDaysLeftStaking !== Infinity &&
                         lastWeekAverageDailyRewardsUsd ? (
                             <>
@@ -283,10 +286,12 @@ const Overview = ({
                             }
                             thirdColumn={
                                 <ImpLossRel>
-                                    {formatUtils.getFormattedPercentageValue(
-                                        Math.abs(impLossRel) < 0.00001 ? 0 : impLossRel,
-                                        false,
-                                    )}
+                                    {!impLossUsd
+                                        ? '0%'
+                                        : formatUtils.getFormattedPercentageValue(
+                                              Math.abs(impLossRel) < 0.00001 ? 0 : impLossRel,
+                                              false,
+                                          )}
                                 </ImpLossRel>
                             }
                         />

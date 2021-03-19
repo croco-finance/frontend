@@ -1,6 +1,6 @@
+import { colors } from '@config';
 import React from 'react';
 import styled from 'styled-components';
-import { colors, variables } from '@config';
 
 const Wrapper = styled.div`
     min-width: fit-content;
@@ -58,24 +58,22 @@ const GrayBox = ({
     borderRadius = [10, 10, 10, 10],
     bottomBarBorderRadius = borderRadius,
     backgroundColor = colors.BACKGROUND,
-}: Props) => {
-    return (
-        <Wrapper className={className}>
-            <Content
-                hasBottomBar={bottomBar !== undefined}
-                padding={padding}
-                borderRadius={borderRadius}
-                backgroundColor={backgroundColor}
-            >
-                {children}
-            </Content>
-            {bottomBar && (
-                <BottomBar padding={bottomBarPadding} borderRadius={bottomBarBorderRadius}>
-                    {bottomBar}
-                </BottomBar>
-            )}
-        </Wrapper>
-    );
-};
+}: Props) => (
+    <Wrapper className={className}>
+        <Content
+            hasBottomBar={bottomBar !== undefined}
+            padding={padding}
+            borderRadius={borderRadius}
+            backgroundColor={backgroundColor}
+        >
+            {children}
+        </Content>
+        {bottomBar && (
+            <BottomBar padding={bottomBarPadding} borderRadius={bottomBarBorderRadius}>
+                {bottomBar}
+            </BottomBar>
+        )}
+    </Wrapper>
+);
 
 export default GrayBox;

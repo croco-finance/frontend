@@ -1,12 +1,14 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { changeSelectedPool } from '@actions';
 import { FiatValue, TokenLogo } from '@components/ui';
 import { variables } from '@config';
 import { useSelector } from '@reducers';
+import { formatUtils } from '@utils';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import PoolItemCard from '../PoolItemCard';
-import { formatUtils } from '@utils';
+import { TokenType, Exchange } from '@types';
 
 const Item = styled.div`
     display: flex;
@@ -47,6 +49,14 @@ const TokenWeight = styled.div<{ isSelected: boolean }>`
     font-size: ${variables.FONT_SIZE.TINY};
     display: flex;
     align-items: center;
+
+    @media (max-width: 1400px) and (min-width: ${variables.SCREEN_SIZE.LG}) {
+        display: none;
+    }
+
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        display: none;
+    }
 `;
 
 const TokenSymbol = styled.div`
@@ -74,7 +84,7 @@ const ExchangeLogoWrapper = styled.div`
 `;
 
 interface PoolItem {
-    symbol: string;
+    symbol: TokenType;
     weight: number;
 }
 
@@ -93,42 +103,41 @@ const PoolItem = ({ poolId }: Props) => {
     if (allPools[poolId].cumulativeStats === null) return <p> No stats </p>;
     const { feesUsd, yieldUsd, txCostUsd, endPoolValueUsd } = allPools[poolId].cumulativeStats;
 
-    let isSelected = selectedPoolId === poolId;
+    const isSelected = selectedPoolId === poolId;
 
     const handleOnClick = (e, poolId) => {
         dispatch(changeSelectedPool(poolId));
     };
 
     return (
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div onClick={event => handleOnClick(event, poolId)}>
             <PoolItemCard isSelected={isSelected}>
                 <ExchangeLogoWrapper>
                     <TokenLogo
-                        symbol={theme === 'light' ? exchange : `${exchange}dark`}
+                        symbol={theme === 'light' ? exchange : (`${exchange}dark` as Exchange)}
                         size={17}
                     />
                 </ExchangeLogoWrapper>
                 <PoolWrapper>
-                    {pooledTokens.map((token, i) => {
-                        return (
-                            <TokenItem key={token.symbol}>
-                                <TokenLogo symbol={token.symbol} size={18} />
-                                <TokenSymbol>{token.symbol}</TokenSymbol>
-                                <TokenWeight isSelected={isSelected}>
-                                    {formatUtils.getFormattedPercentageValue(token.weight, true)}
-                                </TokenWeight>
-                            </TokenItem>
-                        );
-                    })}
+                    {pooledTokens.map((token, i) => (
+                        <TokenItem key={token.symbol}>
+                            <TokenLogo symbol={token.symbol as TokenType} size={18} />
+                            <TokenSymbol>{token.symbol}</TokenSymbol>
+                            <TokenWeight isSelected={isSelected}>
+                                {formatUtils.getFormattedPercentageValue(token.weight, true)}
+                            </TokenWeight>
+                        </TokenItem>
+                    ))}
                 </PoolWrapper>
 
-                <Value>{isActive ? <FiatValue value={endPoolValueUsd}></FiatValue> : ''}</Value>
+                <Value>{isActive ? <FiatValue value={endPoolValueUsd} /> : ''}</Value>
                 <Gains>
                     <FiatValue
                         value={feesUsd + yieldUsd}
                         usePlusSymbol
                         // colorized={!isSelected}
-                    ></FiatValue>
+                    />
                 </Gains>
             </PoolItemCard>
         </div>

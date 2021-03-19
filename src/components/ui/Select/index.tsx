@@ -1,8 +1,8 @@
+import { variables } from '@config';
+import { useTheme } from '@hooks';
 import React from 'react';
 import ReactSelect, { Props as SelectProps } from 'react-select';
 import styled from 'styled-components';
-import { colors, variables } from '@config';
-import { useTheme } from '@hooks';
 
 const selectStyle = (
     isSearchable: boolean,
@@ -14,6 +14,7 @@ const selectStyle = (
     useWhiteBackground: boolean,
     useDarkBorder: boolean,
     theme: any,
+    maxDropdownHeight: string,
 ) => ({
     singleValue: (base: Record<string, any>) => ({
         ...base,
@@ -36,29 +37,27 @@ const selectStyle = (
     control: (
         base: Record<string, any>,
         { isDisabled, isFocused }: { isDisabled: boolean; isFocused: boolean },
-    ) => {
-        return {
-            ...base,
-            minHeight: 'initial',
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: variables.FONT_SIZE.SMALL,
-            height: variant === 'small' ? '36px' : '48px',
+    ) => ({
+        ...base,
+        minHeight: 'initial',
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: variables.FONT_SIZE.SMALL,
+        height: variant === 'small' ? '36px' : '48px',
+        borderRadius: '4px',
+        borderWidth: noBorder ? 0 : '2px',
+        borderColor: useDarkBorder ? theme.STROKE_GREY : theme.BACKGROUND,
+        boxShadow: 'none',
+        backgroundColor: useWhiteBackground ? theme.BG_WHITE : theme.BACKGROUND,
+        // transition: 'border 250ms ease-out',
+        '&:hover, &:focus': {
+            cursor: 'pointer',
             borderRadius: '4px',
-            borderWidth: noBorder ? 0 : '2px',
-            borderColor: useDarkBorder ? theme.STROKE_GREY : theme.BACKGROUND,
-            boxShadow: 'none',
-            backgroundColor: useWhiteBackground ? theme.BG_WHITE : theme.BACKGROUND,
-            // transition: 'border 250ms ease-out',
-            '&:hover, &:focus': {
-                cursor: 'pointer',
-                borderRadius: '4px',
-                // borderColor: colors.PASTEL_BLUE_MEDIUM,
-                borderColor: '#96b7ff',
-                // backgroundColor: ' #f7f9ff',
-            },
-        };
-    },
+            // borderColor: colors.PASTEL_BLUE_MEDIUM,
+            borderColor: '#96b7ff',
+            // backgroundColor: ' #f7f9ff',
+        },
+    }),
     indicatorSeparator: () => ({
         display: 'none',
     }),
@@ -86,6 +85,34 @@ const selectStyle = (
         background: theme.BG_WHITE,
         // border: `1px solid ${colors.BLACK80}`,
         borderRadius: '4px',
+        maxHeight: maxDropdownHeight,
+        '::-webkit-scrollbar': {
+            backgroundColor: theme.SCROLLBAR_BACKGROUND,
+            width: '8px',
+            borderRadius: '8px',
+        },
+        /* background of the scrollbar except button or resizer */
+        '::-webkit-scrollbar-track': {
+            backgroundColor: 'transparent',
+        },
+        /* scrollbar itself */
+        '::-webkit-scrollbar-thumb': {
+            /* 7F7F7F for mac-like color */
+            backgroundColor: theme.SCROLLBAR_THUMB,
+            borderRadius: '10px',
+            border: `1px solid ${theme.SCROLLBAR_THUMB}`,
+        },
+
+        '::-webkit-scrollbar-thumb:hover': {
+            /* 7F7F7F for mac-like color */
+            backgroundColor: theme.SCROLLBAR_THUMB_HOVER,
+            border: `1px solid ${theme.SCROLLBAR_THUMB_HOVER_BORDER}`,
+        },
+
+        /* set button(top and bottom of the scrollbar) */
+        '::-webkit-scrollbar-button': {
+            display: 'none',
+        },
     }),
     option: (base: Record<string, any>, { isFocused }: { isFocused: boolean }) => ({
         ...base,
@@ -110,7 +137,7 @@ const selectStyle = (
     placeholder: (base: Record<string, any>) => ({
         ...base,
         color: theme.FONT_LIGHT,
-        fontWeight: variables.FONT_WEIGHT.DEMI_BOLD,
+        fontWeight: variables.FONT_WEIGHT.MEDIUM,
         fontSize: variables.FONT_SIZE.NORMAL,
         padding: '2px 8px',
     }),
@@ -133,6 +160,7 @@ interface Props extends Omit<SelectProps, 'components'> {
     noBorder?: boolean;
     useWhiteBackground?: boolean;
     useDarkBorder?: boolean;
+    maxDropdownHeight?: string;
 }
 
 const Select = ({
@@ -147,6 +175,7 @@ const Select = ({
     noBorder = false,
     useWhiteBackground = false,
     useDarkBorder = false,
+    maxDropdownHeight = '260px',
     ...props
 }: Props) => {
     const theme = useTheme();
@@ -163,6 +192,7 @@ const Select = ({
                     useWhiteBackground,
                     useDarkBorder,
                     theme,
+                    maxDropdownHeight,
                 )}
                 isSearchable={isSearchable}
                 {...props}

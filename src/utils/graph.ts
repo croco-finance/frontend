@@ -1,15 +1,15 @@
-import { DailyStats, InteractionsGraphData, IntervalStats } from '@types';
-import { mathUtils } from '.';
+import { DailyStats, InteractionsGraphData, IntervalStats, DailyFeesGraph } from '@types';
+import { mathUtils } from '@utils';
 
 const getDailyGraphData = (data: DailyStats) => {
     const { timestamps, feesTokenAmounts, feesUsd, tokenSymbols } = data;
 
     // return data in graph-ready format
-    let graphData = new Array();
+    const graphData: DailyFeesGraph[] = [];
     for (let i = 0; i < timestamps.length; i++) {
         graphData[i] = {
             timestamp: timestamps[i],
-            tokenSymbols: tokenSymbols,
+            tokenSymbols,
             feesTokenAmounts: feesTokenAmounts ? feesTokenAmounts[i] : undefined,
             feesUsd: feesUsd[i],
         };
@@ -21,7 +21,7 @@ const getDailyGraphData = (data: DailyStats) => {
 const getInteractionsGraphData = (intervalStats: IntervalStats[]): InteractionsGraphData[] => {
     const statsCount = intervalStats.length;
     const lastTimestamp = intervalStats[intervalStats.length - 1].timestampEnd;
-    let graphData: InteractionsGraphData[] = new Array(statsCount + 1);
+    const graphData: InteractionsGraphData[] = new Array(statsCount + 1);
 
     // Get first element of graph data. The rest will be computed using loop
     const initialPoolValues = new Array(statsCount).fill(undefined);
@@ -31,7 +31,7 @@ const getInteractionsGraphData = (intervalStats: IntervalStats[]): InteractionsG
 
     graphData[0] = {
         label: `${intervalStats[0].timestampStart}_Deposit`,
-        lastTimestamp: lastTimestamp,
+        lastTimestamp,
         timestampPrev: null,
         timestamp: intervalStats[0].timestampStart,
         poolValues: initialPoolValues,
@@ -70,37 +70,30 @@ const getInteractionsGraphData = (intervalStats: IntervalStats[]): InteractionsG
             } else {
                 label = 'Today';
             }
-        } else {
-            if (intervalStats[i + 1].poolValueUsdStart < stat.poolValueUsdEnd) {
-                label = 'Withdraw';
-            } else if (intervalStats[i + 1].poolValueUsdStart > stat.poolValueUsdEnd) {
-                label = 'Deposit';
+        } else if (intervalStats[i + 1].poolValueUsdStart < stat.poolValueUsdEnd) {
+            label = 'Withdraw';
+        } else if (intervalStats[i + 1].poolValueUsdStart > stat.poolValueUsdEnd) {
+            label = 'Deposit';
+        } else if (intervalStats[i + 1].poolValueUsdStart === 0) {
+            label = '';
+        } else if (i > 0) {
+            // the USD value did not change. Check if the user staked or un-staked
+            // if the previous snap was staked
+            if (stat.staked === false) {
+                label = 'Yield start';
             } else {
-                if (intervalStats[i + 1].poolValueUsdStart === 0) {
-                    label = '';
-                } else {
-                    // the USD value did not change. Check if the user staked or un-staked
-
-                    if (i > 0) {
-                        // if the previous snap was staked
-                        if (stat.staked === false) {
-                            label = 'Yield start';
-                        } else {
-                            label = 'Yield end';
-                        }
-                    } else {
-                        label = 'Yield start';
-                    }
-                }
+                label = 'Yield end';
             }
+        } else {
+            label = 'Yield start';
         }
 
         graphData[i + 1] = {
             label: `${stat.timestampEnd}_${label}`,
-            lastTimestamp: lastTimestamp,
+            lastTimestamp,
             timestampPrev: stat.timestampStart,
             timestamp: stat.timestampEnd,
-            poolValues: poolValues,
+            poolValues,
             feesUsd: mathUtils.getTokenArrayValue(stat.feesTokenAmounts, stat.tokenPricesEnd),
             yieldUsd: stat.yieldTokenPriceEnd
                 ? stat.yieldTotalTokenAmount * stat.yieldTokenPriceEnd
@@ -169,7 +162,7 @@ const getMaxPossiblePoolValue = (
     currentTokenBalances: Array<number>,
     currentTokenPrices: Array<number>,
     defaultPriceChangeCoeffs: Array<number>,
-    maxCoeffIncreaseRate: number = 2,
+    maxCoeffIncreaseRate = 2,
 ) => {
     const maxPossibleCoeffs = mathUtils.multiplyEachArrayElementByValue(
         defaultPriceChangeCoeffs,
@@ -198,7 +191,7 @@ const getStrategiesMaxPossiblePoolValues = (
     txCostEth: number,
     tokensHodlTokenAmounts: number[],
     ethHodlEthAmount: number,
-    maxCoeffIncreaseRate: number = 2,
+    maxCoeffIncreaseRate = 2,
 ) => {
     const maxPossibleCoeffs = mathUtils.multiplyEachArrayElementByValue(
         defaultTokensPriceChangeCoeffs,

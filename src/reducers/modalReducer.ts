@@ -1,19 +1,24 @@
-import { MODAL } from '../actions/constants';
+import * as actionTypes from '@actionTypes';
 
-const initialState = {
+interface ModalState {
+    modalType: any;
+    modalProps: any;
+}
+
+const initialState: ModalState = {
     modalType: null,
     modalProps: {},
 };
 
-const modalReducer = (state = initialState, action) => {
+const modalReducer = (state = initialState, action): ModalState => {
     switch (action.type) {
-        case MODAL.OPEN:
+        case actionTypes.OPEN_MODAL:
             return {
                 modalType: action.payload.type,
                 modalProps: action.payload.props,
             };
 
-        case MODAL.CLOSE: {
+        case actionTypes.CLOSE_MODAL: {
             return initialState;
         }
 

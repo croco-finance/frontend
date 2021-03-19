@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { variables } from '../../../config';
 import colors from '../../../config/colors';
 
 const Wrapper = styled.div<{
@@ -98,8 +97,8 @@ const FiatValue = ({
 }: Props) => {
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: currency,
-        minimumFractionDigits: minimumFractionDigits,
+        currency,
+        minimumFractionDigits,
     });
 
     // save the original value
@@ -109,7 +108,7 @@ const FiatValue = ({
     let sign = '+ ';
 
     // if passed value is not a number
-    if (isNaN(originalValue)) {
+    if (Number.isNaN(originalValue)) {
         return (
             <Wrapper
                 value={0}

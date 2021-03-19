@@ -16,7 +16,7 @@ export const THEME = {
         BUTTON_PRIMARY_BG_DISABLED: '#e7e9ed',
         BUTTON_PRIMARY_FONT_DISABLED: '#ffffff',
 
-        //Secondary
+        // Secondary
         BUTTON_SECONDARY_BG: '#deeefd',
         BUTTON_SECONDARY_FONT: '#0084ff',
         BUTTON_SECONDARY_BG_HOVER: '#0084ff',
@@ -79,7 +79,7 @@ export const THEME = {
         NAV_ACTIVE_FONT: '#002237',
 
         // Scrollbar
-        SCROLLBAR_BACKGROUND: '#e0e1e8',
+        SCROLLBAR_BACKGROUND: '#e8e8ec',
         SCROLLBAR_THUMB: '#cbd1dc',
         SCROLLBAR_THUMB_HOVER: '#bfc7d6',
         SCROLLBAR_THUMB_HOVER_BORDER: '#bec8da',

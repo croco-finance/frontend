@@ -1,7 +1,7 @@
 // These are regular React components we will write soon
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeModal } from '../../../actions/modalActions';
+import { closeModal } from '@actions';
 
 import { ManageAddressesModal, FeedbackModal } from '@components/modals';
 

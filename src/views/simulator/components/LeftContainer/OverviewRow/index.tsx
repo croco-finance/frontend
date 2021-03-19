@@ -35,6 +35,7 @@ const Col = styled.div<RowContentProps>`
                 return css`
                     color: ${props.theme.FONT_DARK};
                 `;
+            // no default
         }
     }}
 
@@ -60,23 +61,21 @@ const OverviewRow = ({
     thirdColumn,
     fourthColumn,
     color = 'light',
-}: Props) => {
-    return (
-        <>
-            <Col textAlign="left" color={color}>
-                {firstColumn}
-            </Col>
-            <Col textAlign="left" color={color}>
-                {secondColumn}
-            </Col>
-            <Col textAlign="right" color={color}>
-                {thirdColumn}
-            </Col>
-            <Col textAlign="right" color={color}>
-                {fourthColumn}
-            </Col>
-        </>
-    );
-};
+}: Props) => (
+    <>
+        <Col textAlign="left" color={color}>
+            {firstColumn}
+        </Col>
+        <Col textAlign="left" color={color}>
+            {secondColumn}
+        </Col>
+        <Col textAlign="right" color={color}>
+            {thirdColumn}
+        </Col>
+        <Col textAlign="right" color={color}>
+            {fourthColumn}
+        </Col>
+    </>
+);
 
 export default OverviewRow;

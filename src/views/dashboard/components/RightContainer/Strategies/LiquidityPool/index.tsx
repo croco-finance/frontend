@@ -16,7 +16,7 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
     width: 100%;
-    max-width: 650px;
+    max-width: 680px;
     margin: 0 auto;
 `;
 
@@ -82,9 +82,9 @@ const CollapseWrapper = styled.div``;
 
 const LiquidityPool = () => {
     const { allPools, selectedPoolId } = useSelector(state => state.app);
-    let pool = allPools[selectedPoolId];
+    const pool = allPools[selectedPoolId];
     const [isOpened, setIsOpened] = useState(false);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const handleExpand = (opened: boolean) => {
         setIsOpened(opened);
@@ -107,7 +107,7 @@ const LiquidityPool = () => {
         );
     }
 
-    let { pooledTokens, isActive, hasYieldReward, intervalStats } = pool;
+    const { pooledTokens, isActive, hasYieldReward, intervalStats } = pool;
 
     const {
         yieldUsd,
@@ -185,11 +185,7 @@ const LiquidityPool = () => {
             firstColumn={
                 <div style={{ display: '-webkit-inline-box' }}>
                     Transaction expenses
-                    <QuestionTooltip
-                        content={
-                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
-                        }
-                    />
+                    <QuestionTooltip content="Amount of ETH you spent for all pool deposit and withdrawal transactions" />
                 </div>
             }
             secondColumn={

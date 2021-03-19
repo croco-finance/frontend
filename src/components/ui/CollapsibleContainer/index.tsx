@@ -1,9 +1,8 @@
+import { colors } from '@config';
 import React, { useState } from 'react';
-import { Collapse, UnmountClosed } from 'react-collapse';
+import { UnmountClosed } from 'react-collapse';
 import styled from 'styled-components';
 import './index.css';
-import { Icon } from '@components/ui';
-import { colors } from '@config';
 
 const Header = styled.div<{ roundedBottom: boolean }>`
     /* display: flex;

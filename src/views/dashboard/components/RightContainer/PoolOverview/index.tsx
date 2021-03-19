@@ -1,4 +1,4 @@
-import { BoxRow, FiatValue, GrayBox, VerticalCryptoAmounts, QuestionTooltip } from '@components/ui';
+import { BoxRow, FiatValue, GrayBox, QuestionTooltip, VerticalCryptoAmounts } from '@components/ui';
 import { variables } from '@config';
 import { useTheme } from '@hooks';
 import { PoolItem } from '@types';
@@ -9,7 +9,7 @@ import 'tippy.js/dist/tippy.css'; // optional
 
 const Wrapper = styled.div`
     width: 100%;
-    max-width: 650px;
+    max-width: 680px;
     margin: 0 auto;
 `;
 
@@ -75,8 +75,8 @@ interface Props {
 }
 
 const PoolOverview = ({ pool }: Props) => {
-    const theme: any = useTheme();
-    let { pooledTokens, isActive, hasYieldReward, intervalStats } = pool;
+    const theme = useTheme();
+    const { pooledTokens, isActive, hasYieldReward, intervalStats } = pool;
 
     const {
         feesUsd,
@@ -133,11 +133,7 @@ const PoolOverview = ({ pool }: Props) => {
             firstColumn={
                 <div style={{ display: '-webkit-inline-box' }}>
                     Transaction expenses
-                    <QuestionTooltip
-                        content={
-                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
-                        }
-                    />
+                    <QuestionTooltip content="Amount of ETH you spent for all pool deposit and withdrawal transactions" />
                 </div>
             }
             secondColumn={

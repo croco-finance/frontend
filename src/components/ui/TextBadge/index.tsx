@@ -1,4 +1,4 @@
-import { colors, variables } from '@config';
+import { variables } from '@config';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -18,7 +18,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
 }
 
-const TextBadge = ({ className, children }: Props) => {
-    return <Wrapper className={className}>{children}</Wrapper>;
-};
+const TextBadge = ({ className, children }: Props) => (
+    <Wrapper className={className}>{children}</Wrapper>
+);
 export default TextBadge;

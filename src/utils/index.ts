@@ -6,10 +6,12 @@ import * as simulatorUtils from './simulator';
 import * as formatUtils from './format';
 import * as graphUtils from './graph';
 import * as helperUtils from './helpers';
+import * as stringUtils from './string';
 import { getSnaps } from './firebase-loader';
 import { setUnclaimed } from './unclaimed-loader';
 import { loadState, saveState } from './local-storage';
 import { getDailyFees } from './daily-fees-loader';
+import { getLastPoolSnap } from './last-pool-snap-loader';
 
 export {
     validationUtils,
@@ -25,4 +27,6 @@ export {
     saveState,
     getDailyFees,
     helperUtils,
+    stringUtils,
+    getLastPoolSnap,
 };

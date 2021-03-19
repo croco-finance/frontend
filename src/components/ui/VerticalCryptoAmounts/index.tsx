@@ -1,8 +1,7 @@
+import { styles, variables } from '@config';
+import { formatUtils, mathUtils } from '@utils';
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { colors, variables, styles } from '@config';
-import { formatUtils, mathUtils } from '@utils';
-import { SignedValue } from '@components/ui';
 
 const rightAlignedStyles = css`
     text-align: right;
@@ -70,8 +69,8 @@ const VerticalCryptoAmounts = ({
     maxWidth = 100,
     maxHeight = 160,
 }: Props) => {
-    let tokenSymbolsRendered = tokenSymbols;
-    let tokenAmountsRendered = tokenAmounts;
+    const tokenSymbolsRendered = tokenSymbols;
+    const tokenAmountsRendered = tokenAmounts;
 
     // if the user passed just one symbol/amount, convert that number to array so that I can loop through it
     // if (!Array.isArray(props.tokenSymbols)) {

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
     width: 100%;
-    max-width: 650px;
+    max-width: 680px;
     margin: 0 auto;
 `;
 
@@ -73,7 +73,7 @@ interface Props {
 }
 
 const SummaryOverview = ({ summary }: Props) => {
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     const {
         valueLockedUsd,
@@ -123,11 +123,7 @@ const SummaryOverview = ({ summary }: Props) => {
             firstColumn={
                 <div style={{ display: '-webkit-inline-box' }}>
                     Transaction expenses
-                    <QuestionTooltip
-                        content={
-                            'Amount of ETH you spent for all pool deposit and withdrawal transactions'
-                        }
-                    />
+                    <QuestionTooltip content="Amount of ETH you spent for all pool deposit and withdrawal transactions" />
                 </div>
             }
             secondColumn={

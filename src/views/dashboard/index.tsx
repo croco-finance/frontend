@@ -1,62 +1,42 @@
-import {
-    DashboardContainer,
-    LeftLayoutContainer,
-    RightLayoutContainer,
-    NavBar,
-    Modal,
-} from '@components/layout';
-import {
-    Input,
-    LoadingBox,
-    SocialButtonBubble,
-    Icon,
-    Select,
-    DarkModeSwitch,
-} from '@components/ui';
 import { AddressSelect } from '@components/containers';
-import { animations, colors, variables, styles } from '@config';
-import { validationUtils } from '@utils';
-import React, { useEffect, useState } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { DashboardContainer, LeftLayoutContainer, RightLayoutContainer } from '@components/layout';
+import { LoadingBox, SadCrocoBox, QuestionTooltip } from '@components/ui';
+import { animations, styles, variables } from '@config';
+import { useSelector } from '@reducers';
+import React from 'react';
+import { withRouter } from 'react-router';
 import styled from 'styled-components';
-import RightContainer from './components/RightContainer';
 import PoolList from './components/LeftContainer/PoolList';
 import SummaryList from './components/LeftContainer/SummaryList';
-import { AllAddressesGlobal, AppThemeColors } from '@types';
-import * as actionTypes from '@actionTypes';
-import { useTheme } from '@hooks';
-import { useSelector } from '@reducers';
+import RightContainer from './components/RightContainer';
 
-const Header = styled.div`
-    width: 100%;
-    /* padding-bottom: 44px; */
-    /* max-width: 540px; */
-    display: flex;
-    justify-content: center;
-    background-color: ${props => props.theme.BACKGROUND};
-    padding: 0 20px;
-`;
+const POOL_CARD_MAX_WIDTH = '530px';
 
-const DarkModeSwitchWrapper = styled.div`
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 8px;
-    right: 10px;
+const PageHeadline = styled.div`
+    color: ${props => props.theme.FONT_DARK};
+    font-size: ${variables.FONT_SIZE.H1};
+    font-weight: ${variables.FONT_WEIGHT.BOLD};
+    align-self: baseline;
+    margin-bottom: 30px;
+    margin-top: 12px;
 
-    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
-        display: none;
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        margin-bottom: 20px;
     }
 `;
-
-const HeaderContent = styled.div`
+const PoolsWrapper = styled.div`
+    height: 100%;
     width: 100%;
-    max-width: 620px;
-    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
-
-    /* padding: 0 20px 40px 20px; */
-    /* border-bottom: 2px solid ${colors.BACKGROUND_DARK}; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    ${styles.scrollBarStyles};
+    margin-top: 20px;
+    align-items: baseline;
+    padding-left: 10px;
+    padding-right: 10px;
 `;
 
 const ExceptionWrapper = styled.div`
@@ -64,7 +44,7 @@ const ExceptionWrapper = styled.div`
     height: 260px;
     align-items: center;
     justify-content: center;
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     flex-direction: column;
     margin-top: 24px;
     text-align: center;
@@ -72,52 +52,54 @@ const ExceptionWrapper = styled.div`
     line-height: 26px;
 `;
 
-const NoPoolFoundInfo = styled(ExceptionWrapper)`
-    color: ${props => props.theme.FONT_MEDIUM};
-`;
-
-const ErrorTextWrapper = styled(ExceptionWrapper)`
-    & > button {
-        color: white;
-        background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
-        font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin: 16px auto 0 auto;
-        outline: none;
-    }
-`;
-
 const NoAddressNoPool = styled(ExceptionWrapper)`
+    width: 100%;
+    height: 100px;
     color: ${props => props.theme.FONT_LIGHT};
-    font-size: ${variables.FONT_SIZE.H2};
+    font-size: ${variables.FONT_SIZE.H3};
+`;
+
+const RefreshPageDescWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const RefreshButton = styled.button`
+    color: white;
+    background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
+    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 16px auto 0 auto;
+    outline: none;
+`;
+
+const LeftContentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px 10px 10px;
+    margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
+    width: 100%;
+    height: 100%;
+    max-width: 620px;
+    align-self: center;
+    ${styles.scrollBarStyles};
+
+    @media (max-width: ${variables.SCREEN_SIZE.LG}) {
+        // because choose pool options are not visible on mobile screen
+        min-height: 60vh;
+    }
 `;
 
 const AddressWrapper = styled.div`
     width: 100%;
-    max-width: 610px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    padding: 0 5px;
-    /* padding: 6px;
-    border-radius: 8px;
-    background-color: ${colors.BACKGROUND_DARK}; */
-`;
-
-const LeftSubHeaderContent = styled.div`
-    margin: 0 10px 10px 10px; // because of scrollbar - I don't want to have it all the way to the right
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: auto;
-    overflow-x: hidden;
-    ${styles.scrollBarStyles};
+    margin-bottom: 14px;
 `;
 
 const RightNonExceptionContentWrapper = styled.div`
@@ -125,109 +107,81 @@ const RightNonExceptionContentWrapper = styled.div`
     width: 100%;
 `;
 
-const Headline = styled.div`
-    /* align-self: baseline; */
-    padding-top: 0px;
-    margin-bottom: 50px;
-    padding-left: 20px;
-    color: ${props => props.theme.FONT_MEDIUM};
-    font-size: ${variables.FONT_SIZE.H3};
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        margin-bottom: 30px;
-    }
-`;
-
-const PoolListWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    width: 100%;
-    max-width: 540px;
+const StyledQuestionTooltip = styled(QuestionTooltip)`
+    display: inline-block;
 `;
 
 const Dashboard = () => {
-    const allPoolsGlobal = useSelector(state => state.app.allPools);
+    const { allPools, selectedAddress } = useSelector(state => state.app);
     const isLoading = useSelector(state => state.app.loading);
     const isFetchError = useSelector(state => state.app.error);
     const noPoolsFound = useSelector(state => state.app.noPoolsFound);
-    const theme = useTheme();
-
-    let exceptionContent;
-    let rightWrapperContent;
-    const noPoolsSavedInRedux = allPoolsGlobal ? Object.keys(allPoolsGlobal).length === 0 : true;
+    const noPoolsSavedInRedux = allPools ? Object.keys(allPools).length === 0 : true;
 
     const refreshPage = () => {
         window.location.reload();
     };
 
-    if (isFetchError) {
-        exceptionContent = (
-            <ErrorTextWrapper>
-                An error occurred while fetching data :(
-                <button onClick={refreshPage}>Try again</button>
-            </ErrorTextWrapper>
-        );
-    }
+    const getExceptionContent = () => {
+        if (isLoading) {
+            return <LoadingBox>Wait a moment. We are getting pool data...</LoadingBox>;
+        }
 
-    if (isLoading) {
-        exceptionContent = <LoadingBox>Wait a moment. We are getting pool data...</LoadingBox>;
-    } else if (noPoolsFound) {
-        exceptionContent = (
-            <NoPoolFoundInfo>
-                We didn't find any pools associated with this address.
-                <br />
-                Don't forget that we support only Uniswap, SushiSwap and Balancer at this time.
-            </NoPoolFoundInfo>
-        );
-    }
+        if (isFetchError) {
+            return (
+                <SadCrocoBox>
+                    <RefreshPageDescWrapper>
+                        An error occurred while fetching data :(
+                        <RefreshButton onClick={refreshPage}>Try again</RefreshButton>
+                    </RefreshPageDescWrapper>
+                </SadCrocoBox>
+            );
+        }
 
-    if (noPoolsSavedInRedux && !exceptionContent) {
-        rightWrapperContent = (
-            <NoAddressNoPool>Input valid Ethereum address first!</NoAddressNoPool>
-        );
-    }
+        if (!selectedAddress) {
+            return <NoAddressNoPool>Input valid Ethereum address first</NoAddressNoPool>;
+        }
+
+        if (!allPools || noPoolsSavedInRedux || noPoolsFound) {
+            return (
+                <SadCrocoBox>
+                    Sorry, Croco could not find any pools for this address :(
+                    <StyledQuestionTooltip content="We track only pools on Uniswap, SushiSwap, Balancer and Materia exchanges." />
+                </SadCrocoBox>
+            );
+        }
+        return null;
+    };
+
+    const exceptionContent = getExceptionContent();
 
     return (
         <>
-            <DarkModeSwitchWrapper>
-                <DarkModeSwitch />
-            </DarkModeSwitchWrapper>
-
             <DashboardContainer>
-                <LeftLayoutContainer backgroundColor={'red'}>
-                    <Header>
-                        <HeaderContent>
-                            <NavBar />
-                        </HeaderContent>
-                    </Header>
-                    <LeftSubHeaderContent>
+                <LeftLayoutContainer maxHeightMobileScreen="75vh">
+                    <LeftContentWrapper>
                         <AddressWrapper>
+                            <PageHeadline>Dashboard</PageHeadline>
                             <AddressSelect />
                         </AddressWrapper>
-
-                        {exceptionContent
-                            ? exceptionContent
-                            : !noPoolsSavedInRedux && (
-                                  <PoolListWrapper>
-                                      <Headline>Your liquidity pools</Headline>
-                                      <SummaryList />
-                                      <PoolList />
-                                  </PoolListWrapper>
-                              )}
-                    </LeftSubHeaderContent>
+                        <PoolsWrapper>
+                            {exceptionContent ||
+                                (!noPoolsSavedInRedux && (
+                                    <>
+                                        <SummaryList cardMaxWidth={POOL_CARD_MAX_WIDTH} />
+                                        <PoolList cardMaxWidth={POOL_CARD_MAX_WIDTH} />
+                                    </>
+                                ))}
+                        </PoolsWrapper>
+                    </LeftContentWrapper>
                 </LeftLayoutContainer>
                 <RightLayoutContainer>
-                    {rightWrapperContent}
-                    {!exceptionContent && !noPoolsSavedInRedux && (
+                    {!exceptionContent && (
                         <RightNonExceptionContentWrapper>
                             <RightContainer />
                         </RightNonExceptionContentWrapper>
                     )}
                 </RightLayoutContainer>
-                <SocialButtonBubble />
             </DashboardContainer>
         </>
     );

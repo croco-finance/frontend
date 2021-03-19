@@ -1,10 +1,9 @@
 import * as actionTypes from '@actionTypes';
-import { DarkModeSwitch, Icon, PageLogo, Spinner } from '@components/ui';
-import { analytics, colors, constants, styles, variables, web3, firebase } from '@config';
+import { Icon, Spinner } from '@components/ui';
+import { analytics, colors, firebase, styles, variables, web3 } from '@config';
 import { useSelector } from '@reducers';
 import { validationUtils } from '@utils';
 import React, { useState } from 'react';
-import { Fade } from 'react-awesome-reveal';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -34,19 +33,6 @@ const MainWrapper = styled.div`
     }
 `;
 
-const DarkModeSwitchWrapper = styled.div`
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 8px;
-    right: 10px;
-
-    @media (max-width: ${CONTENT_WIDTH + 100}px) {
-        position: static;
-    }
-`;
-
 const AnimatedWrapper = styled.div`
     width: 100%;
     max-width: 740px;
@@ -59,36 +45,6 @@ const ContentWrapper = styled.div`
     align-items: center;
 `;
 
-const TopBar = styled.div`
-    display: flex;
-    width: 100%;
-    height: 64px;
-    flex-direction: row;
-    align-items: center;
-`;
-
-const PageLogoWrapper = styled.div`
-    display: flex;
-    padding-bottom: 4px; // to align with social icons. TODO make the alignment better way
-`;
-
-const CommunityIconsWrapper = styled.div`
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
-`;
-
-const IconLinkWrapper = styled.a`
-    text-decoration: none;
-    cursor: pointer;
-    margin: 0 10px;
-    display: flex;
-    align-items: center;
-
-    &:hover {
-        text-decoration: none;
-    }
-`;
 const IllustrationWrapper = styled.h1`
     margin-top: 115px;
     margin-bottom: 60px;
@@ -290,7 +246,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         try {
             const accounts = await web3.eth.getAccounts();
             setPortisLoading(false);
-            let initialAddressesObj = {};
+            const initialAddressesObj = {};
             initialAddressesObj[accounts[0]] = { bundled: false, ens: '' };
 
             dispatch({
@@ -308,11 +264,11 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         }
     };
 
-    const handleButtonOnClick = async () => {
+    const handleButtonOnClick = () => {
         if (isValidAddress) {
             // fire custom Google Analytics event
-            let initialAddressesObj = {};
-            initialAddressesObj[inputHexAddress] = { bundled: false, ens: ensName ? ensName : '' };
+            const initialAddressesObj = {};
+            initialAddressesObj[inputHexAddress] = { bundled: false, ens: ensName || '' };
 
             dispatch({
                 type: actionTypes.SET_ADDRESSES,
@@ -320,14 +276,14 @@ const LandingPage = (props: RouteComponentProps<any>) => {
             });
             dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: inputAddress });
 
-            let addressWithout0x = validationUtils.isHex(inputHexAddress)
+            const addressWithout0x = validationUtils.isHex(inputHexAddress)
                 ? inputHexAddress.substring(2)
                 : inputHexAddress;
             analytics.logEvent('landing_page_go_button', { address: addressWithout0x });
 
             // save new address to Firebase
             const firebaseRef = firebase.addresses(inputHexAddress);
-            const payload = await firebaseRef.set(true);
+            firebaseRef.set(true);
         }
     };
 
@@ -335,7 +291,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         <>
             <MainWrapper>
                 <ContentWrapper>
-                    <TopBar>
+                    {/* <TopBar>
                         <PageLogoWrapper>
                             <PageLogo height={20} />
                         </PageLogoWrapper>
@@ -365,7 +321,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                                 <DarkModeSwitch />
                             </DarkModeSwitchWrapper>
                         </CommunityIconsWrapper>
-                    </TopBar>
+                    </TopBar> */}
 
                     <AnimatedWrapper>
                         {/* <Fade direction="up" delay={400} triggerOnce> */}
@@ -383,7 +339,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                                     handleAddressChange(event.target.value.trim());
                                     setInputAddress(event.target.value.trim());
                                 }}
-                            ></AddressInput>
+                            />
                             <DashboardButton
                                 onClick={e => {
                                     handleButtonOnClick();
@@ -404,7 +360,7 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                             Or log in using
                             <PortisButton onClick={handlePortisLogin}>
                                 {portisLoading ? (
-                                    <Spinner size={12} color={'#4b6b9a'} />
+                                    <Spinner size={12} color="#4b6b9a" />
                                 ) : (
                                     <Icon icon="portis" size={14} />
                                 )}

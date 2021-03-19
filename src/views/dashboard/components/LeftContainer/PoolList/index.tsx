@@ -6,10 +6,11 @@ import styled from 'styled-components';
 import PoolItem from '../PoolItem';
 import { Exchange } from '@types';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ maxWidth: string }>`
     padding-left: 0;
     margin-bottom: 65px;
     width: 100%;
+    max-width: ${props => props.maxWidth};
 `;
 
 const ActiveExchange = styled.div`
@@ -51,7 +52,11 @@ const Value = styled(HeaderChild)``;
 
 const Gains = styled(HeaderChild)``;
 
-const PoolList = () => {
+interface Props {
+    cardMaxWidth?: string;
+}
+
+const PoolList = ({ cardMaxWidth = '100%' }: Props) => {
     const { activePoolIds, dexToPoolMap } = useSelector(state => state.app);
     const dexRenderingOrder: Array<keyof typeof Exchange> = [
         'UNI_V2',
@@ -76,7 +81,7 @@ const PoolList = () => {
     });
 
     return (
-        <Wrapper>
+        <Wrapper maxWidth={cardMaxWidth}>
             {activePoolIdsOrdered.length > 0 ? (
                 <>
                     <Header>
@@ -89,12 +94,12 @@ const PoolList = () => {
                         <Value>Value</Value>
                         <Gains>
                             Reward
-                            <QuestionTooltip content={'fees + yield'} />
+                            <QuestionTooltip content="fees + yield" />
                         </Gains>
                     </Header>
-                    {activePoolIdsOrdered.map(poolId => {
-                        return <PoolItem key={poolId} poolId={poolId} />;
-                    })}
+                    {activePoolIdsOrdered.map(poolId => (
+                        <PoolItem key={poolId} poolId={poolId} />
+                    ))}
                 </>
             ) : null}
 
@@ -106,13 +111,13 @@ const PoolList = () => {
                                 Past positions
                             </InactiveHeadline>
                         </ExchangeHeader>
-                        <Value>{''}</Value>
+                        <Value />
                         <Gains>{activePoolIds.length === 0 ? 'Reward' : ''}</Gains>
                     </Header>
 
-                    {inactivePoolIdsOrdered.map(poolId => {
-                        return <PoolItem key={poolId} poolId={poolId} />;
-                    })}
+                    {inactivePoolIdsOrdered.map(poolId => (
+                        <PoolItem key={poolId} poolId={poolId} />
+                    ))}
                 </>
             ) : null}
         </Wrapper>

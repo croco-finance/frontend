@@ -1,10 +1,9 @@
+import { useSelector } from '@reducers';
 import React from 'react';
 import styled from 'styled-components';
-import { colors } from '../../../config';
-import Spinner from '../Spinner';
-import Illustration from '../../../data/images/loading-illustration.svg';
 import IllustrationDark from '../../../data/images/loading-illustration-dark.svg';
-import { useSelector } from '@reducers';
+import Illustration from '../../../data/images/loading-illustration.svg';
+import Spinner from '../Spinner';
 
 const Wrapper = styled.div<{ height: number }>`
     display: flex;
@@ -14,8 +13,8 @@ const Wrapper = styled.div<{ height: number }>`
     align-items: center;
     flex-direction: column-reverse;
     border-radius: 5px;
-    margin-top: 44px;
-    padding: 40px;
+    margin-top: 10px;
+    padding: 20px;
 `;
 
 const SpinnerDescription = styled.div`

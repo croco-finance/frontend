@@ -66,9 +66,12 @@ const RightContainer = () => {
     return (
         <Wrapper>
             <TabSelectHeader
+                selected={selectedTab}
                 headline={headerHeadline}
                 onSelectTab={tab => handleTabChange(tab)}
                 hideTabs={selectedPoolId === 'all'}
+                tabHeadlines={['Overview', 'Strategies']}
+                tabIds={['overview', 'strategies']}
             />
             {pageToShow}
         </Wrapper>

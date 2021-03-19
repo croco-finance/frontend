@@ -45,12 +45,10 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     isSelected?: boolean;
 }
 
-const PoolItemCard = ({ children, isSelected = false, className }: Props) => {
-    return (
-        <Wrapper isSelected={isSelected} className={className}>
-            {children}
-        </Wrapper>
-    );
-};
+const PoolItemCard = ({ children, isSelected = false, className }: Props) => (
+    <Wrapper isSelected={isSelected} className={className}>
+        {children}
+    </Wrapper>
+);
 
 export default PoolItemCard;

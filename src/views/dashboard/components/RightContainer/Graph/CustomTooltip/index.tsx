@@ -77,9 +77,7 @@ const PoolShareValueWrapper = styled.div`
     color: #b1bac5;
 `;
 
-interface Props extends TooltipProps {
-    onShow?: (index: number) => void;
-    feesUsd?: number;
+interface Props extends TooltipProps<any, any> {
     yieldUsd?: number;
 
     // inherited from TooltipProps
@@ -98,10 +96,7 @@ const CustomTooltip = (props: Props) => {
             timestamp,
             poolValues,
             poolValuePrev,
-            feesUsd,
             yieldUsd,
-            txCostUsd,
-            impLossUsd,
         } = graphData;
 
         props.setHighlightedAreaId(dataKey, timestamp);
@@ -133,23 +128,19 @@ const CustomTooltip = (props: Props) => {
                             {endDayString}
                         </IntervalsDateHeader>
                         {/* <IntervalValuesWrapper roundedBottom={isHoveredLast && !txCostUsd}> */}
-                        <IntervalValuesWrapper roundedBottom={true}>
+                        <IntervalValuesWrapper roundedBottom>
                             <PoolValuesWrapper>
                                 <PoolShareValueWrapper>Pool share value</PoolShareValueWrapper>
                                 <GridWrapper>
                                     {/* <TooltipRow firstColumn={`Pool value`} secondColumn={''} /> */}
                                     <TooltipRow
                                         firstColumn={`${startDayString} `}
-                                        secondColumn={
-                                            <FiatValue value={poolValuePrev ? poolValuePrev : 0} />
-                                        }
+                                        secondColumn={<FiatValue value={poolValuePrev || 0} />}
                                     />
 
                                     <TooltipRow
                                         firstColumn={`${endDayString} `}
-                                        secondColumn={
-                                            <FiatValue value={poolValue ? poolValue : 0} />
-                                        }
+                                        secondColumn={<FiatValue value={poolValue || 0} />}
                                     />
 
                                     {poolValueDiff ? (
@@ -157,7 +148,7 @@ const CustomTooltip = (props: Props) => {
                                             firstColumn=""
                                             secondColumn={
                                                 <FiatValue
-                                                    value={poolValueDiff ? poolValueDiff : 0}
+                                                    value={poolValueDiff || 0}
                                                     colorized
                                                     usePlusSymbol
                                                     useLightRed

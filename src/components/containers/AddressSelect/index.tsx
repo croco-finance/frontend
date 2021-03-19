@@ -1,29 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
-import { Select, Icon } from '@components/ui';
-import { Modal } from '@components/layout';
-import { colors } from '@config';
-import { useDispatch } from 'react-redux';
-import { AllAddressesGlobal, AddressData } from '@types';
-import { validationUtils, formatUtils, mathUtils } from '@utils';
-import * as actionTypes from '@actionTypes';
+import { fetchSnapshots, setSelectedAddress } from '@actions';
 import { AddressModal } from '@components/containers';
-import { fetchSnapshots, setSelectedPoolId, setSelectedAddress } from '@actions';
+import { Modal } from '@components/layout';
+import { Icon, Select } from '@components/ui';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
+import { AllAddressesGlobal } from '@types';
+import { formatUtils, mathUtils, validationUtils } from '@utils';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
     width: 100%;
-    max-width: 610px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    padding: 0 5px;
-    /* padding: 6px;
-    border-radius: 8px;
-    background-color: ${colors.BACKGROUND_DARK}; */
 `;
 
 const ManageAddressesButton = styled.button`
@@ -44,29 +35,30 @@ const ManageAddressesButton = styled.button`
     }
 `;
 
-const buildAddressOption = (address: string, ens: string) => {
-    return {
-        value: address,
-        label: ens ? ens : address,
-    };
-};
+const buildAddressOption = (address: string, ens: string): AddressOption => ({
+    value: address,
+    label: ens || address,
+});
 
 const buildAddressOptions = (addresses: AllAddressesGlobal) => {
     if (!addresses) return null;
 
     let numberOfBundled = 0;
-    const options = new Array();
+    const options: AddressOption[] = [];
 
     // get how many bundled addresses there are
-    for (const [address, value] of Object.entries(addresses)) {
+    Object.keys(addresses).forEach(address => {
+        // addresses are 0xabc, 0xefg, ... and "bundled".
         if (address !== 'bundled') {
+            const { bundled, ens } = addresses[address];
+
             // check if the address has bundled tag
-            if (value.bundled) numberOfBundled += 1;
+            if (bundled) numberOfBundled += 1;
 
             // push address option
-            options.push(buildAddressOption(address, value.ens));
+            options.push(buildAddressOption(address, ens));
         }
-    }
+    });
 
     // add bundled option if more than 1 bundled addresses is present
     if (numberOfBundled > 1) {
@@ -84,10 +76,14 @@ interface AddressOption {
     label: string;
 }
 
-const AddressSelect = () => {
+interface Props {
+    isSelectedNull?: boolean;
+}
+
+const AddressSelect = ({ isSelectedNull }: Props) => {
     const dispatch = useDispatch();
     const { allAddresses, selectedAddress } = useSelector(state => state.app);
-    const theme: any = useTheme();
+    const theme = useTheme();
 
     // save setting before the "Manage addresses" modal is opened
     const bundledAddressesSnapBeforeModalOpened = useRef<string[]>([]);
@@ -127,17 +123,16 @@ const AddressSelect = () => {
                 if (!addressesAreEqual && bundledAddressesCount > 1) {
                     dispatch(fetchSnapshots(currentBundled));
                 }
-            } else {
-                // if there is only one address in allAddresses and it's different from previously selected address, select it automatically
-                if (
-                    addressesCount === 1 &&
-                    (addressSelectedBeforeModalOpened.current !== selectedAddress ||
-                        selectedAddress === null)
-                ) {
-                    const addressToSelect = Object.keys(allAddresses)[0];
-                    dispatch(setSelectedAddress(addressToSelect));
-                    dispatch(fetchSnapshots(addressToSelect));
-                }
+            }
+            // if there is only one address in allAddresses and it's different from previously selected address, select it automatically
+            if (
+                addressesCount === 1 &&
+                (addressSelectedBeforeModalOpened.current !== selectedAddress ||
+                    selectedAddress === null)
+            ) {
+                const addressToSelect = Object.keys(allAddresses)[0];
+                dispatch(setSelectedAddress(addressToSelect));
+                dispatch(fetchSnapshots(addressToSelect));
             }
         } else {
             // if the modal is going to be opened, take snapshot
@@ -146,29 +141,37 @@ const AddressSelect = () => {
             );
             addressSelectedBeforeModalOpened.current = selectedAddress;
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showAddressModal]);
 
-    const ens = allAddresses[selectedAddress] ? allAddresses[selectedAddress].ens : '';
-    let value = buildAddressOption(selectedAddress, ens);
+    const getSelectedAddressValue = (address: string | null) => {
+        if (isSelectedNull) return null;
+        if (address === 'bundled') {
+            return {
+                value: 'bundled',
+                label: 'Bundled Wallets',
+            };
+        }
+        if (address === '' || address === null) {
+            // if null is selected, the placeholder is shown
+            return null;
+        }
 
-    if (selectedAddress === 'bundled') {
-        value = {
-            value: 'bundled',
-            label: 'Bundled Wallets',
-        };
-    }
+        const ens = allAddresses[address] ? allAddresses[address].ens : '';
+        return buildAddressOption(address, ens);
+    };
 
     return (
         <Wrapper>
             <Select
                 options={buildAddressOptions(allAddresses)}
-                value={selectedAddress === null ? null : value} // I want to clean the select when user deletes just selected address
+                value={getSelectedAddressValue(selectedAddress)} // I want to clean the select when user deletes just selected address
                 onChange={(option: AddressOption) => {
                     handleAddressChange(option.value);
                 }}
                 useWhiteBackground
                 useDarkBorder
-                placeholder="Select Ethereum address..."
+                placeholder="Select your Ethereum address..."
                 isSearchable={false}
             />
 
@@ -184,7 +187,7 @@ const AddressSelect = () => {
                 <Modal
                     cancelable
                     onCancel={() => setShowAddressModal(false)}
-                    heading={'Manage addresses'}
+                    heading="Manage addresses"
                     showHeaderBorder={false}
                 >
                     <AddressModal />

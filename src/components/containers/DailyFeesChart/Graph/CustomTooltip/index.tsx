@@ -55,7 +55,7 @@ const TokenFeesGridWrapper = styled(GridWrapper)`
     padding-top: 5px;
     margin top: 8px;`;
 
-interface Props extends TooltipProps {
+interface Props extends TooltipProps<any, any> {
     // inherited from TooltipProps
     payload?: any;
     active?: boolean;
@@ -74,7 +74,7 @@ const CustomTooltip = (props: Props) => {
                     <TooltipGridWrapper>
                         <TooltipRow
                             firstColumn="Fees USD"
-                            secondColumn={<FiatValue value={feesUsd ? feesUsd : 0} />}
+                            secondColumn={<FiatValue value={feesUsd || 0} />}
                         />
                     </TooltipGridWrapper>
                     {feesTokenAmounts && (

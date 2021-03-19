@@ -1,7 +1,5 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { variables } from '../../../config';
-import colors from '../../../config/colors';
 
 const Wrapper = styled.div<{ value: number; colorized: boolean; useBadgeStyle: boolean }>`
     ${props =>
@@ -54,7 +52,6 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     value: number;
     symbol?: string;
     colorized?: boolean; // change color is the amount is positive or negative
-    minimumFractionDigits?: number;
     usePlusSymbol?: boolean;
     useBadgeStyle?: boolean;
 }

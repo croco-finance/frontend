@@ -21,7 +21,7 @@ export enum Exchange {
     UNI_V2 = 'UNI_V2',
     BALANCER = 'BALANCER',
     SUSHI = 'SUSHI',
-    MATERIA = 'MATERIA'
+    MATERIA = 'MATERIA',
 }
 
 export enum StakingService {
@@ -220,6 +220,7 @@ export interface Deposit {
     valueEth: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Withdrawal extends Deposit {}
 export interface DailyData {
     block: number;
@@ -237,11 +238,12 @@ export interface DailyStats {
     timestamps: number[];
     feesUsd: number[];
     tokenSymbols: string[] | undefined;
-    feesTokenAmounts: number[] | undefined;
+    feesTokenAmounts: number[][] | undefined;
     averageDailyFeesUsd: number | undefined;
     averageDailyYieldUsd: number | undefined;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export type AllPoolsGlobal = { [key: string]: PoolItem } | {};
 export interface AddressData {
     bundled: boolean;
@@ -265,6 +267,35 @@ export interface AppStateInterface {
     noPoolsFound: boolean;
     theme: AppThemeVariant;
 }
+
+export interface SimulatorStateInterface {
+    // simulation mode
+    simulationMode: 'positions' | 'import';
+    // pool import
+    poolSnapFetchError: boolean;
+    poolSnapLoading: boolean;
+    poolSnapData: DailyData | null;
+    // simulation data
+    poolId: string;
+    tokenSymbols: TokenType[];
+    tokenWeights: number[];
+    tokenPricesUsd: number[];
+    ethPriceUsd: number;
+    yieldTokenSymbol: TokenType | null;
+    investedAmount: number;
+    userTokenBalances: number[];
+    exchange: Exchange | null;
+    // simulated price coefficients
+    simulatedTokenCoefficients: number[];
+    simulatedEthCoefficient: number;
+    simulatedYieldCoefficient: number;
+    defaultSliderTokenCoefficients: number[];
+    defaultSliderEthCoefficient: number;
+}
+
+export type ResizeStateInterface = {
+    size: 'XLARGE' | 'LARGE' | 'NORMAL' | 'UNAVAILABLE' | 'TINY' | 'SMALL';
+};
 
 export type AppThemeVariant = 'light' | 'dark';
 

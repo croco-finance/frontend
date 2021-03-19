@@ -4,45 +4,19 @@ import {
     DailyData,
     DailyStats,
     Deposit,
+    Exchange,
     IntervalStats,
     PoolItem,
     Snap,
     SummaryStats,
     Withdrawal,
 } from '@types';
-import { formatUtils, helperUtils, lossUtils, mathUtils, validationUtils } from '.';
+import { formatUtils, helperUtils, lossUtils, mathUtils, validationUtils } from '@utils';
 
-const getPoolStatsFromSnapshots = (poolSnapshots: Snap[]) => {
-    // get interval stats first
-    let intervalStats = new Array();
+const getEthValueOfTokenArray = (tokenBalances, tokenPrices, ethPrice): number => {
+    const startTokenValue = mathUtils.multiplyArraysElementWise(tokenBalances, tokenPrices);
 
-    poolSnapshots.forEach((snapshot, i) => {
-        if (i > 0) {
-            intervalStats.push(getIntervalStats(poolSnapshots[i - 1], poolSnapshots[i]));
-        }
-    });
-
-    const poolIsActive = poolSnapshots[poolSnapshots.length - 1].liquidityTokenBalance > 0;
-    const {
-        deposits,
-        withdrawals,
-        depositTimestamps,
-        depositTokenAmounts,
-        depositEthAmounts,
-    } = getDepositsAndWithdrawals(intervalStats, poolIsActive);
-
-    // get cumulative stats
-    let cumulativeStats = getCumulativeStats(intervalStats, deposits, withdrawals, poolSnapshots);
-
-    return {
-        intervalStats,
-        cumulativeStats,
-        deposits,
-        withdrawals,
-        depositTimestamps,
-        depositTokenAmounts,
-        depositEthAmounts,
-    };
+    return mathUtils.sumArr(mathUtils.divideEachArrayElementByValue(startTokenValue, ethPrice));
 };
 
 const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => {
@@ -165,36 +139,36 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
         timestampEnd: snapshotT1.timestamp * 1000,
 
         // Token balances
-        tokenBalancesStart: tokenBalancesStart,
-        tokenBalancesEnd: tokenBalancesEnd,
+        tokenBalancesStart,
+        tokenBalancesEnd,
 
         // Fees and imp. loss
-        feesTokenAmounts: feesTokenAmounts,
+        feesTokenAmounts,
         feesUsdEndPrice: mathUtils.sumArr(
             mathUtils.multiplyArraysElementWise(feesTokenAmounts, tokenPricesEnd),
         ),
-        tokenDiffNoFees: tokenDiffNoFees,
+        tokenDiffNoFees,
 
         // User's pool share
-        userPoolShareStart: userPoolShareStart,
-        userPoolShareEnd: userPoolShareEnd,
+        userPoolShareStart,
+        userPoolShareEnd,
         liquidityTokenBalanceStart: snapshotT0.liquidityTokenBalance,
         liquidityTokenBalanceEnd: snapshotT1.liquidityTokenBalance,
 
         // Token prices
-        tokenPricesStart: tokenPricesStart,
-        tokenPricesEnd: tokenPricesEnd,
-        ethPriceStart: ethPriceStart,
-        ethPriceEnd: ethPriceEnd,
+        tokenPricesStart,
+        tokenPricesEnd,
+        ethPriceStart,
+        ethPriceEnd,
 
         // TX Cost
         txCostEthStart: snapshotT0.txCostEth,
         txCostEthEnd: snapshotT1.txCostEth,
 
         // Yield rewards
-        yieldUnclaimedTokenAmount: yieldUnclaimedTokenAmount,
-        yieldClaimedTokenAmount: yieldClaimedTokenAmount,
-        yieldTotalTokenAmount: yieldTotalTokenAmount,
+        yieldUnclaimedTokenAmount,
+        yieldClaimedTokenAmount,
+        yieldTotalTokenAmount,
         yieldTokenPriceStart: snapshotT0.yieldReward ? snapshotT0.yieldReward.price : null,
         yieldTokenPriceEnd: snapshotT1.yieldReward ? snapshotT1.yieldReward.price : null,
         yieldTokenSymbol: snapshotT0.yieldReward ? snapshotT0.yieldReward.token.symbol : null,
@@ -203,20 +177,201 @@ const getIntervalStats = (snapshotT0: Snap, snapshotT1: Snap): IntervalStats => 
         impLossUsd: impLossUsd ? mathUtils.roundToNDecimals(impLossUsd, 4) : 0,
 
         // Strategy values (for interval start/end prices, not current prices)
-        poolValueUsdStart: poolValueUsdStart,
-        poolValueUsdEnd: poolValueUsdEnd,
-        hodlValueUsd: hodlValueUsd,
-        ethHodlValueUsd: ethHodlValueUsd,
+        poolValueUsdStart,
+        poolValueUsdEnd,
+        hodlValueUsd,
+        ethHodlValueUsd,
 
         // If staked LP tokens (for Uniswap)
         staked: snapshotT0.stakingService !== null,
     };
 };
 
-const getEthValueOfTokenArray = (tokenBalances, tokenPrices, ethPrice): number => {
-    const startTokenValue = mathUtils.multiplyArraysElementWise(tokenBalances, tokenPrices);
+const getDepositsOrWithdrawalsSum = (deposits: Deposit[]) => {
+    // deposits and withdrawals share the same interface (for now)
 
-    return mathUtils.sumArr(mathUtils.divideEachArrayElementByValue(startTokenValue, ethPrice));
+    const tokenCount = deposits[0].tokenAmounts.length;
+    let tokenAmountsSum = new Array(tokenCount).fill(0);
+
+    deposits.forEach(deposit => {
+        tokenAmountsSum = mathUtils.sumArraysElementWise(tokenAmountsSum, deposit.tokenAmounts);
+    });
+
+    return tokenAmountsSum;
+};
+
+const getDepositsOrWithdrawalsEthSum = (deposits: Deposit[] | Withdrawal[]) => {
+    // deposits and withdrawals share the same interface (for now)
+    let valueEthSum = 0;
+
+    deposits.forEach(deposit => {
+        valueEthSum += deposit.valueEth;
+    });
+
+    return valueEthSum;
+};
+
+const getCumulativeStats = (
+    intervalStats: IntervalStats[],
+    deposits: Deposit[],
+    withdrawals: Withdrawal[],
+    snapshots: Snap[],
+): CumulativeStats => {
+    const lastSnap = snapshots[snapshots.length - 1];
+    const pooledTokensCount = intervalStats[0].tokenBalancesStart.length;
+    const intervalsCount = intervalStats.length;
+    const lastInterval = intervalStats[intervalsCount - 1];
+
+    // End token prices
+    const pooledTokenPricesEnd = lastInterval.tokenPricesEnd;
+    const yieldTokenPriceEnd = lastInterval.yieldTokenPriceEnd
+        ? lastInterval.yieldTokenPriceEnd
+        : 0;
+    const { ethPriceEnd } = lastInterval;
+
+    const isActive = lastInterval.liquidityTokenBalanceEnd !== 0;
+
+    const endPoolValueUsd = mathUtils.getTokenArrayValue(
+        lastInterval.tokenBalancesEnd,
+        pooledTokenPricesEnd,
+    );
+
+    // Current pool value. If pool is not active, current pool value is 0
+    let currentPoolValueUsd = endPoolValueUsd;
+    if (!isActive) {
+        currentPoolValueUsd = 0;
+    }
+
+    const currentTokenBalances = isActive
+        ? lastInterval.tokenBalancesEnd
+        : new Array(pooledTokensCount).fill(0);
+
+    // Sum and value of all withdrawals/deposits
+    const depositsTokenAmounts = getDepositsOrWithdrawalsSum(deposits);
+    const withdrawalsTokenAmounts = getDepositsOrWithdrawalsSum(withdrawals);
+    const depositsEth = getDepositsOrWithdrawalsEthSum(deposits);
+    const depositsUsd = mathUtils.getTokenArrayValue(depositsTokenAmounts, pooledTokenPricesEnd);
+    const withdrawalsUsd = mathUtils.getTokenArrayValue(
+        withdrawalsTokenAmounts,
+        pooledTokenPricesEnd,
+    );
+
+    // get cumulative fees, yield, txCostEth gains
+    const yieldTokenRewards: { [key: string]: yieldTokenRewards } = {};
+    // Create object of symbols and amounts for yield rewards
+    const yieldUnclaimedTokenAmounts: number[] = [];
+    const yieldClaimedTokenAmounts: number[] = [];
+    const yieldTotalTokenAmounts: number[] = [];
+    const yieldTokenPrices: number[] = [];
+    const yieldTokenSymbols: string[] = [];
+
+    let feesTokenAmounts = new Array(pooledTokensCount).fill(0);
+    let txCostEth = 0;
+    intervalStats.forEach((stat, i) => {
+        // Fees
+        feesTokenAmounts = mathUtils.sumArraysElementWise(feesTokenAmounts, stat.feesTokenAmounts);
+
+        // Tx Cost eth
+        txCostEth += stat.txCostEthStart;
+
+        // if last stat, add txCostEthEnd as well
+        if (i === intervalStats.length - 1) {
+            txCostEth += stat.txCostEthEnd;
+        }
+
+        // yield rewards
+        const { yieldTokenSymbol } = stat;
+
+        if (yieldTokenSymbol) {
+            // initialize object for not-yet-seen symbol
+            if (!yieldTokenRewards[yieldTokenSymbol]) {
+                yieldTokenRewards[yieldTokenSymbol] = { claimed: 0, unclaimed: 0, price: 0 };
+            }
+
+            yieldTokenRewards[yieldTokenSymbol].claimed += stat.yieldClaimedTokenAmount;
+            yieldTokenRewards[yieldTokenSymbol].unclaimed += stat.yieldUnclaimedTokenAmount;
+            // always overwrite the price, so at the end you get the latest one (not current, but latest)
+            if (stat.yieldTokenPriceEnd && stat.yieldTokenPriceEnd !== null)
+                yieldTokenRewards[yieldTokenSymbol].price = stat.yieldTokenPriceEnd;
+        }
+    });
+
+    // Get unclaimed yield from the last snapshot
+    if (lastSnap.yieldReward && lastSnap.yieldReward.token) {
+        const lastSnapYieldSymbol = lastSnap.yieldReward.token.symbol;
+        if (!yieldTokenRewards[lastSnapYieldSymbol])
+            yieldTokenRewards[lastSnapYieldSymbol] = { claimed: 0, unclaimed: 0, price: 0 };
+        yieldTokenRewards[lastSnapYieldSymbol].unclaimed += lastSnap.yieldReward.unclaimed;
+    }
+
+    // iterate over yieldTokenRewards and parse yield information into an array
+    Object.keys(yieldTokenRewards).forEach(symbol => {
+        const reward = yieldTokenRewards[symbol];
+        yieldTokenSymbols.push(symbol);
+        yieldTotalTokenAmounts.push(reward.unclaimed + reward.claimed);
+        yieldUnclaimedTokenAmounts.push(reward.unclaimed);
+        yieldClaimedTokenAmounts.push(reward.claimed);
+        yieldTokenPrices.push(reward.price);
+    });
+
+    // Tx. cost USD
+    const txCostUsd = txCostEth * ethPriceEnd;
+
+    // Fees USD
+    const feesUsd = mathUtils.getTokenArrayValue(feesTokenAmounts, pooledTokenPricesEnd);
+
+    let feesTokenAmountsExceptLastInt = new Array(pooledTokensCount).fill(0);
+    for (let i = 0; i < intervalStats.length - 1; i++) {
+        feesTokenAmountsExceptLastInt = mathUtils.sumArraysElementWise(
+            feesTokenAmountsExceptLastInt,
+            intervalStats[i].feesTokenAmounts,
+        );
+    }
+
+    // yield USD
+    // If there is zero for some yield token, it means that the price is not defined and I can't compute overall yield USD
+    let yieldUsd = 0;
+    if (!yieldTokenPrices.includes(0)) {
+        yieldUsd = mathUtils.getTokenArrayValue(yieldTotalTokenAmounts, yieldTokenPrices);
+    }
+
+    // strategies
+    const poolStrategyUsd = currentPoolValueUsd + withdrawalsUsd + yieldUsd - txCostUsd;
+    const tokensHodlStrategyTokenAmounts = depositsTokenAmounts;
+    const tokensHodlStrategyUsd = depositsUsd;
+    const ethHodlStrategyUsd = depositsEth * ethPriceEnd;
+    const ethHodlStrategyEth = depositsEth;
+
+    return {
+        txCostEth,
+        txCostUsd,
+        feesUsd,
+        yieldUsd,
+        yieldUnclaimedTokenAmounts,
+        yieldClaimedTokenAmounts,
+        yieldTotalTokenAmounts,
+        yieldTokenSymbols,
+        yieldTokenPrices,
+        tokenBalances: lastInterval.tokenBalancesEnd,
+        feesTokenAmounts,
+        ethPriceEnd: lastInterval.ethPriceEnd,
+        tokenPricesEnd: pooledTokenPricesEnd,
+        yieldTokenPriceEnd: yieldTokenPrices[0], // TODO take into account there might be more yield tokens
+        currentPoolValueUsd,
+        endPoolValueUsd,
+        timestampEnd: lastInterval.timestampEnd,
+        depositsTokenAmounts,
+        withdrawalsTokenAmounts,
+        depositsUsd,
+        withdrawalsUsd,
+        poolStrategyUsd,
+        tokensHodlStrategyTokenAmounts,
+        tokensHodlStrategyUsd,
+        ethHodlStrategyUsd,
+        ethHodlStrategyEth,
+        currentTokenBalances,
+        feesTokenAmountsExceptLastInt,
+    };
 };
 
 const getDepositsAndWithdrawals = (intervalStats: Array<IntervalStats>, poolIsActive: boolean) => {
@@ -239,7 +394,7 @@ const getDepositsAndWithdrawals = (intervalStats: Array<IntervalStats>, poolIsAc
     };
 
     // Note: loop until the "i < length - 1 snap", because i + 1 is not defined for last snap
-    for (let i = 0, length = intervalStats.length; i < length - 1; i++) {
+    for (let i = 0; i < intervalStats.length - 1; i++) {
         const endBalancePrev = intervalStats[i].tokenBalancesEnd;
         const startBalanceNext = intervalStats[i + 1].tokenBalancesStart;
         const startTokenPricesNext = intervalStats[i + 1].tokenPricesStart;
@@ -329,28 +484,37 @@ const getDepositsAndWithdrawals = (intervalStats: Array<IntervalStats>, poolIsAc
     return { deposits, withdrawals, depositTimestamps, depositTokenAmounts, depositEthAmounts };
 };
 
-const getDepositsOrWithdrawalsSum = (deposits: Deposit[]) => {
-    // deposits and withdrawals share the same interface (for now)
+const getPoolStatsFromSnapshots = (poolSnapshots: Snap[]) => {
+    // get interval stats first
+    const intervalStats: IntervalStats[] = [];
 
-    let tokenCount = deposits[0].tokenAmounts.length;
-    let tokenAmountsSum = new Array(tokenCount).fill(0);
-
-    deposits.forEach(deposit => {
-        tokenAmountsSum = mathUtils.sumArraysElementWise(tokenAmountsSum, deposit.tokenAmounts);
+    poolSnapshots.forEach((snapshot, i) => {
+        if (i > 0) {
+            intervalStats.push(getIntervalStats(poolSnapshots[i - 1], poolSnapshots[i]));
+        }
     });
 
-    return tokenAmountsSum;
-};
+    const poolIsActive = poolSnapshots[poolSnapshots.length - 1].liquidityTokenBalance > 0;
+    const {
+        deposits,
+        withdrawals,
+        depositTimestamps,
+        depositTokenAmounts,
+        depositEthAmounts,
+    } = getDepositsAndWithdrawals(intervalStats, poolIsActive);
 
-const getDepositsOrWithdrawalsEthSum = (deposits: Deposit[] | Withdrawal[]) => {
-    // deposits and withdrawals share the same interface (for now)
-    let valueEthSum = 0;
+    // get cumulative stats
+    const cumulativeStats = getCumulativeStats(intervalStats, deposits, withdrawals, poolSnapshots);
 
-    deposits.forEach(deposit => {
-        valueEthSum += deposit.valueEth;
-    });
-
-    return valueEthSum;
+    return {
+        intervalStats,
+        cumulativeStats,
+        deposits,
+        withdrawals,
+        depositTimestamps,
+        depositTokenAmounts,
+        depositEthAmounts,
+    };
 };
 
 interface yieldTokenRewards {
@@ -358,171 +522,6 @@ interface yieldTokenRewards {
     unclaimed: number;
     price: number;
 }
-
-const getCumulativeStats = (
-    intervalStats: IntervalStats[],
-    deposits: Deposit[],
-    withdrawals: Withdrawal[],
-    snapshots: Snap[],
-): CumulativeStats => {
-    const lastSnap = snapshots[snapshots.length - 1];
-    const pooledTokensCount = intervalStats[0].tokenBalancesStart.length;
-    const intervalsCount = intervalStats.length;
-    const lastInterval = intervalStats[intervalsCount - 1];
-
-    // End token prices
-    const pooledTokenPricesEnd = lastInterval.tokenPricesEnd;
-    const yieldTokenPriceEnd = lastInterval.yieldTokenPriceEnd
-        ? lastInterval.yieldTokenPriceEnd
-        : 0;
-    const ethPriceEnd = lastInterval.ethPriceEnd;
-
-    const isActive = lastInterval.liquidityTokenBalanceEnd !== 0;
-
-    const endPoolValueUsd = mathUtils.getTokenArrayValue(
-        lastInterval.tokenBalancesEnd,
-        pooledTokenPricesEnd,
-    );
-
-    // Current pool value. If pool is not active, current pool value is 0
-    let currentPoolValueUsd = endPoolValueUsd;
-    if (!isActive) {
-        currentPoolValueUsd = 0;
-    }
-
-    const currentTokenBalances = isActive
-        ? lastInterval.tokenBalancesEnd
-        : new Array(pooledTokensCount).fill(0);
-
-    // Sum and value of all withdrawals/deposits
-    const depositsTokenAmounts = getDepositsOrWithdrawalsSum(deposits);
-    const withdrawalsTokenAmounts = getDepositsOrWithdrawalsSum(withdrawals);
-    const depositsEth = getDepositsOrWithdrawalsEthSum(deposits);
-    const depositsUsd = mathUtils.getTokenArrayValue(depositsTokenAmounts, pooledTokenPricesEnd);
-    const withdrawalsUsd = mathUtils.getTokenArrayValue(
-        withdrawalsTokenAmounts,
-        pooledTokenPricesEnd,
-    );
-
-    // get cumulative fees, yield, txCostEth gains
-    let yieldTokenRewards: { [key: string]: yieldTokenRewards } = {};
-    // Create object of symbols and amounts for yield rewards
-    let yieldUnclaimedTokenAmounts: number[] = [];
-    let yieldClaimedTokenAmounts: number[] = [];
-    let yieldTotalTokenAmounts: number[] = [];
-    let yieldTokenPrices: number[] = [];
-    let yieldTokenSymbols: string[] = [];
-
-    let feesTokenAmounts = new Array(pooledTokensCount).fill(0);
-    let txCostEth = 0;
-    intervalStats.forEach((stat, i) => {
-        // Fees
-        feesTokenAmounts = mathUtils.sumArraysElementWise(
-            feesTokenAmounts,
-            stat['feesTokenAmounts'],
-        );
-
-        // Tx Cost eth
-        txCostEth += stat['txCostEthStart'];
-
-        // if last stat, add txCostEthEnd as well
-        if (i === intervalStats.length - 1) {
-            txCostEth += stat['txCostEthEnd'];
-        }
-
-        // yield rewards
-        const yieldTokenSymbol = stat['yieldTokenSymbol'];
-
-        if (yieldTokenSymbol) {
-            // initialize object for not-yet-seen symbol
-            if (!yieldTokenRewards[yieldTokenSymbol]) {
-                yieldTokenRewards[yieldTokenSymbol] = { claimed: 0, unclaimed: 0, price: 0 };
-            }
-
-            yieldTokenRewards[yieldTokenSymbol].claimed += stat['yieldClaimedTokenAmount'];
-            yieldTokenRewards[yieldTokenSymbol].unclaimed += stat['yieldUnclaimedTokenAmount'];
-            // always overwrite the price, so at the end you get the latest one (not current, but latest)
-            if (stat['yieldTokenPriceEnd'] && stat['yieldTokenPriceEnd'] !== null)
-                yieldTokenRewards[yieldTokenSymbol].price = stat['yieldTokenPriceEnd'];
-        }
-    });
-
-    // Get unclaimed yield from the last snapshot
-    if (lastSnap.yieldReward && lastSnap.yieldReward.token) {
-        const lastSnapYieldSymbol = lastSnap.yieldReward.token.symbol;
-        if (!yieldTokenRewards[lastSnapYieldSymbol])
-            yieldTokenRewards[lastSnapYieldSymbol] = { claimed: 0, unclaimed: 0, price: 0 };
-        yieldTokenRewards[lastSnapYieldSymbol].unclaimed += lastSnap.yieldReward.unclaimed;
-    }
-
-    // iterate over yieldTokenRewards and parse yield information into an array
-    for (const [symbol, value] of Object.entries(yieldTokenRewards)) {
-        yieldTokenSymbols.push(symbol);
-        yieldTotalTokenAmounts.push(value.unclaimed + value.claimed);
-        yieldUnclaimedTokenAmounts.push(value.unclaimed);
-        yieldClaimedTokenAmounts.push(value.claimed);
-        yieldTokenPrices.push(value.price);
-    }
-
-    // Tx. cost USD
-    const txCostUsd = txCostEth * ethPriceEnd;
-
-    // Fees USD
-    let feesUsd = mathUtils.getTokenArrayValue(feesTokenAmounts, pooledTokenPricesEnd);
-
-    let feesTokenAmountsExceptLastInt = new Array(pooledTokensCount).fill(0);
-    for (let i = 0; i < intervalStats.length - 1; i++) {
-        feesTokenAmountsExceptLastInt = mathUtils.sumArraysElementWise(
-            feesTokenAmountsExceptLastInt,
-            intervalStats[i].feesTokenAmounts,
-        );
-    }
-
-    // yield USD
-    // If there is zero for some yield token, it means that the price is not defined and I can't compute overall yield USD
-    let yieldUsd = 0;
-    if (!validationUtils.isZeroInArray(yieldTokenPrices)) {
-        yieldUsd = mathUtils.getTokenArrayValue(yieldTotalTokenAmounts, yieldTokenPrices);
-    }
-
-    // strategies
-    const poolStrategyUsd = currentPoolValueUsd + withdrawalsUsd + yieldUsd - txCostUsd;
-    const tokensHodlStrategyTokenAmounts = depositsTokenAmounts;
-    const tokensHodlStrategyUsd = depositsUsd;
-    const ethHodlStrategyUsd = depositsEth * ethPriceEnd;
-    const ethHodlStrategyEth = depositsEth;
-
-    return {
-        txCostEth: txCostEth,
-        txCostUsd: txCostUsd,
-        feesUsd: feesUsd,
-        yieldUsd: yieldUsd,
-        yieldUnclaimedTokenAmounts: yieldUnclaimedTokenAmounts,
-        yieldClaimedTokenAmounts: yieldClaimedTokenAmounts,
-        yieldTotalTokenAmounts: yieldTotalTokenAmounts,
-        yieldTokenSymbols: yieldTokenSymbols,
-        yieldTokenPrices: yieldTokenPrices,
-        tokenBalances: lastInterval.tokenBalancesEnd,
-        feesTokenAmounts: feesTokenAmounts,
-        ethPriceEnd: lastInterval.ethPriceEnd,
-        tokenPricesEnd: pooledTokenPricesEnd,
-        yieldTokenPriceEnd: yieldTokenPrices[0], // TODO take into account there might be more yield tokens
-        currentPoolValueUsd: currentPoolValueUsd,
-        endPoolValueUsd: endPoolValueUsd,
-        timestampEnd: lastInterval.timestampEnd,
-        depositsTokenAmounts: depositsTokenAmounts,
-        withdrawalsTokenAmounts: withdrawalsTokenAmounts,
-        depositsUsd: depositsUsd,
-        withdrawalsUsd: withdrawalsUsd,
-        poolStrategyUsd: poolStrategyUsd,
-        tokensHodlStrategyTokenAmounts: tokensHodlStrategyTokenAmounts,
-        tokensHodlStrategyUsd: tokensHodlStrategyUsd,
-        ethHodlStrategyUsd: ethHodlStrategyUsd,
-        ethHodlStrategyEth: ethHodlStrategyEth,
-        currentTokenBalances,
-        feesTokenAmountsExceptLastInt,
-    };
-};
 
 const mergeTokenSymbolsAndAmountsArrays = (
     feesUsd0: number[],
@@ -560,7 +559,7 @@ const mergeTokenSymbolsAndAmountsArrays = (
         errorDays = helperUtils.getUniqueItemsFromArray(errorDays);
     });
 
-    return { timestamps: timestampsMerged, feesUsd: feesUsdMerged, errorDays: errorDays };
+    return { timestamps: timestampsMerged, feesUsd: feesUsdMerged, errorDays };
 };
 
 // Returns pools summary object for specified pool IDs
@@ -569,23 +568,23 @@ const getPoolsSummaryObject = (
     filteredPoolIds: string[],
 ): SummaryStats => {
     let feesUsdSum = 0;
-    let feesTokenAmountsSum: { [key: string]: number } = {}; // {ETH: 5.6, DAI: 123.43, ...}
+    const feesTokenAmountsSum: { [key: string]: number } = {}; // {ETH: 5.6, DAI: 123.43, ...}
     let txCostUsdSum = 0;
     let txCostEthSum = 0;
     let yieldUsdSum = 0;
     let totalValueLockedUsd = 0;
-    let pooledTokenAmountsSum: { [key: string]: number } = {};
-    let tokenSymbolsDailySum: string[] | undefined = undefined;
-    let feesTokenAmountsDailySum: number[] | undefined = undefined;
-    let feesTimestampsDailySum: number[] | undefined = undefined;
-    let feesUsdDailySum: number[] | undefined = undefined;
+    const pooledTokenAmountsSum: { [key: string]: number } = {};
+    let tokenSymbolsDailySum: string[] | undefined;
+    let feesTokenAmountsDailySum: number[][] | undefined;
+    let feesTimestampsDailySum: number[] | undefined;
+    let feesUsdDailySum: number[] | undefined;
     let yieldRewardsMerged: { [key: string]: number } = {};
     let errorDaysDailyFees: number[] = [];
 
     // iterate through all specified pool IDs
     for (let i = 0; i < filteredPoolIds.length; i++) {
         const poolId = filteredPoolIds[i];
-        const pool: PoolItem = allPools[poolId];
+        const pool = allPools[poolId];
         const { cumulativeStats, pooledTokens, yieldRewards } = pool;
         const {
             currentPoolValueUsd,
@@ -623,28 +622,27 @@ const getPoolsSummaryObject = (
             feesTokenAmountsDailySum = pool.dailyStats.feesTokenAmounts;
             feesTimestampsDailySum = pool.dailyStats.timestamps;
             feesUsdDailySum = pool.dailyStats.feesUsd;
-        } else {
-            // One pool is already processed and this is another one
-            if (
-                pool.dailyStats &&
-                tokenSymbolsDailySum &&
-                feesTokenAmountsDailySum &&
-                feesTimestampsDailySum &&
-                feesUsdDailySum
-            ) {
-                const { timestamps, feesUsd, errorDays } = mergeTokenSymbolsAndAmountsArrays(
-                    feesUsdDailySum,
-                    pool.dailyStats.feesUsd,
-                    feesTimestampsDailySum,
-                    pool.dailyStats.timestamps,
-                );
+        }
+        // One pool is already processed and this is another one
+        if (
+            pool.dailyStats &&
+            tokenSymbolsDailySum &&
+            feesTokenAmountsDailySum &&
+            feesTimestampsDailySum &&
+            feesUsdDailySum
+        ) {
+            const { timestamps, feesUsd, errorDays } = mergeTokenSymbolsAndAmountsArrays(
+                feesUsdDailySum,
+                pool.dailyStats.feesUsd,
+                feesTimestampsDailySum,
+                pool.dailyStats.timestamps,
+            );
 
-                feesTimestampsDailySum = timestamps;
-                feesUsdDailySum = feesUsd;
-                errorDaysDailyFees = helperUtils.getUniqueItemsFromArray(
-                    errorDaysDailyFees.concat(errorDays),
-                );
-            }
+            feesTimestampsDailySum = timestamps;
+            feesUsdDailySum = feesUsd;
+            errorDaysDailyFees = helperUtils.getUniqueItemsFromArray(
+                errorDaysDailyFees.concat(errorDays),
+            );
         }
 
         // double check you sum only non-NaN values
@@ -658,7 +656,7 @@ const getPoolsSummaryObject = (
     }
 
     // create daily data object
-    let dailyStats: DailyStats | undefined = undefined;
+    let dailyStats: DailyStats | undefined;
 
     if (feesTimestampsDailySum && feesUsdDailySum && tokenSymbolsDailySum) {
         dailyStats = {
@@ -685,28 +683,32 @@ const getPoolsSummaryObject = (
         feesTokenSymbols: Object.keys(feesTokenAmountsSum),
         feesTokenAmounts: Object.values(feesTokenAmountsSum),
         feesUsd: feesUsdSum,
-        dailyStats: dailyStats,
+        dailyStats,
     };
 };
 
 const getDailyRewards = (
     dailyData: { [key: number]: DailyData },
-    poolItem: PoolItem,
+    snapshots: Snap[],
+    exchange: PoolItem['exchange'],
+    tokenWeights: PoolItem['tokenWeights'],
+    tokenSymbols: PoolItem['tokenSymbols'],
 ): DailyStats | undefined => {
-    const { exchange, snapshots, tokenWeights, tokenSymbols } = poolItem;
-    const userTokenBalancesDaily = new Array();
-    const tokenPricesDaily = new Array();
-    const tokenFeesArr = new Array();
-    const usdFeesArr = new Array();
-    const dayTimestamps = new Array();
-    const statsTimestamps = new Array();
-    const userTokenBalancesIntervals = new Array();
+    console.log('getDailyRewards()');
+
+    const userTokenBalancesDaily: number[][] = [];
+    const tokenPricesDaily: number[][] = [];
+    const tokenFeesArr: number[][] | undefined = [];
+    const usdFeesArr: number[] = [];
+    const dayTimestamps: number[] = [];
+    const statsTimestamps: number[] = [];
+    const userTokenBalancesIntervals: Array<{ start: number[]; end: number[] }> = [];
     let indexOfLastSnapChecked = 0; // index of snapshot which lp tokens a
-    let errorDaysDailyFees: number[] = [];
+    const errorDaysDailyFees: number[] = [];
 
     // Convert dayIds to number and make sure the dayIds are sorted
-    let dayIdsString = Object.keys(dailyData);
-    let dayIdsNumbers = dayIdsString.map(dayId => parseFloat(dayId));
+    const dayIdsString = Object.keys(dailyData);
+    const dayIdsNumbers = dayIdsString.map(dayId => parseFloat(dayId));
     dayIdsNumbers.sort();
 
     // Iterate day by day
@@ -842,17 +844,17 @@ const getDailyRewards = (
 
         return {
             errorDays: [],
-            tokenSymbols: tokenSymbols,
+            tokenSymbols,
             timestamps: statsTimestamps,
             feesTokenAmounts: tokenFeesArr,
             feesUsd: usdFeesArr,
-            averageDailyFeesUsd: averageDailyFeesUsd,
+            averageDailyFeesUsd,
             averageDailyYieldUsd: averageDailyYield,
         };
-    } else {
-        console.log('Could not compute daily stats.');
-        return undefined;
     }
+
+    console.log('Could not compute daily stats.');
+    return undefined;
 };
 
 // TODO compute average yield rewards for the last month

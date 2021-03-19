@@ -1,4 +1,4 @@
-import { mathUtils } from '.';
+import { mathUtils } from '@utils';
 import { AllAddressesGlobal, PoolToken, TokenType } from '@types';
 
 const getFormattedUsdValue = (value: number) => {
@@ -18,7 +18,7 @@ const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 const getFormattedDateFromTimestamp = (
     timestampMillis: number,
     type: DateFormats = 'MONTH_DAY_YEAR',
-    useTodayFormat: boolean = false,
+    useTodayFormat = false,
 ) => {
     const dateObj = new Date(timestampMillis);
     const year = dateObj.getFullYear(); // 2019
@@ -44,17 +44,29 @@ const getFormattedDateFromTimestamp = (
     return `${monthName} ${day}/${year}`;
 };
 
+const getValueSign = (value: number) => {
+    if (Number.isNaN(value) || value === 0) {
+        return ' ';
+    }
+
+    if (value < 0) {
+        return '- ';
+    }
+
+    return '+ ';
+};
+
 const getFormattedPercentageValue = (
     value: number,
     hideDecimals = false,
-    usePlusSymbol: boolean = false,
+    usePlusSymbol = false,
 ) => {
     const sign = getValueSign(value);
     if (usePlusSymbol) {
         value = Math.abs(value);
     }
 
-    let percentageFormat = 100 * value;
+    const percentageFormat = 100 * value;
     const numOfDecimals = mathUtils.countDecimals(percentageFormat);
 
     if (numOfDecimals === 0 && hideDecimals) {
@@ -67,25 +79,13 @@ const getFormattedPercentageValue = (
     return `${percentageFormat.toFixed(2)}%`;
 };
 
-const getValueSign = (value: number) => {
-    if (isNaN(value) || value === 0) {
-        return ' ';
-    }
-
-    if (value < 0) {
-        return '- ';
-    }
-
-    return '+ ';
-};
-
-const getFormattedCryptoValue = (value: number, roundDecimals: number = 4) => {
-    if (isNaN(value)) {
+const getFormattedCryptoValue = (value: number, roundDecimals = 4) => {
+    if (Number.isNaN(value)) {
         return '-';
     }
 
     // TODO double check this code and make sure it does what you want
-    if (value === 0 || Math.abs(value) < 1 / Math.pow(10, roundDecimals + 1)) {
+    if (value === 0 || Math.abs(value) < 1 / (10 ** roundDecimals + 1)) {
         return 0;
     }
 
@@ -121,23 +121,23 @@ const getTokenWeightsArr = (tokensArr: PoolToken[]) => {
 const tokenArrToCommaSeparatedString = (tokenSymbols: string[]) => {
     let text = '';
     tokenSymbols.forEach((symbol, i) => {
-        text = text + ', ' + symbol;
+        text = `${text}, ${symbol}`;
     });
-    return text.substring(1); //delete first char (comma)
+    return text.substring(1); // delete first char (comma)
 };
 
 const getBundledAddresses = (addresses: AllAddressesGlobal) => {
-    const addressesArr = new Array();
+    const addressesArr: string[] = [];
 
-    for (const [address, value] of Object.entries(addresses)) {
-        if (value.bundled) addressesArr.push(address);
-    }
+    Object.keys(addresses).forEach(address => {
+        if (addresses[address].bundled) addressesArr.push(address);
+    });
 
     return addressesArr;
 };
 
 const getPooledTokenBalancesAsArr = (userPoolShare: number, tokens: PoolToken[]) => {
-    const tokenBalances = new Array();
+    const tokenBalances: number[] = [];
     tokens.forEach(token => {
         tokenBalances.push(token.reserve * userPoolShare);
     });
@@ -146,7 +146,7 @@ const getPooledTokenBalancesAsArr = (userPoolShare: number, tokens: PoolToken[])
 };
 
 const getPooledTokenPricesAsArr = (tokens: PoolToken[]) => {
-    const tokenPrices = new Array();
+    const tokenPrices: number[] = [];
     tokens.forEach(token => {
         tokenPrices.push(token.priceUsd);
     });
