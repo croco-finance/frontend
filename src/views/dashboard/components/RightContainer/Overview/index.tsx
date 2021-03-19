@@ -101,8 +101,6 @@ const Overview = () => {
         poolOverview = <PoolOverview pool={allPools[selectedPoolId]} />;
     }
 
-    console.log('dailyStats', dailyStats);
-
     return (
         <Wrapper>
             {exchange === 'BALANCER' ? (

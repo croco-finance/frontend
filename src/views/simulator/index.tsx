@@ -30,7 +30,7 @@ import { AllPoolsGlobal, SimulatorStateInterface, TokenType } from '@types';
 import { formatUtils, validationUtils } from '@utils';
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
 import BalanceOverview from './components/LeftContainer/BalanceOverview';
 import SimulationBox from './components/LeftContainer/SimulationBox';
@@ -270,7 +270,7 @@ const buildPoolOptions = (pools: AllPoolsGlobal) => {
 type PoolOption = ReturnType<typeof buildPoolOption>;
 type StatisticsTabOptions = 'il' | 'strategies';
 
-const Simulator = () => {
+const Simulator = (props: RouteComponentProps<any>) => {
     // theme
     const themeColors = useTheme();
     // pool data
@@ -288,37 +288,59 @@ const Simulator = () => {
     // when the page is loaded, reset everything
     useEffect(() => {
         const initSimulator = () => {
-            dispatch(setSimulationMode('positions'));
-            if (
-                allPools &&
-                selectedPoolId &&
-                allPools[selectedPoolId] &&
-                allPools[selectedPoolId].isActive
-            ) {
-                const pool = allPools[selectedPoolId];
-                const { tokenWeights, tokenSymbols } = pool;
-                const { tokenPricesEnd, ethPriceEnd, tokenBalances } = pool.cumulativeStats;
-                const yieldTokenSymbol = '';
-
-                dispatch(
-                    setNewSimulationPoolData(
-                        pool.poolId,
-                        tokenSymbols,
-                        tokenWeights,
-                        yieldTokenSymbol,
-                        tokenPricesEnd,
-                        ethPriceEnd,
-                        tokenBalances,
-                        pool.exchange,
-                    ),
-                );
-
-                dispatch(resetSimulationCoefficients(tokenBalances.length));
+            // check if there is some address in url and if it's valid
+            let poolIdUrl: string | undefined = props.match.params.poolId;
+            if (poolIdUrl) poolIdUrl = poolIdUrl.trim().toLowerCase();
+            if (poolIdUrl && validationUtils.isValidEthereumAddress(poolIdUrl)) {
+                // set import mode
+                dispatch(setSimulationMode('import'));
+                // paste address from URL to input
+                setImportedPoolAddress(poolIdUrl);
+                // mark address as valid
+                setIsImportedPoolAddressValid(true);
+                // fetch data for pool in URL
+                dispatch(fetchPoolSnap(poolIdUrl));
+                analytics.logEvent('import_pool_url', {
+                    poolAddress: poolIdUrl,
+                });
             } else {
-                // reset pool data
-                dispatch(resetPoolSnapData());
-                // reset selected Pool ID
-                dispatch(setSelectedPoolId(''));
+                // clear url
+                props.history.push({
+                    pathname: `/simulator`,
+                });
+
+                dispatch(setSimulationMode('positions'));
+                if (
+                    allPools &&
+                    selectedPoolId &&
+                    allPools[selectedPoolId] &&
+                    allPools[selectedPoolId].isActive
+                ) {
+                    const pool = allPools[selectedPoolId];
+                    const { tokenWeights, tokenSymbols } = pool;
+                    const { tokenPricesEnd, ethPriceEnd, tokenBalances } = pool.cumulativeStats;
+                    const yieldTokenSymbol = '';
+
+                    dispatch(
+                        setNewSimulationPoolData(
+                            pool.poolId,
+                            tokenSymbols,
+                            tokenWeights,
+                            yieldTokenSymbol,
+                            tokenPricesEnd,
+                            ethPriceEnd,
+                            tokenBalances,
+                            pool.exchange,
+                        ),
+                    );
+
+                    dispatch(resetSimulationCoefficients(tokenBalances.length));
+                } else {
+                    // reset pool data
+                    dispatch(resetPoolSnapData());
+                    // reset selected Pool ID
+                    dispatch(setSelectedPoolId(''));
+                }
             }
         };
 
@@ -408,6 +430,24 @@ const Simulator = () => {
         setImportedPoolInvestment('');
         // change selected tab to impermanent loss view
         setSelectedTab('il');
+        // clear url
+        if (tabName === 'positions') {
+            props.history.push({
+                pathname: `/simulator`,
+            });
+        } else {
+            // if there is pool address stored from previous attempt
+            // eslint-disable-next-line no-lonely-if
+            if (importedPoolAddress) {
+                props.history.push({
+                    pathname: `/simulator/pool/${importedPoolAddress}`,
+                });
+            } else {
+                props.history.push({
+                    pathname: `/simulator/pool`,
+                });
+            }
+        }
     };
 
     const handlePoolSelectionChange = (poolId: string) => {
@@ -522,6 +562,7 @@ const Simulator = () => {
         !poolSnapLoading;
     if (simulationMode === 'positions' && (!selectedPoolId || selectedPoolId === 'all'))
         showData = false;
+
     return (
         <>
             <SimulatorContainer>
@@ -622,6 +663,9 @@ const Simulator = () => {
                                                 dispatch(setSimulationMode('import'));
                                                 analytics.logEvent('import_pool', {
                                                     poolAddress: importedPoolAddress,
+                                                });
+                                                props.history.push({
+                                                    pathname: `/simulator/pool/${importedPoolAddress}`,
                                                 });
                                             }}
                                         >

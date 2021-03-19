@@ -76,8 +76,6 @@ const DailyFeesChart = ({ dailyStats, graphHeight = 380, noBorder = false }: Pro
     const graphData = graphUtils.getDailyGraphData(dailyStats);
     const { feesUsd, errorDays } = dailyStats;
 
-    console.log('graphData', graphData);
-
     const earnedSinceText = graphData
         ? formatUtils.getFormattedDateFromTimestamp(graphData[0].timestamp, 'MONTH_DAY')
         : '...';
