@@ -24,23 +24,21 @@ const masterChefAbi = [
     'function pendingSushi(uint256 _pid, address user) external view returns (uint256)',
 ];
 
-async function setUnclaimed(
+function setUnclaimed(
     provider: ethers.providers.Provider,
     address: string,
     snaps: SnapStructure,
-): Promise<void> {
-    for (const [poolId, poolSnaps] of Object.entries(snaps)) {
+): void {
+    Object.entries(snaps).forEach(([poolId, poolSnaps]) => {
         // Iterate over arrays corresponding to farms and unstaked
-        for (const farmSnaps of Object.values(poolSnaps)) {
+        Object.values(poolSnaps).forEach(async farmSnaps => {
             const lastSnap = farmSnaps![farmSnaps!.length - 1];
-            if (lastSnap.stakingService !== null) {
-                if (lastSnap.yieldReward === null) {
-                    // TODO: send log to firebase along with address
-                    console.log(
-                        'ERROR: null reward object in setUnclaimed for non-null stakingService',
-                    );
-                    continue;
-                }
+            if (lastSnap.yieldReward === null) {
+                // TODO: send log to firebase along with address
+                console.log(
+                    'ERROR: null reward object in setUnclaimed for non-null stakingService',
+                );
+            } else if (lastSnap.stakingService !== null) {
                 let unclaimed = 0;
                 if (
                     lastSnap.stakingService === StakingService.UNI_V2 ||
@@ -67,8 +65,8 @@ async function setUnclaimed(
             } else if (lastSnap.exchange === Exchange.BALANCER) {
                 // TODO
             }
-        }
-    }
+        });
+    });
 }
 
 export { setUnclaimed };

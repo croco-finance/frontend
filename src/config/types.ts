@@ -91,7 +91,7 @@ export enum NoneEnum {
 
 export type PoolSnaps = {
     [key in StakingService | NoneEnum]?: Snap[];
-}
+};
 
 export interface SnapStructure {
     [key: string]: PoolSnaps;
@@ -230,6 +230,7 @@ export interface Deposit {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Withdrawal extends Deposit {}
+
 export interface DailyData {
     block: number;
     ethPrice: number;
@@ -253,6 +254,7 @@ export interface DailyStats {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type AllPoolsGlobal = { [key: string]: PoolItem } | {};
+
 export interface AddressData {
     bundled: boolean;
     ens: string;
