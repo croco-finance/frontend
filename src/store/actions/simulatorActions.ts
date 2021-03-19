@@ -123,6 +123,7 @@ export const fetchPoolSnap = (address: string) => async dispatch => {
             // set simulation coefficients
             dispatch(resetSimulationCoefficients(tokenCounts));
         } else {
+            dispatch(fetchPoolSnapFailed());
             console.log('Did not find any pool snap');
         }
     } catch (e) {
