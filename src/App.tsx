@@ -65,6 +65,7 @@ const App = (props: RouteComponentProps<any>) => {
             <AppLayout>
                 <Switch>
                     <Route path="/dashboard" component={Dashboard} />
+                    <Route path="/simulator/pool/:poolId?" component={Simulator} />
                     <Route path="/simulator" component={Simulator} />
                     <Route path="/" component={LandingPage} />
                 </Switch>
