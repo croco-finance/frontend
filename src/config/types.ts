@@ -85,8 +85,16 @@ export const tokens: { [key in RewardContracts]: Token } = {
     },
 };
 
+export enum NoneEnum {
+    NONE = 'NONE',
+}
+
+export type PoolSnaps = {
+    [key in StakingService | NoneEnum]?: Snap[];
+}
+
 export interface SnapStructure {
-    [key: string]: Snap[];
+    [key: string]: PoolSnaps;
 }
 
 // Types from above are used in firebase-loader

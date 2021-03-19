@@ -29,35 +29,44 @@ async function setUnclaimed(
     address: string,
     snaps: SnapStructure,
 ): Promise<void> {
-    // eslint-disable-next-line no-restricted-syntax
     for (const [poolId, poolSnaps] of Object.entries(snaps)) {
-        const lastSnap = poolSnaps[poolSnaps.length - 1];
-        if (lastSnap.stakingService !== null) {
-            if (lastSnap.yieldReward === null) {
-                // TODO: send log to firebase along with address
-                console.log(
-                    'ERROR: null reward object in setUnclaimed for non-null stakingService',
-                );
-                continue;
+        // Iterate over arrays corresponding to farms and unstaked
+        for (const farmSnaps of Object.values(poolSnaps)) {
+            const lastSnap = farmSnaps![farmSnaps!.length - 1];
+            if (lastSnap.stakingService !== null) {
+                if (lastSnap.yieldReward === null) {
+                    // TODO: send log to firebase along with address
+                    console.log(
+                        'ERROR: null reward object in setUnclaimed for non-null stakingService',
+                    );
+                    continue;
+                }
+                let unclaimed = 0;
+                if (
+                    lastSnap.stakingService === StakingService.UNI_V2 ||
+                    lastSnap.stakingService === StakingService.INDEX
+                ) {
+                    let contractAddress = (<{ [key: string]: string }>(
+                        stakingContracts[lastSnap.stakingService]
+                    ))[poolId];
+                    const contract = new ethers.Contract(
+                        contractAddress,
+                        stakingRewardsAbi,
+                        provider,
+                    );
+                    unclaimed = await contract.earned(address);
+                } else if (lastSnap.stakingService === StakingService.SUSHI) {
+                    let contractAddress = stakingContracts[lastSnap.stakingService] as string;
+                    const contract = new ethers.Contract(contractAddress, masterChefAbi, provider);
+                    unclaimed = await contract.pendingSushi(
+                        lastSnap.idWithinStakingContract,
+                        address,
+                    );
+                }
+                lastSnap.yieldReward.unclaimed = unclaimed * 10 ** -18;
+            } else if (lastSnap.exchange === Exchange.BALANCER) {
+                // TODO
             }
-            let unclaimed = 0;
-            if (
-                lastSnap.stakingService === StakingService.UNI_V2 ||
-                lastSnap.stakingService === StakingService.INDEX
-            ) {
-                let contractAddress = (stakingContracts[lastSnap.stakingService] as {
-                    [key: string]: string;
-                })[poolId];
-                const contract = new ethers.Contract(contractAddress, stakingRewardsAbi, provider);
-                unclaimed = await contract.earned(address);
-            } else if (lastSnap.stakingService === StakingService.SUSHI) {
-                let contractAddress = stakingContracts[lastSnap.stakingService] as string;
-                const contract = new ethers.Contract(contractAddress, masterChefAbi, provider);
-                unclaimed = await contract.pendingSushi(lastSnap.idWithinStakingContract, address);
-            }
-            lastSnap.yieldReward.unclaimed = unclaimed * 10 ** -18;
-        } else if (lastSnap.exchange === Exchange.BALANCER) {
-            // TODO
         }
     }
 }
