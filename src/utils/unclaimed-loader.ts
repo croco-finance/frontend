@@ -1,5 +1,3 @@
-/* eslint-disable no-continue */
-/* eslint-disable prefer-const */
 /* eslint-disable no-await-in-loop */
 import { Exchange, RewardContracts, SnapStructure, StakingService } from '@types';
 import { ethers } from 'ethers';
@@ -44,7 +42,7 @@ function setUnclaimed(
                     lastSnap.stakingService === StakingService.UNI_V2 ||
                     lastSnap.stakingService === StakingService.INDEX
                 ) {
-                    let contractAddress = (<{ [key: string]: string }>(
+                    const contractAddress = (<{ [key: string]: string }>(
                         stakingContracts[lastSnap.stakingService]
                     ))[poolId];
                     const contract = new ethers.Contract(
@@ -54,7 +52,7 @@ function setUnclaimed(
                     );
                     unclaimed = await contract.earned(address);
                 } else if (lastSnap.stakingService === StakingService.SUSHI) {
-                    let contractAddress = stakingContracts[lastSnap.stakingService] as string;
+                    const contractAddress = stakingContracts[lastSnap.stakingService] as string;
                     const contract = new ethers.Contract(contractAddress, masterChefAbi, provider);
                     unclaimed = await contract.pendingSushi(
                         lastSnap.idWithinStakingContract,
