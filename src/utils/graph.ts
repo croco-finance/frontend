@@ -42,6 +42,11 @@ const getInteractionsGraphData = (intervalStats: IntervalStats[]): InteractionsG
         impLossUsd: 0,
     };
 
+    let stakedSnapPresent = false;
+    intervalStats.forEach((stat, i) => {
+        if (stat.staked) stakedSnapPresent = true;
+    });
+
     intervalStats.forEach((stat, i) => {
         // ship the first stat (is already included)
         const poolValues = new Array(statsCount).fill(undefined);
@@ -76,7 +81,7 @@ const getInteractionsGraphData = (intervalStats: IntervalStats[]): InteractionsG
             label = 'Deposit';
         } else if (intervalStats[i + 1].poolValueUsdStart === 0) {
             label = '';
-        } else if (i > 0) {
+        } else if (i > 0 && stakedSnapPresent) {
             // the USD value did not change. Check if the user staked or un-staked
             // if the previous snap was staked
             if (stat.staked === false) {
@@ -85,7 +90,7 @@ const getInteractionsGraphData = (intervalStats: IntervalStats[]): InteractionsG
                 label = 'Yield end';
             }
         } else {
-            label = 'Yield start';
+            label = '';
         }
 
         graphData[i + 1] = {
