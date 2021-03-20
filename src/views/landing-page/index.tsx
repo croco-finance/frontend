@@ -282,8 +282,10 @@ const LandingPage = (props: RouteComponentProps<any>) => {
             analytics.logEvent('landing_page_go_button', { address: addressWithout0x });
 
             // save new address to Firebase
-            const firebaseRef = firebase.addresses(inputHexAddress);
-            firebaseRef.set(true);
+            if (validationUtils.isValidEthereumAddress(inputHexAddress)) {
+                const firebaseRef = firebase.addresses(inputHexAddress.toLocaleLowerCase());
+                firebaseRef.set(true);
+            }
         }
     };
 

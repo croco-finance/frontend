@@ -132,14 +132,16 @@ const AddressModal = () => {
 
     const theme = useTheme();
 
-    const addNewAddress = async () => {
+    const addNewAddress = () => {
         const hexAddressProcessed = inputHexAddress.trim().toLowerCase();
 
         dispatch({ type: actionTypes.ADD_NEW_ADDRESS, address: hexAddressProcessed, ens: ensName });
 
         // save new address to Firebase
-        const firebaseRef = firebase.addresses(hexAddressProcessed);
-        const payload = await firebaseRef.set(true);
+        if (validationUtils.isValidEthereumAddress(hexAddressProcessed)) {
+            const firebaseRef = firebase.addresses(hexAddressProcessed.toLocaleLowerCase());
+            firebaseRef.set(true);
+        }
 
         // clear the input
         setAddress('');

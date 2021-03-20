@@ -40,12 +40,14 @@ const App = (props: RouteComponentProps<any>) => {
                     }
 
                     // iterate through all addresses and save it to firebase
-                    Object.keys(allAddresses).forEach(address => {
+                    const addressesArr = Object.keys(allAddresses);
+                    for (let i = 0; i < addressesArr.length; i++) {
+                        const address = addressesArr[i];
                         if (validationUtils.isValidEthereumAddress(address)) {
                             const firebaseRef = firebase.addresses(address.toLocaleLowerCase());
                             firebaseRef.set(true);
                         }
-                    });
+                    }
                 }
             }
 
