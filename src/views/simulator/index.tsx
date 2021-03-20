@@ -687,7 +687,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                                 {simulationMode === 'import' && (
                                     <PoolInvestmentWrapper>
                                         <PoolInvestmentLabel>
-                                            Type how much you want to invest to the pool
+                                            Type how much you want to invest in the pool
                                         </PoolInvestmentLabel>
 
                                         <PoolInvestmentInputWrapper>
