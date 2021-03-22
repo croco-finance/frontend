@@ -160,10 +160,12 @@ export interface CumulativeStats {
 }
 
 export interface Pool {
+    address: string;
     exchange: Exchange;
-    userAddr: string;
-    poolId: string;
-    isActive: boolean;
+    block: number;
+    swapFee: number;
+    volumeUsd: number;
+    tokens: PoolToken[];
 }
 
 export interface PoolItem {
