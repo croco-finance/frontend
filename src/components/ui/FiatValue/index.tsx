@@ -162,7 +162,7 @@ const FiatValue = ({
                     {usePlusSymbol && sign} {formatter.format(value)}{' '}
                 </>
             ) : (
-                <Nan>-</Nan>
+                <Nan>0</Nan>
             )}
         </Wrapper>
     );

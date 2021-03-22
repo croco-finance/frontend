@@ -694,8 +694,6 @@ const getDailyRewards = (
     tokenWeights: PoolItem['tokenWeights'],
     tokenSymbols: PoolItem['tokenSymbols'],
 ): DailyStats | undefined => {
-    console.log('getDailyRewards()');
-
     const userTokenBalancesDaily: number[][] = [];
     const tokenPricesDaily: number[][] = [];
     const tokenFeesArr: number[][] | undefined = [];

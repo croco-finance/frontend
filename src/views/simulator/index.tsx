@@ -26,7 +26,7 @@ import {
 import { analytics, colors, styles, types, variables, constants } from '@config';
 import { useTheme } from '@hooks';
 import { useSelector } from '@reducers';
-import { AllPoolsGlobal, SimulatorStateInterface, TokenType } from '@types';
+import { AllPoolsGlobal, DailyData, SimulatorStateInterface, TokenType } from '@types';
 import { formatUtils, validationUtils } from '@utils';
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -331,6 +331,9 @@ const Simulator = (props: RouteComponentProps<any>) => {
                             ethPriceEnd,
                             tokenBalances,
                             pool.exchange,
+                            null,
+                            null,
+                            null,
                         ),
                     );
 
@@ -389,6 +392,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
         const tokenSymbols: TokenType[] = new Array(tokenCounts);
         const tokenWeights: number[] = new Array(tokenCounts);
         const tokenPricesUsd: number[] = new Array(tokenCounts);
+        const poolTokenReserves: number[] = new Array(tokenCounts);
 
         if (poolSnapData) {
             poolSnapData.tokens.forEach((token, i) => {
@@ -398,6 +402,7 @@ const Simulator = (props: RouteComponentProps<any>) => {
                 investedAmountsUsd[i] = investedToToken;
                 userTokenBalances[i] = investedToToken / token.priceUsd;
                 tokenSymbols[i] = token.token.symbol as TokenType;
+                poolTokenReserves[i] = token.reserve;
             });
 
             dispatch(
@@ -410,6 +415,9 @@ const Simulator = (props: RouteComponentProps<any>) => {
                     poolSnapData.ethPrice,
                     userTokenBalances,
                     poolSnapData.exchange,
+                    poolTokenReserves,
+                    poolSnapData.volumeUsd24,
+                    poolSnapData.swapFee,
                 ),
             );
         }
@@ -466,6 +474,9 @@ const Simulator = (props: RouteComponentProps<any>) => {
                 ethPriceEnd,
                 tokenBalances,
                 pool.exchange,
+                null,
+                null,
+                null,
             ),
         );
 
@@ -657,7 +668,10 @@ const Simulator = (props: RouteComponentProps<any>) => {
                                             value={importedPoolAddress}
                                         />
                                         <AddPoolButton
-                                            disabled={!(isImportedPoolAddressValid && !showData)}
+                                            disabled={
+                                                !(isImportedPoolAddressValid && !showData) ||
+                                                poolSnapLoading
+                                            }
                                             onClick={() => {
                                                 dispatch(fetchPoolSnap(importedPoolAddress));
                                                 dispatch(setSimulationMode('import'));
