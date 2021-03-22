@@ -4,7 +4,7 @@ import { PoolItem } from '@types';
 import { mathUtils, simulatorUtils } from '@utils';
 import React from 'react';
 import styled from 'styled-components';
-import Overview from './Overview';
+import ImpLossView from './ImpLossView';
 import Strategies from './Strategies';
 
 const Wrapper = styled.div`
@@ -47,6 +47,9 @@ const RightContainer = ({
         tokenPricesUsd,
         userTokenBalances,
         exchange,
+        swapFee,
+        poolTokenReserves,
+        volumeUsd24,
     } = useSelector(state => state.simulator);
     if (!exchange) return null;
 
@@ -87,8 +90,12 @@ const RightContainer = ({
                     tabIds={[]}
                     tabHeadlines={[]}
                 />
-                <Overview
+                <ImpLossView
                     isActive
+                    isImportedPool
+                    swapFee={swapFee}
+                    poolTokenReserves={poolTokenReserves}
+                    volumeUsd24={volumeUsd24}
                     tokenSymbols={tokenSymbols}
                     tokenBalances={userTokenBalances}
                     simulatedPooledTokenBalances={simulatedTokenBalances}
@@ -100,9 +107,6 @@ const RightContainer = ({
                     simulatedHodlValueUsd={simulatedHodlValueUsd}
                     tokenPricesEnd={tokenPricesUsd}
                     sliderDefaultCoeffs={sliderDefaultCoeffs}
-                    lastIntSimulatedFeesUsd={simulatedFeesUsd}
-                    lastIntYieldUsd={0}
-                    lastSnapTimestampStart={0}
                     lastSnapTimestampEnd={Date.now()}
                     impLossUsd={impLossUsd}
                     impLossRel={impLossRel}
@@ -256,7 +260,7 @@ const RightContainer = ({
             />
 
             {selectedTab === 'il' && (
-                <Overview
+                <ImpLossView
                     isActive={isActive}
                     tokenSymbols={tokenSymbols}
                     tokenBalances={tokenBalances}
@@ -266,9 +270,6 @@ const RightContainer = ({
                     simulatedHodlValueUsd={simulatedHodlValueUsd}
                     tokenPricesEnd={tokenPricesEnd}
                     sliderDefaultCoeffs={sliderDefaultCoeffs}
-                    lastIntSimulatedFeesUsd={simulatedFeesUsd}
-                    lastIntYieldUsd={lastIntYieldUsd}
-                    lastSnapTimestampStart={lastSnapTimestampStart}
                     lastSnapTimestampEnd={lastSnapTimestampEnd}
                     impLossUsd={impLossUsd}
                     impLossRel={impLossRel}

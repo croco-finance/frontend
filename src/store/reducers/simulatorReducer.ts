@@ -16,6 +16,9 @@ export const initialState: SimulatorStateInterface = {
     yieldTokenSymbol: null,
     investedAmount: 0,
     exchange: null,
+    poolTokenReserves: null,
+    volumeUsd24: null,
+    swapFee: null,
     // pool snap data
     poolSnapFetchError: false,
     poolSnapLoading: false,
@@ -41,6 +44,9 @@ const simulatorReducer = (state = initialState, action): SimulatorStateInterface
                 draft.tokenPricesUsd = action.payload.tokenPricesUsd;
                 draft.userTokenBalances = action.payload.userTokenBalances;
                 draft.exchange = action.payload.exchange;
+                draft.poolTokenReserves = action.payload.poolTokenReserves;
+                draft.volumeUsd24 = action.payload.volumeUsd24;
+                draft.swapFee = action.payload.swapFee;
                 break;
             }
 

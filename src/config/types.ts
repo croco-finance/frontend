@@ -231,6 +231,8 @@ export interface DailyData {
     timestamp: number;
     txCostEth: number;
     tokens: PoolToken[];
+    swapFee: number;
+    volumeUsd24: number | null;
 }
 
 export interface DailyStats {
@@ -275,6 +277,9 @@ export interface SimulatorStateInterface {
     poolSnapFetchError: boolean;
     poolSnapLoading: boolean;
     poolSnapData: DailyData | null;
+    poolTokenReserves: number[] | null;
+    volumeUsd24: number | null;
+    swapFee: number | null;
     // simulation data
     poolId: string;
     tokenSymbols: TokenType[];

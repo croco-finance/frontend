@@ -153,7 +153,12 @@ const LiquidityPool = () => {
 
     const withdrawalsRow = (
         <BoxRow
-            firstColumn="Pool withdrawals"
+            firstColumn={
+                <>
+                    Pool withdrawals
+                    <QuestionTooltip content="All assets that you withdrew from the pool" />
+                </>
+            }
             secondColumn={
                 <VerticalCryptoAmounts
                     tokenSymbols={tokenSymbolsArr}

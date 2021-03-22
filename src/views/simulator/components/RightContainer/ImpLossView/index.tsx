@@ -95,7 +95,7 @@ const GraphTitle = styled.div`
 `;
 
 const DaysLeftGridWrapper = styled(ImpLossGridWrapper)`
-    gap: 5px 10px;
+    gap: 24px 10px;
     font-size: ${variables.FONT_SIZE.NORMAL};
     color: ${props => props.theme.FONT_LIGHT};
 `;
@@ -105,6 +105,11 @@ const XScrollWrapper = styled.div`
 `;
 
 interface Props {
+    // imported pool params
+    isImportedPool?: boolean;
+    poolTokenReserves?: number[] | null;
+    volumeUsd24?: number | null;
+    swapFee?: number | null;
     tokenSymbols: string[];
     simulatedPooledTokenBalances: number[];
     tokenBalances: number[];
@@ -113,9 +118,6 @@ interface Props {
     simulatedHodlValueUsd: number;
     tokenPricesEnd: number[];
     sliderDefaultCoeffs: Array<number>;
-    lastIntSimulatedFeesUsd: number;
-    lastIntYieldUsd: number;
-    lastSnapTimestampStart: number;
     lastSnapTimestampEnd: number;
     impLossUsd: number;
     impLossRel: number;
@@ -123,7 +125,11 @@ interface Props {
     lastWeekAverageDailyRewardsUsd: number | undefined;
 }
 
-const Overview = ({
+const ImpLossView = ({
+    isImportedPool = false,
+    poolTokenReserves,
+    volumeUsd24,
+    swapFee,
     tokenSymbols,
     simulatedPooledTokenBalances,
     tokenBalances,
@@ -132,9 +138,6 @@ const Overview = ({
     simulatedHodlValueUsd,
     tokenPricesEnd,
     sliderDefaultCoeffs,
-    lastIntSimulatedFeesUsd,
-    lastIntYieldUsd,
-    lastSnapTimestampStart,
     lastSnapTimestampEnd,
     impLossUsd,
     impLossRel,
@@ -161,9 +164,23 @@ const Overview = ({
         2,
     );
 
-    const estDaysLeftStaking = lastWeekAverageDailyRewardsUsd
-        ? Math.round(Math.abs(impLossUsd / lastWeekAverageDailyRewardsUsd))
-        : NaN;
+    let estDaysLeftStaking;
+    let userFeesUsd24;
+    let userPoolShare;
+    if (isImportedPool && volumeUsd24 && poolTokenReserves && swapFee) {
+        // compute user's poolShare
+        userPoolShare = tokenBalances[0] / (poolTokenReserves[0] + tokenBalances[0]);
+
+        // compute fee estimate
+        userFeesUsd24 = userPoolShare * volumeUsd24 * swapFee;
+
+        // estimated days left staking
+        estDaysLeftStaking = Math.round(Math.abs(impLossUsd / userFeesUsd24));
+    } else if (!isImportedPool) {
+        estDaysLeftStaking = lastWeekAverageDailyRewardsUsd
+            ? Math.round(Math.abs(impLossUsd / lastWeekAverageDailyRewardsUsd))
+            : NaN;
+    }
 
     return (
         <Wrapper>
@@ -245,27 +262,73 @@ const Overview = ({
                     bottomBarBorderRadius={[0, 0, 10, 10]}
                     backgroundColor={theme.BACKGROUND}
                     bottomBar={
-                        isActive &&
-                        !Number.isNaN(estDaysLeftStaking) &&
-                        estDaysLeftStaking !== Infinity &&
-                        lastWeekAverageDailyRewardsUsd ? (
+                        isActive || isImportedPool ? (
                             <>
                                 <DaysLeftGridWrapper>
+                                    {isImportedPool ? (
+                                        <BoxRow
+                                            columnAlignment={['left', 'right', 'left']}
+                                            firstColumn={
+                                                <>
+                                                    Est. daily rewards from trading fees
+                                                    <QuestionTooltip
+                                                        content={
+                                                            <>
+                                                                Based on your investment, current
+                                                                pool liquidity and 24 hour trading
+                                                                volume. (<b>NOTE</b> that these
+                                                                values change continuously and so do
+                                                                your fee rewards)
+                                                            </>
+                                                        }
+                                                    />
+                                                </>
+                                            }
+                                            secondColumn={
+                                                <RightPaddingWrapper>
+                                                    <FiatValue value={userFeesUsd24 || 0} />
+                                                </RightPaddingWrapper>
+                                            }
+                                            thirdColumn={<></>}
+                                        />
+                                    ) : (
+                                        <BoxRow
+                                            columnAlignment={['left', 'right', 'left']}
+                                            firstColumn={
+                                                <>Average fee rewards during the last week</>
+                                            }
+                                            secondColumn={
+                                                <RightPaddingWrapper>
+                                                    <FiatValue
+                                                        value={
+                                                            lastWeekAverageDailyRewardsUsd || NaN
+                                                        }
+                                                    />
+                                                </RightPaddingWrapper>
+                                            }
+                                            thirdColumn={<></>}
+                                        />
+                                    )}
                                     <BoxRow
                                         columnAlignment={['left', 'right', 'left']}
                                         firstColumn={
                                             <>
                                                 Est. days left to compensate loss
                                                 <QuestionTooltip
-                                                    content={`Based on your average fee rewards during the last week (${formatUtils.getFormattedUsdValue(
-                                                        lastWeekAverageDailyRewardsUsd,
-                                                    )}/day)`}
+                                                    content={
+                                                        !isImportedPool
+                                                            ? 'Based on your average fee rewards during the last week'
+                                                            : 'Based on the daily trading fees estimated above.'
+                                                    }
                                                 />
                                             </>
                                         }
                                         secondColumn={
                                             <RightPaddingWrapper>
-                                                {estDaysLeftStaking}
+                                                {Number.isNaN(estDaysLeftStaking) ||
+                                                estDaysLeftStaking === Infinity
+                                                    ? '-'
+                                                    : estDaysLeftStaking}
                                             </RightPaddingWrapper>
                                         }
                                         thirdColumn={<></>}
@@ -311,4 +374,4 @@ const Overview = ({
     );
 };
 
-export default Overview;
+export default ImpLossView;

@@ -26,6 +26,8 @@ const parsePoolSnap = (snap): DailyData => {
         // eslint-disable-next-line no-prototype-builtins
         txCostEth: snap.hasOwnProperty('txCostEth') ? parseFloat(snap.txCostEth) : 0,
         tokens: poolTokens,
+        volumeUsd24: snap.volumeUsd24,
+        swapFee: parseFloat(snap.swapFee),
     };
 };
 
@@ -60,6 +62,9 @@ export const setNewSimulationPoolData = (
     ethPriceUsd: number,
     userTokenBalances: number[],
     exchange: SimulatorStateInterface['exchange'],
+    poolTokenReserves: number[] | null,
+    volumeUsd24: number | null,
+    swapFee: number | null,
 ) => ({
     type: actionTypes.SET_NEW_SIMULATION_POOL_DATA,
     payload: {
@@ -71,11 +76,14 @@ export const setNewSimulationPoolData = (
         ethPriceUsd,
         userTokenBalances,
         exchange,
+        poolTokenReserves,
+        volumeUsd24,
+        swapFee,
     },
 });
 
 export const resetPoolSnapData = () => dispatch => {
-    dispatch(setNewSimulationPoolData('', [], [], null, [], 0, [], null));
+    dispatch(setNewSimulationPoolData('', [], [], null, [], 0, [], null, null, null, null));
 };
 
 export const resetSimulationCoefficients = tokensCount => ({
@@ -100,11 +108,13 @@ export const fetchPoolSnap = (address: string) => async dispatch => {
             const tokenSymbols: TokenType[] = new Array(tokenCounts);
             const tokenWeights: number[] = new Array(tokenCounts);
             const tokenPricesUsd: number[] = new Array(tokenCounts);
+            const poolTokenReserves: number[] = new Array(tokenCounts);
 
             parsedPoolData.tokens.forEach((token, i) => {
                 tokenWeights[i] = token.weight;
                 tokenPricesUsd[i] = token.priceUsd;
                 tokenSymbols[i] = token.token.symbol as TokenType;
+                poolTokenReserves[i] = token.reserve;
             });
 
             // set pool data besides user's balances
@@ -118,6 +128,9 @@ export const fetchPoolSnap = (address: string) => async dispatch => {
                     parsedPoolData.ethPrice,
                     new Array(tokenCounts).fill(0),
                     parsedPoolData.exchange,
+                    poolTokenReserves,
+                    parsedPoolData.volumeUsd24,
+                    parsedPoolData.swapFee,
                 ),
             );
             // set simulation coefficients
