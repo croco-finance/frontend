@@ -13,6 +13,8 @@ import {
     YieldReward,
 } from '@types';
 import { firebase } from '@config';
+import { setUnclaimed } from './unclaimed-loader';
+import { ethers } from 'ethers';
 
 function parseSnap(snap: any): Snap {
     let yieldReward: YieldReward | null = null;
@@ -28,6 +30,7 @@ function parseSnap(snap: any): Snap {
             price,
             claimed: 0,
             unclaimed: 0,
+            vested: 0,
         };
     } else if (Object.prototype.hasOwnProperty.call(snap, 'yieldTokenPrice')) {
         // In Balancer there is no staking service but the yield tokens are distributed
@@ -42,6 +45,7 @@ function parseSnap(snap: any): Snap {
                 price: parseFloat(snap.yieldTokenPrice),
                 claimed: 0,
                 unclaimed: 0,
+                vested: 0,
             };
         }
     }
@@ -243,7 +247,45 @@ async function getCurrentSnap(poolId: string, lastSnap: Snap, dayId: number): Pr
     return null;
 }
 
-async function getSnaps(address: string): Promise<SnapStructure | null> {
+async function populateCurrent(snaps: SnapStructure): Promise<SnapStructure> {
+    const dayIds: { [key in Exchange]?: number } = {};
+    // Iterate over pools
+    for (const [poolId, poolSnaps] of Object.entries(snaps)) {
+        // Iterate over arrays corresponding to farms and unstaked
+        for (const farmSnaps of Object.values(poolSnaps)) {
+            const lastSnap = farmSnaps![farmSnaps!.length - 1];
+
+            if (lastSnap.liquidityTokenBalance !== 0) {
+                if (!Object.prototype.hasOwnProperty.call(dayIds, lastSnap.exchange)) {
+                    const ref = firebase.exchangeDayId(lastSnap.exchange);
+                    dayIds[lastSnap.exchange] = (await ref.once('value')).val();
+                }
+                const dayId = <number>dayIds[lastSnap.exchange];
+                const currentSnap = await getCurrentSnap(poolId, lastSnap, dayId);
+                if (currentSnap !== null) {
+                    farmSnaps!.push(currentSnap);
+                }
+            }
+        }
+    }
+    return snaps;
+}
+
+function setVested(snaps: SnapStructure): void {
+    // Find pairs
+    Object.entries(snaps).forEach(([poolId, poolSnaps]) => {
+        const sushiStaked = poolSnaps.SUSHI;
+        // Check if staked snaps exist and if they do not have a snap before 10959148
+        if (sushiStaked !== undefined && !sushiStaked.some(snap => snap.block <= 10959148)) {
+            sushiStaked.forEach(snap => {
+                snap.yieldReward!.vested = (snap.yieldReward!.claimed + snap.yieldReward!.unclaimed) * 2;
+            });
+        }
+    });
+
+}
+
+async function getSnaps(address: string, provider: ethers.providers.Provider): Promise<SnapStructure | null> {
     const ref = firebase.snaps(address);
     let snaps: SnapStructure | null = null;
     const payload = await ref.once('value');
@@ -269,25 +311,15 @@ async function getSnaps(address: string): Promise<SnapStructure | null> {
             distributeStakedYields(userData.SUSHI.yields, snaps);
         }
 
-        const dayIds: { [key in Exchange]?: number } = {};
-        // Iterate over pools
-        for (const [poolId, poolSnaps] of Object.entries(snaps)) {
-            // Iterate over arrays corresponding to farms and unstaked
-            for (const farmSnaps of Object.values(poolSnaps)) {
-                const lastSnap = farmSnaps![farmSnaps!.length - 1];
+        snaps = await populateCurrent(snaps);
 
-                if (lastSnap.liquidityTokenBalance !== 0) {
-                    if (!Object.prototype.hasOwnProperty.call(dayIds, lastSnap.exchange)) {
-                        const ref = firebase.exchangeDayId(lastSnap.exchange);
-                        dayIds[lastSnap.exchange] = (await ref.once('value')).val();
-                    }
-                    const dayId = <number>dayIds[lastSnap.exchange];
-                    const currentSnap = await getCurrentSnap(poolId, lastSnap, dayId);
-                    if (currentSnap !== null) {
-                        farmSnaps!.push(currentSnap);
-                    }
-                }
-            }
+        await setUnclaimed(provider, address, snaps);
+
+        if (
+            Object.prototype.hasOwnProperty.call(userData, 'SUSHI') &&
+            Object.prototype.hasOwnProperty.call(userData.SUSHI, 'pendingAt10959148')
+        ) {
+            setVested(snaps);
         }
     }
     return snaps;

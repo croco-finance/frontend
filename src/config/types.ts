@@ -56,6 +56,7 @@ export interface YieldReward {
     price: number | null;
     claimed: number;
     unclaimed: number;
+    vested: number;
 }
 
 export const tokens: { [key in RewardContracts]: Token } = {
