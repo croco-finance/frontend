@@ -21,7 +21,7 @@ const GridWrapper = styled.div`
     align-items: center;
     /* allow x-axis scrolling: useful on small screens when fiat amount is displayed */
     /* overflow-x: auto; */
-    word-break: break-all;
+    word-break: break-word;
     align-items: baseline;
 
     @media (max-width: ${variables.SCREEN_SIZE.SM}) {

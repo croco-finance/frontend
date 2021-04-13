@@ -22,7 +22,7 @@ const GridWrapper = styled.div`
     font-size: ${variables.FONT_SIZE.NORMAL};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
     align-items: center;
-    word-break: break-all;
+    word-break: break-word;
     padding: 5px;
     width: 100%;
     min-width: fit-content;
