@@ -3,7 +3,7 @@ import { Icon, Spinner } from '@components/ui';
 import { analytics, colors, firebase, styles, variables, web3 } from '@config';
 import { useSelector } from '@reducers';
 import { validationUtils } from '@utils';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -195,12 +195,16 @@ const FooterText = styled.div`
     margin-right: 6px;
 `;
 
+const UnlockButton = styled.button``;
+
+type UnlockState = 'LOCKED' | 'UNLOCKED' | 'PENDING';
 // props: RouteComponentProps<any>
 const LandingPage = (props: RouteComponentProps<any>) => {
     const dispatch = useDispatch();
     const [inputAddress, setInputAddress] = useState('');
     const [inputHexAddress, setInputHexAddress] = useState('');
     const [ensName, setEnsName] = useState('');
+    const [unlock, setUnclock] = useState<UnlockState>('PENDING');
     const [portisLoading, setPortisLoading] = useState(false);
     const [isValidAddress, setIsValidAddress] = useState(false);
     const [loadingEnsDomain, setLoadingEnsDomain] = useState(false);
@@ -289,6 +293,56 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         }
     };
 
+    const unlockToken = () => {
+        // eslint-disable-next-line no-unused-expressions
+        console.log('UNLOCK window', window);
+        const newWindow: any = window as any;
+        console.log('newWindow.unlockProtocol', newWindow.unlockProtocol);
+        if (newWindow.unlockProtocol) {
+            newWindow.unlockProtocol.loadCheckoutModal(/* optional configuration */);
+        }
+    };
+
+    const unlockHandler = e => {
+        setUnclock(e.detail);
+    };
+
+    useEffect(() => {
+        window.addEventListener('unlockProtocol', unlockHandler);
+
+        window.addEventListener('unlockProtocol.status', (e: any) => {
+            const state = e.detail;
+            // the state is a string whose value can either be 'unlocked' or 'locked'...
+            // If state is 'unlocked': implement code here which will be triggered when
+            // the current visitor has a valid lock key
+            // If state is 'locked': implement code here which will be
+            // triggered when the current visitor does not have a valid lock key
+        });
+
+        // window.addEventListener('unlockProtocol.status', (event: any) => {
+        //     // We hide all .unlock-content elements
+        //     if (document && document.querySelector) {
+        //         document.querySelector('.unlock-content').style.display = 'none';
+        //         // We show only the relevant element
+        //         document
+        //             .querySelectorAll(`.unlock-content.${event.detail.state}`)
+        //             .forEach(element => {
+        //                 element.style.display = 'block';
+        //             });
+        //     }
+        // });
+
+        window.addEventListener('unlockProtocol.authenticated', (event: any) => {
+            // event.detail.addresss includes the address of the current user, when known
+        });
+
+        window.addEventListener('unlockProtocol.transactionSent', (event: any) => {
+            // event.detail.hash includes the hash of the transaction sent
+        });
+
+        return () => window.removeEventListener('unlockProtocol', unlockHandler);
+    }, []);
+
     return (
         <>
             <MainWrapper>
@@ -358,6 +412,8 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                                 )}
                             </DashboardButton>
                         </AddressInputWrapper>
+                        <UnlockButton onClick={() => unlockToken()}>Unlock!</UnlockButton>
+                        <div>unlock state: {unlock}</div>
                         <PortisButtonWrapper>
                             Or log in using
                             <PortisButton onClick={handlePortisLogin}>
