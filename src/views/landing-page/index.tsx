@@ -1,5 +1,5 @@
 import * as actionTypes from '@actionTypes';
-import { Icon, Spinner } from '@components/ui';
+import { Icon, Spinner, Web3Status } from '@components/ui';
 import { analytics, colors, firebase, styles, variables, web3 } from '@config';
 import { useSelector } from '@reducers';
 import { validationUtils } from '@utils';
@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Features from './components/Features';
 import LandingPageText from './components/LandingPageText';
+import { openModal } from '@actions';
 
 const CONTENT_WIDTH = 1200;
 const INPUT_HEIGHT = '66px';
@@ -157,16 +158,16 @@ const PortisButtonWrapper = styled.div`
     }
 `;
 
-const PortisButton = styled.button`
+const ConnectWalletButton = styled.button`
     display: flex;
     align-items: center;
     border: none;
-    padding: 6px 8px;
+    padding: 12px 16px;
     color: #4b6b9aff;
     outline: none;
     background-color: ${props => props.theme.BUTTON_PORTIS_BG};
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    font-size: ${variables.FONT_SIZE.SMALL};
+    font-size: ${variables.FONT_SIZE.H3};
     border-radius: 5px;
     margin-left: 8px;
     cursor: pointer;
@@ -343,6 +344,9 @@ const LandingPage = (props: RouteComponentProps<any>) => {
         return () => window.removeEventListener('unlockProtocol', unlockHandler);
     }, []);
 
+    const openWalletModal = () => {
+        dispatch(openModal({ type: 'wallet' }));
+    };
     return (
         <>
             <MainWrapper>
@@ -413,18 +417,11 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                             </DashboardButton>
                         </AddressInputWrapper>
                         <UnlockButton onClick={() => unlockToken()}>Unlock!</UnlockButton>
-                        <div>unlock state: {unlock}</div>
-                        <PortisButtonWrapper>
-                            Or log in using
-                            <PortisButton onClick={handlePortisLogin}>
-                                {portisLoading ? (
-                                    <Spinner size={12} color="#4b6b9a" />
-                                ) : (
-                                    <Icon icon="portis" size={14} />
-                                )}
-                                <PortisButtonText>Portis</PortisButtonText>
-                            </PortisButton>
-                        </PortisButtonWrapper>
+                        <div style={{ color: 'red' }}>unlock state: {unlock}</div>
+                        <ConnectWalletButton onClick={() => openWalletModal()}>
+                            Connect Wallet
+                        </ConnectWalletButton>
+                        <Web3Status />
                         {/* </Fade> */}
                     </AnimatedWrapper>
 

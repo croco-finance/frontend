@@ -31,6 +31,7 @@ import Tooltip from './Tooltip';
 import QuestionTooltip from './QuestionTooltip';
 import Textarea from './Textarea';
 import SadCrocoBox from './SadCrocoBox';
+import Web3Status from './Web3Status';
 
 export {
     TokenLogo,
@@ -66,4 +67,5 @@ export {
     QuestionTooltip,
     Textarea,
     SadCrocoBox,
+    Web3Status,
 };

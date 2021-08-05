@@ -5,6 +5,9 @@ export type UserContextPayload =
           type: 'address';
       }
     | {
+          type: 'wallet';
+      }
+    | {
           type: 'feedback';
       };
 
