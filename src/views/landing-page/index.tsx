@@ -11,6 +11,7 @@ import styled, { css } from 'styled-components';
 import Features from './components/Features';
 import LandingPageText from './components/LandingPageText';
 import { openModal } from '@actions';
+import { Paywall } from '@components/layout';
 
 const CONTENT_WIDTH = 1200;
 const INPUT_HEIGHT = '66px';
@@ -36,7 +37,7 @@ const MainWrapper = styled.div`
 
 const AnimatedWrapper = styled.div`
     width: 100%;
-    max-width: 740px;
+    max-width: 880px;
 `;
 const ContentWrapper = styled.div`
     max-width: ${CONTENT_WIDTH}px;
@@ -48,7 +49,7 @@ const ContentWrapper = styled.div`
 
 const IllustrationWrapper = styled.h1`
     margin-top: 115px;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
 
     @media (max-width: 900px) {
         font-size: ${variables.FONT_SIZE.NORMAL};
@@ -146,37 +147,6 @@ const DashboardButton = styled(Link)<{ active: boolean }>`
     }
 `;
 
-const PortisButtonWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    color: ${props => props.theme.FONT_MEDIUM};
-    margin: 50px auto 10px auto;
-    justify-content: center;
-
-    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
-        margin-top: 10px;
-    }
-`;
-
-const ConnectWalletButton = styled.button`
-    display: flex;
-    align-items: center;
-    border: none;
-    padding: 12px 16px;
-    color: #4b6b9aff;
-    outline: none;
-    background-color: ${props => props.theme.BUTTON_PORTIS_BG};
-    font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
-    font-size: ${variables.FONT_SIZE.H3};
-    border-radius: 5px;
-    margin-left: 8px;
-    cursor: pointer;
-
-    &:hover {
-        background-color: ${props => props.theme.BUTTON_PORTIS_BG_HOVER};
-    }
-`;
-
 const PortisButtonText = styled.div`
     margin-left: 4px;
 `;
@@ -196,12 +166,42 @@ const FooterText = styled.div`
     margin-right: 6px;
 `;
 
-const UnlockButton = styled.button``;
+const BlueButton = styled.button`
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: ${props => props.theme.BUTTON_PRIMARY_BG};
+    color: white;
+    font-weight: ${variables.FONT_WEIGHT.BOLD};
+    font-size: 20px;
+    border: none;
+    border-radius: ${INPUT_BORDER_RADIUS};
+    text-decoration: none;
+    transition: 0.1s;
+    width: 130px;
+    height: ${INPUT_HEIGHT};
+
+    &:hover {
+        background-color: ${props => props.theme.BUTTON_PRIMARY_BG_HOVER};
+    }
+    @media (max-width: ${variables.SCREEN_SIZE.SM}) {
+        font-size: ${variables.FONT_SIZE.NORMAL};
+        font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
+        padding: 5px;
+        width: 125px;
+        height: ${INPUT_HEIGHT_SMALL};
+        border-radius: 5px;
+        margin: 10px auto;
+    }
+`;
 
 type UnlockState = 'LOCKED' | 'UNLOCKED' | 'PENDING';
 // props: RouteComponentProps<any>
 const LandingPage = (props: RouteComponentProps<any>) => {
     const dispatch = useDispatch();
+    const appIsLocked = useSelector(state => state.app.isLocked);
     const [inputAddress, setInputAddress] = useState('');
     const [inputHexAddress, setInputHexAddress] = useState('');
     const [ensName, setEnsName] = useState('');
@@ -210,89 +210,6 @@ const LandingPage = (props: RouteComponentProps<any>) => {
     const [isValidAddress, setIsValidAddress] = useState(false);
     const [loadingEnsDomain, setLoadingEnsDomain] = useState(false);
     const theme = useSelector(state => state.app.theme);
-
-    const handleAddressChange = async input => {
-        setIsValidAddress(false);
-        setLoadingEnsDomain(false); // just to double check
-
-        // check for ETH address validity
-        if (validationUtils.isValidEthereumAddress(input)) {
-            setInputAddress(input);
-            setIsValidAddress(true);
-            setInputHexAddress(input.toLowerCase());
-            return;
-        }
-
-        // check if valid ENS name
-        if (input.substring(input.length - 4) === '.eth') {
-            try {
-                setLoadingEnsDomain(true);
-                const ensHexAddress = await web3.eth.ens.getAddress(input);
-                if (ensHexAddress) {
-                    setLoadingEnsDomain(false);
-                    setInputAddress(input);
-                    setIsValidAddress(true);
-                    setEnsName(input);
-                    setInputHexAddress(ensHexAddress.toLocaleLowerCase());
-                    return;
-                }
-            } catch (e) {
-                console.log('Could not get eth address from ENS name');
-                setIsValidAddress(false);
-            }
-        }
-
-        setIsValidAddress(false);
-        setLoadingEnsDomain(false);
-    };
-
-    const handlePortisLogin = async () => {
-        setPortisLoading(true);
-        try {
-            const accounts = await web3.eth.getAccounts();
-            setPortisLoading(false);
-            const initialAddressesObj = {};
-            initialAddressesObj[accounts[0]] = { bundled: false, ens: '' };
-
-            dispatch({
-                type: actionTypes.SET_ADDRESSES,
-                addresses: initialAddressesObj,
-            });
-
-            dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: accounts[0] });
-            props.history.push({
-                pathname: `/dashboard`,
-            });
-        } catch (e) {
-            console.log('Error when trying to log in using Portis');
-            setPortisLoading(false);
-        }
-    };
-
-    const handleButtonOnClick = () => {
-        if (isValidAddress) {
-            // fire custom Google Analytics event
-            const initialAddressesObj = {};
-            initialAddressesObj[inputHexAddress] = { bundled: false, ens: ensName || '' };
-
-            dispatch({
-                type: actionTypes.SET_ADDRESSES,
-                addresses: initialAddressesObj,
-            });
-            dispatch({ type: actionTypes.SET_SELECTED_ADDRESS, address: inputAddress });
-
-            const addressWithout0x = validationUtils.isHex(inputHexAddress)
-                ? inputHexAddress.substring(2)
-                : inputHexAddress;
-            analytics.logEvent('landing_page_go_button', { address: addressWithout0x });
-
-            // save new address to Firebase
-            if (validationUtils.isValidEthereumAddress(inputHexAddress)) {
-                const firebaseRef = firebase.addresses(inputHexAddress.toLocaleLowerCase());
-                firebaseRef.set(true);
-            }
-        }
-    };
 
     const unlockToken = () => {
         // eslint-disable-next-line no-unused-expressions
@@ -388,40 +305,11 @@ const LandingPage = (props: RouteComponentProps<any>) => {
                         <IllustrationWrapper>
                             <LandingPageText />
                         </IllustrationWrapper>
-                        <AddressInputWrapper isDark={theme === 'dark'}>
-                            <AddressInput
-                                isDark={theme === 'dark'}
-                                type="text"
-                                spellCheck={false}
-                                placeholder="Enter ENS domain or valid Ethereum address"
-                                value={inputAddress}
-                                onChange={event => {
-                                    handleAddressChange(event.target.value.trim());
-                                    setInputAddress(event.target.value.trim());
-                                }}
-                            />
-                            <DashboardButton
-                                onClick={e => {
-                                    handleButtonOnClick();
-                                }}
-                                active={isValidAddress}
-                                to={{
-                                    pathname: isValidAddress ? '/dashboard' : '',
-                                }}
-                            >
-                                {loadingEnsDomain ? (
-                                    <Spinner size={14} color={colors.FONT_MEDIUM} />
-                                ) : (
-                                    "Let's Go!"
-                                )}
-                            </DashboardButton>
-                        </AddressInputWrapper>
-                        <UnlockButton onClick={() => unlockToken()}>Unlock!</UnlockButton>
+                        {/* <BlueButton onClick={() => unlockToken()}>Unlock!</BlueButton>
                         <div style={{ color: 'red' }}>unlock state: {unlock}</div>
-                        <ConnectWalletButton onClick={() => openWalletModal()}>
-                            Connect Wallet
-                        </ConnectWalletButton>
-                        <Web3Status />
+                        <BlueButton onClick={() => openWalletModal()}>Connect Wallet</BlueButton>
+                        <Web3Status /> */}
+                        {appIsLocked ? <Paywall /> : null}
                         {/* </Fade> */}
                     </AnimatedWrapper>
 

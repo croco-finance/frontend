@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 `;
 
 const FeaturesWrapper = styled.div`
-    margin: 80px 0 0 0;
+    margin: 60px 0 0 0;
 
     & > section {
         padding: 30px 0;

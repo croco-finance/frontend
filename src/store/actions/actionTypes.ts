@@ -1,3 +1,4 @@
+export const SET_APP_LOCKED = 'SET_APP_LOCKED';
 export const SET_POOL_DATA = 'SET_POOL_DATA';
 export const SET_SELECTED_POOL_ID = 'SET_SELECTED_POOL_ID';
 export const FETCH_POOLS = 'FETCH_POOLS';

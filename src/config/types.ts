@@ -255,6 +255,7 @@ export interface AddressData {
 export type AllAddressesGlobal = { [key: string]: AddressData };
 
 export interface AppStateInterface {
+    isLocked: boolean;
     allPools: AllPoolsGlobal;
     selectedPoolId: string;
     allAddresses: AllAddressesGlobal;

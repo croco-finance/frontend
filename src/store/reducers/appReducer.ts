@@ -3,6 +3,7 @@ import * as actionTypes from '@actionTypes';
 import { AppStateInterface } from '@types';
 
 export const initialState: AppStateInterface = {
+    isLocked: true,
     allPools: {},
     selectedPoolId: '',
     allAddresses: {},
@@ -130,6 +131,11 @@ const appReducer = (state = initialState, action): AppStateInterface =>
 
             case actionTypes.SET_THEME: {
                 draft.theme = action.variant;
+                break;
+            }
+
+            case actionTypes.SET_APP_LOCKED: {
+                draft.isLocked = action.isLocked;
                 break;
             }
             default:

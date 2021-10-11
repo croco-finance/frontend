@@ -57,12 +57,15 @@ const AccountGroupingRow = styled.div`
     ${({ theme }) => theme.flexRowNoWrap};
     justify-content: space-between;
     align-items: center;
+    display: flex;
+    background-color: green;
     font-weight: 400;
     color: ${({ theme }) => theme.text1};
 
     div {
         ${({ theme }) => theme.flexRowNoWrap}
         align-items: center;
+        background-color: yellow;
     }
 `;
 
@@ -106,6 +109,8 @@ const AccountControl = styled.div`
 
     font-weight: 500;
     font-size: 1.25rem;
+
+    background-color: red;
 
     a:hover {
         text-decoration: underline;
@@ -287,7 +292,7 @@ export default function AccountDetails({
                         <InfoCard>
                             <AccountGroupingRow>
                                 {formatConnectorName()}
-                                <div>
+                                <div style={{ backgroundColor: 'pink' }}>
                                     {connector !== injected && connector !== walletlink && (
                                         <WalletAction
                                             style={{
@@ -316,14 +321,14 @@ export default function AccountDetails({
                                 <AccountControl>
                                     {ENSName ? (
                                         <>
-                                            <div>
+                                            <div style={{ backgroundColor: 'pink' }}>
                                                 {getStatusIcon()}
                                                 <p> {ENSName}</p>
                                             </div>
                                         </>
                                     ) : (
                                         <>
-                                            <div>
+                                            <div style={{ backgroundColor: 'purple' }}>
                                                 {getStatusIcon()}
                                                 <p> {account && shortenAddress(account)}</p>
                                             </div>
@@ -335,7 +340,7 @@ export default function AccountDetails({
                                 {ENSName ? (
                                     <>
                                         <AccountControl>
-                                            <div>
+                                            <div style={{ display: 'flex' }}>
                                                 {account && (
                                                     <Copy toCopy={account}>
                                                         <span style={{ marginLeft: '4px' }}>
@@ -365,7 +370,7 @@ export default function AccountDetails({
                                 ) : (
                                     <>
                                         <AccountControl>
-                                            <div>
+                                            <div style={{ backgroundColor: 'orange' }}>
                                                 {account && (
                                                     <Copy toCopy={account}>
                                                         <span style={{ marginLeft: '4px' }}>

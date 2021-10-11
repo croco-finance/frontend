@@ -128,7 +128,6 @@ function Web3StatusInner() {
     // const toggleWalletModal = useWalletModalToggle();
     const hasPendingTransactions = false;
 
-    console.log('account', account);
     if (account) {
         return (
             <Web3StatusConnected

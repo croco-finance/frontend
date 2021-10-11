@@ -237,7 +237,7 @@ const WalletModal = (props: Props) => {
                     </HeaderRow>
                     <ContentWrapper>
                         {error instanceof UnsupportedChainIdError ? (
-                            <h5>lease connect to the appropriate Ethereum network.</h5>
+                            <h5>Please connect to the appropriate Ethereum network.</h5>
                         ) : (
                             'Error connecting. Try refreshing the page.'
                         )}

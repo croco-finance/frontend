@@ -6,6 +6,7 @@ import SimulatorContainer from './SimulatorContainer';
 import Modal from './Modal';
 import NavigationPanel from './NavigationPanel';
 import AppLayout from './AppLayout';
+import Paywall from './Paywall';
 
 export {
     LeftLayoutContainer,
@@ -16,4 +17,5 @@ export {
     Modal,
     NavigationPanel,
     AppLayout,
+    Paywall,
 };

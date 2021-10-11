@@ -5,7 +5,7 @@ export const loadState = () => {
         if (serializedState === null) {
             return undefined;
         }
-        return JSON.parse(serializedState);
+        return { ...JSON.parse(serializedState), isLocked: true };
     } catch (err) {
         console.log('Error while loading state from local storage');
         return undefined;
